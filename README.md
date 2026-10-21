@@ -13,7 +13,7 @@ Stock trades disclosed by members of Congress and the President, rebuilt into es
 
 ## Alerts (ntfy)
 Exactly one sender at a time. `NTFY_SENDER` (repository variable):
-- `auto` (default): the workflow sends only if the self-hosted server at `BOX_STATUS_URL` is down or hasn't refreshed for 3 hours;
+- `auto` (default): the workflow sends only if the self-hosted server at `BOX_STATUS_URL` (secret) is down or hasn't refreshed for 3 hours;
 - `actions`: the workflow always sends (use this once the self-hosted server is retired);
 - `box`: the workflow never sends.
 

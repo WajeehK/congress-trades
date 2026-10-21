@@ -9,6 +9,10 @@ on:
         description: "Push an encrypted state backup to the state branch"
         type: boolean
         default: false
+      probe_sources:
+        description: "Check that every data source answers from GitHub's network"
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths-ignore: ["README.md"]
@@ -34,7 +38,7 @@ jobs:
       DB_PATH: state/trades.db
       NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
       NTFY_SENDER: ${{ vars.NTFY_SENDER || 'auto' }}
-      BOX_STATUS_URL: ${{ vars.BOX_STATUS_URL }}
+      BOX_STATUS_URL: ${{ secrets.BOX_STATUS_URL }}
       PUBLISH_SENATE: ${{ vars.PUBLISH_SENATE || '1' }}
       STATE_KEY: ${{ secrets.STATE_KEY }}
     steps:
@@ -72,6 +76,24 @@ jobs:
           else
             echo "No state branch yet - starting from an empty database (first run backfills; no alerts for old filings)."
           fi
+
+      - name: Probe data sources
+        if: inputs.probe_sources
+        run: |
+          python - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import requests, app
+          checks = {"House Clerk": ("HEAD", app.HOUSE_INDEX.format(y=2026), {}),
+                    "Senate (Bargo)": ("GET", app.BARGO, {"chamber": "senate", "limit": 1}),
+                    "OGE": ("GET", app.OGE_INDEX, {}),
+                    "Yahoo": ("GET", app.YAHOO.format(sym="AAPL"), {"interval": "1d", "range": "5d"}),
+                    "legislators": ("HEAD", app.LEGIS, {})}
+          for name, (m, url, params) in checks.items():
+              try:
+                  r = requests.request(m, url, params=params, headers=app.UA, timeout=60)
+                  print(f"- {name}: HTTP {r.status_code}, {len(r.content)} bytes")
+              except Exception as e:
+                  print(f"- {name}: FAILED {type(e).__name__}: {e}")
+          PY
 
       - name: Refresh (House Clerk, Senate via Bargo, OGE, Yahoo prices) + alerts
         run: |

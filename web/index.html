@@ -63,7 +63,7 @@
     <div class="page-h"><div class="eyebrow">Latest disclosures</div><h1>Trades</h1><p class="credit">Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> · House Clerk · OGE</p></div>
     <div class="kpis" id="kpis"></div>
     <div class="controls">
-      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search a name, ticker or company" autocomplete="off" enterkeyhint="search"></label>
+      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search a company, ticker, politician or state" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
       <div class="pills wide" id="rangeSeg" role="group" aria-label="Date range">
         <button data-v="0">Today</button><button data-v="7">1W</button><button data-v="30">1M</button><button data-v="90" class="on">3M</button><button data-v="365">1Y</button><button data-v="all">ALL</button><button data-v="custom">Custom</button>
       </div>
@@ -97,7 +97,7 @@
   <section class="view" id="v-people" hidden>
     <div class="page-h"><div class="eyebrow">Estimated portfolios</div><h1>Politicians</h1></div>
     <div class="controls">
-      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="Search politicians" autocomplete="off"></label>
+      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="Search politicians, party or state" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
       <div class="scroller">
         <div class="pills" id="polSort"><button data-v="value" class="on">Portfolio</button><button data-v="ret">Return 1Y</button><button data-v="n">Most trades</button><button data-v="volume">Volume</button><button data-v="latest">Recent</button><button data-v="name">A–Z</button></div>
         <button class="chip-btn dir" id="polDir" title="Reverse order"><svg viewBox="0 0 24 24"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg><span>High → low</span></button>
@@ -123,6 +123,7 @@
 
 <div class="sheet-wrap" id="sheet" hidden><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div><button class="ib close" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div id="sheetBody"></div></div></div>
 <div class="toast" id="toast" hidden></div>
+<script src="static/search.js?v=__BUILD__"></script>
 <script src="static/data.js?v=__BUILD__"></script>
 <script src="static/app.js?v=__BUILD__"></script>
 <script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(function(){});});</script>

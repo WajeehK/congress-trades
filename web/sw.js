@@ -2,7 +2,7 @@
    App shell: cache-first, refreshed per build. Data JSON: network-first with offline fallback. */
 const SHELL = 'ct-shell-__BUILD__';
 const DATA = 'ct-data';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './static/style.css?v=__BUILD__', './static/data.js?v=__BUILD__',
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './static/style.css?v=__BUILD__', './static/search.js?v=__BUILD__', './static/data.js?v=__BUILD__',
   './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {

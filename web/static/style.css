@@ -201,6 +201,10 @@ h1{font-size:56px;line-height:1.02;font-weight:800;letter-spacing:-.045em}
 .search svg{color:var(--mute)}
 .search input{flex:1;outline:0;min-width:0;font-size:15.5px}
 .search:focus-within{border-color:var(--ink2)}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}
+.search .sx{display:none;width:28px;height:28px;margin-right:-8px;border-radius:50%;place-items:center;background:var(--bg2);color:var(--ink2);flex:none}
+.search .sx svg{width:14px;height:14px;stroke-width:2.4;color:var(--ink2)}
+.search.has .sx{display:grid}
 .scroller{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
 .sel{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 6px 0 14px;border-radius:999px;border:1px solid var(--line2);background:var(--card);font-size:13.5px;font-weight:600;flex:none}
 .sel span{color:var(--mute);font-weight:500}

@@ -9,6 +9,7 @@ Sources
   * Prices: Yahoo Finance public chart endpoint (daily bars), cached in SQLite.
   * Notifications: ntfy.sh topic (optional).
 """
+import functools
 import hashlib
 import html as htmllib
 import io
@@ -89,6 +90,7 @@ TRADE_COLS = ["uid", "source", "filing_id", "chamber", "politician", "last_name"
 def db():
     c = sqlite3.connect(DB_PATH, timeout=60)
     c.row_factory = sqlite3.Row
+    c.create_function("bh_match", 12, search_match, deterministic=True)
     return c
 
 
@@ -734,6 +736,71 @@ TRADE_SELECT = """SELECT t.*, q.price AS cur_price, q.as_of AS cur_as_of, q.name
 MID = "((COALESCE(t.amount_low,0) + COALESCE(t.amount_high, t.amount_low, 0)) / 2.0)"
 
 
+# ---------------------------------------------------------------- smart search (mirrors web/static/search.js)
+SEARCH_ALIASES = {'google': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ('alphabet',)), 'alphabet': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ()), 'youtube': (('GOOGL', 'GOOG'), ('alphabet',)), 'waymo': (('GOOGL', 'GOOG'), ('alphabet',)), 'facebook': (('META', 'FB'), ('meta platforms',)), 'meta': (('META', 'FB'), ()), 'instagram': (('META', 'FB'), ('meta platforms',)), 'whatsapp': (('META', 'FB'), ('meta platforms',)), 'berkshire': (('BRK.B', 'BRK.A'), ()), 'berkshire hathaway': (('BRK.B', 'BRK.A'), ()), 'buffett': (('BRK.B', 'BRK.A'), ('berkshire',)), 'tesla': (('TSLA',), ()), 'amazon': (('AMZN',), ()), 'aws': (('AMZN',), ('amazon',)), 'microsoft': (('MSFT',), ()), 'apple': (('AAPL',), ()), 'iphone': (('AAPL',), ('apple inc',)), 'nvidia': (('NVDA',), ()), 'netflix': (('NFLX',), ()), 'disney': (('DIS',), ()), 'walmart': (('WMT',), ()), 'costco': (('COST',), ()), 'jpmorgan': (('JPM',), ()), 'jp morgan': (('JPM',), ()), 'chase': (('JPM',), ('jpmorgan',)), 'bank of america': (('BAC',), ()), 'bofa': (('BAC',), ()), 'goldman': (('GS',), ()), 'goldman sachs': (('GS',), ()), 'morgan stanley': (('MS',), ()), 'wells fargo': (('WFC',), ()), 'citi': (('C',), ()), 'citigroup': (('C',), ()), 'visa': (('V',), ()), 'mastercard': (('MA',), ()), 'paypal': (('PYPL',), ()), 'amex': (('AXP',), ()), 'american express': (('AXP',), ()), 'blackrock': (('BLK',), ()), 'coca cola': (('KO',), ()), 'coca-cola': (('KO',), ()), 'coke': (('KO',), ('coca-cola',)), 'pepsi': (('PEP',), ()), 'pepsico': (('PEP',), ()), 'mcdonalds': (('MCD',), ()), "mcdonald's": (('MCD',), ()), 'starbucks': (('SBUX',), ()), 'nike': (('NKE',), ()), 'boeing': (('BA',), ()), 'lockheed': (('LMT',), ()), 'lockheed martin': (('LMT',), ()), 'raytheon': (('RTX',), ()), 'northrop': (('NOC',), ()), 'general dynamics': (('GD',), ()), 'intel': (('INTC',), ()), 'amd': (('AMD',), ()), 'broadcom': (('AVGO',), ()), 'qualcomm': (('QCOM',), ()), 'oracle': (('ORCL',), ()), 'salesforce': (('CRM',), ()), 'adobe': (('ADBE',), ()), 'ibm': (('IBM',), ()), 'cisco': (('CSCO',), ()), 'palantir': (('PLTR',), ()), 'uber': (('UBER',), ()), 'airbnb': (('ABNB',), ()), 'exxon': (('XOM',), ()), 'exxonmobil': (('XOM',), ()), 'chevron': (('CVX',), ()), 'pfizer': (('PFE',), ()), 'moderna': (('MRNA',), ()), 'johnson & johnson': (('JNJ',), ()), 'johnson and johnson': (('JNJ',), ()), 'j&j': (('JNJ',), ()), 'unitedhealth': (('UNH',), ()), 'lilly': (('LLY',), ()), 'eli lilly': (('LLY',), ()), 'home depot': (('HD',), ()), 'at&t': (('T',), ()), 'verizon': (('VZ',), ()), 'comcast': (('CMCSA',), ()), 'tsmc': (('TSM',), ()), 'taiwan semiconductor': (('TSM',), ()), 'coinbase': (('COIN',), ()), 'microstrategy': (('MSTR',), ()), 'snowflake': (('SNOW',), ()), 'crowdstrike': (('CRWD',), ()), 'shopify': (('SHOP',), ()), 'spotify': (('SPOT',), ()), 's&p 500': (('SPY', 'VOO', 'IVV'), ()), 's&p': (('SPY', 'VOO', 'IVV'), ()), 'nasdaq': (('QQQ',), ()), 'trump media': (('DJT',), ()), 'truth social': (('DJT',), ('trump media',)), 'general electric': (('GE',), ()), 'general motors': (('GM',), ()), 'ford': (('F',), ()), 'target': (('TGT',), ()), 'dell': (('DELL',), ()), 'micron': (('MU',), ()), 'supermicro': (('SMCI',), ()), 'super micro': (('SMCI',), ()), 'robinhood': (('HOOD',), ()), 'bitcoin': (('IBIT', 'FBTC', 'GBTC', 'MSTR', 'COIN'), ()), 'gamestop': (('GME',), ()), 'amc': (('AMC',), ()), 'rivian': (('RIVN',), ()), 'lucid': (('LCID',), ()), 'ups': (('UPS',), ()), 'fedex': (('FDX',), ()), 'caterpillar': (('CAT',), ()), 'deere': (('DE',), ()), 'john deere': (('DE',), ()), '3m': (('MMM',), ()), 'procter': (('PG',), ()), 'procter & gamble': (('PG',), ()), 'p&g': (('PG',), ()), 'merck': (('MRK',), ()), 'abbvie': (('ABBV',), ()), 'amgen': (('AMGN',), ()), 'gilead': (('GILD',), ()), 'cvs': (('CVS',), ()), 'walgreens': (('WBA',), ()), 'servicenow': (('NOW',), ()), 'intuit': (('INTU',), ()), 'applied materials': (('AMAT',), ()), 'lam research': (('LRCX',), ()), 'asml': (('ASML',), ()), 'arm': (('ARM',), ()), 'zoom': (('ZM',), ()), 'salesforce.com': (('CRM',), ()), 'dupont': (('DD',), ()), 'dow': (('DOW',), ()), 'honeywell': (('HON',), ()), 'verisign': (('VRSN',), ())}
+_STATES = {"AL":"alabama","AK":"alaska","AZ":"arizona","AR":"arkansas","CA":"california","CO":"colorado","CT":"connecticut","DE":"delaware","FL":"florida","GA":"georgia","HI":"hawaii","ID":"idaho","IL":"illinois","IN":"indiana","IA":"iowa","KS":"kansas","KY":"kentucky","LA":"louisiana","ME":"maine","MD":"maryland","MA":"massachusetts","MI":"michigan","MN":"minnesota","MS":"mississippi","MO":"missouri","MT":"montana","NE":"nebraska","NV":"nevada","NH":"new hampshire","NJ":"new jersey","NM":"new mexico","NY":"new york","NC":"north carolina","ND":"north dakota","OH":"ohio","OK":"oklahoma","OR":"oregon","PA":"pennsylvania","RI":"rhode island","SC":"south carolina","SD":"south dakota","TN":"tennessee","TX":"texas","UT":"utah","VT":"vermont","VA":"virginia","WA":"washington","WV":"west virginia","WI":"wisconsin","WY":"wyoming","DC":"district of columbia","PR":"puerto rico","GU":"guam","VI":"virgin islands","AS":"american samoa","MP":"northern mariana islands"}
+_PARTY = {"D": "democrat democratic dem", "R": "republican gop rep", "I": "independent ind"}
+_SIDE = {"buy": "buy bought purchase", "sell": "sell sold sale"}
+
+
+def _snorm(s):
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(s or "").lower())
+    return re.sub(r"\s+", " ", "".join(ch for ch in s if not unicodedata.combining(ch))).strip()
+
+
+def _scompact(s):
+    return re.sub(r"[^a-z0-9]", "", _snorm(s))
+
+
+def _stick(s):
+    return re.sub(r"[^A-Z0-9]", "", str(s or "").upper())
+
+
+_SKEYS = [(_snorm(k), {_stick(t) for t in v[0]}, v[1]) for k, v in SEARCH_ALIASES.items()]
+_SMULTI = sorted([k for k, _, _ in _SKEYS if " " in k], key=len, reverse=True)
+
+
+def _alias_tickers(text):
+    out, names = set(), set()
+    for k, ts, ns in _SKEYS:
+        if k == text or (len(text) >= 3 and len(k) >= 4 and k.startswith(text)):
+            out |= ts
+            names |= set(ns)
+    return out, tuple(sorted(names))
+
+
+@functools.lru_cache(maxsize=256)
+def _sparse(q):
+    s = " " + _snorm(q).replace('"', "").replace("'", "") + " "
+    terms = []
+    for k in _SMULTI:
+        if " " + k + " " in s:
+            terms.append(k); s = s.replace(" " + k + " ", " ")
+        elif len(s.strip()) >= 3 and " " in s.strip() and k.startswith(s.strip()):
+            terms.append(s.strip()); s = " "
+    terms += [w for w in s.split(" ") if w]
+    return tuple((t, _scompact(t), _stick(t), frozenset(_alias_tickers(t)[0]), _alias_tickers(t)[1]) for t in terms)
+
+
+def search_match(q, politician, ticker, asset, company, description, party, state, chamber, tx_type, side, owner):
+    terms = _sparse(q or "")
+    if not terms:
+        return 1
+    st = (state or "").upper()
+    h = _snorm(" | ".join(x for x in [politician, ticker, asset, company, (description or "")[:200], _PARTY.get(party, party),
+                                       f"{party}-{st}" if party and st else "", st, _STATES.get(st), chamber,
+                                       "white house trump" if chamber == "President" else "", tx_type, _SIDE.get(side, side), owner] if x))
+    hc, tk = re.sub(r"[^a-z0-9]", "", h), _stick(ticker)
+    for text, c, ttk, alias, names in terms:
+        if tk and (tk in alias or (ttk and tk.startswith(ttk))):
+            continue
+        if text in h or any(n in h for n in names) or (len(c) >= 3 and c in hc):
+            continue
+        return 0
+    return 1
+
+
 def _where(q=None, politician=None, ticker=None, chamber=None, party=None, side=None,
            date_from=None, date_to=None, date_field="disclosure_date", asset=None):
     w, a = [], []
@@ -743,8 +810,9 @@ def _where(q=None, politician=None, ticker=None, chamber=None, party=None, side=
         w.append("NOT (t.ticker IS NOT NULL AND (t.asset_type IS NULL OR t.asset_type IN ('ST','EF')))")
     df = "t.tx_date" if date_field == "tx_date" else "t.disclosure_date"
     if q:
-        w.append("(t.politician LIKE ? OR t.ticker LIKE ? OR t.asset LIKE ?)")
-        a += [f"%{q}%", f"{q}%", f"%{q}%"]
+        w.append("bh_match(?, t.politician, t.ticker, t.asset, (SELECT name FROM quotes WHERE ticker = t.ticker), t.description, "
+                 "t.party, t.state, t.chamber, t.tx_type, t.side, t.owner) = 1")
+        a.append(q)
     if politician:
         w.append("t.politician = ?"); a.append(politician)
     if ticker:

@@ -30,12 +30,12 @@
   };
   const isStock = t => t.ticker && (!t.asset_type || t.asset_type === 'ST' || t.asset_type === 'EF');
   function where(rows, p) {
-    const q = (p.get('q') || '').toLowerCase(), qu = q.toUpperCase();
+    const match = window.BHSearch ? window.BHSearch.compile(p.get('q') || '') : () => true;
     const df = p.get('date_field') === 'tx_date' ? 'tx_date' : 'disclosure_date';
     const from = p.get('date_from'), to = p.get('date_to');
     const f = {politician: p.get('politician'), ticker: (p.get('ticker') || '').toUpperCase(), chamber: p.get('chamber'), party: p.get('party'), side: p.get('side'), asset: p.get('asset')};
     return rows.filter(t =>
-      (!q || (t.politician || '').toLowerCase().includes(q) || (t.ticker || '').toUpperCase().startsWith(qu) || (t.asset || '').toLowerCase().includes(q)) &&
+      match(t) &&
       (!f.politician || t.politician === f.politician) && (!f.ticker || (t.ticker || '').toUpperCase() === f.ticker) &&
       (!f.chamber || t.chamber === f.chamber) && (!f.party || t.party === f.party) && (!f.side || t.side === f.side) &&
       (!from || (t[df] && t[df] >= from)) && (!to || (t[df] && t[df] <= to)) &&

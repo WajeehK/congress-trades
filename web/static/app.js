@@ -291,8 +291,9 @@ async function loadFeed(append = false) {
   F.total = d.total;
   const html = d.trades.map(t => tradeRow(t)).join('');
   if (append) $('#feed').insertAdjacentHTML('beforeend', html);
-  else $('#feed').innerHTML = html || empty('No trades match', 'Try a wider date range or fewer filters.');
   const lbl = {0: 'today', 7: 'in the past week', 30: 'in the past month', 90: 'in the past 3 months', 365: 'in the past year', all: 'all time', custom: 'in the chosen dates'}[F.range];
+  const qv = $('#q').value.trim();
+  if (!append) $('#feed').innerHTML = html || (qv ? empty(`No trades match “${esc(qv)}” ${F.range === 'all' ? 'at all' : lbl}`, F.range === 'all' ? 'Try a ticker (GOOGL), a company (Google) or a politician’s name.' : 'Try a wider date range like 1 year or All, or fewer filters.') : empty('No trades match', 'Try a wider date range or fewer filters.'));
   const newN = d.trades.filter(isNew).length;
   $('#feedCount').innerHTML = `<span><b>${d.total.toLocaleString()}</b> trades ${$('#dateField').value === 'tx_date' ? 'made' : 'disclosed'} ${lbl}${newN && !append ? ` · <span style="color:var(--blue);font-weight:600">${newN} new since your last visit</span>` : ''}</span>`;
   $('#tickChip').innerHTML = F.ticker ? `<button class="chip-btn" id="clrTick">${esc(F.ticker)} ✕</button>` : '';
@@ -320,8 +321,8 @@ async function loadPeople() {
     const [people, pfs] = await Promise.all([api('/api/politicians'), portfolios()]);
     P.list = people.map(p => ({...p, pf: pfs.get(p.politician) || null}));
   }
-  const q = $('#pq').value.trim().toLowerCase();
-  let L = P.list.filter(p => (!P.chamber || p.chamber === P.chamber) && (!q || p.politician.toLowerCase().includes(q)));
+  const q = $('#pq').value.trim(), m = window.BHSearch ? BHSearch.compilePeople(q) : (p => p.politician.toLowerCase().includes(q.toLowerCase()));
+  let L = P.list.filter(p => (!P.chamber || p.chamber === P.chamber) && (!q || m(p)));
   const key = {
     value: p => p.pf ? p.pf.value : -1, ret: p => p.pf && p.pf.periods['1Y'] && p.pf.periods['1Y'][1] != null && p.pf.value >= 50000 ? p.pf.periods['1Y'][1] : -1e9,
     n: p => p.n, volume: p => p.volume || 0, latest: p => p.latest || '', name: p => p.politician,
@@ -329,7 +330,7 @@ async function loadPeople() {
   L.sort((a, b) => { const x = key(a), y = key(b); const c = x < y ? -1 : x > y ? 1 : 0; return P.sort === 'name' ? c * -P.dir : c * P.dir; });
   if (P.sort === 'ret' && P.dir === 1) L = L.filter(p => key(p) > -1e9).concat(L.filter(p => key(p) <= -1e9));
   $('#polDir span').textContent = P.sort === 'name' ? (P.dir === -1 ? 'A → Z' : 'Z → A') : (P.dir === -1 ? 'High → low' : 'Low → high');
-  $('#polGrid').innerHTML = L.map(p => portfolioCard(p, p.pf)).join('') || empty('Nobody found', '');
+  $('#polGrid').innerHTML = L.map(p => portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, party (e.g. Democrat) or state (e.g. Texas or TX).') : empty('Nobody found', ''));
 }
 
 /* ============ politician page ============ */
@@ -629,12 +630,16 @@ pills('polChamber', v => { P.chamber = v; loadPeople(); });
 $('#polDir').onclick = () => { P.dir *= -1; loadPeople(); };
 let deb;
 $('#q').addEventListener('input', () => { clearTimeout(deb); deb = setTimeout(() => loadFeed(), 250); });
-$('#pq').addEventListener('input', () => loadPeople());
+let pdeb;
+$('#pq').addEventListener('input', () => { clearTimeout(pdeb); pdeb = setTimeout(() => loadPeople(), 120); });
+$$('.search').forEach(l => { const inp = l.querySelector('input'), x = l.querySelector('.sx'); if (!inp || !x) return;
+  const upd = () => l.classList.toggle('has', !!inp.value); inp.addEventListener('input', upd); upd();
+  x.onclick = e => { e.preventDefault(); inp.value = ''; upd(); inp.dispatchEvent(new Event('input')); inp.focus(); }; });
 $('#party').onchange = () => { loadFeed(); loadKpis(); };
 ['#dateField', '#sort', '#assetSel'].forEach(s => $(s).onchange = () => loadFeed());
 ['#from', '#to'].forEach(s => $(s).onchange = () => { loadFeed(); loadKpis(); });
 $('#reset').onclick = () => {
-  ['#q', '#from', '#to', '#party', '#assetSel'].forEach(s => $(s).value = '');
+  ['#q', '#from', '#to', '#party', '#assetSel'].forEach(s => $(s).value = ''); $$('.search').forEach(l => l.classList.remove('has'));
   $('#dateField').value = 'disclosure_date'; $('#sort').value = 'disclosure_date';
   F.ticker = null; F.side = ''; F.chamber = ''; F.range = '90'; $('#custom').hidden = true;
   [['rangeSeg', '90'], ['sideSeg', ''], ['chamberSeg', '']].forEach(([id, v]) => $$(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === v)));

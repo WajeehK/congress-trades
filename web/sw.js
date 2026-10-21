@@ -1,9 +1,9 @@
-/* Congress Trades service worker (build __BUILD__).
+/* The Black House service worker (build __BUILD__).
    App shell: cache-first, refreshed per build. Data JSON: network-first with offline fallback. */
 const SHELL = 'ct-shell-__BUILD__';
 const DATA = 'ct-data';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './static/style.css?v=__BUILD__', './static/data.js?v=__BUILD__',
-  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/img/trump.jpg'];
+  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('ct-shell-') && k !== SHELL).map(k => caches.delete(k)))).then(() => self.clients.claim()));

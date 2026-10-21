@@ -622,7 +622,7 @@ def notify(new_rows):
         lines.append(f"{pol} ({party or '?'}-{st}, {ch}): " + "; ".join(parts) + more)
     if len(by_pol) > 8:
         lines.append(f"…and {len(by_pol) - 8} more politicians")
-    title = f"{len(new_rows)} new congressional trade{'s' if len(new_rows) != 1 else ''} disclosed"
+    title = f"The Black House: {len(new_rows)} new trade{'s' if len(new_rows) != 1 else ''} disclosed"
     headers = {"Title": title, "Tags": "classical_building"}
     if url:
         headers["Click"] = url
@@ -699,7 +699,7 @@ def scheduler():
 
 
 # ---------------------------------------------------------------- API
-app = FastAPI(title="Politician Trades Tracker")
+app = FastAPI(title="The Black House")
 
 
 @app.on_event("startup")

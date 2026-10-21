@@ -72,7 +72,7 @@ def main():
     st = app.status()
     n0 = sum(s["n"] for s in before["sources"])
     n1 = sum(s["n"] for s in st["sources"])
-    lines = [f"### Congress Trades refresh",
+    lines = [f"### The Black House refresh",
              f"- trades: {n0} -> {n1} (+{n1 - n0})",
              f"- notifications: {'sent by this run' if send else 'skipped'} ({why})",
              f"- prices: {json.dumps(st['prices'])}",

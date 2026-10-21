@@ -1,5 +1,5 @@
 'use strict';
-/* Congress Trades v5 */
+/* The Black House v5 */
 /* ============ helpers ============ */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -398,7 +398,7 @@ async function openPolitician(name) {
   $('#bellBtn').onclick = () => toggleFollow(name);
   $('#shareBtn').onclick = async () => {
     const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(name);
-    if (navigator.share) { try { await navigator.share({title: `${name} · Congress Trades`, url}); } catch (e) { /* cancelled */ } }
+    if (navigator.share) { try { await navigator.share({title: `${name} · The Black House`, url}); } catch (e) { /* cancelled */ } }
     else { await navigator.clipboard.writeText(url).catch(() => {}); toast('Link copied'); }
   };
   if ($('#mirrorBtn')) $('#mirrorBtn').onclick = () => openMirror();
@@ -476,7 +476,7 @@ function openFollowSheet(name) {
   const d = POL.data && POL.data.politician === name ? POL.data : null;
   const topic = d ? d.follow_topic : null, server = (d && d.ntfy_server) || 'https://ntfy.sh';
   openSheet(`<div class="td-head">${avatar(name, d && d.bioguide)}<div><h2 style="font-size:22px">Following ${esc(name)}</h2><div class="an">Saved on this device</div></div></div>
-    ${topic ? `<div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>Congress Trades</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+    ${topic ? `<div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
     <div class="steps">
       <div class="step card"><div><b>Install ntfy</b><p>Free and open source, for <a href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener" style="text-decoration:underline">iPhone</a>, <a href="https://play.google.com/store/apps/details?id=io.heckel.ntfy" target="_blank" rel="noopener" style="text-decoration:underline">Android</a> or the web.</p></div></div>
       <div class="step card"><div><b>Subscribe to this topic</b><p><code>${esc(topic)}</code></p><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><a class="sbtn" href="${esc(server)}/${esc(topic)}" target="_blank" rel="noopener">Open in ntfy</a><button class="sbtn ghost" data-copy="${esc(topic)}">Copy topic</button></div></div></div>
@@ -582,7 +582,7 @@ async function renderAlerts() {
     <div class="page-h"><div class="eyebrow">Instant alerts</div><h1>Never miss<br>a trade.</h1></div>
     <div class="lock"><div class="time">${now.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})}</div>
       <div class="clock">${now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: false})}</div>
-      <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>Congress Trades</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+      <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
     <div class="h2s" style="margin-top:8px"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
     <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; const t = base ? `${base}-${slug(n)}` : null; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b>${t ? `<code>${esc(t)}</code>` : ''}</div>${t ? `<a class="sbtn" href="${esc(server)}/${esc(t)}" target="_blank" rel="noopener">Subscribe</a>` : ''}<button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
       : `<div class="empty"><b>You're not following anyone yet</b>Open a politician and tap the ${I.bell.replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} bell.</div>`}</div>

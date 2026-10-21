@@ -39,6 +39,16 @@ def box_alive():
         return False, f"unreachable ({type(e).__name__})"
 
 
+def senate_feed():
+    """Senate trades relayed by the box (Bargo blocks GitHub's IP ranges). The workflow decrypts the
+    `senate-feed` branch to data/senate_feed.json; raw records never leave the encrypted state."""
+    f = app.DATA / "senate_feed.json"
+    if os.environ.get("SENATE_VIA", "feed") != "feed" or not f.exists():
+        return None
+    d = json.loads(f.read_text())
+    return d.get("trades", []), d.get("exported_at")
+
+
 def main():
     mode = os.environ.get("NTFY_SENDER", "auto").strip().lower() or "auto"
     if mode == "actions":
@@ -50,7 +60,15 @@ def main():
         send = not alive
     app._startup()
     before = app.status()
+    feed = senate_feed()
+    extra = []
+    if feed is not None:
+        app.fetch_senate = lambda force=False: []  # direct Bargo calls from Actions get HTTP 403
+        extra = app.ingest_bargo(feed[0])
+        app.note(f"Senate (Bargo via box feed, exported {feed[1]}): {len(extra)} new transactions")
     app.refresh(force_senate=False, do_notify=send)
+    if send and extra:
+        app.notify(extra)
     st = app.status()
     n0 = sum(s["n"] for s in before["sources"])
     n1 = sum(s["n"] for s in st["sources"])

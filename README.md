@@ -11,6 +11,12 @@ Stock trades disclosed by members of Congress and the President, rebuilt into es
   4. `pipeline/export_static.py` writes pre-generated JSON (`data/*.json`) plus the frontend in `web/` to `_site`, which is deployed to GitHub Pages.
 - The frontend (`web/`) is the same app as the server version; `web/static/data.js` emulates the API in the browser, so filtering, sorting, estimated prices, portfolios, Mirror and the Alerts tab all run client-side.
 
+## Senate relay (box)
+Bargo answers GitHub Actions IPs with HTTP 403, so Senate trades come from the self-hosted box:
+`box/senate_feed.sh loop` reads the box server's latest Bargo dump each hour, encrypts it with `STATE_KEY`
+and force-pushes it to the `senate-feed` branch; the workflow decrypts and ingests it. If the box is off,
+House, OGE and prices keep updating; Senate pauses until the box is back.
+
 ## Alerts (ntfy)
 Exactly one sender at a time. `NTFY_SENDER` (repository variable):
 - `auto` (default): the workflow sends only if the self-hosted server at `BOX_STATUS_URL` (secret) is down or hasn't refreshed for 3 hours;

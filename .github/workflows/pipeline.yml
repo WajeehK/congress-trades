@@ -95,6 +95,17 @@ jobs:
                   print(f"- {name}: FAILED {type(e).__name__}: {e}")
           PY
 
+      - name: Senate feed from the box (Bargo blocks GitHub IPs)
+        run: |
+          mkdir -p data
+          if git fetch --depth 1 origin senate-feed 2>/dev/null; then
+            git show FETCH_HEAD:senate.json.gz.enc > /tmp/s.enc
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass env:STATE_KEY -in /tmp/s.enc | gunzip > data/senate_feed.json
+            echo "senate feed: $(git log -1 --format=%cI FETCH_HEAD)"
+          else
+            echo "no senate-feed branch yet"
+          fi
+
       - name: Refresh (House Clerk, Senate via Bargo, OGE, Yahoo prices) + alerts
         run: |
           mkdir -p data

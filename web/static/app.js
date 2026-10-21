@@ -593,7 +593,7 @@ async function renderAlerts() {
       <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>The server checks filings every ${Math.round(s.refresh_minutes || 60)} minutes. When it finds new trades by someone, it sends one push to their topic with the tickers and amounts. Tap it to open their page.</p></div></div>
     </div>
     ${base ? `<div class="h2s"><h2>Everything</h2></div>
-    <div class="card"><div class="frow"><span class="logo sm" style="background:var(--accent);color:var(--on-accent);border:0">${I.cap}</span><div class="t"><b>All new trades</b><code>${esc(base)}</code></div><a class="sbtn" href="${esc(server)}/${esc(base)}" target="_blank" rel="noopener">Subscribe</a></div></div>
+    <div class="card"><div class="frow"><span class="logo sm brandmark">${I.cap}</span><div class="t"><b>All new trades</b><code>${esc(base)}</code></div><a class="sbtn" href="${esc(server)}/${esc(base)}" target="_blank" rel="noopener">Subscribe</a></div></div>
     <p class="fine">Topics are public names on ntfy.sh. Anyone who knows a topic can read its alerts, which only ever contain public disclosure data.</p>` : ''}
     <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">

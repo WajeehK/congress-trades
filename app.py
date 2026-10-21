@@ -19,6 +19,7 @@ import os
 import re
 import secrets
 import sqlite3
+import subprocess
 import threading
 import time
 import unicodedata
@@ -374,12 +375,15 @@ def fetch_senate(force=False):
 
 
 
-# ---------------------------------------------------------------- Executive branch (OGE Form 278-T, the President)
+# ---------------------------------------------------------------- Executive branch (OGE 278-T and 278e, the President)
 OGE_DIR = DATA / "oge"
 OGE_DIR.mkdir(exist_ok=True)
+OGE_TEXT_DIR = BASE / "oge_ocr"  # committed OCR text (pages split by \f) so GitHub Actions never has to re-OCR old scans
 OGE_INDEX = "https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000"
 OGE_BASE = "https://extapps2.oge.gov"
 OGE_MIN_HOURS = float(os.environ.get("OGE_MIN_HOURS", "6"))
+# bump when the OGE parsers change: every OGE filing is then re-parsed once, and rows found that way count as backfill
+OGE_PARSER_VERSION = "3"
 EXEC_PEOPLE = {"Trump": {"name": "Donald J. Trump", "last": "Trump", "party": "R", "state": "US", "role": "President"}}
 _ticker_index = None
 
@@ -402,7 +406,8 @@ def ticker_index():
 
 
 def oge_filings():
-    """The President's 278-T links from OGE's public President & Vice President index (no OGE Form 201 needed)."""
+    """The President's 278-T (periodic) and 278e (annual / termination) reports from OGE's public President & Vice
+    President index (no OGE Form 201 needed)."""
     import urllib.parse
     r = requests.get(OGE_INDEX, headers=UA, timeout=60)
     r.raise_for_status()
@@ -410,84 +415,174 @@ def oge_filings():
     for m in re.finditer(r"<a href='([^']+)'>((?:(?!</a>).)*?)</a>", r.text, re.S):
         label = re.sub("<[^>]+>", "", m.group(2)).strip()
         path = m.group(1)
-        dm = re.search(r"278 Transaction \((\d\d)/(\d\d)/(\d{4})\)", label)
         who = next((k for k in EXEC_PEOPLE if k in path), None)
-        if not dm or not who:
+        if not who:
+            continue
+        dm = re.search(r"278 Transaction \((\d\d)/(\d\d)/(\d{4})\)", label)
+        am = re.match(r"(Annual|Termination)(?: \((\d{4})\))?", label)
+        if dm:
+            kind, received = "278t", f"{dm.group(3)}-{dm.group(1)}-{dm.group(2)}"
+        elif am:
+            ym = re.search(r"(20\d\d)", path)
+            yr = am.group(2) or (ym.group(1) if ym else "2000")
+            kind, received = "278e", f"{yr}-05-15"  # placeholder; the report's own OGE-received stamp wins
+        else:
             continue
         docid = path.split("/")[-3] if "/$FILE/" in path else hashlib.sha1(path.encode()).hexdigest()[:16]
-        out.append({"who": who, "docid": docid, "received": f"{dm.group(3)}-{dm.group(1)}-{dm.group(2)}",
+        out.append({"who": who, "docid": docid, "received": received, "kind": kind, "label": label,
                     "file_name": path.split("/")[-1], "amended": "AMEND" in path.upper(),
                     "url": OGE_BASE + urllib.parse.quote(path, safe="/+$")})
     return out
 
 
-def _parse_oge_pdf(pdf, received):
+def _oge_ocr_text(pdf):
+    """OCR text of a scanned 278-T, pages separated by \\f: committed copy if present, else tesseract (cached)."""
+    committed = OGE_TEXT_DIR / f"{pdf.stem}.txt"
+    if committed.exists():
+        return committed.read_text()
+    import oge_ocr
+    all_txt = oge_ocr.ocr_pdf(pdf, workers=3)
+    pages = sorted(pdf.with_suffix(".ocr").glob("p-*.txt"))
+    return "\f".join(p.read_text() for p in pages) if pages else all_txt
+
+
+def _parse_oge_pdf(pdf, received, amended=False):
+    """278-T rows: the PDF's own text layer first, then tesseract OCR to fill rows the text layer lost.
+    An amended report carries 'In place of line item #N' substitutions that override those rows."""
     filed = date.fromisoformat(received)
-    text_rows = oge_parser.parse_lines(oge_parser.pdf_lines(str(pdf)), filed)
-    ocr_rows = []
+    text = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
     try:
-        import oge_ocr
-        ocr_rows = oge_parser.parse_lines(oge_ocr.ocr_pdf(pdf, workers=3).splitlines(), filed)
+        ocr = _oge_ocr_text(pdf)
     except Exception as e:
         log.warning("OCR %s failed: %s", pdf, e)
-    return oge_parser.merge(text_rows, ocr_rows)
+        ocr = ""
+    subs = {}
+    if amended:
+        subs = {**oge_parser.parse_amendment(ocr), **oge_parser.parse_amendment(text)}
+
+    def lines(t):
+        return [ln for pg in t.split("\f") if not (amended and oge_parser.is_amendment_page(pg)) for ln in pg.splitlines()]
+    rows = oge_parser.merge(oge_parser.parse_lines(lines(text), filed), oge_parser.parse_lines(lines(ocr), filed))
+    seen = set()
+    for r in rows:
+        s = subs.get(r.get("n"))
+        if s:
+            r.update({k: s[k] for k in ("tx_type", "tx_date", "amount_low", "amount_high", "amount")}, amended=True)
+            seen.add(r["n"])
+    rows += [dict(s, amended=True) for n, s in sorted(subs.items()) if n not in seen and len(s["asset"]) >= 3]
+    return rows
+
+
+def _asset_key(a):
+    return re.sub(r"[^A-Z]", "", oge_parser.clean_asset(a or "").upper())[:28]
+
+
+def _dedupe_278e(c, politician, fid, txs):
+    """Drop 278e rows already reported on a 278-T (same date, type, value band and a similar asset name);
+    each 278-T row absorbs at most one annual row, so genuine repeat lots are kept."""
+    from difflib import SequenceMatcher
+    pool = {}
+    for r in c.execute("SELECT tx_date, tx_type, amount_low, asset FROM trades WHERE source='oge' AND politician=? "
+                       "AND filing_id IN (SELECT id FROM filings WHERE source='oge' AND id != ? AND url NOT LIKE '%278ANNUAL%' "
+                       "AND url NOT LIKE '%Annual%' AND url NOT LIKE '%Termination%')", (politician, fid)):
+        pool.setdefault((r["tx_date"], r["tx_type"], r["amount_low"]), []).append(_asset_key(r["asset"]))
+    out, dropped = [], 0
+    for t in txs:
+        cands = pool.get((t["tx_date"], t["tx_type"], t["amount_low"]), [])
+        k = _asset_key(t["asset"])
+        hit = next((i for i, k2 in enumerate(cands) if SequenceMatcher(None, k, k2).ratio() >= 0.5), None)
+        if hit is None:
+            out.append(t)
+        else:
+            cands.pop(hit)
+            dropped += 1
+    return out, dropped
 
 
 def fetch_oge(force=False):
     last = meta_get("oge_last_fetch")
-    if last and not force and time.time() - float(last) < OGE_MIN_HOURS * 3600:
+    reparse = meta_get("oge_parser_version") != OGE_PARSER_VERSION
+    if last and not force and not reparse and time.time() - float(last) < OGE_MIN_HOURS * 3600:
         return []
     fl = oge_filings()
     with db() as c:
-        done = {r["id"] for r in c.execute("SELECT id FROM filings WHERE source='oge' AND status IN ('parsed','amendment','no_transactions')")}
-    todo = [f for f in fl if f"oge:{f['docid']}" not in done]
-    note(f"Executive (OGE): {len(fl)} 278-T filings listed, {len(todo)} new to process")
+        known = {r["id"] for r in c.execute("SELECT id FROM filings WHERE source='oge'")}
+        done = set() if reparse else {r["id"] for r in c.execute(
+            "SELECT id FROM filings WHERE source='oge' AND status IN ('parsed','no_transactions')")}
+    # 278-Ts first, so annual reports can be de-duplicated against them
+    todo = sorted([f for f in fl if f"oge:{f['docid']}" not in done], key=lambda f: (f["kind"] != "278t", f["received"]))
+    note(f"Executive (OGE): {len(fl)} filings listed, {len(todo)} to process{' (parser update: re-parsing all)' if reparse else ''}")
     idx = ticker_index()
-    new_rows = []
+    new_rows, failed = [], 0
     for f in todo:
         fid = f"oge:{f['docid']}"
         person = EXEC_PEOPLE[f["who"]]
         pdf = OGE_DIR / f"{f['docid']}.pdf"
+        # a filing we had already processed, or any annual report, only adds history: never alert on those rows
+        backfill = fid in known or f["kind"] == "278e"
+        received, note_txt, dropped = f["received"], None, 0
         try:
             if not pdf.exists():
                 rr = requests.get(f["url"], headers=UA, timeout=600)
                 rr.raise_for_status()
                 pdf.write_bytes(rr.content)
-            if f["amended"]:
-                status, txs = "amendment", []
+            if f["kind"] == "278e":
+                text = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
+                got = oge_parser.received_278e(text)
+                received = got.isoformat() if got else received
+                txs = oge_parser.parse_278e(text)
+                what = "termination report" if f["label"].startswith("Termination") else \
+                    f"annual report for {int(f['label'][-5:-1]) - 1}" if re.search(r"\(\d{4}\)$", f["label"]) else "annual report"
+                note_txt = f"From the OGE 278e {what}"
             else:
-                txs = _parse_oge_pdf(pdf, f["received"])
-                status = "parsed" if txs else "no_transactions"
+                txs = _parse_oge_pdf(pdf, received, amended=f["amended"])
+            status = "parsed" if txs else "no_transactions"
         except Exception as e:
             note(f"OGE {f['file_name']} failed: {e}")
+            failed += 1
             continue
         with db() as c:
+            if f["kind"] == "278e":
+                txs, dropped = _dedupe_278e(c, person["name"], fid, txs)
             c.execute("INSERT OR REPLACE INTO filings VALUES(?,?,?,?,?,?,?,?,?,?)",
-                      (fid, "oge", "Executive", person["name"], person["role"], f["received"], f["url"], status,
+                      (fid, "oge", "Executive", person["name"], person["role"], received, f["url"], status,
                        len(txs), now()))
             prev = {r["uid"]: r["first_seen"] for r in c.execute("SELECT uid, first_seen FROM trades WHERE filing_id=?", (fid,))}
             c.execute("DELETE FROM trades WHERE filing_id=?", (fid,))
+            used = set()
             for i, t in enumerate(txs):
-                uid = f"{fid}:{t['n'] or 'x' + str(i)}"
+                if f["kind"] == "278e":
+                    uid = f"{fid}:e{i + 1}"
+                else:
+                    uid = f"{fid}:{t['n'] or 'x' + str(i)}"
+                    k = 2
+                    while uid in used:  # a misread row number must not silently overwrite another row
+                        uid = f"{fid}:{t['n']}-{k}"
+                        k += 1
+                used.add(uid)
                 hit = idx.match(t["asset"]) if idx else None
                 kind = oge_parser.asset_kind(t["asset"])
+                desc = note_txt or ("Amended by the filer (OGE 278-T amendment)" if t.get("amended") else
+                                    "Reported more than 30 days after notification" if t.get("late") else None)
                 row = {"uid": uid, "source": "oge", "filing_id": fid, "chamber": "Executive",
                        "politician": person["name"], "last_name": person["last"], "party": person["party"],
                        "state": person["state"], "district": person["role"], "owner": None,
                        "ticker": hit[0] if hit else None, "asset": t["asset"], "asset_type": "ST" if hit else kind,
                        "tx_type": t["tx_type"], "side": side_of(t["tx_type"]), "tx_date": t["tx_date"],
-                       "disclosure_date": f["received"], "amount": t["amount"], "amount_low": t["amount_low"],
-                       "amount_high": t["amount_high"],
-                       "description": "Reported more than 30 days after notification" if t.get("late") else None,
+                       "disclosure_date": received, "amount": t["amount"], "amount_low": t["amount_low"],
+                       "amount_high": t["amount_high"], "description": desc,
                        "url": f["url"], "fetched_at": now(), "bioguide": None,
-                       "first_seen": prev.get(uid) or first_seen_for(f["received"])}
+                       "first_seen": prev.get(uid) or (received + "T12:00:00+00:00" if backfill else first_seen_for(received))}
                 insert_trade(c, row, ignore=True)
-                if uid not in prev:
+                if uid not in prev and not backfill:
                     new_rows.append(row)
             for (tk,) in c.execute("SELECT DISTINCT ticker FROM trades WHERE filing_id=? AND ticker IS NOT NULL", (fid,)).fetchall():
                 c.execute(EST_SQL, (tk,))  # reuse cached daily prices for the trade-day estimate
-        note(f"OGE {f['file_name']}: {status}, {len(txs)} transactions")
+        note(f"OGE {f['file_name']}: {status}, {len(txs)} transactions"
+             + (f" ({dropped} already on a 278-T)" if dropped else "") + (" [backfill, no alerts]" if backfill else ""))
     meta_set("oge_last_fetch", str(time.time()))
+    if reparse and not failed:
+        meta_set("oge_parser_version", OGE_PARSER_VERSION)
     return new_rows
 
 
@@ -737,7 +832,7 @@ MID = "((COALESCE(t.amount_low,0) + COALESCE(t.amount_high, t.amount_low, 0)) / 
 
 
 # ---------------------------------------------------------------- smart search (mirrors web/static/search.js)
-SEARCH_ALIASES = {'google': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ('alphabet',)), 'alphabet': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ()), 'youtube': (('GOOGL', 'GOOG'), ('alphabet',)), 'waymo': (('GOOGL', 'GOOG'), ('alphabet',)), 'facebook': (('META', 'FB'), ('meta platforms',)), 'meta': (('META', 'FB'), ()), 'instagram': (('META', 'FB'), ('meta platforms',)), 'whatsapp': (('META', 'FB'), ('meta platforms',)), 'berkshire': (('BRK.B', 'BRK.A'), ()), 'berkshire hathaway': (('BRK.B', 'BRK.A'), ()), 'buffett': (('BRK.B', 'BRK.A'), ('berkshire',)), 'tesla': (('TSLA',), ()), 'amazon': (('AMZN',), ()), 'aws': (('AMZN',), ('amazon',)), 'microsoft': (('MSFT',), ()), 'apple': (('AAPL',), ()), 'iphone': (('AAPL',), ('apple inc',)), 'nvidia': (('NVDA',), ()), 'netflix': (('NFLX',), ()), 'disney': (('DIS',), ()), 'walmart': (('WMT',), ()), 'costco': (('COST',), ()), 'jpmorgan': (('JPM',), ()), 'jp morgan': (('JPM',), ()), 'chase': (('JPM',), ('jpmorgan',)), 'bank of america': (('BAC',), ()), 'bofa': (('BAC',), ()), 'goldman': (('GS',), ()), 'goldman sachs': (('GS',), ()), 'morgan stanley': (('MS',), ()), 'wells fargo': (('WFC',), ()), 'citi': (('C',), ()), 'citigroup': (('C',), ()), 'visa': (('V',), ()), 'mastercard': (('MA',), ()), 'paypal': (('PYPL',), ()), 'amex': (('AXP',), ()), 'american express': (('AXP',), ()), 'blackrock': (('BLK',), ()), 'coca cola': (('KO',), ()), 'coca-cola': (('KO',), ()), 'coke': (('KO',), ('coca-cola',)), 'pepsi': (('PEP',), ()), 'pepsico': (('PEP',), ()), 'mcdonalds': (('MCD',), ()), "mcdonald's": (('MCD',), ()), 'starbucks': (('SBUX',), ()), 'nike': (('NKE',), ()), 'boeing': (('BA',), ()), 'lockheed': (('LMT',), ()), 'lockheed martin': (('LMT',), ()), 'raytheon': (('RTX',), ()), 'northrop': (('NOC',), ()), 'general dynamics': (('GD',), ()), 'intel': (('INTC',), ()), 'amd': (('AMD',), ()), 'broadcom': (('AVGO',), ()), 'qualcomm': (('QCOM',), ()), 'oracle': (('ORCL',), ()), 'salesforce': (('CRM',), ()), 'adobe': (('ADBE',), ()), 'ibm': (('IBM',), ()), 'cisco': (('CSCO',), ()), 'palantir': (('PLTR',), ()), 'uber': (('UBER',), ()), 'airbnb': (('ABNB',), ()), 'exxon': (('XOM',), ()), 'exxonmobil': (('XOM',), ()), 'chevron': (('CVX',), ()), 'pfizer': (('PFE',), ()), 'moderna': (('MRNA',), ()), 'johnson & johnson': (('JNJ',), ()), 'johnson and johnson': (('JNJ',), ()), 'j&j': (('JNJ',), ()), 'unitedhealth': (('UNH',), ()), 'lilly': (('LLY',), ()), 'eli lilly': (('LLY',), ()), 'home depot': (('HD',), ()), 'at&t': (('T',), ()), 'verizon': (('VZ',), ()), 'comcast': (('CMCSA',), ()), 'tsmc': (('TSM',), ()), 'taiwan semiconductor': (('TSM',), ()), 'coinbase': (('COIN',), ()), 'microstrategy': (('MSTR',), ()), 'snowflake': (('SNOW',), ()), 'crowdstrike': (('CRWD',), ()), 'shopify': (('SHOP',), ()), 'spotify': (('SPOT',), ()), 's&p 500': (('SPY', 'VOO', 'IVV'), ()), 's&p': (('SPY', 'VOO', 'IVV'), ()), 'nasdaq': (('QQQ',), ()), 'trump media': (('DJT',), ()), 'truth social': (('DJT',), ('trump media',)), 'general electric': (('GE',), ()), 'general motors': (('GM',), ()), 'ford': (('F',), ()), 'target': (('TGT',), ()), 'dell': (('DELL',), ()), 'micron': (('MU',), ()), 'supermicro': (('SMCI',), ()), 'super micro': (('SMCI',), ()), 'robinhood': (('HOOD',), ()), 'bitcoin': (('IBIT', 'FBTC', 'GBTC', 'MSTR', 'COIN'), ()), 'gamestop': (('GME',), ()), 'amc': (('AMC',), ()), 'rivian': (('RIVN',), ()), 'lucid': (('LCID',), ()), 'ups': (('UPS',), ()), 'fedex': (('FDX',), ()), 'caterpillar': (('CAT',), ()), 'deere': (('DE',), ()), 'john deere': (('DE',), ()), '3m': (('MMM',), ()), 'procter': (('PG',), ()), 'procter & gamble': (('PG',), ()), 'p&g': (('PG',), ()), 'merck': (('MRK',), ()), 'abbvie': (('ABBV',), ()), 'amgen': (('AMGN',), ()), 'gilead': (('GILD',), ()), 'cvs': (('CVS',), ()), 'walgreens': (('WBA',), ()), 'servicenow': (('NOW',), ()), 'intuit': (('INTU',), ()), 'applied materials': (('AMAT',), ()), 'lam research': (('LRCX',), ()), 'asml': (('ASML',), ()), 'arm': (('ARM',), ()), 'zoom': (('ZM',), ()), 'salesforce.com': (('CRM',), ()), 'dupont': (('DD',), ()), 'dow': (('DOW',), ()), 'honeywell': (('HON',), ()), 'verisign': (('VRSN',), ())}
+SEARCH_ALIASES = {'mp materials': (('MP',), ('mp matls',)), 'usa rare earth': (('USAR',), ()), 'google': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ('alphabet',)), 'alphabet': (('GOOGL', 'GOOG', 'GOOGM', 'GOOGN'), ()), 'youtube': (('GOOGL', 'GOOG'), ('alphabet',)), 'waymo': (('GOOGL', 'GOOG'), ('alphabet',)), 'facebook': (('META', 'FB'), ('meta platforms',)), 'meta': (('META', 'FB'), ()), 'instagram': (('META', 'FB'), ('meta platforms',)), 'whatsapp': (('META', 'FB'), ('meta platforms',)), 'berkshire': (('BRK.B', 'BRK.A'), ()), 'berkshire hathaway': (('BRK.B', 'BRK.A'), ()), 'buffett': (('BRK.B', 'BRK.A'), ('berkshire',)), 'tesla': (('TSLA',), ()), 'amazon': (('AMZN',), ()), 'aws': (('AMZN',), ('amazon',)), 'microsoft': (('MSFT',), ()), 'apple': (('AAPL',), ()), 'iphone': (('AAPL',), ('apple inc',)), 'nvidia': (('NVDA',), ()), 'netflix': (('NFLX',), ()), 'disney': (('DIS',), ()), 'walmart': (('WMT',), ()), 'costco': (('COST',), ()), 'jpmorgan': (('JPM',), ()), 'jp morgan': (('JPM',), ()), 'chase': (('JPM',), ('jpmorgan',)), 'bank of america': (('BAC',), ()), 'bofa': (('BAC',), ()), 'goldman': (('GS',), ()), 'goldman sachs': (('GS',), ()), 'morgan stanley': (('MS',), ()), 'wells fargo': (('WFC',), ()), 'citi': (('C',), ()), 'citigroup': (('C',), ()), 'visa': (('V',), ()), 'mastercard': (('MA',), ()), 'paypal': (('PYPL',), ()), 'amex': (('AXP',), ()), 'american express': (('AXP',), ()), 'blackrock': (('BLK',), ()), 'coca cola': (('KO',), ()), 'coca-cola': (('KO',), ()), 'coke': (('KO',), ('coca-cola',)), 'pepsi': (('PEP',), ()), 'pepsico': (('PEP',), ()), 'mcdonalds': (('MCD',), ()), "mcdonald's": (('MCD',), ()), 'starbucks': (('SBUX',), ()), 'nike': (('NKE',), ()), 'boeing': (('BA',), ()), 'lockheed': (('LMT',), ()), 'lockheed martin': (('LMT',), ()), 'raytheon': (('RTX',), ()), 'northrop': (('NOC',), ()), 'general dynamics': (('GD',), ()), 'intel': (('INTC',), ()), 'amd': (('AMD',), ()), 'broadcom': (('AVGO',), ()), 'qualcomm': (('QCOM',), ()), 'oracle': (('ORCL',), ()), 'salesforce': (('CRM',), ()), 'adobe': (('ADBE',), ()), 'ibm': (('IBM',), ()), 'cisco': (('CSCO',), ()), 'palantir': (('PLTR',), ()), 'uber': (('UBER',), ()), 'airbnb': (('ABNB',), ()), 'exxon': (('XOM',), ()), 'exxonmobil': (('XOM',), ()), 'chevron': (('CVX',), ()), 'pfizer': (('PFE',), ()), 'moderna': (('MRNA',), ()), 'johnson & johnson': (('JNJ',), ()), 'johnson and johnson': (('JNJ',), ()), 'j&j': (('JNJ',), ()), 'unitedhealth': (('UNH',), ()), 'lilly': (('LLY',), ()), 'eli lilly': (('LLY',), ()), 'home depot': (('HD',), ()), 'at&t': (('T',), ()), 'verizon': (('VZ',), ()), 'comcast': (('CMCSA',), ()), 'tsmc': (('TSM',), ()), 'taiwan semiconductor': (('TSM',), ()), 'coinbase': (('COIN',), ()), 'microstrategy': (('MSTR',), ()), 'snowflake': (('SNOW',), ()), 'crowdstrike': (('CRWD',), ()), 'shopify': (('SHOP',), ()), 'spotify': (('SPOT',), ()), 's&p 500': (('SPY', 'VOO', 'IVV'), ()), 's&p': (('SPY', 'VOO', 'IVV'), ()), 'nasdaq': (('QQQ',), ()), 'trump media': (('DJT',), ()), 'truth social': (('DJT',), ('trump media',)), 'general electric': (('GE',), ()), 'general motors': (('GM',), ()), 'ford': (('F',), ()), 'target': (('TGT',), ()), 'dell': (('DELL',), ()), 'micron': (('MU',), ()), 'supermicro': (('SMCI',), ()), 'super micro': (('SMCI',), ()), 'robinhood': (('HOOD',), ()), 'bitcoin': (('IBIT', 'FBTC', 'GBTC', 'MSTR', 'COIN'), ()), 'gamestop': (('GME',), ()), 'amc': (('AMC',), ()), 'rivian': (('RIVN',), ()), 'lucid': (('LCID',), ()), 'ups': (('UPS',), ()), 'fedex': (('FDX',), ()), 'caterpillar': (('CAT',), ()), 'deere': (('DE',), ()), 'john deere': (('DE',), ()), '3m': (('MMM',), ()), 'procter': (('PG',), ()), 'procter & gamble': (('PG',), ()), 'p&g': (('PG',), ()), 'merck': (('MRK',), ()), 'abbvie': (('ABBV',), ()), 'amgen': (('AMGN',), ()), 'gilead': (('GILD',), ()), 'cvs': (('CVS',), ()), 'walgreens': (('WBA',), ()), 'servicenow': (('NOW',), ()), 'intuit': (('INTU',), ()), 'applied materials': (('AMAT',), ()), 'lam research': (('LRCX',), ()), 'asml': (('ASML',), ()), 'arm': (('ARM',), ()), 'zoom': (('ZM',), ()), 'salesforce.com': (('CRM',), ()), 'dupont': (('DD',), ()), 'dow': (('DOW',), ()), 'honeywell': (('HON',), ()), 'verisign': (('VRSN',), ())}
 _STATES = {"AL":"alabama","AK":"alaska","AZ":"arizona","AR":"arkansas","CA":"california","CO":"colorado","CT":"connecticut","DE":"delaware","FL":"florida","GA":"georgia","HI":"hawaii","ID":"idaho","IL":"illinois","IN":"indiana","IA":"iowa","KS":"kansas","KY":"kentucky","LA":"louisiana","ME":"maine","MD":"maryland","MA":"massachusetts","MI":"michigan","MN":"minnesota","MS":"mississippi","MO":"missouri","MT":"montana","NE":"nebraska","NV":"nevada","NH":"new hampshire","NJ":"new jersey","NM":"new mexico","NY":"new york","NC":"north carolina","ND":"north dakota","OH":"ohio","OK":"oklahoma","OR":"oregon","PA":"pennsylvania","RI":"rhode island","SC":"south carolina","SD":"south dakota","TN":"tennessee","TX":"texas","UT":"utah","VT":"vermont","VA":"virginia","WA":"washington","WV":"west virginia","WI":"wisconsin","WY":"wyoming","DC":"district of columbia","PR":"puerto rico","GU":"guam","VI":"virgin islands","AS":"american samoa","MP":"northern mariana islands"}
 _PARTY = {"D": "democrat democratic dem", "R": "republican gop rep", "I": "independent ind"}
 _SIDE = {"buy": "buy bought purchase", "sell": "sell sold sale"}

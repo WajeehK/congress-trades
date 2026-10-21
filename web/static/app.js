@@ -120,7 +120,7 @@ function tradeRow(t, showWho = true) {
   return `<button class="trow" data-trade="${esc(t.uid)}">
     ${logo(t.ticker, t.asset_type)}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag" title="From an annual financial disclosure report">Annual report</span>' : ''}</div>
       <div class="l2">${sub}</div>
     </div>
     <div class="r">
@@ -465,7 +465,7 @@ async function loadFilings(name) {
   if (!d || POL.name !== name) return;
   const F2 = d.filings.filter(f => f.url);
   $('#filN').textContent = `${F2.length} filing${F2.length === 1 ? '' : 's'}`;
-  $('#polFilings').innerHTML = F2.slice(0, 8).map(f => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${I.doc}<span>${esc(f.status === 'amendment' ? 'Amended report' : f.source === 'oge' ? 'OGE 278-T report' : 'Periodic transaction report')}${f.n_tx ? ` · ${f.n_tx} trades` : ''}</span><span class="f">${fmtDY(f.filing_date)}</span></a>`).join('') || empty('No filing links', 'Senate trades link to the eFD search portal.');
+  $('#polFilings').innerHTML = F2.slice(0, 8).map(f => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${I.doc}<span>${esc(f.status === 'amendment' || /AMENDED/i.test(f.url) ? 'Amended report' : f.source === 'oge' ? (/annual/i.test(f.url) ? 'OGE 278e annual report' : /termination/i.test(f.url) ? 'OGE 278e termination report' : 'OGE 278-T report') : 'Periodic transaction report')}${f.n_tx ? ` · ${f.n_tx} trades` : ''}</span><span class="f">${fmtDY(f.filing_date)}</span></a>`).join('') || empty('No filing links', 'Senate trades link to the eFD search portal.');
 }
 function toggleFollow(name) {
   const on = !isFollowing(name);

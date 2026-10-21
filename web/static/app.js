@@ -1,0 +1,651 @@
+'use strict';
+/* Congress Trades v5 */
+/* ============ helpers ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const api = async (p, o) => { if (window.staticApi) return window.staticApi(p, o); const r = await fetch(p, o); if (!r.ok) throw new Error(r.status); return r.json(); };
+const D = d => new Date(d + 'T12:00:00Z');
+const todayISO = () => new Date().toLocaleDateString('en-CA', {timeZone: 'America/New_York'});
+const daysAgoISO = n => { const d = D(todayISO()); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); };
+const yr = new Date().getUTCFullYear();
+const fmtD = d => d ? D(d).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: D(d).getUTCFullYear() === yr ? undefined : 'numeric', timeZone: 'UTC'}) : '—';
+const fmtDY = d => d ? D(d).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}) : '—';
+const fmtUK = iso => new Intl.DateTimeFormat('en-GB', {timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', timeZoneName: 'short'}).format(new Date(iso));
+const fmtUKlong = iso => new Intl.DateTimeFormat('en-GB', {timeZone: 'Europe/London', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZoneName: 'short'}).format(new Date(iso));
+const dayDiff = (a, b) => Math.round((D(b) - D(a)) / 864e5);
+function ago(d) {
+  if (!d) return '';
+  const n = dayDiff(d, todayISO());
+  if (n <= 0) return 'Today';
+  if (n === 1) return 'Yesterday';
+  if (n < 7) return `${n}d ago`;
+  if (n < 60) return `${Math.round(n / 7)}w ago`;
+  if (n < 730) return `${Math.round(n / 30.4)}mo ago`;
+  return `${Math.round(n / 365)}y ago`;
+}
+const money = n => n == null ? '—' : Math.abs(n) >= 1e9 ? '$' + (n / 1e9).toFixed(2) + 'B' : Math.abs(n) >= 1e6 ? '$' + (n / 1e6).toFixed(Math.abs(n) >= 1e7 ? 1 : 2) + 'M' : Math.abs(n) >= 1e3 ? '$' + Math.round(n / 1e3) + 'K' : '$' + Math.round(n);
+const usd = (n, dp = 2) => n == null ? '—' : (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits: dp, maximumFractionDigits: dp});
+const usd0 = n => usd(n, 0);
+const sgnUsd = n => (n >= 0 ? '+' : '-') + usd(Math.abs(n), Math.abs(n) >= 1e5 ? 0 : 2);
+const pct = (p, dp = 2) => p == null ? '—' : `${p >= 0 ? '' : '-'}${Math.abs(p).toLocaleString('en-US', {minimumFractionDigits: dp, maximumFractionDigits: dp})}%`;
+const num = n => n == null ? '—' : n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e4 ? Math.round(n / 1e3) + 'K' : Math.round(n).toLocaleString('en-US');
+const amtShort = t => t.amount_low && t.amount_high ? `${money(t.amount_low)}–${money(t.amount_high)}` : t.amount_low ? `${money(t.amount_low - 1)}+` : (t.amount || '—');
+const mid = t => t.amount_low ? (t.amount_low + (t.amount_high || t.amount_low)) / 2 : null;
+const PARTY = {D: 'Democrat', R: 'Republican', I: 'Independent'};
+const PHOTO = {'Donald J. Trump': 'static/img/trump.jpg'};
+const ROLE = {'Donald J. Trump': 'President'};
+const I = {
+  up: '<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  dn: '<svg viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+  swap: '<svg viewBox="0 0 24 24"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>',
+  back: '<svg viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>',
+  bell: '<svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+  share: '<svg viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>',
+  chevd: '<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  doc: '<svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+  bank: '<svg viewBox="0 0 24 24"><path d="M3 10h18L12 4zM5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg>',
+  bond: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h6M7 13h10M7 16h4"/></svg>',
+  cap: '<svg viewBox="0 0 24 24"><path d="M12 3v2M9.5 7.5a2.5 2.5 0 0 1 5 0V9h-5zM4 11h16L12 9zM6 11v7M10 11v7M14 11v7M18 11v7M3 21h18M4 18.5h16"/></svg>',
+  copy: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>',
+  ext: '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+  pie: '<svg viewBox="0 0 24 24"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>',
+};
+const isWide = () => matchMedia('(min-width:861px)').matches;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
+const store = {get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set: (k, v) => localStorage.setItem(k, JSON.stringify(v))};
+
+/* new since last visit */
+const prevVisit = localStorage.getItem('lastVisit') || new Date(Date.now() - 24 * 3600e3).toISOString();
+setTimeout(() => localStorage.setItem('lastVisit', new Date().toISOString()), 4000);
+const isNew = t => t.first_seen && t.first_seen > prevVisit;
+
+/* theme */
+$('#themeBtn').onclick = () => {
+  const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t; localStorage.setItem('theme5', t);
+  $('meta[name=theme-color]').content = t === 'dark' ? '#0c0c0c' : '#f6f4f0';
+};
+
+/* ============ building blocks ============ */
+const initials = n => {
+  const w = (n || '?').replace(/\b(Hon|Dr|Mr|Mrs|Ms|Jr|Sr|II|III|IV)\b\.?/g, '').replace(/,/g, '').trim().split(/\s+/).filter(Boolean);
+  return ((w[0] || '?')[0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase();
+};
+const photoURL = (name, bio, big) => PHOTO[name] || (bio ? `https://unitedstates.github.io/images/congress/${big ? '450x550' : '225x275'}/${bio}.jpg` : null);
+function avatar(name, bio, cls = '') {
+  const ph = `<span class="av ${cls}">${esc(initials(name))}</span>`;
+  const u = photoURL(name, bio);
+  if (!u) return ph;
+  return `<img class="av ${cls}" loading="lazy" alt="" src="${esc(u)}" data-ph="${esc(ph)}" onerror="this.outerHTML=this.dataset.ph">`;
+}
+function portrait(name, bio, cls = '') {
+  const u = photoURL(name, bio, true);
+  const ini = `<span class="ini">${esc(initials(name))}</span>`;
+  return u ? `<img class="${cls}" loading="lazy" alt="" src="${esc(u)}" onerror="this.outerHTML='${esc(ini).replace(/'/g, '&#39;')}'">` : ini;
+}
+function logo(ticker, kind, cls = '') {
+  if (!ticker) return `<span class="logo ph ${cls}">${kind === 'BOND' ? I.bond : kind === 'GS' ? I.bank : I.doc}</span>`;
+  const t = encodeURIComponent(ticker.replace('.', '-'));
+  const ph = `<span class="logo ph ${cls}">${esc(ticker.slice(0, 4))}</span>`;
+  return `<span class="logo ${cls}"><img loading="lazy" alt="" src="https://assets.parqet.com/logos/symbol/${t}?format=png" data-alt="https://financialmodelingprep.com/image-stock/${t}.png" data-ph="${esc(ph)}" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.dataset.alt=''}else{this.parentNode.outerHTML=this.dataset.ph}"></span>`;
+}
+const cleanAsset = t => (t.asset || '').replace(/\s*\[[A-Z]{2}\]\s*$/, '').replace(/\s*\(([A-Z0-9.\-\/$]{1,10})\)\s*$/, '').replace(/\s+-\s+/g, ' – ').replace(/\s+/g, ' ').trim();
+const assetName = t => t.company || cleanAsset(t);
+function loc(p) {
+  if (p.chamber === 'Executive') return ROLE[p.politician] || 'Executive';
+  if (p.chamber === 'House' && p.district) {
+    const m = p.district.match(/^([A-Z]{2})0*(\d+)$/);
+    if (m) return m[2] === '0' ? `${m[1]}-AL` : `${m[1]}-${m[2]}`;
+  }
+  return p.state || '';
+}
+const chamberLbl = c => c === 'Executive' ? 'White House' : c;
+const metaShort = p => `${p.party || '?'} · ${loc(p)}${p.chamber !== 'Executive' ? ' · ' + p.chamber : ''}`;
+function sideTag(t) {
+  if (t.side === 'buy') return `<span class="side buy">${I.up}Buy</span>`;
+  if (t.side === 'sell') return `<span class="side sell">${I.dn}${/partial/i.test(t.tx_type || '') ? 'Partial sell' : 'Sell'}</span>`;
+  return `<span class="side other">${I.swap}${esc(t.tx_type || 'Other')}</span>`;
+}
+const lagTag = t => t.lag_days == null || t.lag_days < 0 ? '' : `<span class="lag${t.lag_days > 45 ? ' late' : ''}" title="Days between the trade and its public disclosure">${t.lag_days === 0 ? 'same day' : t.lag_days + 'd lag'}</span>`;
+const chgTxt = p => p == null ? '' : `<span class="${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(1)}%</span>`;
+
+/* Trade row, styled like Insiderwave's "Trades in this update" list */
+function tradeRow(t, showWho = true) {
+  const sh = t.est_price && t.amount_low ? mid(t) / t.est_price : null;
+  const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
+  const sub = t.est_price != null ? `<b>${usd(t.est_price)}</b>/share` : t.ticker ? esc(assetName(t)) : esc(t.asset_type === 'BOND' ? 'Bond · no market price' : (cleanAsset(t) && t.ticker ? '' : 'Not exchange-listed'));
+  return `<button class="trow" data-trade="${esc(t.uid)}">
+    ${logo(t.ticker, t.asset_type)}
+    <div class="mid">
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}</div>
+      <div class="l2">${sub}</div>
+    </div>
+    <div class="r">
+      <div class="sh">${sh ? `~${num(sh)} shares` : esc(t.owner && t.owner !== 'Self' ? t.owner : '')}</div>
+      <div class="amt">${amtShort(t)}</div>
+      ${t.pct_since != null ? `<div class="pc">${chgTxt(t.pct_since)}</div>` : ''}
+    </div>
+    <div class="l3">${showWho ? `<span class="who-mini">${avatar(t.politician, t.bioguide, 'round')}${esc(t.politician)}<span class="mute" style="font-weight:500">${esc(t.party || '')}${t.party ? '-' : ''}${esc(loc(t))}</span></span>` : ''}<span class="dates"><span title="Trade date → disclosure date">Traded ${fmtD(t.tx_date)} · Filed ${fmtD(t.disclosure_date)}</span>${lagTag(t)}<span class="ago">${ago(t.disclosure_date).replace("Yesterday", "1d ago")}</span></span></div>
+  </button>`;
+}
+const skRows = n => Array(n).fill('<div class="sk-row"></div>').join('');
+const empty = (a, b) => `<div class="empty"><b>${a}</b>${b}</div>`;
+
+/* ============ charts ============ */
+function smoothPath(pts) {
+  if (pts.length < 2) return '';
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) {
+    const p0 = pts[i - 2] || pts[i - 1], p1 = pts[i - 1], p2 = pts[i], p3 = pts[i + 1] || p2;
+    const t = 0.18;
+    const c1 = [p1[0] + (p2[0] - p0[0]) * t, p1[1] + (p2[1] - p0[1]) * t];
+    const c2 = [p2[0] - (p3[0] - p1[0]) * t, p2[1] - (p3[1] - p1[1]) * t];
+    d += `C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+function sparkSVG(vals, up) {
+  if (!vals || vals.length < 2) return '';
+  const W = 300, H = 62, mn = Math.min(...vals), mx = Math.max(...vals), r = mx - mn || 1;
+  const pts = vals.map((v, i) => [i / (vals.length - 1) * W, H - 6 - (v - mn) / r * (H - 14)]);
+  const col = up ? 'var(--up-l)' : 'var(--dn)';
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="${smoothPath(pts)}" stroke="${col}" stroke-width="1.8" fill="none" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+/* ============ routing ============ */
+let baseView = 'home', statusData = null, lastSeen = null;
+const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol'];
+function showView(v) {
+  VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
+  document.body.classList.toggle('on-pol', v === 'pol');
+  const nav = v === 'pol' ? null : v;
+  $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
+}
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (h.startsWith('t=')) { openTicker(h.slice(2)); return; }
+  if (h.startsWith('x=')) { openTrade(h.slice(2)); return; }
+  if (h.startsWith('m=')) { history.replaceState(null, '', '#p=' + encodeURIComponent(h.slice(2))); route.after = 'mirror'; }
+  if (h.startsWith('f=')) { history.replaceState(null, '', '#p=' + encodeURIComponent(h.slice(2))); route.after = 'follow'; }
+  const h2 = decodeURIComponent(location.hash.slice(1));
+  if (h2 !== h) return route();
+  closeSheet(false);
+  let v = 'home';
+  if (h.startsWith('p=')) v = 'pol';
+  else if (['trades', 'people', 'alerts'].includes(h)) v = h;
+  else if (h === 'info') v = 'alerts';
+  const changed = v !== route.cur || (v === 'pol' && h !== route.h);
+  showView(v); route.cur = v; route.h = h;
+  if (v !== 'pol') baseView = v;
+  if (changed) window.scrollTo({top: 0, behavior: 'instant'});
+  if (v === 'home') loadHome();
+  if (v === 'trades' && !F.loaded) { F.loaded = true; loadKpis(); loadFeed(); }
+  if (v === 'people') loadPeople();
+  if (v === 'alerts') renderAlerts();
+  if (v === 'pol' && changed) openPolitician(h.slice(2));
+}
+addEventListener('hashchange', route);
+addEventListener('scroll', () => $('#top').classList.toggle('scrolled', scrollY > 4), {passive: true});
+
+/* ============ status ============ */
+async function loadStatus() {
+  try {
+    const s = await api('/api/status');
+    statusData = s;
+    const live = $('#live');
+    live.classList.toggle('busy', s.running);
+    $('#liveTxt').textContent = s.running ? 'Checking…' : s.last_refresh ? `Updated ${fmtUK(s.last_refresh)}` : 'Live';
+    const newest = s.sources.map(x => x.newest_disclosure).sort().pop();
+    live.title = `Last checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : 'never'}. Newest filing ${fmtDY(newest)}. Click to check now.`;
+    const seen = s.sources.map(x => x.newest_seen).sort().pop();
+    if (lastSeen && seen > lastSeen) { F.loaded && loadFeed(); toast('New trades just came in'); }
+    lastSeen = seen;
+    if (route.cur === 'alerts') renderAlerts();
+  } catch (e) { /* offline */ }
+}
+$('#live').onclick = async () => {
+  const r = await api('/api/refresh', {method: 'POST'}).catch(() => ({message: 'Could not start a check'}));
+  toast(r.started ? 'Checking for new filings…' : r.message);
+  setTimeout(loadStatus, 1500);
+};
+
+/* ============ portfolios (shared) ============ */
+let PF = null;
+async function portfolios() {
+  if (!PF) PF = api('/api/portfolios').then(rows => { const m = new Map(); rows.forEach(r => m.set(r.politician, r)); return m; }).catch(() => new Map());
+  return PF;
+}
+function portfolioCard(p, pf) {
+  const all = pf && pf.periods ? pf.periods.ALL : null;
+  const up = !all || all[1] == null || all[1] >= 0;
+  return `<button class="pcard" data-pol="${esc(p.politician)}">
+    <div class="ph">${portrait(p.politician, p.bioguide)}<div class="tag"><i class="pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}</div><div class="nm">${esc(p.politician)}</div></div>
+    ${pf ? `<div class="b"><div class="k">Portfolio Value</div><div class="v">${usd0(pf.value)}</div>
+      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>` : ''}</div></div>
+      <div class="spark">${sparkSVG(pf.spark, up)}</div>`
+    : `<div class="b"><div class="k">${num(p.n)} disclosed trades</div></div><div class="none">No priced stock trades to build a portfolio from.</div>`}
+  </button>`;
+}
+
+/* ============ home ============ */
+const H = {period: '1Y', loaded: false};
+async function loadHome() {
+  const pfs = await portfolios();
+  const list = [...pfs.values()];
+  // top performers: meaningful portfolios only
+  const k = H.period;
+  const elig = list.filter(p => p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
+  elig.sort((a, b) => b.periods[k][1] - a.periods[k][1]);
+  $('#perfRail').innerHTML = elig.slice(0, 12).map((p, i) => {
+    const r = p.periods[k][1], up = r >= 0;
+    return `<button class="pcard-s" data-pol="${esc(p.politician)}"><div class="ph">${portrait(p.politician, p.bioguide)}<span class="rank">${i + 1}</span><span class="badge ${up ? 'up' : 'dn'}">${up ? '+' : ''}${pct(r)}</span></div>
+      <div class="b"><div class="nm">${esc(p.politician)}</div><div class="mt">${esc(metaShort(p))}</div></div></button>`;
+  }).join('') || empty('No data yet', '');
+  if (!H.loaded) {
+    H.loaded = true;
+    const tot = list.reduce((a, p) => a + p.value, 0);
+    $('#heroStats').innerHTML = `<div><b>${list.length}</b><span>portfolios tracked</span></div><div><b>${money(tot)}</b><span>est. holdings</span></div><div><b>${num(list.reduce((a, p) => a + p.n, 0))}</b><span>trades disclosed</span></div>`;
+    const f = list.filter(p => p.n_priced >= 5 && p.periods.ALL && p.periods.ALL[1] > 0 && p.politician !== 'Donald J. Trump').sort((a, b) => b.value - a.value)[0];
+    if (f && isWide()) {
+      const all = f.periods.ALL;
+      $('#heroPhone').innerHTML = `<div class="scr" data-pol="${esc(f.politician)}"><span class="notch"></span><div class="ph">${portrait(f.politician, f.bioguide)}<span class="hb" style="left:14px">${I.back}</span><span class="hb" style="right:54px">${I.bell}</span><span class="hb" style="right:14px">${I.share}</span><div class="nm">${esc(f.politician.split(' ')[0])}</div></div>
+        <div class="bd"><div class="k">Portfolio Value</div><div class="v">${usd(f.value)}</div><div class="d"><span>${sgnUsd(all[0])}</span><span class="up">▲ ${pct(all[1])}</span></div></div>
+        <div class="sp">${sparkSVG(f.spark, true)}</div><div class="tb"><span>1W</span><span>1M</span><span>3M</span><span>YTD</span><span>1Y</span><span>5Y</span><span class="on">ALL</span></div></div>`;
+    }
+    const top = list.filter(p => p.n_priced >= 5).sort((a, b) => b.value - a.value).slice(0, isWide() ? 8 : 6);
+    $('#homeGrid').innerHTML = top.map(p => portfolioCard(p, p)).join('');
+    $('#homeTrades').innerHTML = skRows(5);
+    const d = await api('/api/trades?limit=8&sort=disclosure_date');
+    $('#homeTrades').innerHTML = d.trades.map(t => tradeRow(t)).join('');
+  }
+}
+$$('#perfPills button').forEach(b => b.onclick = () => { $$('#perfPills button').forEach(x => x.classList.toggle('on', x === b)); H.period = b.dataset.v; loadHome(); });
+
+/* ============ trades feed ============ */
+const F = {offset: 0, range: '90', side: '', chamber: '', ticker: null, total: 0, PAGE: 40, seq: 0, loaded: false};
+const trades = new Map();
+function rangeDates() {
+  if (F.range === 'custom') return [$('#from').value || null, $('#to').value || null];
+  if (F.range === 'all') return [null, null];
+  return [daysAgoISO(+F.range), null];
+}
+function feedParams() {
+  const p = new URLSearchParams();
+  const set = (k, v) => v && p.set(k, v);
+  const [a, b] = rangeDates();
+  set('q', $('#q').value.trim()); set('chamber', F.chamber); set('party', $('#party').value); set('side', F.side);
+  set('date_field', $('#dateField').value); set('date_from', a); set('date_to', b); set('asset', $('#assetSel').value);
+  set('sort', $('#sort').value); set('ticker', F.ticker);
+  p.set('limit', F.PAGE); p.set('offset', F.offset);
+  return p;
+}
+async function loadFeed(append = false) {
+  if (!append) { F.offset = 0; $('#feed').innerHTML = skRows(8); }
+  const seq = ++F.seq;
+  const d = await api('/api/trades?' + feedParams());
+  if (seq !== F.seq) return;
+  d.trades.forEach(t => trades.set(t.uid, t));
+  F.total = d.total;
+  const html = d.trades.map(t => tradeRow(t)).join('');
+  if (append) $('#feed').insertAdjacentHTML('beforeend', html);
+  else $('#feed').innerHTML = html || empty('No trades match', 'Try a wider date range or fewer filters.');
+  const lbl = {0: 'today', 7: 'in the past week', 30: 'in the past month', 90: 'in the past 3 months', 365: 'in the past year', all: 'all time', custom: 'in the chosen dates'}[F.range];
+  const newN = d.trades.filter(isNew).length;
+  $('#feedCount').innerHTML = `<span><b>${d.total.toLocaleString()}</b> trades ${$('#dateField').value === 'tx_date' ? 'made' : 'disclosed'} ${lbl}${newN && !append ? ` · <span style="color:var(--blue);font-weight:600">${newN} new since your last visit</span>` : ''}</span>`;
+  $('#tickChip').innerHTML = F.ticker ? `<button class="chip-btn" id="clrTick">${esc(F.ticker)} ✕</button>` : '';
+  $('#more').hidden = F.offset + F.PAGE >= d.total;
+}
+async function loadKpis() {
+  const days = F.range === 'all' ? 3650 : F.range === 'custom' ? 365 : Math.max(+F.range, 1);
+  const p = new URLSearchParams({days});
+  if (F.chamber) p.set('chamber', F.chamber);
+  if ($('#party').value) p.set('party', $('#party').value);
+  const s = await api('/api/stats?' + p);
+  const t = s.totals, top = s.top_tickers[0], tp = s.top_politicians[0];
+  $('#kpis').innerHTML = `
+    <div class="kpi"><div class="k">Trades disclosed</div><div class="v">${(t.n || 0).toLocaleString()}</div><div class="f">${money(t.vol_low)}–${money(t.vol_high)}</div></div>
+    <div class="kpi"><div class="k">Buys / sells</div><div class="v"><span class="up">${num(t.buys || 0)}</span> <span class="mute" style="font-weight:400">/</span> <span style="color:var(--sell)">${num(t.sells || 0)}</span></div><div class="f">${t.pols || 0} people trading</div></div>
+    <div class="kpi"><div class="k">Most traded</div>${top ? `<button class="who-k" data-tick="${esc(top.ticker)}">${logo(top.ticker, null, 'sm')}<span>${esc(top.ticker)}<br><small class="mute" style="font-weight:500">${top.n} trades</small></span></button>` : '—'}</div>
+    <div class="kpi"><div class="k">Most active</div>${tp ? `<button class="who-k" data-pol="${esc(tp.politician)}">${avatar(tp.politician, tp.bioguide)}<span>${esc(tp.politician)}<br><small class="mute" style="font-weight:500">${num(tp.n)} trades</small></span></button>` : '—'}</div>`;
+}
+
+/* ============ politicians ============ */
+const P = {sort: 'value', dir: -1, chamber: '', list: null};
+async function loadPeople() {
+  if (!P.list) {
+    $('#polGrid').innerHTML = Array(8).fill('<div class="sk-card"></div>').join('');
+    const [people, pfs] = await Promise.all([api('/api/politicians'), portfolios()]);
+    P.list = people.map(p => ({...p, pf: pfs.get(p.politician) || null}));
+  }
+  const q = $('#pq').value.trim().toLowerCase();
+  let L = P.list.filter(p => (!P.chamber || p.chamber === P.chamber) && (!q || p.politician.toLowerCase().includes(q)));
+  const key = {
+    value: p => p.pf ? p.pf.value : -1, ret: p => p.pf && p.pf.periods['1Y'] && p.pf.periods['1Y'][1] != null && p.pf.value >= 50000 ? p.pf.periods['1Y'][1] : -1e9,
+    n: p => p.n, volume: p => p.volume || 0, latest: p => p.latest || '', name: p => p.politician,
+  }[P.sort];
+  L.sort((a, b) => { const x = key(a), y = key(b); const c = x < y ? -1 : x > y ? 1 : 0; return P.sort === 'name' ? c * -P.dir : c * P.dir; });
+  if (P.sort === 'ret' && P.dir === 1) L = L.filter(p => key(p) > -1e9).concat(L.filter(p => key(p) <= -1e9));
+  $('#polDir span').textContent = P.sort === 'name' ? (P.dir === -1 ? 'A → Z' : 'Z → A') : (P.dir === -1 ? 'High → low' : 'Low → high');
+  $('#polGrid').innerHTML = L.map(p => portfolioCard(p, p.pf)).join('') || empty('Nobody found', '');
+}
+
+/* ============ politician page ============ */
+const POL = {name: null, data: null, period: 'ALL', offset: 0, showAll: false};
+const PERIOD_DAYS = {'1W': 7, '1M': 30, '3M': 91, '1Y': 365, '5Y': 1826, 'ALL': 36500};
+function periodSlice(s, key) {
+  const d = s.d, n = d.length;
+  const last = d[n - 1];
+  let since;
+  if (key === 'YTD') since = last.slice(0, 4) + '-01-01';
+  else { const x = D(last); x.setUTCDate(x.getUTCDate() - PERIOD_DAYS[key]); since = x.toISOString().slice(0, 10); }
+  let j = d.findIndex(x => x >= since);
+  if (j < 0) j = n - 1;
+  const base = j > 0 ? j - 1 : -1;
+  return {start: Math.max(base, 0), bi: base >= 0 ? s.i[base] : 1, bp: base >= 0 ? s.p[base] : 0};
+}
+const following = () => store.get('follows', []);
+const isFollowing = n => following().includes(n);
+function setFollow(n, on) { const f = following().filter(x => x !== n); if (on) f.push(n); store.set('follows', f); }
+
+async function openPolitician(name) {
+  POL.name = name; POL.period = 'ALL'; POL.showAll = false; POL.offset = 0;
+  const el = $('#v-pol');
+  el.innerHTML = `<div class="phero"><button class="hbtn back" data-back>${I.back}</button></div><div class="pbody"><div class="sk-card" style="height:120px"></div></div>`;
+  let d;
+  try { d = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) { el.innerHTML = empty('Politician not found', `<a href="#people">Browse politicians</a>`); return; }
+  if (POL.name !== name) return;
+  POL.data = d;
+  const p = {...d, politician: name};
+  const has = d.series && d.series.d.length > 1;
+  const fol = isFollowing(name);
+  el.innerHTML = `
+    <div class="phero">${portrait(name, d.bioguide, 'portrait')}
+      <button class="hbtn back" data-back aria-label="Back">${I.back}</button>
+      <button class="hbtn bell${fol ? ' on' : ''}" id="bellBtn" aria-label="Follow">${I.bell}</button>
+      <button class="hbtn share" id="shareBtn" aria-label="Share">${I.share}</button>
+      <div class="nm"><h1>${esc(name)}</h1><div class="sub"><span><i class="pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span><span>${esc(loc(p))}</span><span>${esc(chamberLbl(d.chamber))}</span></div></div>
+    </div>
+    <div class="pbody">
+      <div class="pv-k">Portfolio Value <span class="est">Estimate</span></div>
+      <div class="pv-v" id="pvV">${has ? usd(d.value) : '—'}</div>
+      <div class="pv-d" id="pvD">${has ? '' : '<span class="when">No priced stock trades to build a portfolio from.</span>'}</div>
+      ${has ? `<div class="chart" id="chart"></div>
+      <div class="rtabs" id="rtabs">${['1W', '1M', '3M', 'YTD', '1Y', '5Y', 'ALL'].map(k => `<button data-v="${k}"${k === POL.period ? ' class="on"' : ''}>${k}</button>`).join('')}</div>` : ''}
+      <div class="stats">
+        <div class="stat"><div class="k">Win Rate</div><div class="v">${d.win_rate != null ? d.win_rate.toFixed(1) + '%' : '—'}</div><div class="f">${d.win_n ? `${num(d.win_n)} trades, ${d.win_days}d later` : 'Needs trades 30+ days old'}</div></div>
+        <div class="stat"><div class="k">Expectancy</div><div class="v ${d.edge == null ? '' : d.edge >= 0 ? 'up' : 'dn'}">${d.edge != null ? (d.edge >= 0 ? '+' : '') + d.edge.toFixed(2) + '%' : '—'}</div><div class="f">Avg move their way, ${d.win_days}d</div></div>
+        <div class="stat"><div class="k">Avg Delay</div><div class="v">${d.avg_delay != null ? Math.round(d.avg_delay) + ' days' : '—'}</div><div class="f">Trade → disclosure</div></div>
+        <div class="stat"><div class="k">Trades</div><div class="v">${num(d.n)}</div><div class="f"><span class="up">${num(d.buys)} buys</span> · <span style="color:var(--sell)">${num(d.sells)} sells</span></div></div>
+        <div class="stat"><div class="k">Holdings</div><div class="v">${num(d.n_holdings)}</div><div class="f">Since ${fmtDY(d.first_tx)}</div></div>
+      </div>
+      ${d.holdings.length ? `<button class="btn mirror-btn" id="mirrorBtn">${I.copy}Mirror portfolio</button>` : ''}
+      ${d.holdings.length ? `<div class="h2s"><h2>Current Holdings</h2><small>${num(d.n_holdings)} positions · est.</small></div>
+      <div class="card hlist" id="holdings"></div>` : ''}
+      <div class="h2s"><h2>Trades</h2><small>Newest disclosed first</small></div>
+      <div class="card tlist" id="polTrades">${skRows(4)}</div>
+      <button class="btn ghost full" id="polMore" hidden>Show more trades</button>
+      <div class="h2s"><h2>Disclosures</h2><small id="filN"></small></div>
+      <div class="card flist" id="polFilings">${skRows(2)}</div>
+      <p class="note">${I.info}<span>Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.chamber === 'Executive' ? ' The President\'s reports are scanned PDFs read with OCR, so some trades are missing.' : ''}</span></p>
+    </div>`;
+  if (has) { renderPeriod(); }
+  renderHoldings();
+  loadPolTrades();
+  loadFilings(name);
+  $('#bellBtn').onclick = () => toggleFollow(name);
+  $('#shareBtn').onclick = async () => {
+    const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(name);
+    if (navigator.share) { try { await navigator.share({title: `${name} · Congress Trades`, url}); } catch (e) { /* cancelled */ } }
+    else { await navigator.clipboard.writeText(url).catch(() => {}); toast('Link copied'); }
+  };
+  if ($('#mirrorBtn')) $('#mirrorBtn').onclick = () => openMirror();
+  if (route.after === 'mirror' && d.holdings.length) openMirror();
+  if (route.after === 'follow') openFollowSheet(name);
+  route.after = null;
+  if ($('#rtabs')) $$('#rtabs button').forEach(b => b.onclick = () => { POL.period = b.dataset.v; $$('#rtabs button').forEach(x => x.classList.toggle('on', x === b)); renderPeriod(); });
+}
+function headerAt(s, sl, idx) {
+  const pnl = s.p[idx] - sl.bp, r = (s.i[idx] / sl.bi - 1) * 100, up = pnl >= 0;
+  $('#pvV').textContent = usd(s.v[idx]);
+  const label = idx === s.d.length - 1 ? ({'1W': 'Past week', '1M': 'Past month', '3M': 'Past 3 months', 'YTD': 'Year to date', '1Y': 'Past year', '5Y': 'Past 5 years', 'ALL': 'All time'}[POL.period]) : fmtDY(s.d[idx]);
+  $('#pvD').innerHTML = `<span>${sgnUsd(pnl)}</span><span class="pct ${r >= 0 ? 'up' : 'dn'}">${r >= 0 ? '▲' : '▼'} ${pct(Math.abs(r))}</span><span class="when">${label}</span>`;
+  return up;
+}
+function renderPeriod() {
+  const s = POL.data.series, sl = periodSlice(s, POL.period);
+  const n = s.d.length, idx = [];
+  for (let k = sl.start; k < n; k++) idx.push(k);
+  const step = Math.max(1, Math.floor(idx.length / 600));
+  const pick = idx.filter((_, j) => j % step === 0 || j === idx.length - 1);
+  const vals = pick.map(k => s.v[k]);
+  const up = headerAt(s, sl, n - 1);
+  const W = 1000, Hh = 260, mn = Math.min(...vals), mx = Math.max(...vals), rr = mx - mn || mx || 1;
+  const X = j => pick.length === 1 ? W : j / (pick.length - 1) * W, Y = v => Hh - 14 - (v - mn) / rr * (Hh - 34);
+  const pts = vals.map((v, j) => [X(j), Y(v)]);
+  const col = up ? 'var(--up-l)' : 'var(--dn)';
+  const ch = $('#chart');
+  ch.innerHTML = `<svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none"><path d="${smoothPath(pts)}" stroke="${col}" stroke-width="2.2" fill="none" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>
+    <span class="cdot" id="cdot" style="left:100%;top:${(pts[pts.length - 1][1] / Hh * 100).toFixed(2)}%;background:${col}"></span><span class="cursor" id="ccur" hidden></span>`;
+  const move = e => {
+    const r = ch.getBoundingClientRect();
+    const fx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    const j = Math.round(fx * (pick.length - 1));
+    $('#cdot').style.left = (X(j) / W * 100) + '%'; $('#cdot').style.top = (pts[j][1] / Hh * 100) + '%';
+    $('#ccur').hidden = false; $('#ccur').style.left = (X(j) / W * 100) + '%';
+    headerAt(s, sl, pick[j]);
+  };
+  const leave = () => { $('#ccur').hidden = true; $('#cdot').style.left = '100%'; $('#cdot').style.top = (pts[pts.length - 1][1] / Hh * 100) + '%'; headerAt(s, sl, n - 1); };
+  ch.onpointermove = move; ch.onpointerdown = move; ch.onpointerleave = leave; ch.onpointerup = e => e.pointerType !== 'mouse' && leave();
+}
+function renderHoldings() {
+  const el = $('#holdings'); if (!el) return;
+  const H = POL.data.holdings, n = POL.showAll ? Math.min(H.length, 100) : 5;
+  el.innerHTML = H.slice(0, n).map(h => `<button class="hrow" data-tick="${esc(h.ticker)}">${logo(h.ticker)}
+      <div><div class="tk">${esc(h.ticker)}</div><div class="w">${h.weight.toFixed(2)}%</div></div>
+      <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div></button>`).join('')
+    + (H.length > 5 ? `<button class="viewall${POL.showAll ? ' open' : ''}" id="viewAll">${POL.showAll ? 'Show less' : 'View All'} ${I.chevd}</button>` : '');
+  if ($('#viewAll')) $('#viewAll').onclick = () => { POL.showAll = !POL.showAll; renderHoldings(); };
+}
+async function loadPolTrades(append = false) {
+  const name = POL.name;
+  const d = await api(`/api/trades?politician=${encodeURIComponent(name)}&limit=25&offset=${POL.offset}`);
+  if (POL.name !== name) return;
+  d.trades.forEach(t => trades.set(t.uid, t));
+  const html = d.trades.map(t => tradeRow(t, false)).join('');
+  if (append) $('#polTrades').insertAdjacentHTML('beforeend', html); else $('#polTrades').innerHTML = html || empty('No trades', '');
+  $('#polMore').hidden = POL.offset + 25 >= d.total;
+  $('#polMore').onclick = () => { POL.offset += 25; loadPolTrades(true); };
+}
+async function loadFilings(name) {
+  const d = await api('/api/politician?name=' + encodeURIComponent(name)).catch(() => null);
+  if (!d || POL.name !== name) return;
+  const F2 = d.filings.filter(f => f.url);
+  $('#filN').textContent = `${F2.length} filing${F2.length === 1 ? '' : 's'}`;
+  $('#polFilings').innerHTML = F2.slice(0, 8).map(f => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${I.doc}<span>${esc(f.status === 'amendment' ? 'Amended report' : f.source === 'oge' ? 'OGE 278-T report' : 'Periodic transaction report')}${f.n_tx ? ` · ${f.n_tx} trades` : ''}</span><span class="f">${fmtDY(f.filing_date)}</span></a>`).join('') || empty('No filing links', 'Senate trades link to the eFD search portal.');
+}
+function toggleFollow(name) {
+  const on = !isFollowing(name);
+  setFollow(name, on);
+  $('#bellBtn').classList.toggle('on', on);
+  if (on) openFollowSheet(name); else toast(`Unfollowed ${name}`);
+}
+function openFollowSheet(name) {
+  const d = POL.data && POL.data.politician === name ? POL.data : null;
+  const topic = d ? d.follow_topic : null, server = (d && d.ntfy_server) || 'https://ntfy.sh';
+  openSheet(`<div class="td-head">${avatar(name, d && d.bioguide)}<div><h2 style="font-size:22px">Following ${esc(name)}</h2><div class="an">Saved on this device</div></div></div>
+    ${topic ? `<div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>Congress Trades</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+    <div class="steps">
+      <div class="step card"><div><b>Install ntfy</b><p>Free and open source, for <a href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener" style="text-decoration:underline">iPhone</a>, <a href="https://play.google.com/store/apps/details?id=io.heckel.ntfy" target="_blank" rel="noopener" style="text-decoration:underline">Android</a> or the web.</p></div></div>
+      <div class="step card"><div><b>Subscribe to this topic</b><p><code>${esc(topic)}</code></p><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><a class="sbtn" href="${esc(server)}/${esc(topic)}" target="_blank" rel="noopener">Open in ntfy</a><button class="sbtn ghost" data-copy="${esc(topic)}">Copy topic</button></div></div></div>
+      <div class="step card"><div><b>Done</b><p>When a new filing from ${esc(name)} is picked up, you get “${esc(name)} disclosed new trades.”</p></div></div>
+    </div>` : '<p class="prose">Notifications are turned off on this server.</p>'}`);
+}
+
+/* ============ mirror calculator (screenshot 03) ============ */
+function openMirror() {
+  const d = POL.data; if (!d) return;
+  const top = d.holdings.slice(0, 10), tw = top.reduce((a, h) => a + h.weight, 0) || 1;
+  const amt0 = store.get('mirrorAmt', 1000);
+  openSheet(`<div class="mir-h"><div class="k">Mirror amount</div>
+      <div class="mir-amt">$<input id="mirAmt" type="text" inputmode="decimal" value="${amt0.toFixed(2)}" aria-label="Amount in dollars"></div>
+      <div class="mir-who">${avatar(d.politician, d.bioguide, 'round')}${esc(d.politician)}</div></div>
+    <div class="quick">${[100, 500, 1000, 5000].map(v => `<button data-amt="${v}">$${v.toLocaleString()}</button>`).join('')}</div>
+    <div class="h2s" style="margin-top:8px"><h2 style="font-size:18px">Top holdings</h2><small>${top.length} of ${num(d.n_holdings)}</small></div>
+    <div id="mirList"></div>
+    <div class="infobox">${I.info}<span><b>Hypothetical illustration, not advice.</b> Splits your amount across their ${top.length} largest <i>estimated</i> holdings in proportion to estimated weight. Holdings are rebuilt from disclosed trade ranges and are delayed by up to 45 days. No orders are placed.</span></div>`);
+  const fit = () => { const el = $('#mirAmt'); el.style.width = Math.max(3, el.value.length + 0.4) + 'ch'; };
+  const draw = () => {
+    fit();
+    const a = Math.max(0, parseFloat(($('#mirAmt').value || '0').replace(/[^0-9.]/g, '')) || 0);
+    store.set('mirrorAmt', a);
+    $('#mirList').innerHTML = top.map(h => { const w = h.weight / tw; return `<div class="mrow">${logo(h.ticker)}<div style="min-width:0"><div class="tk">${esc(h.ticker)}</div><div class="hrs">${I.clock}9:30 AM – 4:00 PM ET</div></div><div class="r"><div class="a">${usd(a * w)}</div><div class="w">${(w * 100).toFixed(2)}%</div></div></div>`; }).join('');
+  };
+  $('#mirAmt').oninput = draw;
+  $('#mirAmt').onblur = () => { const a = parseFloat($('#mirAmt').value.replace(/[^0-9.]/g, '')) || 0; $('#mirAmt').value = a.toFixed(2); fit(); };
+  $$('[data-amt]').forEach(b => b.onclick = () => { $('#mirAmt').value = (+b.dataset.amt).toFixed(2); draw(); });
+  draw();
+}
+
+/* ============ sheets ============ */
+function openSheet(html) { $('#sheetBody').innerHTML = html; $('#sheet').hidden = false; document.body.style.overflow = 'hidden'; $('.sheet').scrollTop = 0; }
+function closeSheet(updateHash = true) {
+  if ($('#sheet').hidden) return;
+  $('#sheet').hidden = true; document.body.style.overflow = '';
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (updateHash && (h.startsWith('t=') || h.startsWith('x='))) history.back();
+}
+function rangeBar(t) {
+  const close = t.est_price;
+  if (close == null) return `<div class="rng none">${!t.ticker ? (t.asset_type === 'BOND' ? 'Bond, no market price' : 'Not exchange-listed') : 'No price for that day'}</div>`;
+  const lo = t.day_low ?? close, hi = t.day_high ?? close;
+  const nowT = t.cur_price != null && t.pct_since != null ? close * (1 + t.pct_since / 100) : null;
+  const pts = [lo, hi, close].concat(nowT != null ? [nowT] : []);
+  let mn = Math.min(...pts), mx = Math.max(...pts);
+  const pad = (mx - mn) * 0.08 || close * 0.01; mn -= pad; mx += pad;
+  const x = v => ((v - mn) / (mx - mn) * 100).toFixed(2) + '%';
+  const dir = t.pct_since != null ? (t.pct_since >= 0 ? 'up' : 'dn') : '';
+  return `<div class="rng"><div class="vals"><span><b>${usd(close)}</b>close${t.est_date && t.est_date !== t.tx_date ? ` · ${fmtD(t.est_date)}` : ''}</span>${nowT != null ? `<span>now ${usd(t.cur_price)}</span>` : ''}</div>
+    <div class="bar"><span class="day" style="left:${x(lo)};width:calc(${x(hi)} - ${x(lo)})"></span>${nowT != null ? `<span class="link ${dir}" style="left:${x(Math.min(close, nowT))};width:calc(${x(Math.max(close, nowT))} - ${x(Math.min(close, nowT))})"></span><span class="now" style="left:${x(nowT)}"></span>` : ''}<span class="cl" style="left:${x(close)}"></span></div>
+    <div class="lh"><span>Day low ${usd(lo)}</span><span>Day high ${usd(hi)}</span></div></div>`;
+}
+async function openTrade(uid) {
+  let t = trades.get(uid);
+  if (!t) { try { t = await api('/api/trade?uid=' + encodeURIComponent(uid)); trades.set(uid, t); } catch (e) { location.hash = ''; return; } }
+  if (!route.cur) { showView('home'); route.cur = 'home'; loadHome(); }
+  const close = t.est_price, lo = t.day_low ?? close, hi = t.day_high ?? close;
+  const sh = close != null && t.amount_low ? [t.amount_low / hi, (t.amount_high || t.amount_low) / lo] : null;
+  const k = t.pct_since != null ? 1 + t.pct_since / 100 : null;
+  openSheet(`<div class="td-head">${logo(t.ticker, t.asset_type)}<div style="min-width:0"><h2>${esc(t.ticker || cleanAsset(t).slice(0, 34))}</h2><div class="an">${esc(t.ticker ? assetName(t) : t.tx_type)}</div></div><div style="margin-left:auto">${sideTag(t)}</div></div>
+    <button class="who" data-pol="${esc(t.politician)}">${avatar(t.politician, t.bioguide)}<span><div class="nm">${esc(t.politician)}</div><div class="mt">${esc(metaShort(t))}</div></span></button>
+    <div class="card" style="padding:16px;margin-top:16px"><div class="mute" style="font-size:13px">Estimated price on ${fmtDY(t.tx_date)}</div>${rangeBar(t)}</div>
+    <div class="kv">
+      <div><div class="k">Amount disclosed</div><div class="v">${esc(amtShort(t))}</div><div class="f">Midpoint ${money(mid(t))}</div></div>
+      <div><div class="k">Implied shares</div><div class="v">${sh ? `${num(sh[0])}–${num(sh[1])}` : '—'}</div><div class="f">${sh ? 'Range ÷ day high / low' : 'Needs a trade-day price'}</div></div>
+      <div><div class="k">Since the trade</div><div class="v ${t.pct_since == null ? '' : t.pct_since >= 0 ? 'up' : 'dn'}">${t.pct_since != null ? (t.pct_since >= 0 ? '+' : '') + t.pct_since.toFixed(2) + '%' : '—'}</div><div class="f">${t.cur_price != null ? `Now ${usd(t.cur_price)}` : ''}</div></div>
+      <div><div class="k">Same shares today</div><div class="v">${k && t.amount_low ? `${money(t.amount_low * k)}–${money((t.amount_high || t.amount_low) * k)}` : '—'}</div><div class="f">Estimate</div></div>
+      <div><div class="k">Traded</div><div class="v">${fmtDY(t.tx_date)}</div><div class="f">${ago(t.tx_date)}</div></div>
+      <div><div class="k">Disclosed</div><div class="v">${fmtDY(t.disclosure_date)}</div><div class="f">${t.lag_days != null ? `${t.lag_days} days later${t.lag_days > 45 ? ' (late)' : ''}` : ''}</div></div>
+      <div><div class="k">Owner</div><div class="v">${esc(t.owner || 'Self')}</div><div class="f">${esc(t.tx_type || '')}</div></div>
+      <div><div class="k">Day open / close</div><div class="v">${t.day_open != null ? `${usd(t.day_open)} / ${usd(close)}` : '—'}</div><div class="f">Yahoo daily bar</div></div>
+    </div>
+    ${t.ticker ? '' : `<p class="note">${esc(cleanAsset(t))}</p>`}
+    ${t.description ? `<p class="note">${esc(t.description)}</p>` : ''}
+    <div class="infobox">${I.info}<span>Prices are estimates from Yahoo Finance daily data for the trade date: any fill that day was between the low and high, and the close is our single best guess. Disclosures only give dollar ranges.</span></div>
+    <div class="btns"><a class="btn" href="${esc(t.url || '#')}" target="_blank" rel="noopener">${I.doc}Original filing</a>${t.ticker ? `<button class="btn ghost" data-tick="${esc(t.ticker)}">All ${esc(t.ticker)} trades</button>` : ''}</div>`);
+}
+async function openTicker(tk) {
+  if (!route.cur) { showView('home'); route.cur = 'home'; loadHome(); }
+  openSheet(`<div class="td-head">${logo(tk)}<div><h2>${esc(tk)}</h2><div class="an" id="tkName">Loading…</div></div></div><div class="card tlist" id="tkList">${skRows(4)}</div>`);
+  const d = await api(`/api/trades?ticker=${encodeURIComponent(tk)}&limit=60`);
+  d.trades.forEach(t => trades.set(t.uid, t));
+  const t0 = d.trades[0] || {};
+  const people = new Set(d.trades.map(t => t.politician)).size;
+  $('#tkName').innerHTML = `${esc(t0.company || cleanAsset(t0) || '')}${t0.cur_price != null ? ` · <b style="color:var(--ink)">${usd(t0.cur_price)}</b>` : ''}<br>${d.total} trades by ${people} ${people === 1 ? 'person' : 'people'}`;
+  $('#tkList').innerHTML = d.trades.map(t => tradeRow(t)).join('') || empty('No trades', '');
+}
+
+/* ============ alerts (screenshot 06) ============ */
+async function renderAlerts() {
+  const s = statusData || {};
+  const base = s.ntfy ? s.ntfy.topic : null, server = s.ntfy ? s.ntfy.server : 'https://ntfy.sh';
+  const fol = following();
+  const pfs = await portfolios();
+  const now = new Date();
+  const slug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  const newest = (s.sources || []).map(x => x.newest_disclosure).sort().pop();
+  const by = c => (s.sources || []).filter(x => x.chamber === c).reduce((a, x) => a + x.n, 0);
+  const sample = fol[0] || 'Nancy Pelosi';
+  $('#v-alerts').innerHTML = `
+    <div class="page-h"><div class="eyebrow">Instant alerts</div><h1>Never miss<br>a trade.</h1></div>
+    <div class="lock"><div class="time">${now.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})}</div>
+      <div class="clock">${now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: false})}</div>
+      <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>Congress Trades</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+    <div class="h2s" style="margin-top:8px"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
+    <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; const t = base ? `${base}-${slug(n)}` : null; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b>${t ? `<code>${esc(t)}</code>` : ''}</div>${t ? `<a class="sbtn" href="${esc(server)}/${esc(t)}" target="_blank" rel="noopener">Subscribe</a>` : ''}<button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
+      : `<div class="empty"><b>You're not following anyone yet</b>Open a politician and tap the ${I.bell.replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} bell.</div>`}</div>
+    <div class="h2s"><h2>How it works</h2></div>
+    <div class="steps">
+      <div class="step card"><div><b>Tap the bell on a politician</b><p>It saves them to your follow list on this device and shows their personal alert topic.</p></div></div>
+      <div class="step card"><div><b>Subscribe in the free ntfy app</b><p>Install <a href="https://ntfy.sh" target="_blank" rel="noopener" style="text-decoration:underline">ntfy</a> (iPhone, Android or web) and subscribe to the topic. No account needed.</p></div></div>
+      <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>The server checks filings every ${Math.round(s.refresh_minutes || 60)} minutes. When it finds new trades by someone, it sends one push to their topic with the tickers and amounts. Tap it to open their page.</p></div></div>
+    </div>
+    ${base ? `<div class="h2s"><h2>Everything</h2></div>
+    <div class="card"><div class="frow"><span class="logo sm" style="background:var(--accent);color:var(--on-accent);border:0">${I.cap}</span><div class="t"><b>All new trades</b><code>${esc(base)}</code></div><a class="sbtn" href="${esc(server)}/${esc(base)}" target="_blank" rel="noopener">Subscribe</a></div></div>
+    <p class="fine">Topics are public names on ntfy.sh. Anyone who knows a topic can read its alerts, which only ever contain public disclosure data.</p>` : ''}
+    <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
+    <div class="card prose" style="padding:4px 18px 18px">
+      <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> (rolling 3 months), and <b>${by('Executive').toLocaleString()}</b> trades from the President's <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE 278-T reports</a> (scanned, read with OCR). Newest filing ${fmtDY(newest)}.</p>
+      <p>Prices come from Yahoo Finance daily data and photos from the public-domain congress-legislators project. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
+      <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
+    </div>`;
+  $$('[data-unfollow]').forEach(b => b.onclick = () => { setFollow(b.dataset.unfollow, false); renderAlerts(); });
+}
+
+/* ============ events ============ */
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="http"]'); if (a) return;
+  const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Topic copied')).catch(() => toast(cp.dataset.copy)); return; }
+  if (e.target.closest('[data-back]')) { if (history.length > 1 && document.referrer !== undefined && route.prev) history.back(); else location.hash = baseView === 'home' ? '' : baseView; return; }
+  if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
+  const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }
+  const tk = e.target.closest('[data-tick]'); if (tk) { location.hash = 't=' + encodeURIComponent(tk.dataset.tick); return; }
+  const tr = e.target.closest('[data-trade]'); if (tr) { location.hash = 'x=' + encodeURIComponent(tr.dataset.trade); return; }
+  if (e.target.id === 'sheet' || e.target.closest('#sheetX')) closeSheet();
+});
+addEventListener('hashchange', () => { route.prev = true; });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSheet();
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); location.hash = 'trades'; setTimeout(() => $('#q').focus(), 50); }
+});
+function pills(id, cb) { $$(`#${id} button`).forEach(b => b.onclick = () => { $$(`#${id} button`).forEach(x => x.classList.toggle('on', x === b)); cb(b.dataset.v); }); }
+pills('rangeSeg', v => { F.range = v; $('#custom').hidden = v !== 'custom'; if (v !== 'custom') { loadFeed(); loadKpis(); } });
+pills('sideSeg', v => { F.side = v; loadFeed(); });
+pills('chamberSeg', v => { F.chamber = v; loadFeed(); loadKpis(); });
+pills('polSort', v => { P.sort = v; P.dir = -1; loadPeople(); });
+pills('polChamber', v => { P.chamber = v; loadPeople(); });
+$('#polDir').onclick = () => { P.dir *= -1; loadPeople(); };
+let deb;
+$('#q').addEventListener('input', () => { clearTimeout(deb); deb = setTimeout(() => loadFeed(), 250); });
+$('#pq').addEventListener('input', () => loadPeople());
+$('#party').onchange = () => { loadFeed(); loadKpis(); };
+['#dateField', '#sort', '#assetSel'].forEach(s => $(s).onchange = () => loadFeed());
+['#from', '#to'].forEach(s => $(s).onchange = () => { loadFeed(); loadKpis(); });
+$('#reset').onclick = () => {
+  ['#q', '#from', '#to', '#party', '#assetSel'].forEach(s => $(s).value = '');
+  $('#dateField').value = 'disclosure_date'; $('#sort').value = 'disclosure_date';
+  F.ticker = null; F.side = ''; F.chamber = ''; F.range = '90'; $('#custom').hidden = true;
+  [['rangeSeg', '90'], ['sideSeg', ''], ['chamberSeg', '']].forEach(([id, v]) => $$(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === v)));
+  loadFeed(); loadKpis();
+};
+$('#more').onclick = () => { F.offset += F.PAGE; $('#more').textContent = 'Loading…'; loadFeed(true).then(() => $('#more').textContent = 'Show more trades'); };
+
+/* ============ boot ============ */
+const qp = new URLSearchParams(location.search);
+if (qp.get('chamber')) { F.chamber = qp.get('chamber'); $$('#chamberSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === F.chamber)); }
+loadStatus();
+route();
+setInterval(loadStatus, 5 * 60e3);
+document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && loadStatus());

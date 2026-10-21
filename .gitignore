@@ -1,0 +1,19 @@
+# runtime data and state (state lives in the Actions cache + an encrypted copy on the `state` branch)
+data/
+state/
+_site/
+*.db
+*.db-*
+*.enc
+*.gz
+# secrets: never commit
+ngrok*
+*.key
+.env
+*authtoken*
+bargo_*.json
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/

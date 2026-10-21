@@ -1,0 +1,125 @@
+name: Refresh data and deploy
+
+on:
+  schedule:
+    - cron: "7 * * * *"   # hourly
+  workflow_dispatch:
+    inputs:
+      force_state_backup:
+        description: "Push an encrypted state backup to the state branch"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths-ignore: ["README.md"]
+
+permissions:
+  contents: write   # encrypted state backup on the `state` branch
+  pages: write
+  id-token: write
+  actions: write    # keep the hourly schedule enabled (GitHub disables crons after 60 idle days)
+
+concurrency:
+  group: pipeline
+  cancel-in-progress: false
+
+jobs:
+  refresh-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      DB_PATH: state/trades.db
+      NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+      NTFY_SENDER: ${{ vars.NTFY_SENDER || 'auto' }}
+      BOX_STATUS_URL: ${{ vars.BOX_STATUS_URL }}
+      PUBLISH_SENATE: ${{ vars.PUBLISH_SENATE || '1' }}
+      STATE_KEY: ${{ secrets.STATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System packages (pdftotext, tesseract)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils tesseract-ocr > /dev/null
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -q -r requirements.txt
+
+      - name: Restore state (Actions cache)
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            state
+            data/legislators-*.json
+            data/sec_company_tickers.json
+          key: state-v1-${{ github.run_id }}
+          restore-keys: state-v1-
+
+      - name: Restore state (encrypted backup branch) on cache miss
+        if: steps.cache.outputs.cache-matched-key == ''
+        run: |
+          mkdir -p state
+          if git fetch --depth 1 origin state 2>/dev/null; then
+            git show FETCH_HEAD:trades.db.gz.enc > /tmp/t.enc
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass env:STATE_KEY -in /tmp/t.enc | gunzip > state/trades.db
+            ls -la state
+          else
+            echo "No state branch yet - starting from an empty database (first run backfills; no alerts for old filings)."
+          fi
+
+      - name: Refresh (House Clerk, Senate via Bargo, OGE, Yahoo prices) + alerts
+        run: |
+          mkdir -p data
+          echo "https://wajeehk.github.io/congress-trades/" > data/public_url.txt
+          python pipeline/ci_refresh.py
+
+      - name: Build static site
+        run: python pipeline/export_static.py _site
+
+      - name: Save state (Actions cache)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            state
+            data/legislators-*.json
+            data/sec_company_tickers.json
+          key: state-v1-${{ github.run_id }}
+
+      - name: Encrypted state backup to the `state` branch (daily at 03 UTC, on cache miss, or on request)
+        if: always() && hashFiles('state/trades.db') != ''
+        env:
+          CACHE_MISS: ${{ steps.cache.outputs.cache-matched-key == '' }}
+          FORCE: ${{ inputs.force_state_backup || false }}
+        run: |
+          if [ "$CACHE_MISS" != "true" ] && [ "$FORCE" != "true" ] && [ "$(date -u +%H)" != "03" ]; then echo "skip"; exit 0; fi
+          [ -n "$STATE_KEY" ] || { echo "STATE_KEY secret missing"; exit 1; }
+          python - <<'PY'
+          import sqlite3
+          s = sqlite3.connect("state/trades.db"); d = sqlite3.connect("/tmp/snap.db"); s.backup(d); d.close()
+          PY
+          gzip -9c /tmp/snap.db | openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 -pass env:STATE_KEY -out /tmp/trades.db.gz.enc
+          cd "$(mktemp -d)" && git init -q -b state && cp /tmp/trades.db.gz.enc .
+          printf 'Encrypted (AES-256, key in the STATE_KEY secret) SQLite state for the hourly pipeline. Not public data.\n' > README.md
+          git add -A && git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "state backup $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" state:state
+          echo "state backup pushed"
+
+      - name: Keep the hourly schedule enabled
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/pipeline.yml/enable" || true
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

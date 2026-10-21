@@ -1,0 +1,19 @@
+{
+  "id": "/congress-trades/",
+  "name": "Congress Trades",
+  "short_name": "Congress Trades",
+  "description": "Stock trades disclosed by members of Congress and the President, with estimated portfolios and alerts.",
+  "start_url": "/congress-trades/",
+  "scope": "/congress-trades/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0c0c",
+  "theme_color": "#0c0c0c",
+  "categories": ["finance", "news"],
+  "icons": [
+    {"src": "static/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "static/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "static/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "static/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

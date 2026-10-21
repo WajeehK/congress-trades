@@ -1,0 +1,70 @@
+"""Hourly data refresh for GitHub Actions.
+
+Fetches House Clerk, Senate (Bargo), OGE and Yahoo prices into the SQLite state (DB_PATH), and sends ntfy
+alerts for new trades -- unless another sender is active, so subscribers never get the same alert twice.
+
+NTFY_SENDER:
+  actions -> this workflow always sends
+  box     -> never send here (the box server sends)
+  auto    -> (default) send only when the box server at BOX_STATUS_URL is down or hasn't refreshed in 3 hours
+"""
+import json
+import os
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+import requests
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+os.environ.setdefault("NO_SCHEDULER", "1")
+import app  # noqa: E402
+
+
+def box_alive():
+    url = os.environ.get("BOX_STATUS_URL", "").strip()
+    if not url:
+        return False, "no BOX_STATUS_URL"
+    try:
+        r = requests.get(url, headers={"User-Agent": "congress-trades-actions/1.0", "ngrok-skip-browser-warning": "1"}, timeout=20)
+        if r.status_code != 200:
+            return False, f"HTTP {r.status_code}"
+        last = r.json().get("last_refresh")
+        if not last:
+            return False, "box never refreshed"
+        age = datetime.now(timezone.utc) - datetime.fromisoformat(last)
+        return age < timedelta(hours=3), f"box last refresh {int(age.total_seconds() // 60)} min ago"
+    except Exception as e:
+        return False, f"unreachable ({type(e).__name__})"
+
+
+def main():
+    mode = os.environ.get("NTFY_SENDER", "auto").strip().lower() or "auto"
+    if mode == "actions":
+        send, why = True, "NTFY_SENDER=actions"
+    elif mode == "box":
+        send, why = False, "NTFY_SENDER=box"
+    else:
+        alive, why = box_alive()
+        send = not alive
+    app._startup()
+    before = app.status()
+    app.refresh(force_senate=False, do_notify=send)
+    st = app.status()
+    n0 = sum(s["n"] for s in before["sources"])
+    n1 = sum(s["n"] for s in st["sources"])
+    lines = [f"### Congress Trades refresh",
+             f"- trades: {n0} -> {n1} (+{n1 - n0})",
+             f"- notifications: {'sent by this run' if send else 'skipped'} ({why})",
+             f"- prices: {json.dumps(st['prices'])}",
+             f"- last error: {st['last_error']}", "", "```", *st["log"], "```"]
+    print("\n".join(lines))
+    summ = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summ:
+        with open(summ, "a") as f:
+            f.write("\n".join(lines) + "\n")
+
+
+if __name__ == "__main__":
+    main()

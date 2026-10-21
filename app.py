@@ -1,0 +1,969 @@
+"""Politician Trades Tracker - FastAPI backend.
+
+Sources
+  * House: official Clerk of the House financial disclosure index (yearly ZIP/XML) +
+    electronically-filed Periodic Transaction Report PDFs (parsed with pdftotext).
+  * Senate: Bargo free Congress trades API (keyless or free key; rolling ~3 months),
+    because the official Senate eFD site (efdsearch.senate.gov) refuses this machine (HTTP 403).
+  * Party / state / bioguide IDs: unitedstates/congress-legislators (public domain).
+  * Prices: Yahoo Finance public chart endpoint (daily bars), cached in SQLite.
+  * Notifications: ntfy.sh topic (optional).
+"""
+import hashlib
+import html as htmllib
+import io
+import json
+import logging
+import os
+import re
+import secrets
+import sqlite3
+import threading
+import time
+import unicodedata
+import xml.etree.ElementTree as ET
+import zipfile
+from concurrent.futures import ThreadPoolExecutor
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+from typing import Optional
+from urllib.parse import quote
+
+import requests
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+from ptr_parser import parse_ptr_pdf
+import oge_parser
+import portfolio as pf
+
+BASE = Path(__file__).resolve().parent
+DATA = BASE / "data"
+PDFS = DATA / "pdfs"
+DATA.mkdir(exist_ok=True)
+PDFS.mkdir(exist_ok=True)
+
+
+def _file_or_env(env, fname, default=""):
+    v = os.environ.get(env, "").strip()
+    if not v and (DATA / fname).exists():
+        v = (DATA / fname).read_text().strip()
+    return v or default
+
+
+DB_PATH = Path(os.environ.get("DB_PATH", DATA / "trades.db"))
+REFRESH_MINUTES = float(os.environ.get("REFRESH_MINUTES", "60"))
+HOUSE_YEARS = [int(y) for y in os.environ.get("HOUSE_YEARS", "").split(",") if y.strip()] or [date.today().year - 1, date.today().year]
+BARGO_KEY = _file_or_env("BARGO_API_KEY", "bargo_key.txt")
+BARGO_MIN_HOURS = float(os.environ.get("BARGO_MIN_HOURS", "1" if BARGO_KEY else "3"))
+NTFY_SERVER = os.environ.get("NTFY_SERVER", "https://ntfy.sh")
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
+if not NTFY_TOPIC and os.environ.get("NTFY_DISABLE") != "1":
+    _tf = DATA / "ntfy_topic.txt"
+    if not _tf.exists():
+        _tf.write_text("congress-trades-" + secrets.token_hex(5))
+    NTFY_TOPIC = _tf.read_text().strip()
+PUBLIC_URL_FILE = DATA / "public_url.txt"
+NEW_WINDOW_DAYS = 14  # a trade disclosed more than this long ago is treated as backfill, not "new"
+
+UA = {"User-Agent": "Mozilla/5.0 (politician-trades-tracker; personal research)"}
+HOUSE_INDEX = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{y}FD.zip"
+HOUSE_PDF = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{y}/{doc}.pdf"
+BARGO = "https://www.bargo.ai/free-apis/congress/v1/trades"
+LEGIS = "https://unitedstates.github.io/congress-legislators/legislators-current.json"
+LEGIS_HIST = "https://unitedstates.github.io/congress-legislators/legislators-historical.json"
+YAHOO = "https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+
+log = logging.getLogger("tracker")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.getLogger("httpx").setLevel(logging.WARNING)
+_lock = threading.Lock()
+_state = {"running": False, "last_error": None, "log": []}
+
+TRADE_COLS = ["uid", "source", "filing_id", "chamber", "politician", "last_name", "party", "state", "district",
+              "owner", "ticker", "asset", "asset_type", "tx_type", "side", "tx_date", "disclosure_date", "amount",
+              "amount_low", "amount_high", "description", "url", "fetched_at", "bioguide", "first_seen"]
+
+
+def db():
+    c = sqlite3.connect(DB_PATH, timeout=60)
+    c.row_factory = sqlite3.Row
+    return c
+
+
+def init_db():
+    with db() as c:
+        c.executescript("""
+        CREATE TABLE IF NOT EXISTS filings(
+          id TEXT PRIMARY KEY, source TEXT, chamber TEXT, politician TEXT, state_dst TEXT,
+          filing_date TEXT, url TEXT, status TEXT, n_tx INTEGER, fetched_at TEXT);
+        CREATE TABLE IF NOT EXISTS trades(
+          uid TEXT PRIMARY KEY, source TEXT, filing_id TEXT, chamber TEXT, politician TEXT,
+          last_name TEXT, party TEXT, state TEXT, district TEXT, owner TEXT, ticker TEXT,
+          asset TEXT, asset_type TEXT, tx_type TEXT, side TEXT, tx_date TEXT, disclosure_date TEXT,
+          amount TEXT, amount_low INTEGER, amount_high INTEGER, description TEXT, url TEXT,
+          fetched_at TEXT);
+        CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT);
+        CREATE TABLE IF NOT EXISTS prices(ticker TEXT, d TEXT, open REAL, high REAL, low REAL, close REAL, adjclose REAL,
+          PRIMARY KEY(ticker, d));
+        CREATE TABLE IF NOT EXISTS quotes(ticker TEXT PRIMARY KEY, symbol TEXT, price REAL, as_of TEXT, name TEXT,
+          status TEXT, hist_from TEXT, checked_at TEXT);
+        """)
+        cols = {r[1] for r in c.execute("PRAGMA table_info(trades)")}
+        for col, typ in (("bioguide", "TEXT"), ("first_seen", "TEXT"), ("est_price", "REAL"), ("est_adj", "REAL"),
+                         ("est_date", "TEXT")):
+            if col not in cols:
+                c.execute(f"ALTER TABLE trades ADD COLUMN {col} {typ}")
+        c.execute("UPDATE trades SET first_seen = disclosure_date || 'T12:00:00+00:00' WHERE first_seen IS NULL")
+        c.executescript("""
+        CREATE INDEX IF NOT EXISTS ix_tr_disc ON trades(disclosure_date);
+        CREATE INDEX IF NOT EXISTS ix_tr_tx ON trades(tx_date);
+        CREATE INDEX IF NOT EXISTS ix_tr_pol ON trades(politician);
+        CREATE INDEX IF NOT EXISTS ix_tr_tick ON trades(ticker);
+        CREATE INDEX IF NOT EXISTS ix_tr_seen ON trades(first_seen);
+        """)
+
+
+def meta_get(k, default=None):
+    with db() as c:
+        r = c.execute("SELECT v FROM meta WHERE k=?", (k,)).fetchone()
+    return r["v"] if r else default
+
+
+def meta_set(k, v):
+    with db() as c:
+        c.execute("INSERT OR REPLACE INTO meta VALUES(?,?)", (k, v))
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def first_seen_for(disclosure_date):
+    """Real 'first seen' time for fresh filings; the disclosure date for old (backfilled) ones."""
+    if disclosure_date and disclosure_date < (date.today() - timedelta(days=NEW_WINDOW_DAYS)).isoformat():
+        return disclosure_date + "T12:00:00+00:00"
+    return now()
+
+
+def iso(d):
+    if not d:
+        return None
+    for f in ("%m/%d/%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(d.strip(), f).date().isoformat()
+        except ValueError:
+            pass
+    return None
+
+
+def note(msg):
+    log.info(msg)
+    _state["log"] = (_state["log"] + [f"{now()} {msg}"])[-60:]
+
+
+# ---------------------------------------------------------------- legislators
+_leg = {"house": {}, "senate": {}, "house_name": {}}
+
+
+def _get_cached(url, path, max_age):
+    if not path.exists() or time.time() - path.stat().st_mtime > max_age:
+        try:
+            r = requests.get(url, headers=UA, timeout=120)
+            r.raise_for_status()
+            path.write_bytes(r.content)
+        except Exception as e:
+            note(f"{url} fetch failed: {e}")
+    return json.loads(path.read_text()) if path.exists() else []
+
+
+def _norm_last(s):
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().strip().lower()
+    return re.sub(r",?\s+(jr|sr|ii|iii|iv)\.?$", "", s)
+
+
+def load_legislators():
+    """(party, bioguide) lookup. Historical first (members who left since 2019), then current overrides."""
+    hist = [p for p in _get_cached(LEGIS_HIST, DATA / "legislators-historical.json", 30 * 86400)
+            if p["terms"][-1].get("end", "") >= "2019"]
+    cur = _get_cached(LEGIS, DATA / "legislators-current.json", 86400)
+    for is_hist, group in ((True, hist), (False, cur)):
+        for p in group:
+            bid = p["id"].get("bioguide")
+            last = _norm_last(p["name"]["last"])
+            for t in (p["terms"][-2:] if is_hist else p["terms"][-1:]):
+                party = {"Democrat": "D", "Republican": "R", "Independent": "I"}.get(t.get("party"), t.get("party"))
+                if t["type"] == "rep":
+                    _leg["house"][(t["state"], int(t.get("district", 0)))] = (last, party, bid)
+                    _leg["house_name"][(t["state"], last)] = (party, bid)
+                else:
+                    _leg["senate"][(t["state"], last)] = (party, bid)
+
+
+def house_lookup(state_dst, last):
+    m = re.match(r"([A-Z]{2})(\d+)", state_dst or "")
+    if not m:
+        return None, None
+    st, dist = m.group(1), int(m.group(2))
+    last = _norm_last(last)
+    hit = _leg["house"].get((st, dist))
+    if hit and (hit[0] == last or hit[0] in last or last in hit[0]):
+        return hit[1], hit[2]
+    return _leg["house_name"].get((st, last), (None, None))
+
+
+def senate_lookup(state, name):
+    toks = [_norm_last(t) for t in re.sub(r"[,.]", " ", name or "").split()]
+    for t in reversed([t for t in toks if t not in ("jr", "sr", "ii", "iii", "iv")]):
+        hit = _leg["senate"].get((state, t))
+        if hit:
+            return hit
+    return None, None
+
+
+def side_of(tx_type):
+    t = (tx_type or "").lower()
+    if "exchange" in t:
+        return "exchange"
+    if t.startswith("p") or "purchase" in t or t == "buy":
+        return "buy"
+    if t.startswith("s") or "sale" in t or "sell" in t:
+        return "sell"
+    return "other"
+
+
+def insert_trade(c, row, ignore=False):
+    vals = [row.get(k) for k in TRADE_COLS]
+    verb = "INSERT OR IGNORE" if ignore else "INSERT OR REPLACE"
+    return c.execute(f"{verb} INTO trades({','.join(TRADE_COLS)}) VALUES({','.join('?' * len(TRADE_COLS))})", vals)
+
+
+# ---------------------------------------------------------------- House
+def fetch_house_year(year):
+    r = requests.get(HOUSE_INDEX.format(y=year), headers=UA, timeout=120)
+    r.raise_for_status()
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    xml_name = next(n for n in z.namelist() if n.lower().endswith(".xml"))
+    root = ET.fromstring(z.read(xml_name))
+    ptrs = []
+    for m in root.findall("Member"):
+        if m.findtext("FilingType") != "P":
+            continue
+        first, last, suffix = ((m.findtext(k) or "").strip() for k in ("First", "Last", "Suffix"))
+        ptrs.append({
+            "doc": m.findtext("DocID").strip(), "year": int(m.findtext("Year") or year),
+            "name": " ".join(x for x in (first, last, suffix) if x), "last": last,
+            "state_dst": (m.findtext("StateDst") or "").strip(), "filing_date": iso(m.findtext("FilingDate")),
+        })
+    with db() as c:
+        done = {r["id"] for r in c.execute(
+            "SELECT id FROM filings WHERE source='house' AND status IN ('parsed','scanned','no_transactions')")}
+    todo = [p for p in ptrs if f"house:{p['doc']}" not in done]
+    note(f"House {year}: {len(ptrs)} PTRs in index, {len(todo)} new to process")
+
+    def work(p):
+        url = HOUSE_PDF.format(y=p["year"], doc=p["doc"])
+        dest = PDFS / f"{p['year']}_{p['doc']}.pdf"
+        try:
+            if not dest.exists():
+                rr = requests.get(url, headers=UA, timeout=60)
+                if rr.status_code != 200:
+                    return p, url, "failed", []
+                dest.write_bytes(rr.content)
+            txs = parse_ptr_pdf(str(dest))
+            if txs is None:
+                return p, url, "scanned", []
+            return p, url, ("parsed" if txs else "no_transactions"), txs
+        except Exception as e:
+            log.warning("PTR %s failed: %s", p["doc"], e)
+            return p, url, "failed", []
+
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        results = list(ex.map(work, todo))
+    new_rows = []
+    with db() as c:
+        for p, url, status, txs in results:
+            fid = f"house:{p['doc']}"
+            party, bid = house_lookup(p["state_dst"], p["last"])
+            c.execute("INSERT OR REPLACE INTO filings VALUES(?,?,?,?,?,?,?,?,?,?)",
+                      (fid, "house", "House", p["name"], p["state_dst"], p["filing_date"], url, status, len(txs), now()))
+            prev = {r["uid"]: r["first_seen"] for r in c.execute("SELECT uid, first_seen FROM trades WHERE filing_id=?", (fid,))}
+            c.execute("DELETE FROM trades WHERE filing_id=?", (fid,))
+            for i, t in enumerate(txs):
+                uid = f"{fid}:{i}"
+                row = {"uid": uid, "source": "house_clerk", "filing_id": fid, "chamber": "House",
+                       "politician": p["name"], "last_name": p["last"], "party": party,
+                       "state": p["state_dst"][:2] or None, "district": p["state_dst"], "owner": t["owner"],
+                       "ticker": t["ticker"], "asset": t["asset"], "asset_type": t["asset_type"],
+                       "tx_type": t["tx_type"], "side": side_of(t["tx_type"]), "tx_date": iso(t["tx_date"]),
+                       "disclosure_date": p["filing_date"], "amount": t["amount"], "amount_low": t["amount_low"],
+                       "amount_high": t["amount_high"], "description": t["description"], "url": url,
+                       "fetched_at": now(), "bioguide": bid,
+                       "first_seen": prev.get(uid) or first_seen_for(p["filing_date"])}
+                insert_trade(c, row)
+                if uid not in prev:
+                    new_rows.append(row)
+    note(f"House {year}: {len(new_rows)} new transactions from {len(results)} filings")
+    return new_rows
+
+
+# ---------------------------------------------------------------- Senate (Bargo)
+def ingest_bargo(trades):
+    new_rows, seen = [], {}
+    with db() as c:
+        for t in trades:
+            if (t.get("chamber") or "").lower() != "senate":
+                continue
+            base = "|".join(str(t.get(k)) for k in ("member", "ticker", "asset", "type", "transaction_date",
+                                                     "amount_range", "disclosure_date"))
+            seen[base] = seen.get(base, 0) + 1
+            uid = "senate:" + hashlib.sha1(f"{base}|{seen[base]}".encode()).hexdigest()[:20]
+            name = re.sub(r"\s+", " ", t.get("member") or "").strip()
+            if name.isupper():
+                name = name.title()
+            state = t.get("state")
+            party, bid = senate_lookup(state, name)
+            ty = (t.get("type") or "").replace("_", " ")
+            ty = {"sale": "Sale", "purchase": "Purchase", "sale partial": "Sale (partial)", "sale full": "Sale",
+                  "exchange": "Exchange"}.get(ty, ty.title())
+            tick = t.get("ticker")
+            row = {"uid": uid, "source": "bargo", "chamber": "Senate", "politician": name,
+                   "last_name": name.split()[-1] if name else "", "party": party, "state": state, "district": state,
+                   "ticker": tick if tick not in (None, "", "--") else None,
+                   "asset": htmllib.unescape(t.get("asset") or ""),
+                   "tx_type": ty, "side": side_of(ty), "tx_date": t.get("transaction_date"),
+                   "disclosure_date": t.get("disclosure_date"), "amount": t.get("amount_range"),
+                   "amount_low": t.get("amount_low"), "amount_high": t.get("amount_high"),
+                   "url": t.get("filing_url") or t.get("filing_portal") or "https://efdsearch.senate.gov/search/",
+                   "fetched_at": now(), "bioguide": bid, "first_seen": first_seen_for(t.get("disclosure_date"))}
+            if insert_trade(c, row, ignore=True).rowcount:
+                new_rows.append(row)
+        for r in c.execute("SELECT uid, politician, state FROM trades WHERE source='bargo' AND bioguide IS NULL").fetchall():
+            party, bid = senate_lookup(r["state"], r["politician"])
+            if bid:
+                c.execute("UPDATE trades SET party=?, bioguide=? WHERE uid=?", (party, bid, r["uid"]))
+    return new_rows
+
+
+def fetch_senate(force=False):
+    last = meta_get("bargo_last_fetch")
+    if last and not force and time.time() - float(last) < BARGO_MIN_HOURS * 3600:
+        return []
+    headers = dict(UA)
+    if BARGO_KEY:
+        headers["X-Api-Key"] = BARGO_KEY
+    new_rows = []
+    lim = 250 if BARGO_KEY else 100
+    for page in range(8 if BARGO_KEY else 1):
+        r = requests.get(BARGO, params={"chamber": "senate", "limit": lim, "page": page}, headers=headers, timeout=60)
+        meta_set("bargo_rate", json.dumps({k.lower(): v for k, v in r.headers.items() if "ratelimit" in k.lower()}))
+        if r.status_code != 200:
+            note(f"Senate (Bargo): HTTP {r.status_code} {r.text[:150]}")
+            break
+        trades = r.json().get("trades", [])
+        (DATA / f"bargo_senate_{date.today().isoformat()}_p{page}.json").write_text(json.dumps(r.json()))
+        new_rows += ingest_bargo(trades)
+        if len(trades) < lim:
+            break
+    meta_set("bargo_last_fetch", str(time.time()))
+    note(f"Senate (Bargo{' key' if BARGO_KEY else ', keyless'}): {len(new_rows)} new transactions")
+    return new_rows
+
+
+
+# ---------------------------------------------------------------- Executive branch (OGE Form 278-T, the President)
+OGE_DIR = DATA / "oge"
+OGE_DIR.mkdir(exist_ok=True)
+OGE_INDEX = "https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000"
+OGE_BASE = "https://extapps2.oge.gov"
+OGE_MIN_HOURS = float(os.environ.get("OGE_MIN_HOURS", "6"))
+EXEC_PEOPLE = {"Trump": {"name": "Donald J. Trump", "last": "Trump", "party": "R", "state": "US", "role": "President"}}
+_ticker_index = None
+
+
+def ticker_index():
+    global _ticker_index
+    if _ticker_index is None:
+        f = DATA / "sec_company_tickers.json"
+        if not f.exists() or time.time() - f.stat().st_mtime > 30 * 86400:
+            try:
+                r = requests.get("https://www.sec.gov/files/company_tickers.json",
+                                 headers={"User-Agent": "politician-trades-tracker personal research admin@example.com"},
+                                 timeout=60)
+                r.raise_for_status()
+                f.write_bytes(r.content)
+            except Exception as e:
+                note(f"SEC ticker list fetch failed: {e}")
+        _ticker_index = oge_parser.TickerIndex(json.loads(f.read_text())) if f.exists() else None
+    return _ticker_index
+
+
+def oge_filings():
+    """The President's 278-T links from OGE's public President & Vice President index (no OGE Form 201 needed)."""
+    import urllib.parse
+    r = requests.get(OGE_INDEX, headers=UA, timeout=60)
+    r.raise_for_status()
+    out = []
+    for m in re.finditer(r"<a href='([^']+)'>((?:(?!</a>).)*?)</a>", r.text, re.S):
+        label = re.sub("<[^>]+>", "", m.group(2)).strip()
+        path = m.group(1)
+        dm = re.search(r"278 Transaction \((\d\d)/(\d\d)/(\d{4})\)", label)
+        who = next((k for k in EXEC_PEOPLE if k in path), None)
+        if not dm or not who:
+            continue
+        docid = path.split("/")[-3] if "/$FILE/" in path else hashlib.sha1(path.encode()).hexdigest()[:16]
+        out.append({"who": who, "docid": docid, "received": f"{dm.group(3)}-{dm.group(1)}-{dm.group(2)}",
+                    "file_name": path.split("/")[-1], "amended": "AMEND" in path.upper(),
+                    "url": OGE_BASE + urllib.parse.quote(path, safe="/+$")})
+    return out
+
+
+def _parse_oge_pdf(pdf, received):
+    filed = date.fromisoformat(received)
+    text_rows = oge_parser.parse_lines(oge_parser.pdf_lines(str(pdf)), filed)
+    ocr_rows = []
+    try:
+        import oge_ocr
+        ocr_rows = oge_parser.parse_lines(oge_ocr.ocr_pdf(pdf, workers=3).splitlines(), filed)
+    except Exception as e:
+        log.warning("OCR %s failed: %s", pdf, e)
+    return oge_parser.merge(text_rows, ocr_rows)
+
+
+def fetch_oge(force=False):
+    last = meta_get("oge_last_fetch")
+    if last and not force and time.time() - float(last) < OGE_MIN_HOURS * 3600:
+        return []
+    fl = oge_filings()
+    with db() as c:
+        done = {r["id"] for r in c.execute("SELECT id FROM filings WHERE source='oge' AND status IN ('parsed','amendment','no_transactions')")}
+    todo = [f for f in fl if f"oge:{f['docid']}" not in done]
+    note(f"Executive (OGE): {len(fl)} 278-T filings listed, {len(todo)} new to process")
+    idx = ticker_index()
+    new_rows = []
+    for f in todo:
+        fid = f"oge:{f['docid']}"
+        person = EXEC_PEOPLE[f["who"]]
+        pdf = OGE_DIR / f"{f['docid']}.pdf"
+        try:
+            if not pdf.exists():
+                rr = requests.get(f["url"], headers=UA, timeout=600)
+                rr.raise_for_status()
+                pdf.write_bytes(rr.content)
+            if f["amended"]:
+                status, txs = "amendment", []
+            else:
+                txs = _parse_oge_pdf(pdf, f["received"])
+                status = "parsed" if txs else "no_transactions"
+        except Exception as e:
+            note(f"OGE {f['file_name']} failed: {e}")
+            continue
+        with db() as c:
+            c.execute("INSERT OR REPLACE INTO filings VALUES(?,?,?,?,?,?,?,?,?,?)",
+                      (fid, "oge", "Executive", person["name"], person["role"], f["received"], f["url"], status,
+                       len(txs), now()))
+            prev = {r["uid"]: r["first_seen"] for r in c.execute("SELECT uid, first_seen FROM trades WHERE filing_id=?", (fid,))}
+            c.execute("DELETE FROM trades WHERE filing_id=?", (fid,))
+            for i, t in enumerate(txs):
+                uid = f"{fid}:{t['n'] or 'x' + str(i)}"
+                hit = idx.match(t["asset"]) if idx else None
+                kind = oge_parser.asset_kind(t["asset"])
+                row = {"uid": uid, "source": "oge", "filing_id": fid, "chamber": "Executive",
+                       "politician": person["name"], "last_name": person["last"], "party": person["party"],
+                       "state": person["state"], "district": person["role"], "owner": None,
+                       "ticker": hit[0] if hit else None, "asset": t["asset"], "asset_type": "ST" if hit else kind,
+                       "tx_type": t["tx_type"], "side": side_of(t["tx_type"]), "tx_date": t["tx_date"],
+                       "disclosure_date": f["received"], "amount": t["amount"], "amount_low": t["amount_low"],
+                       "amount_high": t["amount_high"],
+                       "description": "Reported more than 30 days after notification" if t.get("late") else None,
+                       "url": f["url"], "fetched_at": now(), "bioguide": None,
+                       "first_seen": prev.get(uid) or first_seen_for(f["received"])}
+                insert_trade(c, row, ignore=True)
+                if uid not in prev:
+                    new_rows.append(row)
+            for (tk,) in c.execute("SELECT DISTINCT ticker FROM trades WHERE filing_id=? AND ticker IS NOT NULL", (fid,)).fetchall():
+                c.execute(EST_SQL, (tk,))  # reuse cached daily prices for the trade-day estimate
+        note(f"OGE {f['file_name']}: {status}, {len(txs)} transactions")
+    meta_set("oge_last_fetch", str(time.time()))
+    return new_rows
+
+
+# ---------------------------------------------------------------- prices (Yahoo chart API)
+def yahoo_symbol(t):
+    if not t or "$" in t or len(t) > 8:
+        return None
+    return t.replace(".", "-").replace("/", "-")
+
+
+def _fetch_chart(sym, start=None):
+    params = {"interval": "1d", "includeAdjustedClose": "true"}
+    if start:
+        params.update({"period1": int(datetime.fromisoformat(start).replace(tzinfo=timezone.utc).timestamp()),
+                       "period2": int(time.time()) + 86400})
+    else:
+        params["range"] = "5d"
+    for attempt in range(3):
+        r = requests.get(YAHOO.format(sym=sym), params=params, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+        if r.status_code == 429:
+            time.sleep(5 * (attempt + 1))
+            continue
+        if r.status_code in (400, 404):
+            return None
+        r.raise_for_status()
+        res = (r.json().get("chart") or {}).get("result")
+        return res[0] if res else None
+    raise RuntimeError("rate limited")
+
+
+EST_SQL = """UPDATE trades SET
+    est_price = (SELECT close FROM prices p WHERE p.ticker=trades.ticker AND p.d<=trades.tx_date
+                 AND p.d >= date(trades.tx_date,'-4 days') ORDER BY p.d DESC LIMIT 1),
+    est_adj = (SELECT adjclose FROM prices p WHERE p.ticker=trades.ticker AND p.d<=trades.tx_date
+                 AND p.d >= date(trades.tx_date,'-4 days') ORDER BY p.d DESC LIMIT 1),
+    est_date = (SELECT d FROM prices p WHERE p.ticker=trades.ticker AND p.d<=trades.tx_date
+                 AND p.d >= date(trades.tx_date,'-4 days') ORDER BY p.d DESC LIMIT 1)
+    WHERE ticker=? AND est_price IS NULL AND (asset_type IS NULL OR asset_type IN ('ST','EF'))"""
+
+
+def update_prices(max_tickers=None):
+    """Fetch daily history for tickers lacking an estimated trade price, then refresh stale current quotes."""
+    week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    with db() as c:
+        need = c.execute("""SELECT ticker, MIN(tx_date) mind FROM trades
+            WHERE ticker IS NOT NULL AND tx_date IS NOT NULL AND est_price IS NULL
+              AND (asset_type IS NULL OR asset_type IN ('ST','EF'))
+              AND ticker NOT IN (SELECT ticker FROM quotes WHERE status='nodata' AND checked_at > ?)
+              AND ticker NOT IN (SELECT ticker FROM quotes WHERE status='ok' AND hist_from <= trades.tx_date
+                                 AND checked_at > ?)
+            GROUP BY ticker""", (week_ago, week_ago)).fetchall()
+        stale = c.execute("""SELECT ticker FROM quotes WHERE status='ok' AND checked_at < ?
+            AND ticker IN (SELECT ticker FROM trades WHERE disclosure_date >= ?)""",
+                          ((datetime.now(timezone.utc) - timedelta(hours=6)).isoformat(),
+                           (date.today() - timedelta(days=400)).isoformat())).fetchall()
+    need = list(need)[:max_tickers] if max_tickers else list(need)
+    need_set = {r["ticker"] for r in need}
+    jobs = [(r["ticker"], (datetime.fromisoformat(r["mind"]) - timedelta(days=10)).date().isoformat()) for r in need]
+    jobs += [(r["ticker"], None) for r in stale if r["ticker"] not in need_set]
+    if not jobs:
+        return 0
+
+    def work(job):
+        tick, start = job
+        sym = yahoo_symbol(tick)
+        if not sym:
+            return tick, sym, start, None
+        try:
+            return tick, sym, start, _fetch_chart(sym, start)
+        except Exception as e:
+            log.warning("price %s: %s", tick, e)
+            return tick, sym, start, "error"
+
+    ok = 0
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        for tick, sym, start, res in ex.map(work, jobs):
+            if res == "error":
+                continue
+            with db() as c:
+                if not res or not res.get("timestamp"):
+                    c.execute("""INSERT INTO quotes(ticker,symbol,status,checked_at) VALUES(?,?,?,?)
+                        ON CONFLICT(ticker) DO UPDATE SET checked_at=excluded.checked_at,
+                        status=CASE WHEN quotes.price IS NULL THEN 'nodata' ELSE quotes.status END""",
+                              (tick, sym, "nodata", now()))
+                    continue
+                m = res["meta"]
+                q = res["indicators"]["quote"][0]
+                adj = (res["indicators"].get("adjclose") or [{}])[0].get("adjclose") or q["close"]
+                tz = m.get("gmtoffset", 0)
+                for i, ts in enumerate(res["timestamp"]):
+                    if q["close"][i] is None:
+                        continue
+                    d = datetime.fromtimestamp(ts + tz, timezone.utc).date().isoformat()
+                    c.execute("INSERT OR REPLACE INTO prices VALUES(?,?,?,?,?,?,?)",
+                              (tick, d, q["open"][i], q["high"][i], q["low"][i], q["close"][i], adj[i]))
+                as_of = datetime.fromtimestamp(m.get("regularMarketTime", time.time()), timezone.utc).isoformat()
+                c.execute("""INSERT INTO quotes(ticker,symbol,price,as_of,name,status,hist_from,checked_at)
+                    VALUES(?,?,?,?,?,?,?,?)
+                    ON CONFLICT(ticker) DO UPDATE SET symbol=excluded.symbol, price=excluded.price, as_of=excluded.as_of,
+                    name=COALESCE(excluded.name, quotes.name), status='ok',
+                    hist_from=COALESCE(MIN(quotes.hist_from, excluded.hist_from), quotes.hist_from, excluded.hist_from),
+                    checked_at=excluded.checked_at""",
+                          (tick, sym, m.get("regularMarketPrice"), as_of, m.get("longName") or m.get("shortName"),
+                           "ok", start, now()))
+                if start:
+                    c.execute(EST_SQL, (tick,))
+                ok += 1
+    note(f"Prices: updated {ok} of {len(jobs)} tickers")
+    return ok
+
+
+# ---------------------------------------------------------------- notifications (ntfy.sh)
+def follow_topic(name):
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:40]
+    return f"{NTFY_TOPIC}-{slug}" if NTFY_TOPIC else None
+
+
+def notify(new_rows):
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
+    new_rows = [r for r in new_rows if r["first_seen"] >= cutoff]
+    if not NTFY_TOPIC or not new_rows:
+        return
+    url = (PUBLIC_URL_FILE.read_text().strip() if PUBLIC_URL_FILE.exists() else "") or None
+    by_pol = {}
+    for r in new_rows:
+        by_pol.setdefault((r["politician"], r["party"], r["state"], r["chamber"]), []).append(r)
+    lines = []
+    for (pol, party, st, ch), rows in sorted(by_pol.items(), key=lambda kv: -len(kv[1]))[:8]:
+        parts = []
+        for r in rows[:4]:
+            arrow = "🟢 Buy" if r["side"] == "buy" else "🔴 Sell" if r["side"] == "sell" else r["tx_type"]
+            parts.append(f"{arrow} {r['ticker'] or (r['asset'] or '')[:28]} ({r['amount']})")
+        more = f" +{len(rows) - 4} more" if len(rows) > 4 else ""
+        lines.append(f"{pol} ({party or '?'}-{st}, {ch}): " + "; ".join(parts) + more)
+    if len(by_pol) > 8:
+        lines.append(f"…and {len(by_pol) - 8} more politicians")
+    title = f"{len(new_rows)} new congressional trade{'s' if len(new_rows) != 1 else ''} disclosed"
+    headers = {"Title": title, "Tags": "classical_building"}
+    if url:
+        headers["Click"] = url
+    try:
+        requests.post(f"{NTFY_SERVER}/{NTFY_TOPIC}", data="\n".join(lines).encode("utf-8"), headers=headers, timeout=20)
+        note(f"ntfy: notified {len(new_rows)} new trades")
+    except Exception as e:
+        note(f"ntfy failed: {e}")
+    # one message per politician on their own follow topic ("<base>-<name-slug>"), used by the in-app bell
+    for (pol, party, st, ch), rows in sorted(by_pol.items(), key=lambda kv: -len(kv[1]))[:30]:
+        body = []
+        for r in rows[:6]:
+            arrow = "Buy" if r["side"] == "buy" else "Sell" if r["side"] == "sell" else r["tx_type"]
+            body.append(f"{arrow} {r['ticker'] or (r['asset'] or '')[:28]} ({r['amount']})")
+        if len(rows) > 6:
+            body.append(f"+{len(rows) - 6} more")
+        h = {"Title": f"{pol} disclosed new trades.", "Tags": "classical_building"}
+        if url:
+            h["Click"] = f"{url.rstrip('/')}/#p={quote(pol)}"
+        try:
+            requests.post(f"{NTFY_SERVER}/{follow_topic(pol)}", data="\n".join(body).encode("utf-8"), headers=h, timeout=20)
+        except Exception as e:
+            note(f"ntfy follow topic failed for {pol}: {e}")
+
+
+# ---------------------------------------------------------------- refresh loop
+def refresh(force_senate=False, do_notify=True):
+    if not _lock.acquire(blocking=False):
+        return False
+    _state["running"] = True
+    new_rows = []
+    try:
+        load_legislators()
+        for y in HOUSE_YEARS:
+            try:
+                new_rows += fetch_house_year(y)
+            except Exception as e:
+                note(f"House {y} failed: {e}")
+                _state["last_error"] = f"House {y}: {e}"
+        try:
+            new_rows += fetch_senate(force=force_senate)
+        except Exception as e:
+            note(f"Senate failed: {e}")
+            _state["last_error"] = f"Senate: {e}"
+        if os.environ.get("OGE_DISABLE") != "1":
+            try:
+                new_rows += fetch_oge()
+            except Exception as e:
+                note(f"Executive (OGE) failed: {e}")
+                _state["last_error"] = f"OGE: {e}"
+        meta_set("last_refresh", now())
+        if do_notify:
+            notify(new_rows)
+        try:
+            update_prices()
+        except Exception as e:
+            note(f"Prices failed: {e}")
+        meta_set("last_refresh", now())
+        _pf_cache.clear()
+        threading.Thread(target=portfolio_summaries, daemon=True).start()
+    finally:
+        _state["running"] = False
+        _lock.release()
+    return True
+
+
+def scheduler():
+    while True:
+        try:
+            refresh()
+        except Exception as e:
+            log.exception("refresh failed: %s", e)
+        time.sleep(REFRESH_MINUTES * 60)
+
+
+# ---------------------------------------------------------------- API
+app = FastAPI(title="Politician Trades Tracker")
+
+
+@app.on_event("startup")
+def _startup():
+    init_db()
+    load_legislators()
+    seed = DATA / "bargo_senate_seed.json"
+    if seed.exists() and not meta_get("bargo_seeded"):
+        ingest_bargo(json.loads(seed.read_text()).get("trades", []))
+        meta_set("bargo_seeded", "1")
+        if not meta_get("bargo_last_fetch"):
+            meta_set("bargo_last_fetch", str(seed.stat().st_mtime))
+    with db() as c:  # fill bioguide/party for rows created before bioguide support
+        for r in c.execute("""SELECT DISTINCT filing_id, district, last_name FROM trades
+                              WHERE source='house_clerk' AND bioguide IS NULL""").fetchall():
+            party, bid = house_lookup(r["district"], r["last_name"])
+            if bid:
+                c.execute("UPDATE trades SET bioguide=?, party=COALESCE(party, ?) WHERE filing_id=?",
+                          (bid, party, r["filing_id"]))
+    ingest_bargo([])
+    threading.Thread(target=portfolio_summaries, daemon=True).start()
+    if os.environ.get("NO_SCHEDULER") != "1":
+        threading.Thread(target=scheduler, daemon=True).start()
+
+
+TRADE_SELECT = """SELECT t.*, q.price AS cur_price, q.as_of AS cur_as_of, q.name AS company,
+    CASE WHEN t.est_adj > 0 AND q.price > 0 THEN ROUND((q.price - t.est_adj) / t.est_adj * 100, 2) END AS pct_since,
+    pd.low AS day_low, pd.high AS day_high, pd.open AS day_open,
+    CAST(julianday(t.disclosure_date) - julianday(t.tx_date) AS INTEGER) AS lag_days
+    FROM trades t LEFT JOIN quotes q ON q.ticker = t.ticker AND q.status='ok'
+    LEFT JOIN prices pd ON pd.ticker = t.ticker AND pd.d = t.est_date"""
+MID = "((COALESCE(t.amount_low,0) + COALESCE(t.amount_high, t.amount_low, 0)) / 2.0)"
+
+
+def _where(q=None, politician=None, ticker=None, chamber=None, party=None, side=None,
+           date_from=None, date_to=None, date_field="disclosure_date", asset=None):
+    w, a = [], []
+    if asset == "stock":
+        w.append("t.ticker IS NOT NULL AND (t.asset_type IS NULL OR t.asset_type IN ('ST','EF'))")
+    elif asset == "other":
+        w.append("NOT (t.ticker IS NOT NULL AND (t.asset_type IS NULL OR t.asset_type IN ('ST','EF')))")
+    df = "t.tx_date" if date_field == "tx_date" else "t.disclosure_date"
+    if q:
+        w.append("(t.politician LIKE ? OR t.ticker LIKE ? OR t.asset LIKE ?)")
+        a += [f"%{q}%", f"{q}%", f"%{q}%"]
+    if politician:
+        w.append("t.politician = ?"); a.append(politician)
+    if ticker:
+        w.append("UPPER(t.ticker) = UPPER(?)"); a.append(ticker)
+    if chamber:
+        w.append("t.chamber = ?"); a.append(chamber)
+    if party:
+        w.append("t.party = ?"); a.append(party)
+    if side:
+        w.append("t.side = ?"); a.append(side)
+    if date_from:
+        w.append(f"{df} >= ?"); a.append(date_from)
+    if date_to:
+        w.append(f"{df} <= ?"); a.append(date_to)
+    return (" WHERE " + " AND ".join(w)) if w else "", a
+
+
+SORTS = {
+    "disclosure_date": "t.disclosure_date DESC, t.first_seen DESC, t.tx_date DESC, t.uid",
+    "tx_date": "t.tx_date DESC, t.disclosure_date DESC, t.uid",
+    "amount": "(t.amount_low IS NULL), " + "((COALESCE(t.amount_low,0) + COALESCE(t.amount_high, t.amount_low, 0)) / 2.0)" + " DESC, t.disclosure_date DESC, t.uid",
+    "amount_asc": "(t.amount_low IS NULL), " + "((COALESCE(t.amount_low,0) + COALESCE(t.amount_high, t.amount_low, 0)) / 2.0)" + " ASC, t.disclosure_date DESC, t.uid",
+    "tx_oldest": "t.tx_date ASC, t.uid",
+    "oldest": "t.disclosure_date ASC, t.tx_date ASC, t.uid",
+    "move": "pct_since IS NULL, ABS(pct_since) DESC, t.disclosure_date DESC",
+}
+
+
+@app.get("/api/trades")
+def trades(q: Optional[str] = None, politician: Optional[str] = None, ticker: Optional[str] = None,
+           chamber: Optional[str] = None, party: Optional[str] = None, side: Optional[str] = None,
+           date_from: Optional[str] = None, date_to: Optional[str] = None,
+           date_field: str = "disclosure_date", sort: str = "disclosure_date", asset: Optional[str] = None,
+           limit: int = Query(50, le=500), offset: int = 0):
+    where, a = _where(q, politician, ticker, chamber, party, side, date_from, date_to, date_field, asset)
+    with db() as c:
+        total = c.execute(f"SELECT COUNT(*) FROM trades t{where}", a).fetchone()[0]
+        rows = c.execute(f"{TRADE_SELECT}{where} ORDER BY {SORTS.get(sort, SORTS['disclosure_date'])} LIMIT ? OFFSET ?",
+                         a + [limit, offset]).fetchall()
+    return {"total": total, "trades": [dict(r) for r in rows]}
+
+
+@app.get("/api/stats")
+def stats(days: int = 30, chamber: Optional[str] = None, party: Optional[str] = None):
+    since = (date.today() - timedelta(days=days)).isoformat()
+    where, a = _where(chamber=chamber, party=party, date_from=since, date_field="disclosure_date")
+    with db() as c:
+        tick = c.execute(f"""SELECT t.ticker, MAX(t.asset) asset, MAX(q.name) company, COUNT(*) n,
+                SUM(t.side='buy') buys, SUM(t.side='sell') sells, COUNT(DISTINCT t.politician) pols
+                FROM trades t LEFT JOIN quotes q ON q.ticker=t.ticker {where}
+                {'AND' if where else 'WHERE'} t.ticker IS NOT NULL
+                GROUP BY t.ticker ORDER BY n DESC LIMIT 8""", a).fetchall()
+        pols = c.execute(f"""SELECT t.politician, t.chamber, MAX(t.party) party, MAX(t.state) state,
+                MAX(t.bioguide) bioguide, COUNT(*) n, SUM(t.side='buy') buys, SUM(t.side='sell') sells,
+                MAX(t.disclosure_date) latest
+                FROM trades t{where} GROUP BY t.politician, t.chamber ORDER BY n DESC LIMIT 8""", a).fetchall()
+        tot = c.execute(f"""SELECT COUNT(*) n, SUM(t.side='buy') buys, SUM(t.side='sell') sells,
+                COUNT(DISTINCT t.politician) pols, SUM(COALESCE(t.amount_low,0)) vol_low,
+                SUM(COALESCE(t.amount_high,t.amount_low,0)) vol_high FROM trades t{where}""", a).fetchone()
+    return {"days": days, "since": since, "totals": dict(tot), "top_tickers": [dict(r) for r in tick],
+            "top_politicians": [dict(r) for r in pols]}
+
+
+@app.get("/api/tickers")
+def tickers(days: int = 30, chamber: Optional[str] = None):
+    since = (date.today() - timedelta(days=days)).isoformat()
+    where, a = _where(chamber=chamber, date_from=since, asset="stock")
+    with db() as c:
+        rows = c.execute(f"""SELECT UPPER(t.ticker) ticker, MAX(q.name) company, MAX(t.asset) asset, COUNT(*) n,
+            SUM(t.side='buy') buys, SUM(t.side='sell') sells, COUNT(DISTINCT t.politician) people,
+            MAX(t.disclosure_date) last, SUM({MID}) volume, MAX(q.price) price
+            FROM trades t LEFT JOIN quotes q ON q.ticker=t.ticker AND q.status='ok'{where}
+            GROUP BY UPPER(t.ticker) ORDER BY n DESC LIMIT 200""", a).fetchall()
+    return [dict(r) for r in rows]
+
+
+@app.get("/api/politicians")
+def politicians():
+    with db() as c:
+        rows = c.execute(f"""SELECT politician, chamber, MAX(party) party, MAX(state) state, MAX(district) district,
+            MAX(bioguide) bioguide, COUNT(*) n, MAX(disclosure_date) latest, MAX(tx_date) latest_tx,
+            SUM(side='buy') buys, SUM(side='sell') sells, SUM({MID}) volume,
+            SUM(CASE WHEN disclosure_date >= date('now','-365 days') THEN 1 ELSE 0 END) n_1y
+            FROM trades t GROUP BY politician, chamber ORDER BY politician""").fetchall()
+    return [dict(r) for r in rows]
+
+
+@app.get("/api/politician")
+def politician(name: str):
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.politician=? ORDER BY {SORTS['disclosure_date']}", (name,)).fetchall()
+        if not rows:
+            raise HTTPException(404, "not found")
+        tick = c.execute("""SELECT ticker, MAX(asset) asset, COUNT(*) n, SUM(side='buy') buys, SUM(side='sell') sells
+            FROM trades WHERE politician=? AND ticker IS NOT NULL GROUP BY ticker ORDER BY n DESC LIMIT 20""",
+                         (name,)).fetchall()
+        fil = c.execute("SELECT * FROM filings WHERE politician=? ORDER BY filing_date DESC", (name,)).fetchall()
+        mon = c.execute(f"""SELECT substr(tx_date,1,7) m, SUM(side='buy') buys, SUM(side='sell') sells,
+            SUM(CASE WHEN side='buy' THEN {MID} ELSE 0 END) buy_vol, SUM(CASE WHEN side='sell' THEN {MID} ELSE 0 END) sell_vol
+            FROM trades t WHERE politician=? AND tx_date >= date('now','-24 months') AND tx_date <= date('now')
+            GROUP BY m ORDER BY m""", (name,)).fetchall()
+    r0 = dict(rows[0])
+    vol_lo = sum(r["amount_low"] or 0 for r in rows)
+    vol_hi = sum(r["amount_high"] or r["amount_low"] or 0 for r in rows)
+    lags = sorted(r["lag_days"] for r in rows if r["lag_days"] is not None and r["lag_days"] >= 0)
+    txd = sorted(r["tx_date"] for r in rows if r["tx_date"])
+    extra = {"vol_low": vol_lo, "vol_high": vol_hi, "median_lag": lags[len(lags) // 2] if lags else None,
+             "first_tx": txd[0] if txd else None, "last_tx": txd[-1] if txd else None,
+             "latest_disclosure": max((r["disclosure_date"] or "") for r in rows),
+             "n_filings": len(fil), "priced": sum(r["est_price"] is not None for r in rows),
+             "asset_mix": {k: sum(1 for r in rows if (r["asset_type"] or "") == k) for k in ("ST", "EF", "BOND")}}
+    return {**extra, "politician": name, "chamber": r0["chamber"], "party": r0["party"], "state": r0["state"],
+            "district": r0["district"], "bioguide": r0["bioguide"], "n": len(rows),
+            "buys": sum(r["side"] == "buy" for r in rows), "sells": sum(r["side"] == "sell" for r in rows),
+            "top_tickers": [dict(t) for t in tick], "filings": [dict(f) for f in fil],
+            "monthly": [dict(m) for m in mon], "trades": [dict(r) for r in rows[:60]]}
+
+
+# ---------------------------------------------------------------- estimated portfolios
+_pf_cache = {}
+_pf_lock = threading.Lock()
+
+
+def _pf(name):
+    r = _pf_cache.get(name)
+    if r is None:
+        with db() as c:
+            r = pf.compute(c, name)
+        _pf_cache[name] = r
+    return r
+
+
+def portfolio_summaries():
+    with _pf_lock:
+        if "__summary__" in _pf_cache:
+            return _pf_cache["__summary__"]
+        with db() as c:
+            people = c.execute("""SELECT politician, chamber, MAX(party) party, MAX(state) state, MAX(district) district,
+                MAX(bioguide) bioguide, COUNT(*) n, MAX(disclosure_date) latest FROM trades GROUP BY politician, chamber""").fetchall()
+        out = []
+        for p in people:
+            r = _pf(p["politician"])
+            if not r["series"]["d"]:
+                continue
+            per = {k: pf.period_stats(r["series"], k) for k in pf.PERIODS}
+            out.append({**dict(p), "value": r["value"], "pnl": r["pnl"], "invested": r["invested"],
+                        "periods": per, "spark": pf.spark(r["series"]), "n_holdings": len(r["holdings"]),
+                        "n_priced": r["n_priced"], "win_rate": r["win_rate"], "avg_delay": r["avg_delay"],
+                        "top": [h["ticker"] for h in r["holdings"][:3]]})
+        _pf_cache["__summary__"] = out
+        return out
+
+
+@app.get("/api/portfolios")
+def portfolios():
+    """Estimated portfolio summary for everyone with priced stock trades (see portfolio.py for the method)."""
+    return portfolio_summaries()
+
+
+@app.get("/api/portfolio")
+def portfolio(name: str, holdings: int = Query(200, le=2000)):
+    with db() as c:
+        p = c.execute("""SELECT chamber, MAX(party) party, MAX(state) state, MAX(district) district, MAX(bioguide) bioguide,
+            COUNT(*) n, SUM(side='buy') buys, SUM(side='sell') sells, MAX(disclosure_date) latest, MIN(tx_date) first_tx
+            FROM trades WHERE politician=?""", (name,)).fetchone()
+    if not p or not p["n"]:
+        raise HTTPException(404, "not found")
+    r = _pf(name)
+    return {**dict(p), **{k: v for k, v in r.items() if k != "holdings"}, "politician": name,
+            "holdings": r["holdings"][:holdings], "n_holdings": len(r["holdings"]),
+            "periods": {k: pf.period_stats(r["series"], k) for k in pf.PERIODS} if r["series"]["d"] else {},
+            "follow_topic": follow_topic(name), "ntfy_server": NTFY_SERVER, "win_days": pf.WIN_DAYS}
+
+
+@app.get("/api/trade")
+def trade(uid: str):
+    with db() as c:
+        r = c.execute(f"{TRADE_SELECT} WHERE t.uid=?", (uid,)).fetchone()
+    if not r:
+        raise HTTPException(404, "not found")
+    return dict(r)
+
+
+@app.get("/api/status")
+def status():
+    with db() as c:
+        by = c.execute("""SELECT chamber, source, COUNT(*) n, MAX(disclosure_date) newest_disclosure,
+            MIN(disclosure_date) oldest_disclosure, MAX(tx_date) newest_tx, MAX(first_seen) newest_seen
+            FROM trades GROUP BY chamber, source""").fetchall()
+        fil = c.execute("SELECT status, COUNT(*) n FROM filings GROUP BY status").fetchall()
+        pc = c.execute("""SELECT SUM(ticker IS NOT NULL AND (asset_type IS NULL OR asset_type IN ('ST','EF'))) priceable,
+            SUM(est_price IS NOT NULL) priced, SUM(ticker IS NOT NULL) with_ticker, COUNT(*) n FROM trades""").fetchone()
+    return {"running": _state["running"], "last_refresh": meta_get("last_refresh"), "last_error": _state["last_error"],
+            "refresh_minutes": REFRESH_MINUTES, "senate_min_hours": BARGO_MIN_HOURS, "bargo_key": bool(BARGO_KEY),
+            "sources": [dict(r) for r in by], "house_filings": {r["status"]: r["n"] for r in fil},
+            "prices": dict(pc), "bargo_rate": json.loads(meta_get("bargo_rate", "{}") or "{}"),
+            "ntfy": {"server": NTFY_SERVER, "topic": NTFY_TOPIC} if NTFY_TOPIC else None,
+            "house_years": HOUSE_YEARS, "log": _state["log"][-15:]}
+
+
+_last_manual = {"t": 0.0}
+
+
+@app.post("/api/refresh")
+def do_refresh():
+    if _state["running"]:
+        return {"started": False, "message": "Already refreshing"}
+    if time.time() - _last_manual["t"] < 120:
+        return {"started": False, "message": "Refreshed moments ago"}
+    _last_manual["t"] = time.time()
+    threading.Thread(target=refresh, daemon=True).start()
+    return {"started": True}
+
+
+@app.get("/")
+def index():
+    return FileResponse(STATIC_DIR / "index.html", headers={"Cache-Control": "no-cache"})
+
+
+# the box layout keeps the frontend in static/; the GitHub repo keeps the Pages build in web/
+STATIC_DIR = BASE / "static" if (BASE / "static").exists() else BASE / "web" / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

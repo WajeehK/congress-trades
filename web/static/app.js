@@ -120,7 +120,7 @@ function tradeRow(t, showWho = true) {
   return `<button class="trow" data-trade="${esc(t.uid)}">
     ${logo(t.ticker, t.asset_type)}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag" title="From an annual financial disclosure report">Annual report</span>' : ''}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}</div>
       <div class="l2">${sub}</div>
     </div>
     <div class="r">

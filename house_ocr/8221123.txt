@@ -1,0 +1,32 @@
+#house_ocr v2 doc=8221123 pages=1
+T|1|HAND DELIVERED
+T|1|UNITED STATES HOUSE OF REPRESENTATIVES 40° 01
+T|1|Periodic Transaction Report
+T|1|“ CicLA oP ESouD mt AIT]
+T|1|NAME: OFFICE TELEPHONE:
+T|1|BSE OF REPRESETATVES |
+T|1|Member of the U.S. House of Representatives [] Officer or Employee U.S. HOUSE OF REPK
+T|1|State: KY District: 0S Employing Office: '
+T|1|File an original and 2 coples. File an original and 1 copy. .
+T|1|A $200 penalty shail be assessed against Please indicate whether this is an initial report or an amended report. For )
+T|1|anyone who files more than 30 days late. amendments, please provide the date of the report you are amending. WY)
+T|1|Did you purchase any shares that were allocated as a part of an Initial Report [ Amendment
+T|1|Initial Public Offering? [] YES Xx] NO Date of Report bein Amended: (For Official Use Only)
+T|1|DATE
+T|1|| TYPEOF | [Ol [NOTIFIED
+T|1|FULL ASSET NAME TRANS- OF AMOUNT OF TRANSACTION
+T|1|TRANS:
+T|1|ACTION ACTION TRANS-
+T|1|ACTION
+T|1|A B c D E F G H l J
+T|1|sr -e(sei8e| 8
+T|1|SP Provide full nama, not ticker symbol. (MMIDDYY) | (MM/DD/YY) a in cola +3/28/88|)8s 3
+T|1|De SAE EH ERE ER ERIEEIEEIEE
+T|1|_ | 58/28) 88/28) 88|82|s4|48| 88 | Fs
+T|1|ER ee
+T|1| omenosonemonm TIT | 11 ti.)11) 1
+T|1|[prwonamennen | fom fom >] | | 1
+T|1|a ee ee
+T|1|Oe
+T|1|[ansnmsern | Powe fowe TPP
+T|1|(This page will be publicly disclosed.)

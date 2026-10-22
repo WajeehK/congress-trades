@@ -361,7 +361,7 @@ def fetch_house_year(year):
                                                        else first_seen_for(p["filing_date"]))}
                 if status == "ocr" and not row["ticker"] and idx_ok():
                     import house_scan_parser
-                    hit = ticker_index().match(t["asset"]) or ticker_index().match(house_scan_parser.match_name(t["asset"]))
+                    hit = next(filter(None, map(ticker_index().match, house_scan_parser.match_candidates(t["asset"]))), None)
                     if hit:
                         row.update(ticker=hit[0], asset_type="ST")
                 insert_trade(c, row)

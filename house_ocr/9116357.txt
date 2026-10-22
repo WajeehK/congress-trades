@@ -1,0 +1,24 @@
+#house_ocr v2 doc=9116357 pages=2
+R|1|0||US TSY Note 4.00/ due 5/31/28|9/1/26|9/14/2026|0.089,0.003,0.005,0.016|0.001,0.001,0.079,0.020,0.004,0.006,0.013,0.001,0.013,0.001,0.015
+R|1|1||Katy TX Indpt Sch Perma BE/R/|9/2/26|9/14/26|0.087,0.000,0.007,0.001|0.004,0.015,0.080,0.027,0.006,0.010,0.007,0.011,0.022,0.001,0.005
+R|1|2||Katy TX Indpt Sch Perma BE/R/|9/2/26|9/14/26|0.085,0.001,0.013,0.013|0.002,0.081,0.017,0.012,0.025,0.012,0.014,0.000,0.009,0.008,0.014
+R|1|3||H lI HIiCty&Cty&CNTY SRE BEIRY|9/4/26|9/14/26|0.007,0.096,0.003,0.012|0.015,0.027,0.079,0.016,0.020,0.013,0.012,0.023,0.018,0.008,0.021
+T|2|wang D'ana Harshbarger, 2 2
+T|2|UNITED STATES HOUSE OF REPRESENTATIVES BF
+T|2|Period! Tra tl AR prt
+T|2|DATE DATE
+T|2|NOTIFIED
+T|2|FULL ASSET NAME TYPE OF trays | OF AMOUNT OF TRANSACTION
+T|2|ACTION ACTION TEANS
+T|2|A B c BD E F G H I J K
+T|2|Be] Prove full m — thck symbol (MMDDIYY) | (MMDDFYY) - 38
+T|2|7 =8]383| 88] 32/88 s 82 | 88 sé : $02
+T|2|s2|23| 82/28/88 /82 |ss|$s|83| og|-3
+T|2|| [Taylor Tx 180 BER III ]|9426|er426| DIDO oo olololo!
+T|2|| [Taylor 7x 1s BER IDF D|9426|9n4e6/ (MOOI 0 |0/0/0)
+T|2|Favor miso sem iOOCewee|eraee OOOO CoO
+T|2|ferro IS orers ICISICICMICIOIGIO
+T|2|| _|Coatue innovation Fund [Z|] jazs26|or4re6/ (CM) (0/00 /0|
+T|2|fennel iioiensforers|(CIMIDICIGIIC II
+T|2|[_[esee rors sur cer E7}[ FI J] 9/1926 orvare6/ L/L) | |u|
+T|2|i}

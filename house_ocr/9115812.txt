@@ -1,0 +1,35 @@
+#house_ocr v2 doc=9115812 pages=2
+R|1|0||Plano TX Indp t Sch ond|4/1 4/2026|4/29/2026|0.093,0.009,0.004,0.019|0.002,0.101,0.012,0.006,0.000,0.000,0.001,0.007,0.014,0.005,0.008
+R|1|1||Huron Valley Ml SCH MICHI|4/14/2026|4/29/2026|0.097,0.016,0.006,0.000|0.000,0.001,0.103,0.013,0.011,0.003,0.000,0.005,0.000,0.000,0.008
+R|1|2||Trinity Rue AU TDXDNTN|4/14/2026|4/29/2026|0.093,0.000,0.008,0.007|0.000,0.095,0.004,0.005,0.022,0.001,0.000,0.014,0.012,0.022,0.009
+R|1|3||Bee Municingl Bond|4/15/2026|4/29/2026|0.098,0.003,0.003,0.004|0.000,0.001,0.095,0.012,0.017,0.020,0.017,0.003,0.010,0.000,0.003
+T|2|. Diana Harshbarger Z
+T|2|UNITED STATES HOUSE OF REPRESENTATIVES ae_arerero __ page FA of =
+T|2|Periodic Transaction Report
+T|2|DATE
+T|2|TYPE OF DATE OF NOTIFIED
+T|2|FULL ASSET NAME TRANSACTION TRANS- OF AMOUNT OF TRANSACTION
+T|2|ACTION TRANS-
+T|2|ACTION
+T|2|A B Cc D E F G H i] J K
+T|2|SP 2 a & etele 3 3 3 38
+T|2|oc Provide full name, not ticker symbol. Ss 3 a (MM/DD/YY) (MM/DD/YY) =) s S;sie¢gisg/2i!s|8 1|33
+T|2|i 5 2| 8 21s lsi|8 |SIs\l|se/S$12%]s |22
+T|2|a | 2/$/o/2/2 2/5 |3)8 18 28.
+T|2|5/8/38 /2/8/8\/s]e/8 /#% [ess
+T|2| Twanacaarerrassence [DJL JTL I]artsi2026 |azar026 | IDIL IIL ILI. IIL ILL
+T|2|tlanta G
+T|2|| Aenea Arisa toa XII JIE I [_J]arsr2026 | arzereoes [L_IXIL IIL
+T|2|We
+T|2|| Peete encase — ID<IILIIL IL] 4ntsr2020 | 4rzar2026 ILI III II]
+T|2|Maricopa Cnty AZ INDL
+T|2|f [Warcopecouazinoe ADIT IT IT Itanerzoze laroreoze IISA III
+T|2|STADSRA |
+T|2|| [eaten cotame IRL ILI|L J] 462026 Jarzoro26 ILI ILL
+T|2|ADS 7
+T|2|| [areenncossens’* (XI LIIL A Llanero26 |aeoro26 TIKI ILI
+T|2|; V7
+T|2|[bee eee tease (XIE IL IE | 4ne2oz6 | 4292026 f_I_IXIILILI_L_
+T|2|WW,
+T|2|Be a
+T|2|NOTE NUMBER FILER NOTES

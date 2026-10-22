@@ -1,0 +1,773 @@
+#house_ocr v2 doc=8220783 pages=28
+R|1|0||Biaansa nen tha atéachkas|||0.015,0.009,0.007|0.011,0.008,0.008,0.012,0.019,0.021,0.008,0.007,0.016,0.011,0.011
+R|1|1||Bn|||0.009,0.010,0.012|0.015,0.020,0.009,0.018,0.012,0.010,0.009,0.018,0.008,0.013,0.012
+R|1|2|||||0.025,0.016,0.008|0.026,0.009,0.016,0.007,0.013,0.012,0.001,0.003,0.022,0.017,0.001
+R|1|3||Bn|||0.011,0.001,0.010|0.007,0.007,0.024,0.007,0.008,0.012,0.010,0.006,0.012,0.015,0.009
+T|2|MAME: Renntunns Pigs Ae ot 2 8
+T|2|EE SS SSS ees
+T|2|a ern ee (OU a
+T|2|ET TT TE pe dc ea a
+T|2|. eSpowe or
+T|2|Copal Dependent
+T|2|rn CAR Asset
+T|2|0c il name, , erchonge | $200 | Tronsection m/DO MyDD $15,000 | ssap00_| s1oa.000 | $230,000 | ssoa.000 | $3,00n,000 | $3,000,000 | $75,000,000 | ssx.aon.c00 | $80,000,000 | $2,000,000
+T|2|Grandchildren
+T|2|[oc frosapscommex | x] | | |_| cxmns| ommsrsi | | | |x| | | | | | |
+T|2|TO S&P SOO INDEX 02/28/25| 03/05/25
+T|2|[oc |ucrummccun | x | | | | | anna] onmsnss | [*{| | | | | | | | |
+T|2|a sD
+T|2|S&P 500 INDEX 02/13/25| 03/05/25 .
+T|2|Seo Comal
+T|2|BASKET OF INDICES 02/25/25] 03/05/25
+T|2|uweeDTosersoomper | x | | |_| ossns || | | | | | | |
+T|2|LINKED TO S&P 500 INDEX 02/06/25} 03/05/25
+T|2|| oc lawwumeccmw tx | | | |_| xyonas| oss ee
+T|2|oc wonca staMEY cn et | | | | curs! oonsrs| » | | | | | | | | | |
+T|2|CORPORATION MN ef] | | oyosas, » | | | | | | | | { |
+T|2|CORPORATION CMN 02/07/25| 03/05/25
+T|2|| oc_|saesronce we con xt | | | | cyarasl oxosasl » | | | | | | | | | |
+T|2|| oc |camruonermancarcorroun | x | | | | | onoyasl casas » | | | | | | | | | |_|
+T|2|| oc [carr onermancanconrcan | x | | | | | axes! oyosnss » | | | | | | | | | ||
+T|2|e_[swesronce wc xl t | | | cxayas| cosas» | | | | | | | | | | |
+T|2|| oc fearmaronermancianconrcmn | x | | | | | oxoras| oyosns| » | | | | | | | | | | |
+T|2|| oc learrmoneswancarconrcan || | | | | oxpens| oysnss» | | | | | | | | | | |
+T|2|garmenmeorosne TTT Ae
+T|2|CMN 02/07/25! 03/05/25
+T|2|| oc fouracos.mecomeussa |x| | | | | axons comsm » | | | | | | | | | |_|
+T|2|oc lccnemumusmcemm |» | | | | ‘| exrnrs| cmmsnst » | | | | | | [| [| | |
+T|3|‘
+T|3|SSS
+T|3|Transaction #
+T|3|@ Spouse or
+T|3|ne. susponce me cs at | | | | cxzrasl coosns| | | | | | | | | ft |
+T|3|oe fausronce ween pat | | | cxarasl essa » | | | | | | ff] |
+T|3|| oc leousareamonecocun | x | | | | | oxwasl overs» | | | | | | | | | |
+T|3||oc_|sranaucxs con. com ol | 1 | | cuorrsl oomsos| «| | | | | | | | | | |
+T|3|| oc [ironbeansas | x | || joss x | | | | | | | | |
+T|3|HYBRID 08/15/2055 02/04/25} 03/05/25
+T|3|| oc lummsermccmcussa | xl | | | ouorasl consrs! =| [| | | | | | | |
+T|3|| oc |uvowconroranowcmm | {ul | | x | oxorasl oss » | | | | | | | | | | |
+T|3|oc. [ane meen tt LL | ceowes| conses| | | | tT | ff] tt
+T|3|oe [ase mec dt Tada | cxnsast osmsasl x | | | | | | | | | |
+T|3|| oc fammtoramenrcacomomn | [xi | x | x | cxosns| coma» | | | | | | | | | | |
+T|3|Co aemerneeroener |] er
+T|3|CMN
+T|3|| oc francerconronanoncm |x| | | x | exes] oswss x | | | | | | | | | |
+T|3|| oc _|oevemovauc cum td tt | cons wom} ff
+T|3|oe uasoaane. can tal fed a | cxowas| oom) x | | | f | | tt
+T|3|oe leranavcrs cnr. xm fal te |e | oxeresl oomsrs| | | | fT | pT EE
+T|3|oc laercone eve Stal Le fe | exes] coos! «| | | | | | ft | | yl
+T|3|oc has me cmecuass Pd Tad [cess] oss!» | | | | i | | | fj
+T|4|NAME: Rohit Kanne vee _“f «28
+T|4|en
+T|4|rn ere SN PO
+T|4|of Vronsactfon
+T|4|OE ne ee OO
+T|4|Pronsaction i
+T|4|# Spouse of
+T|4|oc lavazon.con cco dL Lede | oxsmnsl overs! x | | | | | ft | | tl]
+T|4|| oc foeeneacomvom | tel | a | x | cxsns| oss,» [ | | | | | | | | |
+T|4|rosersoompex | x | | | | | cxruns| onsnst | | */ | | | | {| | | |
+T|4|TO S&P 500 INDEX 02/21/25 !
+T|4|| vc fearmmonernancuconrean | x | | | | | ayouns| oapsasi » | | | | | | | | | | |
+T|4|| vc feammmoncrnanencconrcmn |x| | | | | oxosasl oss x | | | | | | | | |
+T|4|c_leaesronce me cm et | | | | corons| oy » | | | | | | | | | |
+T|4|| oc lcamraonermavcaccomcmy |x | | | | | oyors| cms x | | | | | | | | | | | .
+T|4|| oc_|conponamon cn et | Lf | conmns| oyosrst x | | | | | | | | | |
+T|4|CORPORATION CMN 02/07/25| 03/05/25
+T|4|| oc lewrmoncrnancaconrcen |x| | | | | oxpsas| own x | | | | | | | | | |_|
+T|4|| oc_fsesronce nc cu el tt || coms! conse | | | | | | | | | ft
+T|4|| oc luumacizannonnncs.nccww | x | | | | x | oxnss| comsns x | | | | | | | | | |
+T|4|| oc |mcronrecrnouocr.nc.cm | |x| | | x | oxnens| ooosasl x | | | | | | | | | | |
+T|4|clase mc co tet Lads | corns] casas)» | | | | | | | | | | |
+T|4|| oe foc} dal | | x | cups ommssl » | | | | | | | | | | |
+T|4|STOCK 02/27/25) 03/05/25,
+T|4|| oc lamtacormesrsrensiro.cm | |x| | | + | axosns|_oxosrs ee by eed)
+T|4|| oc femrenesrncommcrassa” | __|x| |__| x | oxpansl oxosas|_»_ {yf} ft ft ft
+T|4|| oe |psevie we cm | lel fa] | casas! ooosnsl | | | | | | [| | |
+T|5|saa: nob rene tape St 2S
+T|5|aaa
+T|5|a eee GN GR Oe
+T|5|a ee ee de
+T|5|@ Spouse or
+T|5|Coatet Dependant
+T|5|Goins Chit eset
+T|5|oxeed Portia $1,001- | $18,001- | $5@001- |$toa.00!-|$25a001-| $son.odi- |$1,o0q.00t-| $4,000,001- | $25,c0000!- Over owe
+T|5|70C, Provide ome, nat ticker be erhorg $200 Treansection PM/DD you, $25,000 $50,000 | $100,000 | $250,000 | $s0Q.000 | $1,008,000 | $5,000,000 | $24,002,000 | $sa.000,000 | ssa.D0a.000 | St.qq0.000
+T|5|} oc lsmmoramencacomcmn | [xl | x | x | oxosasl overt » | | | | | | | | | | |
+T|5|joc (soc | xvas vst TT
+T|5|STOCK 0
+T|5|vc lrncnosorrconronsnoncom |x| | | | | onnsrs| ovosns| | * | | | | | | | | | |
+T|5|SSPSOWOK Le | | || | cons ommsns | * | | | | | | | tf
+T|5|S&P S00 INDEX 02/13/25} 03/05/25
+T|5|inweprosapsoompex | x | | | || exrwns| ospsrss =| * | | | | | | | | |
+T|5|LINKED TO S&P S00 INDEX 02/06 03/05/25
+T|5|| oc feemsumenmmawarnccusse |x| | | | | oxasasl onosel | * {| | | | | | | | | |
+T|5|[oc leanoramencaconmom |x| | | | | cansrs| oyosess | «| | | | | | | | |_|
+T|5|| oc juencom te | | ||| xasrsl eons =| * | | | || | | |
+T|5|Foc lunerrecmorocesmcom |x| | | | | oxy! ovo | *| -| | | | | | | |
+T|5|Foc umasermcamonssa |x| | | | | ayasas omens |*| | | | | | | | | |
+T|5|| oc hrowescommanesmcerm — | x | | | | | xasrs| oss | * | | | | | | | | |
+T|5|| oc _[apone mec Patt [| | oxasrs| oss, f * {ff | Pt
+T|5|ON tet | tf | cxasasl omc x | | | | tf | tT
+T|5|CMN 02/25/25| 03/05/25
+T|5|| oc |warorevcomranrmecrcmn | x | | | | | oxasrs| comsas| x | | | | | | | | | | |
+T|5|| oc_utrecrove me. cin at | | | T cxreses! ososas! » | | | | | | | | | tl
+T|5|| oc himwanconronanioncuncussal x1 | | | | oxasrs! osmsasl x | 1 | | | | | | [| [
+T|6|NADAL: Robt Mare Page _-& 28
+T|6|TSS Oe eee OTE OOO OOO)
+T|6|Ye ee a de ee a a a
+T|6|oSpowe or
+T|6|Copkal Dependent
+T|6|Gas Child Asset
+T|6|fOr, Provide fl name, not ticker symbol. chang $200 | rrensection mM/DO m0 $13,000 | $50,000 _| $100,000 | $258,000 | $500,000 | 51,000,000 | $8,000,000 | $25,000,000 | $3a,000.000 | $$2,000,000 | $1,000,000
+T|6|oc mecussscmvcusss |x| | | | | oxnsns\ oapsasi » | | | | | | | | | [|
+T|6|joc fase NL Tt | cass! oases » | | | | | | | | | |
+T|6|CLASS A 02/25/25} 03/05/25
+T|6|| oc larrucomarenmsmicom |x| | | | | covssl oomsass » | | | | { | | | |
+T|6|oc luninawccomw ssf x | | | | «tarsal casas x | | | | | | | [| | fy
+T|6|cc lmemmorsrerscennnciiceam | x | | | | | cxpsnsl cansns| » | | | | | | | | | |
+T|6|| oc lweamareamscocmm | x! | | | | cansrsl oamsnss x | | | | | | | | | | |
+T|6|| oc lcencoramcem | w | | | | | oxasnel oomsnss » | | | | | | | | | | |
+T|6|| pe fweseuwconponarencun | x | | | | | cansas| canes x | | | | | | [| | | |_|
+T|6|Ott | | | | cans! ovosnst » | | | | | | | | | | |
+T|6|CMN 02/25/25! 03/05/25
+T|6|pc huwosernconoucrorsuv.cun |x| | | | | oypsrs| oosal x1 | | | | [| | | [ | |
+T|6|a
+T|6|CMN 02/25/25} 03/05/25
+T|6|Foc lmcersouranomcemn |x| | | |_| carsrs| oapsasl x1 | | | | | | | | |_|
+T|6|| oc [pmuenmarrmancarncomm |x| | | | | oxpsrs| oaosas xi | | | | | [| [| [ | |
+T|6|a
+T|6|CMN 02/25/25| 03/05/25
+T|6|| oc _|memnenrocoommem |x| | | |_| oxasasl oomsast x} | | | | | | {| | ||
+T|6|| oc Incanearmicane,ncewn | x || | |_| oarsas| oomsasi x | | | | | | | | | | |
+T|6|oc Inonosonconroranonemn | x | | | | | consnsl oma » | | | | | | | | | [|
+T|7|AIRE: Rohit channe re 7 «28
+T|7|en
+T|7|ee eras ne Re ee
+T|7|Eee et oe fe eee
+T|7|@ Spouse or
+T|7|Capteat Dependent
+T|7|Gaius ohid Axet
+T|7|{0c bd mame, aot ticher syptibc Sale} deci S70 | trmsection y/DO DN $15,000 | ssa.000 | $300,000 } $250,000 | $300,000 | $1,00a,000 } $5,000,000 | $25,092.00 | $50,000,000 | $s0,000,000 | $1,000,000
+T|7|foe fam tel | | | I yasasl ospsrs| » | 1 | | | | | | | |
+T|7|CMN 02/25/25
+T|7|| oc lromomoroncommawcm | x | | | | | oxasas| oamsasl x | | | | | | | [| | |
+T|7|foc fn et | LL | oxasrsl ons x | | | | | | tT
+T|7|CMN 02/25/25| 03/05/25
+T|7|| oc lemessonesecrnceo.om |» | | | | | oxy om» | | | | | | | | | | |
+T|7|| oc hamnowmesmcem | x | | | | | oxasrsl eons x | | | | | | | |||
+T|7|nc frsaconz us wc. com ol | | ft | cxpsas| coms» | | | | | | | | | | fy
+T|7|| oc |wwcrsncenmccmn |» | | | | | cxsas| osvorsl » | | | | | | | | | | |
+T|7|Foc loeurccimoroaesmcem |x| | | | | oxpsas| coos. | | | | | | | | [ | |
+T|7|| oc |moronorasoumonsncom | x | | | | | oxasasl ovss x | | | | | | | | | |
+T|7|[vc |uosenmeeum sw | | | | | cass! camel » | | | | | | | | | |
+T|7|foc lease et | | || cxsrsl onossl » |. | | | | | dt | |
+T|7|CLASS A 02/25/25| 03/05/25 .
+T|7|Ne tal | | | | cosasl oss » | | | | | | | | | |
+T|7|INC. 02/25/25
+T|7|| oc assvamacmancomcewy |x| | | | | oxasasl oars x | | | | | | | | | |
+T|7|| oc |weusranconcommawcrm | x | | | | | owasrsl ons x | | | | | | | | | | |
+T|7|foc fa LTT | | | cxasrs| coos » | | | | | | | | | |
+T|7|CMN 02/25/25| 03/05/25
+T|7|| oc |acuewrrecwmonocesnc.cun |x| | | | | cxrsrs| osmsasl » | | | | | | | | | | |
+T|7|| oc lsrecromamesmccm |x| | | | | oxasrsl coset » | | | | | | | | | | 4
+T|8|Cee eee EE EEE
+T|8|| notte | terme | | latrines | eng
+T|8|h peactl Dete of Transaction ‘Transaction dwnount of Vranzaction
+T|8|PT a ed a ee a a a
+T|8|e Spoune ot
+T|8|Capital Dependent
+T|8|Cains Child Asset
+T|8|exceed $2,003- | $25,001. | $5Q001 - |StoQ.001-)$250,001-| $s00,001- |$1,000,001-| $5,000,003- | $24,000,001- Our over
+T|8|fox, Provide: net ticker chong $z00 yDO yDo $15,000 _| $saco0 | $200,000 } $350,000 | $500,000 } $1,000,000 | $5,000.00 | $25,q00.000 | $s0.q0n.a00 | $$2,000,000 | $1,000,000
+T|8|| oc lnommennmusrcomrcmy |x| | | |_| ee
+T|8|Foc lesowncasnewmconren |x| | | | | onasns| omens »| | | | | | | [| | |
+T|8|| oc lesxconronsnoncmm | x | | | || rss! onmsasl » | | | | | | TT |
+T|8|oc lowe comonanoncmy |x| | | | | onzspsl ome » | | | | | | | [| | | |
+T|8|| oc cwcwmmcnourimcm | | | | | | oxzns| owns» | | | | | | | | | |
+T|8|| oc lovemccommowsroce | x | | | | | oxasrsl onosast x | | | | | | | | | |
+T|8|oe eoomen xs ney cam sao tL
+T|8|oe _leorreva me. cm pal | | ft exasrsl cosas» | | | of | Ut ||
+T|8|| oc loouancenennsconsonsnoncn| x | | | | | exe! comsns| x | | | | | | [| | | [ |
+T|8|Foc lecwacrourmccm |x| | | | | oxas omar» | | | | | | | [| | |
+T|8|| oc luaconrormnoncm |x| | | | | onasnsl oosal » | | | | | | | | | | |
+T|8|QNGASA | a | ||| | oases] oom,» | | | | | | | L
+T|8|CMIN CLASS A 02/25/25] 03/05/25
+T|8|oc _{uasano,me.cun al | ft | eis! oxosns pf ff
+T|8|oc leemumeeamsco.cmm |x| | | | | oyasns| onosal »| | | | | | | | [| [ J.
+T|8|oc lanuconromnoncon |x| | | | | emsns| osm» | | | | | | | | | | |
+T|8|| oc lomammmreconorocisinc.com |x| | | | | cxrsasl owl «| | | | | | | | | | |
+T|8|| 0 |ooeRna, we. cm LLL | | censas! oosasl » | | | | | | | | | ft
+T|9|{
+T|9|WAME: Rohit Khenne ne 7 28
+T|9|OTN
+T|9|es eras es Ok
+T|9|ee EEE es fe ee es
+T|9|0 Spouse or
+T|9|Capital . Dependent
+T|9|Guia Chutd Acset
+T|9|0, Provide full name, not ticker symbo perhes Ean mA/O0, ra/DD, $13,000 | ssaooo | s10a000 | $250,000 | sson.o0e | $1,000,000 | $3,000,000 | $25,000,000 | ssc.con.000 | ssa.con.ane | $1,000,000
+T|9|| oc lvcmaesomsnrenanonaccun | x | | | | | exasrs| osmsas| x | | | | | | | | | |
+T|9|foc lame tl | | | | oasrsl msl | | | | ff |} |
+T|9|CMN 03/05/25
+T|9|| oc lcsmmencionacomorsnoncnw | x | | | | | exsas| owsns| » | | | | | | | | | |
+T|9|joc low TT LT | exeses| omens! x | | | | | | tT | |
+T|9|CMN 02/25/25} 03/05,
+T|9|joc umanenccmcussa |e | | | | | cxzsnsl ons e | | | | | | | | | |
+T|9|| oc fsurennncnocommuren,we.cwm | x | | | | | oxnsas| onvsnsi » | | | | | | | | | | _
+T|9|| oc funacomcom tx | | | | | cxrsas| ons x | | | | | | | | | |
+T|9|foc fame | dal || a | oxawresl oomsasl | {| | | | | | | | ||
+T|9|CMN 03/05/25
+T|9|| oc inmurncomn | taf Le | | xs] oxpsnst | =| | | | | | | | |
+T|9|} oc |oananenconsonanoncmy | |x| | | x | oxnsas| onsns (*/ | | | | | | | | |
+T|9| e_fenex a 0, ve. cm tel | | | ewes! comsasl | *{ | | | | | | ft
+T|9|| oc foracnocxeunoncnc.cm | |x| | | | emasrsl oowsnsl | *| | | | | | | | |
+T|9|| oc lauaconnn cco tat | La | cxpsasl ooosasl | x] | | | | | yt
+T|9|[vc frovanceomcravencesmccm) |x| | |» | mmasnsl ove | *| | | | | | | | 4: _|
+T|9|| oc_lus.eancore com Stat LL | esas} onset » | | | | | | | |
+T|9|Pe es | EE
+T|9|STOCK 02/25/25| 03/05/25
+T|10|. NAME: RohR Channa Page Chad of a8
+T|10|an OOO
+T|10|ee ye a ee 7
+T|10|Ta se de fe ee eT ae
+T|10|e Spouse of
+T|10|capil Dependent
+T|10|Gore Child Asset
+T|10|2uesd Partiot $£001- | $15,001- | $5d,00% - |Ston.008-|$25q00s-| Sson0di- |S$t.cqn0or-| $4.000,001- | $25,000.001- Over ower
+T|10|(DG, Prowide full name, not ticker D chang $200 __| Transaction DA/DD (00, $18,000 | $50,000 _| $100,000 | $230,000 | $502.00 | $3,000,000 | $3,000,000 } $25,000,000 | s$.aN0.000 | $sh.900.000 | $1,000,000
+T|10|oe larow cone eve tet La fs | onze! oosns) | | | of | | | TE
+T|10|| oc lacomemm |} | wove} fF fff
+T|10|| oc los. worron, we cx tel ||| exeses| ons! | | | | | | | ff
+T|10|oc lmucemananssenncescrovrcunl |x| | | | cxasasl| ones » | | | | | | | | | |
+T|10|foc lame | txt | x | x | cxnsns| overt | | | | | | | | | |
+T|10|CMN ; 02/25/25] 03/05/25
+T|10|foc lam | tal | cxrsrs| osases| x | | | | | | | | | ||
+T|10|CMN 02/25/25; 03/05/25
+T|10|| oc vrmvorowesmcom | (| | | | oxavas_ommsasl » | | | | | | | [| | |
+T|10|| oc lemrencenescnsvsremsnccom | |x| | | | owas ovsasl x | | | | | | | | | | |
+T|10|| oe_lamazon.com nc cw dal | fe | cosas! coos!» | | | | | | | |
+T|10|oc lpepic, ne. com el | de | eersres! ososes| x | | | | | | |
+T|10|Foc leworssmecm | ial | | x | comspsl commas » | | | | | | | | | | |
+T|10|| oc lremnunosnicorrcm | tx | | | cxasrsl ososas x | | | | | | | | | | |
+T|10|oc ram sane ne cum tal | || exssl ovosns! s | | | tT | ot fT |
+T|10|oc lewee unre cu tel ffs | xsl ovosrs| » | | | tf | | |
+T|10|| oc lcowcomronsnoncom | |x| | |_| crass! cunsnss x | | | | | | | | | | |
+T|10|oe nosssrones me com tel | LT exesres| oomsas| » | | | | | | | | tf
+T|10|foc lusa | del | Ft ttt} | tt tl
+T|10|CLASS A 02/25/25} 03/05/25
+T|11|CO
+T|11|a ra a
+T|11|Arncunttof Tramaction:
+T|11|a a RDN OES GA NA CS ANN GONNA GSO NOT NR GC SD SO SS
+T|11|Tronsoction ni
+T|11|a Spouse or
+T|11|= oe
+T|11|foc, Provide full name, not ticker synbo Excha $200 _| Transaction yoo 4/00 $15,000 | ssacoo {$200,000 | $230,000 | $500,000 | $2,000,000 | $5,000,000 | $23,000,000 | $30,000,000 | $50,000,000 |_$1,000,000
+T|11|oc loaccan nc owe tal LL | consis! oapsas| «| | | | | | | ft
+T|11|<r Oe a
+T|11|CMN
+T|11|oc lmewomeneror.ncom | [xl | |x | oxnsns| coosasl x | | | | | | | | | |
+T|11|oc [merronrscwonnnccm | (x1 | | > | emsas comsas | | | | | | | | | | |
+T|11|oc |smesronce mecca ta TT Fees! camsnsl » | | | | | | | | ht lt
+T|11|oc lansvs, v.co le TTT eepsasl coms» | | | | | | | | |]
+T|11|| oc lunmeonewrasmccun | |x| | |» | onasas| copsasl x | | | | | | | [| | |
+T|11|oc |asoac nc. com tel TT | const] comers | | | | | | | | | ft
+T|11|Fo anerewrcomene revel owls} | | | | | | tt 1
+T|11|CMN 02/25/25, 03/05/25
+T|11|Foc lasrennconmamvrcm | lal | |__| onasasl oss» | | | | | | |; | | |
+T|11|| vc lrrcmousmesmccsm | tx! | || exayps wm ft ff
+T|11|Foc |nrurnvesuncca,meccom | [xl |x| x | consas| oomensl » | | | | | | | | | | |
+T|11|oc lavervoewwsoncorronanoncim| |x| | | | onasasl omens » | | | | | | | | | |_|
+T|11|| oc lworecmeconornonemy | |x| | |_| oxasasl coos x | | | | | | | | | |
+T|11|Foc lpmonsmenseacocun | |x| | | » | oxzsns| casas «| | | | | | | | |
+T|11|one Com! om | | {| [tt tt
+T|11|STOCK 02/25/25| 03/05/25
+T|11|0c _fpremc. co ee
+T|12|MAME: Roh theme Page _f 2 428
+T|12|CE EO OOO
+T|12|| namin | pearson | | emmattanten) “mee | ume |
+T|12|TUTTO Te ee se yt et se Te Tn Te
+T|12|@ Spouse ar
+T|12|Opitct Dependent
+T|12|Gains Child Act
+T|12|Seed Portal $2.001- $15,001- | $5001 - |$100,003-|$252,001-| $soaq,001- |$1000.001-| $5,000,001- | $25,00n.001- Over over
+T|12|oe Inetrun me, con | tat td | env ewel «fff ff} tt
+T|12|| oc [aon eusucumencomranveun | |x| | x | | oxnsrs| comsasl » | | | | | | | | |. |
+T|12|oc ow Tt || x | oxpss| oamsass » | | | | | | | | | |
+T|12|CMN 02/25/25| 03/05/25
+T|12|UTA BEAUTY NC CM ta} | Lf casrsl coment «| | | | | | | | | |
+T|12|rOOH CORP CM tel | | | cxsyasl spss) » | | | | | | | | | |
+T|12|oc leane-cnour,wecwn cussa | |x| | | | oansrasl omni x1 | | | | | | | | | |
+T|12|foc la lal Ln | | amsras| oooset » | | | | | | | | ||
+T|12|CMN 02/25/25| 03/05/25
+T|12|aN NAN COMPA TLL || w | copsrsl oomsns| | | | | ft |
+T|12|CMN 02/25/25! 03/05/25
+T|12|oc lcenreneconronanoncmm | [xl | |_| covasnsl omens » | | | | | | | [| | | _
+T|12|oc [ronrmersnc.cow | xl | x | x | cose] ososnss | | | | | | | | | | |
+T|12|[nc lmwranonnomesinc.com | |x | | | exasasl coves» | | | | | | | | | |_|
+T|12|oc lovcrrarnearerusr.wmc.cmw | [xl |__| x_| oansrst coms) » | 1 | | | | | | [| [|
+T|12|| oc lrsowemucecrourmecun | |x| | |_| oxnsnsl omsnsl » | | | | | | | | | | |
+T|12|wee | lat | || cxasnsl Ett |
+T|12|CLASS 6 02/25/25| 03/05/25} x
+T|12|ase | / nasyas it tt |
+T|12|CLASS A 02/25/25} 03/05/25
+T|12|| oc leasramncnemicarcoeanvemn | |x| | | | onasyas| oxsnsl x | | | | | | | | | | _
+T|12|roc loowmcemw —ss—si‘iLSsdwd LL dL norasrel oapsmel x || TLL!
+T|13|AME: Roblt Kieren ne 13 26
+T|13|EES ES
+T|13|a NO PS Gk
+T|13|Cd Pe a de ec ee a es Te
+T|13|o Spouse or
+T|13|Cophat Dependent
+T|13|Gains Chitd Asset
+T|13|| vc |uommerroonsconromanoncun | |x| | | | xasas| ososrst » | | | | | | | | | |
+T|13|oc ton TfL | || wasn! comsass » | | | | | | | | | |
+T|13|STOCK 02/25/25; 03/05/25
+T|13|| oc lumwennerwoms ccm | |x| | | | cansras| oyosrss x | | | | | | | | | |_|
+T|13|OM | fel | |e | corsrel ommsrs} x | | | | | | | | | |
+T|13|CMN 02/25/25) 03/05/25
+T|13|oc loccrensouroocesconmam | |x| | | | casrsl oupsnss » | | | | | [| | | | | |
+T|13|| oc fwrmsmcemn | xt | || expsast comsst » | | | | | | | UT
+T|13|| oc meron recrnorocr,wccmm | |x| | |» | oansyel oomsnsl » | | | | | | | | | | |
+T|13|} oc fcwwonemencovcnnmccm | le} | | x | oxpss] oyosrs| » | | | | | | | | | |
+T|13|oc lounce ciosas saci tt ft | oyasrs awa | Lf) tS
+T|13|oc lrvexconmoranoncmn |x| | | x | oxnsnsl ows» | | | | | | | [| [
+T|13|| vc lemnaseacesronacemc.cm | |x| | x | x | cxnsasl oss» | | | | | | { | | j
+T|13|Sams | LT OO
+T|13|COMMON STOCK 02/25/25| 03/05/25
+T|13|c_(atenwanu cone cx | tat |e | cxnsins| consi x | | | | | | | | | f
+T|13|| vc |novociemconmorarercmn | |x| | |_| xnsns| ovsasi » | | | | | | | | | [
+T|13|c_tnaunna. inc con te) | | | cxnss) coos, | | | | | | | tt
+T|13|| nawanateDeceroton eft |
+T|13|ae BP
+T|13|TO S&P 500 INDEX 02/28/25| 03/05/25
+T|13|a BA
+T|13|S&P S00 INDEX 02/13/25; 03/05/25
+T|14|ee EOE EE OO
+T|14|| nettamttame | peat | | emmatrnmneton! ent | meter
+T|14|Pe a ds ec Toe Te J Fe Ta TT a TT
+T|14|. & Spone oF
+T|14|- Copal Dependent
+T|14|Gebes Chid Acset
+T|14|Ouest Partial $L00t- $25.001- | $80,005 - |$400,003- | $250,003-| SsoQ.ots- |$2,001L008-} Ss.coaant- | $25,00Q001- Over Over
+T|14|fOr, Provide: 0 not ticker Q Pachong $200 Tramvection YOO M/DD, $15,000 $50,000 | $800,000 | $75,000 | $500,000 | $1,000,000 | $3.000.000 | $25,000,000 | $30,000,000 | $80,000,000 | 51,000,000
+T|14|MORGAN STANLEY FINANCE LLC
+T|14|LINKED TO S&P 500 INDEX 02/06/25
+T|14|| se Incavorxconcomm st x | | | |_| ounrrs| onyosasl » | | | | | | | [| | | |
+T|14|cael a Cee
+T|14|CMN 02/25/25] 03/05/25
+T|14|| sp lureacizannioummcs,ncmn |x| | | | | eoaspsl oomsasi x1 | | | | | | {| [ | |
+T|14|| sp lumaczannowmcsincam |x| | | | | ouasrs| osmsasl x | | | | | | | | | | |
+T|14|se hun vorncconm can et | | | | exons] oases | | | | {| | | jf | ft |
+T|14|elm mM TL LLL | caryas| oosast » | | | | | | | | |
+T|14|CMN 03/05/25
+T|14|| sp [ca orn cone come el | || | cxresas| oasrs! x | | | | ff | ||
+T|14|se fcr la) Le |e | exes! ovosnst » | | | | | | { | | |
+T|14|STOCK 02/06/25! 03/05/25
+T|14|a Teel awed
+T|14|STOCK 02/27/25; 03/05/25
+T|14|se Imucnonrecanorocy, cam | [xi |x|» | oxzens ooosal » | | | | | | | | | |_|
+T|14|sp cra. we. com caass dat ft a | cxnarsl osmsnss s | | | | | | [| | | [|
+T|14|| se lwattacoannestsrewsiro.cm | |x| | x | x | commasl oss x | | | | | fF | | | | |
+T|14|se lownenestncomcssa | [xl |x| x | exrans| ossast x | i | | | | | | | | |
+T|14|| sp |aucsonrecunoiocr.nc.cun | |x| | x | x | ouaansl oss «|, | | | | | [| | |
+T|14|se lowrenesrwccmwcussa | |x| |x| «| cpasps| ospsrl » | | | | | | | | fj |
+T|15|wa etn cee te LF 0 28 _
+T|15|Oe
+T|15|| tanta | metre | | emeerrmmcin] ON nes
+T|15|TT TOT a Pec fT oe Tt Te To co JT «wa T +t joy TT s« |
+T|15|. eSpourror
+T|15|Cophot Dependent
+T|15|Cotes Ohlid Asset
+T|15|Suceed PorGel $80,002 - |$10Q001-|$250,.001-| S50q001- |$1.00R001-| $%,c0R.007- | $25,000,.002- Over over
+T|15|{DC Provide ful name, not ticker symbo chen Pri 200 | Trensaction yoo 0, p00 2.000 _| $100,000 | $250,000 | $500,000 | $1,009,000 | $5,000,000 | $25,001,000 | $52,000,000 | $sa.n0e.one | $4,000,000
+T|15|poe | TT PT
+T|15|S&P S00 INDEX 02
+T|15|aoa CT
+T|15|LINKED TO S&P S00 INDEX 06 03/05/25
+T|15|se taencx aco, Nc. cam ett | | | cxpspst oxsass | =| | | | | | | | |
+T|15|se [aseve mc co xt | | | | eennasl oops) [2] | | | | | | | |
+T|15|so am Nr tT LL | canons! omens | x] | | | | | | | |
+T|15|CMN 02/19/25| 03/05/25
+T|15|| se lomnanencorroranonemn |» | | | | | omsns! oypsnss |» | | | | | | | |
+T|15|se lymrurtwecwn el | | || cxnsps| oxsns| | x] | | | | | | |]
+T|15|| se lreasmsmumenrsincemn |x| | | |_| cans pews tt
+T|15|corerouuaninciocrawaneyovn |x | | | | | eonvasl ovosnss | *| | | | | | | | |
+T|15|snot mec cum et] ft | | conmasl camsnsl | x) | | | | | ot | [|
+T|15| lnscrvmcemm st x | | | |_| aonsl xasas| | ptt | tt |
+T|15|| se |wooorsconronnoncmn | x | | | |_| eanens| onnsns|_» | P| | |
+T|15|on = BPP
+T|15|CMN 02/19/25; 03/05/25
+T|15|| so Imecusscmeuse | a1 | | | | enoasl coma» | | | | | | | | | | |
+T|15|| lumacsanvowneswecm |x| | | | | eorsasl ovr» | | | | | | | | | | |
+T|15|| s»_|esx conponamon can xt | | | | cmses| cosas) x | | | | | | | | | |
+T|15|ia ee
+T|15|CLASS A 02/19/25} 03/05/25
+T|16|a
+T|16|ee rr ae ae re CF
+T|16|Pe ta ee oe a sd
+T|16|0 Spouse or
+T|16|‘cupttal Dependent
+T|16|@elns Glid Asset
+T|16|axed $1001 | $2s.00%- | $saco8 - [$100.003-|$25.001-| $s00,001- |$1,000,00I-| $s.000001- | $2s,c0Q00I1-| over over
+T|16|fOC, Provide not Dicker syne Pxchong $200 P/DO, m/DD $13,000 | $s0,000 | $100,900 | $250,000 | $s0q,000 | $1,000,000 | $5,000,000 | $25,000,000 | $sa.00n.0c2 | $30.000.000 | _$1.00n,000
+T|16|a PP
+T|16|CMN 03/05/25
+T|16|| se lncrvomcorrom te | | | |_| exznsl canes EE
+T|16|> lowreonawaswecum | x | | | | | conorsl cms | | | | | | | | | |
+T|16|fe femmmeremsr meron TTT Taal ware, || TP
+T|16|CMN 02/19/25| 03/05/25
+T|16|| se |svervmmumnscoom | x | | | |_| cansas| oypsrs x | | | || } | | | |
+T|16|| se |woronoasownonsmcom | x | | | | | cxnsas| onpsnsl x | | | | | | | | | |
+T|16|| se lawanowomesmcem | x | | | |_| omnsns| oss | | | | | | | | | | |
+T|16|| se heeunconvermsimccom |x| | | | | sonsasl coms») 1 | | | | | [| | [|
+T|16|| se lcwrmonernavaconrcmy |x| | | | | cxnsrs| cosas) »| | | | | | | | | | |
+T|16|| se laumwraserweesmcemn | x | | | | | cxnsas| omnsst x | | | | | | | | | | |
+T|16||e» |usosamcceun | x | | | | | oops consnss s | | | | | | |. | EL
+T|16|seamen TT Lena owl | | | | TP
+T|16|STOCK 02/19/25| 03/05/25
+T|16|commer | tr
+T|16|INC, . 02/19/25| 03/05/25
+T|16|[x lnewmvmcemm st x| | | | | cxnsns| ovens » | | | | | | | | | |
+T|16|wT LL LL | cxnsrsl casos x | | | tf | Pl UE]
+T|16|CMN 02/19/25) 03/05/25
+T|16|se lomtmenn must cone ci ett consns| oss x | | | | | | | | | |
+T|16|| se levwnccommonstoce tx | | | | | cansrsl onl x | | | | | | | | |
+T|17|NAME: Rohit (hens ne L728
+T|17|TTC ee de ee
+T|17|@Spoese or
+T|17|Cuphat Dependent
+T|17|Gels Child Asset
+T|17|fot, Provide furl nome, fot ticker symbol. Pechong $200 MyDD fey $15,000_| $50,000 _] $200,000 | $280,000 | $00,000 | $1,000,090 | $5,000,000 | $23,000,000 | $50,000,000 | $sa.00G.000 | $2,.000.000
+T|17|| se frmuocrrmurnancarmcemn |x| | | | | omgpsl ommsal x | | | | | | | | | |].
+T|17|[a faamnreroomens | CPP
+T|17|CMN 02/19/25} 03/05/25
+T|17|| frrowemmcecrournccomn |x| | | | | ouroasl ome» | | | | | | | [| | |
+T|17|| sp |revexconronmmoncun | x | | | | | cansns| consol » | | | | | | | | | |
+T|17|fe samme Ae
+T|17|CMN 02/19/25
+T|17|| s» looouncnowncswccm | «| | | | | cxnonsl omsasi » | | | | | | | | | |
+T|17|| se |uaconeexm et | [| | capes cosas x | | | | | | | | [| | |
+T|17|se |woncan stawer con ett | | | copsas! cones» | | | | | | | | | ||
+T|17|se Ica von cone cx et [|| oxraas| xs Pett ff
+T|17|| sp |uveseumeonrorancm |x| | | | | oxsas| consi » | | | | | | | [| | |
+T|17|so lam sre el | TT | conors! comsas| | | | | | | | | | | |
+T|17|CMN 02/19/25| 03/05/25
+T|17|| sp |uwosemconoucronsuv.emn |x| | | | | oonsas| copsnsl » | | | | | | | [| [| |
+T|17|| se wasemanscenenrnccn | x | | | | | oxsgas| consi » | | | | | | | | | |
+T|17|gan TT man ow | PTE
+T|17|CMN 02/19/25; 03/05/25
+T|17|fo aeemenewonser | TTL PT
+T|17|CMN 02/19/25| 03/05/25
+T|17|PP cdl
+T|17|CMN 02/19/25| 03/05/25
+T|17|| se lantacmconronarevcun |» | | | | ‘| oxsonsl ono » | | | | | | | | | |
+T|18|eevee eT OOS EE OOOO
+T|18|ee OO a NN OU a
+T|18|: of
+T|18|eSpourrar
+T|18|Capital Dependert
+T|18|Gains Chit Asset
+T|18|famed Portal $2,001- S8S,001- | $50,001 - |$100,003-|$350,001-| $s0R001- |51,000,00!-| $S.c0.001- | $25.00R, 001- Owr over
+T|18|poe, Provide ful name, not theker symbol. ange | $700 | trmtzaction nano mod 315,000 | $saca0 | ssoaone | $250,000 | ss0q,.0n0 | $2,000,000 | $3,000,000 | $25 con.000 | ssn.coqo00 | ssa.c0n000 | $1,000,000
+T|18|| se lreconucenvmvconrorsnoncus| x | | | | | eanonsl ons! » | | | | | (| | [| | |
+T|18|| se lewnasconronanoncwn | x | | | |_| conoas| osmsai » | | | | | | | | [| |
+T|18|| se luamnessancrconronmoncmn |x | | | | | canonsl omens» | | | | | | | | | | |
+T|18|| ronteomonocy uncom | x | | | | | canoes ones! «| | | | | | | | | |
+T|18|| se loowancenenarcononsnoncam| x | | | | | oxnorsl osmsai x | | | | | | | | [| [ |
+T|18|[se [rermarrnenzcocmm |» | | | | | conorsl oomonsl » | | | | | | | | [| |
+T|18|se_[ppcinousris, nc. can pap nite nls Ff fd
+T|18|| se lconncrasnanosincem | x1 | | | | cangas| comai «| | | | | | | | | | |
+T|18|> leeneea nase cn PT tt | cansrsl comens) » | | | | | | | | | fi
+T|18|=a PA pee a a
+T|18|CLASS A 02/19/25) 03/05/25
+T|18|sel mooenwa 1c can {Ltt | cxnss| ovosast » | | | | | oy | | | tT
+T|18|al a
+T|18|CMN 02/19/25} 03/05/25
+T|18|Dc
+T|18|CMN 02/21/25| 03/05/25
+T|18|se lnwescormcm six | | | | | cans osooas x | | | 1 | | | [| | [|
+T|18|a 1
+T|18|CMN 02/19/25| 03/05/25
+T|18|| so |mawumnesourcesmcceun |x| | | | | grnoasl ovosnss x} | | | | (| | {| [| |.
+T|18|| sp leomswannen ine. can Pet | | Lf casos! oss] » | | | | | | | tT | ft
+T|19|nS
+T|19|eee er ne
+T|19|Re a RTS I CS A NC RRS ROUEN GORY OU GUE UENO OED PONT GR SO ORE SO“ REN EE NY RS I
+T|19|«Spouse er
+T|19|Capel Dependant
+T|19|‘utes Chitd Asset
+T|19|foc, Provite full nome, not ticker nemo rehonee | $200 24/00 24/00 $15,000 | $sa.000_| $100,000 | $280,000 | $00,000 | $1,000,000 | $5,000,000 | $25,000,000 | $32,000,000 | $sa.c0n.000 | $1,000,000
+T|19|se lamereeinc ew co et | | | cxyeysl onpsnsl x | | | | | | | fT |
+T|19|| se lrevsconrecinoiocusnccm |x| | | | | canons! cops» | | + | | | | | | | |
+T|19|= TT EE
+T|19|CMIN 02/19/25; 03/05/25
+T|19||e lommonanrsncom || | | | | canons oss «| | | | | | | | [ |
+T|19|| so ucmmarenascocmm | | | | | | eonans! oma, x | | | | | | | | | | |
+T|19|| se lumacismnnownesmecm |x| | | | | onasas| oxen» | | | | | | | | [| |
+T|19|| se lsoomoovmccmvcussa |x| | | | | omssas| coms x| | | | | | | | | | |
+T|19|| se lnsensouranomcem |» | | | | | eysgs| oyosasl » | | | | | | | | | |
+T|19|| so loc stn | | | || casos! ams, e | | | | | | | | |
+T|19|> Ince voms.cone cw xt | tL | eawsasl coms!» | | | | | | | | | f.
+T|19||» loorauncanrmusnccom |x| | | | | omsons| cosnsl » | | | | | | | | | |
+T|19|se fon woeron, ecm xl | | | | cxpspasl oomsas| » | | i | | | | | [|
+T|19| sp_[cencona cco pet | | | copoyst coors» | {| | tT | | | tT
+T|19|=e Came PP
+T|19|STOCK 02/19/25] 03/05/25
+T|19|| se lomawmarecnorosisnccm |x| | | | | oansns|_cxpsns pl pb eee
+T|19|| se lreocasonsronesom | x | | | | | cansrs| cnsnsi x | | | | | | | |
+T|19|a 0
+T|19|02/14/2025 02/14/25} 03/05/25
+T|20|war: acta tama rege 2-7 of 2 _
+T|20|i
+T|20|| OO COSC“ A ee Te a Tw ae
+T|20|@ Spouse or
+T|20|Capital Dependent
+T|20|Gals Child Asset
+T|20|| 0G, Provide full name, not ticker symbo chang 1200 | Trovteection yo, M/DO $23,000_| $sa,000_| $100,000 | $250,000 | $son.000 | $1,000,000 | $3,000,000 | $25,000.900 | $50,000,000 | ssn,000.000 | $1,000,000
+T|20|Le leone OPP | | TTT | carers! oopsasl » | | | | | | tT | |
+T|20|| 02/14/2025 02/14/25| 03/05/25
+T|20|se fanaa er TT TL | canasl oamenel » | | | | | | | Z
+T|20|02/14/2025 02/14/25} 03/05/25
+T|20|| so legnorms 9? | tt ||| yams! omens! » | | | | | | | | |
+T|20|04/30/2025 03/05/25
+T|20|se penta OFT ELT cans! coms! » | | | | | | | | | |
+T|20|04/11/2025 02/14/25} 03/05/25
+T|20|Fp leuvarmos TT | LT xsns| camsns) » | | | | | | | | | |
+T|20|sp |04/04/2025 02/06/25| 03/05/25
+T|20|oe been OTT TL conorsl oomsast » | | | | | | | | |
+T|20|04/17/2025 02/19/25} 03/05/25
+T|20|Sse leans OPP TTT | | xarsl oomsmss » | | | | | | | ft |
+T|20|04/17/2025 03/05/25
+T|20|se Immcrosorrcononanoncwn | |x| |x| x | oxssrs| cams, | |*) | | | | | | |_|
+T|20|sp lmesmorssenscennncwcemy | [xl |x| | oxnonsl comsns | *| | | | | | [| | [| |
+T|20|| sp pevsico, we. can ee ee
+T|20|se lexron cons otc came [al |e || cernsas| osasas ee ee ee
+T|20|| se leweeummencw | txt | || nas! oxosns, | Pt | ft ft
+T|20|se ha co, te. co TL Ta [ceasl camsasl | | | TE | | ft Pf
+T|20|STOCK 02/06/25} 03/05/25} x
+T|20|sp [Reeons omroranoncmmcs TTT LTT cosas! coma | | | | | | | | | |
+T|20|AVOTING 02/19/25| 03/05/25
+T|20|i Ne
+T|20|STOCK 02/27/25| 03/05/25
+T|20|| se lamcenmccun | tat | |x | canspst oxosns Pt], Et ft tt
+T|21|neat: nota ttenra tage 24 ¢ 2S
+T|21|See
+T|21|Date Netiied of
+T|21|Ee eae es a Te
+T|21|6 Spouse or
+T|21|Copel Oapenders
+T|21|. Seles Ohiid Asset
+T|21|| | | lemma} 11.) | |
+T|21|COMMON STOCK 02/19/25; _ 03/05/25
+T|21|| se lwrueorarennsmcam | La) | | x | cons most» | | | | | | | [| ff
+T|21|om | tet Tt a | cena! consol» | | | | | | | | | |
+T|21|CMN 02/19/25| 03/05/25
+T|21||: |nrcrocrrwoncncm | |x| | | x | emnsasl cops x | | | | | | | | [ ||
+T|21|[se hcsonrecworocrwccm | [el | x | x | cxnsasl opps x | | | | | | ft | fy
+T|21|pe lem | tat | Ty | consnsl cosas] » | | | fT |] TT
+T|21|SP _{CMN t
+T|21|js lommmcomasssa | fal | a | | corns! oor » | | | | | | | | [ [|
+T|21|=a OP
+T|21|CMN 02/27/25| 03/05/25
+T|21|ial CEE
+T|21|CMN 02/19/25! 03/05/25
+T|21|| so lwaracommesmemsim.cm| [xf [a | x | sonwas! os» | | | | [| | [ | f |
+T|21|[se laversronecrourmemecen | |e! | | x | cansasl coosasl e | | | | | |. f | | | |
+T|21|jae fpmmasesrncomenssa | Let |e | x | oxrwnsl cosas» | | | | | | | | [ | |
+T|21|| se |mmcrowreamoroer,ne.cun | {x1 [x | x | corwas|comsasl | | | | | | | | | | |
+T|21|| se lrmmnesrnecmeusss | |a| |e | x | cxnsnsl oops» | | | | | | | | [| |
+T|21|and Ne
+T|21|CMN 02/19/25| 03/05/25
+T|21|Fe boensine concuassa el | |e | cxpsas! ovens x | | | t | | | | t
+T|21|| so lrcrrommcnommncom | |x| | | x | cxnsas| cosas» | | | | | | | | [ [|
+T|22|rue: net thamea Page 2 Fog 2S
+T|22|Se ee SST)
+T|22|| nanan | estnamcson | | eneromneten] ee | panera
+T|22|ET EET ed ce oe
+T|22|@ Spouse or
+T|22|Copital Dependent
+T|22|Gab Chit Asset
+T|22|joc Provide full nome, not ticker swmio Exhonge | $200 | Transaction mayDO oe 313,000 | $sa.000_| $10,000 | $280,000 | sson.o00 | $L000,000 | $s. 002,000 | $28,000,000 | $30,000,000 | ssa.c0n.000 | $3.900,000
+T|22|| se Iwernerounowncww | _|x| | x | | oxsorel onosnsi » | | | | | | | | | |
+T|22|| se lweveracusencomanrcom | |x| | | | canoas| ooo » | | | | | | |_|
+T|22|eran || a
+T|22|CMN 02/19/25; 03/05,
+T|22||» lcammencionarconronsnoncun| |x| | | » | mons ows | | | | | | | | | |_|
+T|22|ania a See
+T|22|CMN 02/19/25| 03/05/25
+T|22|so» |noss somes cu et | || caywrs| comsasl » | | | | | | | | |
+T|22|| se lacuewrrecnorociesncccm | |x| | | x | canons onosnst » | | | | | | | | | |_|
+T|22|| se lowmcemm | al | || asst cosas) x | | | | | | | | | [
+T|22|ruecamracwscomranvewn | |x! | | | casors| oomsasl » | | | | | | | | | |
+T|22|Masco componaon im x| | | | exssas| const » | | | | | | | | | |
+T|22|[se |ronomoronconmanresm | x) | |_| canoys vom} tf} ptt
+T|22|se lunmernerwonswecun | [x1 | | | exaaasl coos » | | ( | | | | | | | |
+T|22|| se levscoconmonsnoncmm | |x| | |_| oxnsns| ososass » | | | | | | | | | | |
+T|22|| se lcnoweasnewnconemn | |x| | | | coyoas| comsasl «| | | | | | | | | | |
+T|22|| se lcwwonemencancrumcomn | |x| | | | ass! omens » | | | | | | | | | | i
+T|22|se lsuap-omiwe cm | tat | || ass] comsnsl x» | | | } | | | | | J |
+T|22|| se levenestcnourrram | xi | | | conors| om » | 1 | | | | | | | |
+T|23|WARE: Rohh Khenna Page 39,28
+T|23|EES
+T|23|re era ee es re Or
+T|23|RS aS US ES ESD ERENCES SLENUCENSCEING CORSCRNRNENS RE SOY OO GEN SE OG NOD OR QE URN MR <E - AO RO S
+T|23|Transaction in
+T|23|Goptal Dependent
+T|23|Gains Child Asset
+T|23|Qxeed Pertiot Sxx001- | $52.00% - |$100,008- |$2S0.001-| $500,001- | $2,000001-} $5.con.002- | $25,000 001- Over over
+T|23|rot, Prowide full nome, not ticker nenbe chong $200 | Yronsection EOC BH /DD goo _| ssacc0 | $son.c00 | $2sq.000 | $500,000 | $1.000,000 | $5,000,000} $23,000,000 | $sq.c00,000 | ssn.0n0.000 | $1.000000
+T|23|| se liemoxurenanonnncom | lx) | | | onsors| cosas x | | | | | ; | | | | |
+T|23|fel | ial | | | cans! consass » | | | | | | | | | |
+T|23|CMN 02/19/25; 03/05/25
+T|23|| se lmcnowrecinarocr.mccm | |x| | x | x | oye oymsls | | | | | | | | [ |
+T|23|> |perare we. co el | | | consrs! cosas! x | | | | | | | | ft |
+T|23|| s loexcomonanoncermansroce| |x| | | | anaps| omens x | | | | | | | | [| [|
+T|23|| se_lomicom Grove cw tel | | | cxnorsl onosns| «| | | | | | | tt
+T|23|| se Imnomencemn | ie; || | cxsasl consi » | | | | | | | | | |
+T|23|| leaurvnesinernucmn | iat || x | mons ays » | | | | | | | | | | |
+T|23|pelo | tel | || cxgrsl onset» | | | | | | ET
+T|23|CMN 02/19/25] 03/05/25
+T|23|| se (mounavencricare.wc.cun | [x| | |_| oagps_oaps ej}
+T|23|| se Imoreconronanoncm _|__x| | | | canorsl ons » | | | | | | | | | | if
+T|23|| se (monoeiszwrennanonasinc.cun) —[x| | | x | oxsonsl opps x | | | | | | { | | | |
+T|23|=a Oe re
+T|23|CMN 02/19/25| 03/05/25
+T|23|cameron TT At TPP
+T|23|CLASS B 02/19/25; 03/05/25
+T|23|nvenroemasonconroranoncom| |x| | | | canons cami » | | | | | | | | | |
+T|23|Fs» pose nc co | tet | | | cysgas! oyosa} » | | | | | | | | | | |
+T|23|samnenoee | TT ee
+T|23|CMN G2/19/25| 03/05/25
+T|24|eee ee ______—_E_E___d
+T|24|| rtm | nreenamcn | | emer, Saree | mages
+T|24|EEE Ee Oe de ye Toe T oe ] « | t+ J i yr i
+T|24|@ Spouse or
+T|24|Capkot Ocependent
+T|24|Gains Child Assat
+T|24|rceed Partial $1,001- $45,001. | $SQont - }$100,001-| $zsd0dt-) $soa.a0l- |$1.000,001-| $5,000,001. | $25,000,.001- Over owe
+T|24|fOC, not ticker synbo Phong $200 =| fronsection IMy/DO, yD $1s,000_}_ $50,000 |_| $300,000 | $250,000 } $800,000 | $1,000,000 | $3,000,000 | $25,000,900 | ssa.c00,000 | $50,000,000 |_ $1,000,000
+T|24|sp leavciNNaTi FINANCIAL CRP cam | FINANCIAL CRPCMN  ~ PLL ft | Fears  ayosyas pee pg pt
+T|24|| se iamsmcom | at | |_| canons! conse» | | | | | | —
+T|24|| se lancncarmacroverre.cm | |x| | |_| oxnss| owns » | | | | | | | | | |
+T|24|| se umamaneee | tn) | Lx | xmas! ovo » | | | | | | {| [| [ ft
+T|24|sp fragnexine.ca fel | [| pays! cosns| x | | | | | | | | | ft |
+T|24|[se larorecineconmonanoncom | |x| | | | exons ooens x | | | | | | {| [ | [it
+T|24|[se Irancercononsnoncms | te} || x | consrsl ovat x | | | | | | | [| | | |
+T|24|| se lcenreneconronsnoncmm | |x| | | | oxsgnsl overs » | | | | | | | | [ |
+T|24|| s» lcoorencosmcmecun |x| | |_| aan wmf df
+T|24||» lsoumwesramnescoom | |x| | |_| omsoasl omar» | | | | | | | | | |
+T|24|eee ee pp ep
+T|24|| se lncnocicmconronaeoemn | |x| | | | omorsl oysnl | | | | | | | | | i
+T|24|i De
+T|24|CMN 02/19/25] 03/05/25
+T|24||» Incevermvarssocmcom | |x| | | | conansl comsae » | | | | | | [ [| | [
+T|24|plas | lel | || sorst cosas! x | | | | | | | | | | |
+T|24|CLASS A 02/19/25| 03/05/25
+T|24|| se lemensoneuscrncoo.om | |x| | | x | canons! oomosl «| | | | | | | [ | [|
+T|24|GASB | fel | | | cxporsl ommsrsl x | | | | | | | | | ft |
+T|24|CLASS B 02/19/25] 03/05/25
+T|25|wane: Rode thane Page _ & For_ 2 &
+T|25|TET eee EE EEE _____....._._....__....................._ ]
+T|25|temas | | nent of Transaction aa } Pataca | nang ctramuntn
+T|25|SS Oe I a ec ee ee Toe To a UT tC TO YT sé Ff
+T|25|Trensaction in
+T|25|Caps Dependent
+T|25|Galen Chik Arset
+T|25|fread awa $1,001- $25,001- | $80,003 - | $10Q.001- |$2sq.005-) $sod.on1. |$1,000,001-| $s,con.901- | $2%,000,001- Over over
+T|25|Jot, Provide ful name, not ticker symbol. Prd 09 | Tronmetion pa/Dn) M/DO, $15,000. | ssa.000_| $toq.o90 | $280,000 | $500,000 | $3,000,000 | $s.00n.000 | $23,000,000 | sse.c0q.000 | $0,00n,000 | $2,000,000
+T|25|| so lrncnonrecinorocr,me.cun | |x| | x | x | oxpens| const» | | | | | | | | | jf |
+T|25|| se lenurconronanoncom |x| | || caorsl oxosasl » | | | | | | | | | ||
+T|25|| se hnnrocomonsnoncun | |x| | | x | consasl oss» | | | | | | | [ | | |
+T|25|i ow rene Lt | oyssl | | | | | | | | ft
+T|25|CMIN 02/19/25] 03/05/25
+T|25|| se lovunensenstsouncencom | |x| | | | oansns| oxosas| x | | | | | | | | [| [|
+T|25|Se Serer
+T|25|COMMON STOCK 02/19/25} 03/05/25
+T|25|se [ast sou, ne, Cun | tet | | | oyssns! cosas] » | | | | | | { {| | | |
+T|25|se lserwonessoumonsincom | [xi | | | amos consal x | | | | | | | [| [| |
+T|25|| sp lwesronanmaceuncarsenvcesinc| |x| | | | oxnsrsl oomsasi x | | | | | [| [| | [| [|
+T|25|= ial A on
+T|25|STOCK 02/19/25| 03/05/25
+T|25|| se |r001 cone ca ft fT] | cxnasl coast | | | ff [| | |
+T|25|eennconenss | ops] x tt |
+T|25|A 02/19/25| 03/05/25} x
+T|25|| > leavencevescnsrsrensmccmm | |e} | | x | cosoasl ose» | | | | | | | fj | [|
+T|25|| se lconronanon cua ef] | | omsnss » | | | | | | | [| | | if
+T|25|CGRPGORATION CMN 02/07/25! 03/05/25
+T|25|| se lcarraonernancarconrcsm |» | | | | | commas! oyosnst » | | -| | | | | | | |_|
+T|25|| sp lcarrtuoncrnancaconromn |x| | | | | cxysas| oapsass «| | | | | | | | | | |
+T|25|| sp lcarrmonermancurconrcmn | x1 | | | | oxmgasl ososasl » | (| | | | [| | | [| [|
+T|26|NAME: Robhuhenne Pee Soleo 2S
+T|26|ESSE
+T|26|ae rs Be me ee fd
+T|26|EE EE EE ec a ee
+T|26|a Spouse or
+T|26|Capital Dependent
+T|26|Geis ‘Chik Asset
+T|26|exceed Partial $4001. | $tscoi- | $sa001 - |$100,001- |$2Sa.001-| S$sOd.doi- | $L.00R001-| $5,000.00I- | $25,00N,001- Over over
+T|26|se |emesronce we cm pot | | | | cxasas! overs » | | | | | | | | yt
+T|26|| |sussroncemcemn st x | | | | | canons] coms » | | | | | | | | | |
+T|26|| lewrwonernancancorrcom |x | | | | | ours! owes» | | | | | | | | | |. |
+T|26|| lsoumemcowanpesnsass | x || | | | owasrs| oss «| | | | | | | | | |
+T|26|reReeTUALUSD | x | ttt tt yt tt
+T|26|PERPETUAL USD 02/03/25| 03/05/25
+T|26|mea te | | || | corsrs) comsnsl x | | | | | | | | | fj
+T|26|SP [PERPETUAL 02/03/25| 03/05/25
+T|26|[se loenemmusmccam Le | | || | corers| oosrs| x | | | | | | | | | | |
+T|26|sp_|smesronce mec alt | [| cwanas| oss » | | | | | | | | | ft
+T|26||sussronce nc co at] | [J euel_emals/ jf}; |} |_| 1
+T|26|| se lcoucareramouvecoomm — | x || | | | oxwas| onnsasl x | | | | | {| | | | |
+T|26|se (asove ween | tat fa | a | cxonasl ovmsres x | | | | | | i | | tt
+T|26|se baomemcam | a] | x | | psa oss | | | | | | CT CT CT
+T|26|| so lsmmoramencaconrcm | |x| | «| x | oxosns| osm xi | | | | | | | | |
+T|26|On | el | | x | corns] oswsrsl «| | | | | | | | | |
+T|26|CMN 02/28/25| 03/05/25
+T|26|rancerconworarioncamn | [x] | |x | exons! oops» | | | | | | | | | |_|
+T|26|wena we om ae) + a mst x | | | | | | | ft |
+T|26|Fs _fsranauces cone. cxn el | ads | cxnsas! ososast | | | | | | | | | J
+T|27|nase: mein ioanca tage 2-7 ¢ 26
+T|27|ana
+T|27|rae ra ne er ak
+T|27|CT a fc To ee ds ee
+T|27|0 Spouse of
+T|27|Capital Dependent
+T|27|Gains Child Asset
+T|27|Sxceed Partial $1,001- SL5D0- | SSLOCL - (SIMON [SISLOGT-| SSOLOOI- {SLOOLONI-| $S,00qa0I- | $25, 00R.00l- Over over -
+T|27|se sate cum cass fel La |e | cosas! ooosast «| | | | | | | | | |
+T|27|| se lmmzoncommcemn | xt | a | x | cos] comers, | | | | | | | | | | |
+T|27|| oc lowsyaso |e | ||| | canal comers! | | || | | | | UT
+T|27|5% 12/01/25 JD 62/12/25; 03/05/25
+T|27|| oc larmeooucrsacuemensmceun! x | | | | | oxpans| oomsnss | || | | | | | | | |
+T|27|oc _[pPLCORPORATION cam at | | | | exawas! ose | =| | | | | | | [| |
+T|27| c_ [AMAZON.COM INCOM ett | | | canons! coset » | | | | | | | | | |
+T|27|| oc |macnasoercomonsnoncmn |x| | | | | oanons| opal » | | | | | | | | | ||
+T|27|pee prsencom aee ep mma PL df
+T|27|| oc (uwenenconronanioncom | ta| | x | x | congas oxpsot | *| | | | | | | [| | |
+T|27|oc lmmnaserme.comcassa | |x | |_| oxnsasl oom » | | | | | | | | | [|
+T|27|ST lL LL x | psasl ost » | | | |} | | | | [| |
+T|27|pc |A 02/19/25
+T|28|@ Spouss or
+T|28|Copal Dependent
+T|28|Goins Chi Asset
+T|28|Oaved Portal $2,001. | $15,001, $sa.c0t - ($200,003. | $280,003-| $500,001. |$100g002-| $5,000,001 | $25,002,001- ther over
+T|28|0G, Provide full nome, rot ticker symbo change | $200 | Tronsoction yn 00 $18,000 | $sa.000 | $100,000 | $2sa.000 | $s0q.000 | $1,000,000 | $3,004,000 | $28,000 000 | $50,000,900 | $50,000,000 |_ $1,000,000
+T|28|SRA Holdings
+T|28|RAM :
+T|28|a
+T|28|a
+T|28|Untedeath Group ne es ee |
+T|28|a a
+T|28|a SS OS A A HC
+T|28|com aretas [cores Tx TTT TPT
+T|28|Oc _|Waste Management A OO Oe
+T|28|[0c _[unitedieathnroupine | |x| |__| | aovebas | ameebas [x [ [| | | Py
+T|28|a
+T|28|A a SO A S
+T|28|Broadcom ne Com SO a
+T|28|Waste Management in Treas [arepas xT ee ee :
+T|28|UnitedHealth Group ne Ss
+T|28|a —
+T|28|a Se

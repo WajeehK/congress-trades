@@ -95,6 +95,24 @@ def match_name(a):
     return re.sub(r"-CL[ABC]$", "", a.strip(), flags=re.I)
 
 
+def match_candidates(a):
+    """Name variants to try against the SEC ticker list, most literal first ("MERCK &CO. INC" -> "MERCK & CO INC",
+    "BROADCOM INC So" -> "BROADCOM INC", "DYNATRACE INC REG SHS" -> "DYNATRACE INC")."""
+    out = []
+    for v in (a, match_name(a)):
+        v = re.sub(r"\s*&\s*", " & ", v or "")
+        v = re.sub(r"\s+(REG(ISTERED)?\s+SHS?|SHS|SO|S|I|INCO)$", "", v.strip(), flags=re.I)
+        out.append(v)
+        words = v.split()
+        if len(words) >= 3 and len(words[0]) >= 5:   # one OCR-mangled trailing word
+            out.append(" ".join(words[:-1]))
+    seen = []
+    for v in out:
+        if v and v not in seen:
+            seen.append(v)
+    return seen
+
+
 def asset_ok(a):
     letters = sum(ch.isalpha() for ch in a)
     words = [w for w in re.findall(r"[A-Za-z&]{2,}", a)]

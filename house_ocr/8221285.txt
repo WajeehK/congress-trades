@@ -1,0 +1,405 @@
+#house_ocr v2 doc=8221285 pages=21
+R|1|0||Diaaca can tha oo|.||0.015,0.011,0.014|0.009,0.018,0.008,0.018,0.015,0.016,0.018,0.011,0.017,0.020,0.012
+R|1|1||Be|||0.020,0.019,0.010|0.008,0.008,0.007,0.020,0.009,0.009,0.015,0.010,0.008,0.016,0.015
+R|1|2||-|||0.011,0.012,0.015|0.008,0.009,0.012,0.012,0.006,0.012,0.009,0.004,0.014,0.009,0.005
+R|1|3||Bn|||0.010,0.008,0.019|0.011,0.008,0.007,0.023,0.014,0.011,0.017,0.012,0.018,0.016,0.005
+T|2|. ; . . NAME: Roh? Khanns vas 2 al
+T|2|re Oe POS enc
+T|2|a a a SS SE RE UNS CCC YONG SOR UT OO OO NS GT OO ~ NA
+T|2|Exceed Portiot $2.001- $25,001- | $50,001- |$100,002- |$250,001-} $500,001- |$1,000,002- | $5,000,001- Over Dependent Child Astet over .
+T|2|SsP/OCiT Provide full name, nat ticker symbol, Purchase Exchonge S00 Tromsartion MM/DD/YY MM/DD, $15,000 o000 | $100,000 | $740,000 | $600 000 | $1,000.000 | $5,000,000 | $25,000 000 5 000,001-$50.000,000 } $50,000,000 $1,000,000 ~
+T|2||
+T|2|Grandchildren :
+T|2|be famnaase een pat | | ff sapsast ovo | | | | | | | ff fT
+T|2|oc |A 12/05/25] 01/04/26
+T|2|META PLATFORMS INC-CLASS ACMN | | | |
+T|2|OC jCLASSA 12/05/25| 01/04/26
+T|2|oc fecmasoacestonacemccsm |x| | | | | sysons| ovo» | | | | | [| [op | fo
+T|2|| oc fponsmecmessa fx | ||| seysmasl ovo» | | | ft TT Tt
+T|2|oc {anose ween xt | | | | seons| ouowrs| | [| | | | fof ft
+T|2|| vc fissorruasonsronescam | x | | | | | serorsl ovo x | | | | | | | | | [|
+T|2|| oc lcevenamusmceuy tx | | | || sxorst ovounel x | | | | | | | | | |
+T|2|[cc foovenconwormoncn | x | | | || saan] ovounel | | | [| | | | fo ft ft
+T|2|{ve feaomneusnecsm | x | ft || eyes} ous] x | | | | | | | | of |
+T|2|| oc fowewnmcomorsnoncom |» | | | | | rzywasl ovo » | | | | | | | | [| [|
+T|2|oc fssronce mc cum pal | ff | oes] ood | [of ff tf fy pT
+T|2|| oc lsowewnnsconmoranoncym | x | |_| | | sozsasl ovo» | | | | | [| | | fj. | |
+T|3|Motiied of
+T|3|EE Oe eee oe Ce te) te Cla TU TTL. Ud
+T|3|Exceed Partio? $1001- $15,003- | $50,003~ |$100,001- |$250,001- | $500,001- |$1.000,001-| $5,000,001- Over Dependent Child Ascet over
+T|3|SP/DG Provide fail ane, not ticker symbod. Purchase g $700 Trensoction vy) 15,900 $$0.000 100,000 } $250,000 | $sa0.0090 | $1 ang. 008 | $5 one 000 | $25 con. O00 000, 003.530.000.000 _| $$0.000,000 7,000,000
+T|3|Monte ond Usha Ahuja 2010 trrev Trust FBO
+T|3|: Grandchildren .
+T|3|_| CITIGROUP INC. HYBRID PERPETUAL rei t of |
+T|3|pc |USD 12/22/25] 01/04/26 :
+T|3|| oc femsrouewc-rranorenrerua | x | | | | | anayasl ovoune » | | | | | | | [| [| | |
+T|3|CALL/GOOG FLEX EURO PM 275 EXP Pt ft | |
+T|3|12/05/2025 : 12/05/25| 01/04/26
+T|3|CMN 12/05/25} 01/04/26
+T|3|oc lappucie. cx fel Le Le | sepsrs! ovo! » | | | | | | | ff | |
+T|3|| nc Iucancarmucarcincemn | [xl |x| | somsrst ovourel » | | | | | | | | | | |
+T|3|| oc lcenenarnsororscommanvemn | [xl | x | x | szyonsl ovo 1 | | | | | [| | [| [|
+T|3|, .
+T|4|NAME: Rohit Khanna Pace t of af
+T|4|| etauentae | tepectrmeaton | | tetra) tema | nets
+T|4|[EE eee Sa fe Te eT
+T|4|Exceed Portlet $1001- ‘| $15,001. | $sa.00t- |$100,002-]$28a,002- | $500,002- |$1,000,001-| $5,000,003- Over Dependent Child Assetover |+
+T|4|{d<; Provide full name, nat ticker symbol. Purchase _|} Sale $200 Transaction DD, xy) 15, 000 $50.000_| $100,000 | $250,000 | $500,000 | $1,000 000 | $5.000,000 | $25 000.000 | $25.000.001.$50 NNe 000 0.000.000 1,000 000
+T|4|[oc leoismeemmowecoom | x1 | | | | sysonsl ov » | | | | | | | | J |} |
+T|4|| oc Iucanemrmicare meen | [el fx | | ysl ovo «| | | | | | | [| fe |
+T|4|joc famsumenarnavarnccase | |x| | fs | yas oven x | | |. | | | | | | | |
+T|4|Foc leenenarnororscommanvom | lel |x | x [ wsasl ovownl x | | | | | [ [| | [| | |
+T|4|. . . i
+T|4|. . 1
+T|5|Ptetaaetname —Lteattrmtn | | ect mncon | mene |stats
+T|5|Vad Date of Tremaction Yramaction Amount of Tremaction
+T|5|a a a SS SS A RS YN SORES GE -SED - S S G<S R  SE  NS S ;
+T|5|Exceed Partial $1,001. | $1s0ot- | $50,001 - |ssonans- |$250.001-| Ssop.cot- |$1,000.001-| $5,000,001- Over Sependent Child Asset over :
+T|5|rot; - Provide full name, not ticker rental. ge | $200 __ | transaction Do Dp $15,000_| 50.000 _| $roa.a00 | $250,000 4 $500,000 | $1,000.00 | $$ con.000 | $75.000.000 | $25 000 001.$50,000,000 | $50,000.00 $1,900 000
+T|5|| oc lacrrstnenarinwarnccasss |x| | | | | ssasl ovo |x| | | | | | [| | |
+T|5|oc lwocncem | x | | | | | “saesrsl oval | «| | | | | | | | [|
+T|5|pc {04/01/28 AO 12/09/25 01/04/26 .
+T|5|| oc jauscrstonesrourmcrmecsm | x | | [- | | szysas} ovo |» | | | | [| | | [-| |.
+T|5|Foc lsrazoucesconr-comn | x | | | | | sayossi_ovownel x1 | | | | | | [| | | |
+T|5|oc |rmemomnsuminceen | x | | - | | | szvoss| ovowasl x | | | | | | |. | | |. |
+T|5|oc tnsenv,.ne.cxm pet tL TE asst ovo » | | | { | ft jt | ot | |.
+T|5|Dc |AVOTING 12/05/25} 01/04/26
+T|5|APPLOVIN CORPORATION CMN CLASS rtd [| :
+T|5|oc {A : 12/05/25} 01/04/26
+T|5|oc fracrserneseancusysrensincem| x | | | | | sxsrsl oval x | | | | | | | | | | |
+T|5|Foc feaonne us we. ci Pel} | [Tt sxses| ovoon » | | {| | | | | [of fo
+T|5|oc fonvwex ne. xn pet | Tf | szpsas! ovoune «| | | | | | | | | ||
+T|5|Foc fenrasconronsnoncmw | x | | | | | szyosas]_ovousl x | | | | | | | | | | |
+T|5|| oc lavatonsnycommunmeswcemnm | x | | | | | sass] ovonzsl » | | | | | | | | | |
+T|5|oc feewwue nc cx xt tf || spss] ovowe «| | | | | | | fof fo
+T|5|Foc lvenseanaurncs ecm | x || | | [| sass] ovomasl » | | | | | | | | | | |
+T|5|Foc hwasrenanacemenrnceyn | x | | | | | szysasl ovo x | | | | | | | | | [| |
+T|5||_c_fsssronce ne cn ee ee ee ee ee ee
+T|5|Foc lcwwonemencwemwecm |x| | | | | sess! ovo» | | | | | | | | [ [|
+T|5|| oc fmenrecinorocesincicm | x | | | | | szyosasl ool x | | | | | | [| [| | [|
+T|6|[taarmnname | pet trmnton | || eueeereranson | emt | anrtmaeen
+T|6|ee Se a oS eS A SAO OY WO ORT MOY SS SG SA ROY NE SY
+T|6|Exceed Partial 3i,002- $tgagi- | $50,001- |S10R00!- |$25a0nt-| $500002- |$1,0a.001-| $s.c00,a01- Ovr Dependent Child Asset over
+T|6|sPyDG Provide ful nome, not Scker symbol. arg 00 Tromoxction D MM/CD 515.000 $50,000 | S$100.000 | $350,000 00,000 | $1.000-000 } $$.000. C00 5 006,000} $25,000 001-$50.000.000 | $50,000 000 $1,000, 000 .
+T|6||
+T|6|Foc _lsmoesys nc. com Pet | | | | sxsas] onus x | | | | | | | | | | - | |
+T|6|| ow Let | | T [ szpsrsl ovo x} | | | | | | | | [|
+T|6|pc _iCMN ; 12/05/25} 01/04/26
+T|6|| oc _hroverrecinduociesmcemm | x1 | | | {| sayosrasl ovo x | | | | | | | | | [|
+T|6|nc louaucsromscemy st x | | | | | anvossl ovo x | | | | | | | | TT
+T|6|CHARTER COMMUNICATIONS, INC. Pet ]of |
+T|6|Dc |CMN ; 12/05/25} 01/04/26 °
+T|6|oc haunt nec Pet | [| I sersrs| osou «| | [| | | [| | | | | | :
+T|6|oc _laccennmericemncssa || | | | | sxsrs| ovows «| | | | | | | | | | |
+T|6|we | ty | |e |
+T|6|pc |CMN ‘ 12/05/25| 01/04/26
+T|6|Foc |usenrecomorocy,weemn |x| | | | | sayspsl oy » | | | | | {| [| | | |
+T|6|| oc _leanaspacestoracecemn | x | | | | | sxyosyast_ yours, x | | { | | | [| | | | |
+T|6|| oc lcostarcrovr,mccm _- |x| | | | | sass ovo») | | | | | | | | [| |
+T|6|Ne tel | | LT css! exours] x |_| | ff
+T|6|pc _{INC. 12/05/25} 01/04/26 .
+T|6|| vc fommcomcrourcemn st x | | | | | szyossl ovownl » | | | | | | | | | [|
+T|6|| nc bmecamacwscommawem | x | | | | | szposs|_ovosrsl x | | | -| | | | | | | |
+T|6|oc foevcow, we. cin Pet | | fT esis! ovo x] | | | | | | | | | of |
+T|6|oc loaceawremarionancemn |x| | | | | sasasl oyun » | | | | | | | | | | |
+T|6|Fc fpooe cone con Fel | | | | sss] oyoen «| | | | | | | | | [| |
+T|6|NORWEGIAN CRUISE LINE HLDG LTD ett ;
+T|6|oc |CMN 12/05/25| 01/04/26
+T|6|Foc bmenmarruenzcocmm |x 1-| [ [| szssl ovo»! | | | | | | | [| [ |
+T|7|Data Notified of
+T|7|a aS SO SS SR SS SS SSO SS OA A SS NS
+T|7|Exceed Portal $2,001- $18001- | $50,001- | Sion.ani- |$250.001.] $500,002- | $1.000001-| $5,000,001- Over Depercent Chdd Asset over
+T|7|fox, Provide full nome, not ticker: bot. chang 200 Tromsoction DD MM/DO; 15, 000 0.000 tag.000 | $250,000 | $500,000 2,000 000 | $5,000,000 | $25,000,000 $060 001 $50,000.00? | $50 000. a00 1.000,000
+T|7|UNION PACIFIC CORP. JSE UNPI INT Pett ft | 4
+T|7|oc |EQTY DN CASH BASE 12/05/25| 01/04/26
+T|7|case TTT TT sal ons
+T|7|pc |CLASSA 12/05/25| 01/04/26
+T|7|oc lemcorearvorucemm | x | | | | | samsasi ov » | | | | | | [| [| | | |
+T|7|Foc lcowsareoumovecoom | x{ 1 | | | sxssl ovo »{ (| | | | | | {[ {| [|
+T|7|pc _|CMN CLASS N 12/05/25|__ 01/04/26
+T|7|oc {aoose we oa ett | | T sxsasl ovo «| | | [| | [ | ff ft
+T|7|pc locoroasumcemnesssa |» | | | | sosasl ovo «| ( | {| | | [| [| [| | |
+T|7|oc leavencenesinsrstemsmccmn |x| | | | | spss ova » | | | | | [| | [| | [| |
+T|7|oe leaunrax nc cm Pelt [| | sxospsl ovo «| | | | {| [ [| | | Fo
+T|7|pc |CLASSA 12/05/25| 01/04/26
+T|7|THE PROCTER & GAMBLE COMPANY Pett fo [|
+T|7|oc {CMN | 12/05/25! 01/04/26
+T|7|ae PD
+T|7|oc |CMN 12/05/25] 01/04/26
+T|7|Foc |waastancinnancomccem | |x| | | x | sayssl ova x | | | | | [| | | [| [| |
+T|7|pc [cMN 12/05/25| 01/04/26
+T|7|[oc |serncenowwcemn |x| | | x | saspsl ovo» | | | | | | | | | |
+T|7|Fe leopaer, wc. cn | tal | Tf seyoss| onosrs| » | | | | | | {| | | fj |
+T|7|oc |worwmar,wecemcrassa | [xi | | | sayossl ome » | | | | | | | | [| | |
+T|7|| oc Ineammencorucevn | tel {| | | sosyst ovo x | | | | | [| [| [| | [|
+T|8|° wast: Roh knee mer Oe HH ;
+T|8|Pratt | apres | | ncsettcmacton | see | anette
+T|8|—————————— a SS TS OT SO ONT SE DS SO <  ; S
+T|8|Exceed Partiat S201 | $25,003- | $50,002- 1$200,001- |$250,001-] $500,002. 1$1.000,.007-| $5,c00,001- Over Dependent Chdd Asset over
+T|8|SP/OC, Srovide full nome, not ticker symbot. chong 200 | Fronsaction Re /DO/7Y R44 /D 95, 000 $0 000} $200.00 | ¢250.000 } $500,000 | $1.00 000 | $5,000,000 | $75,900 000 000.001.550.900 900 _| $50,000 900 37,000,000
+T|8|oc |CMN - 12/05/25| 01/04/26
+T|8|Foc leomarsesiosm mccmeasssal |x | | | sgssl ovo x | | | | | [| [| [| | [|
+T|8|Foe fscune can “ft td tf TU saposasl ouowel » | | [| | f [ ft ff [|
+T|8|Fc feaux. inc Ret | lat | LT scvosasl oven » | | | | | | | | of [
+T|8|Foc lanono.nccmmerssa | [x] | | | axspst ovo «| | | {| [| | |. |  [ [| |
+T|8|| oc lmenomenerorncemn | [xl |__| x | sapsasl_ovosrsl | | | | | | | | | | |
+T|8|| oc lovsraurearyreustnccmn |x| | | | szyoss| ovonel » | | | | | | {| | | ff |
+T|8|[oe foevenat asin cm Pott | | | tases] ovowal | | [| | [ | [| [| of ft
+T|8|Foc laoroxcommaionawanom | |x| | | | sayoss| ovens x» | | [- | | | | | [| | |
+T|8|| oc luucrosorrconronanoncan | |x| | | x | sx57s| ovownel x | | | | | | | | {| | |
+T|8|| oc_froens nc. cin css tel 1 fT sesst oyornd «| [| | | | | | fo of [|
+T|8|vc lwwvarionnomesmc.com | |x| | | | sass] oyounel » | | | | | | | [| [| [|
+T|8|OTIS WORLDWIDE CORPORATION Ltd fof >
+T|8|pc |CMN 12/05/25| 01/04/26 .
+T|8|Foc lewncnaowisnrco.inccmw | le} | | | arysasl ovo x | | | | [ [| [| |. | [|
+T|8|oc [von me con tet Tf | casas! coord » | | [ | | | [ | ft |
+T|9|pattie resets | | ate cttmaon | tremens | pettmtae
+T|9|SSE
+T|9|Gains Trensection jn a Spoine or
+T|9|SPsDC/IT Provide full nome. not tcker symbot_ Purchase g $200 Tromroction YDD, DD, $15,000 s0.000__| $100,000 | $250,000 | $500 000 } $1.0 COO | $5. 000.000 | $75. 000.000 _T S25 000. 001-550 000.000 0,000 000 £00, 000.
+T|9|Fe Jossraue co me un Sta} | || sassl ovowne| » | | | | | | | |
+T|9|| oc _|yisa ic. can cuss | otxt Tf x | szysrast ovorel x | | | | | | fof | fo
+T|9|| oc leonssrnananosnccm | [at | | | szysasl avowed» | | | | | | | | |
+T|9|Foc lemeonsrovrnccmn | [xl | | | sansas] ovowael xf. | | | | | | [| | | |
+T|9||e fenowivcasnzmmorcn | fx] | | | szpsrst ove «| | | | | | | fj | fo |
+T|9|{oc |uocgwecmmasssa | tal | | | saysnsl ovennel » {| | | | | | | |. | [
+T|9|| oc fmavevese wc mewn |x| | | | sypsast ovouzel_» | {| | | | | | | | | |
+T|9|cee en A re |_|
+T|9|Dc |CMN 12/05/25| 01/04/26 .
+T|9|: 7 XN
+T|10|: ~ - NAME: Robh Khanna Pan io ot_34 .
+T|10|Pnettame | secttnntcn | |g) rman neat mgm
+T|10|i eo Transaction Amount of Transaction,
+T|10|PE a eo a —e
+T|10|Exceed Portict $2001- | $15,001- | Ss0.001- |$100,002-|Szsa001-| Ssoneor- |$2000.0m-| $sc0Q0d1- Over Gependent Chikd Asset over .
+T|10|D Provide full nome, not ticker symbot. Exchange | $2700 Transaction DO $15,000 $52,000 __| $100,000 | $250,000 | $500,000 } $1.000.000 } $5000.00 [ $25,000,000 | $25 900.001-550,.000.000 | $30,900 000 00.000
+T|10|05/01/33.MN 12/15/25|_ 01/04/26
+T|10|| se leranucracracncwoccocy | | | | | | syonsl ovo » | | | | | | | | | fo |
+T|10|| sp \uenvonecormomesss |x| | | | | azops| ovo «| | | | | | | | | [|] .
+T|10|se lacrscrneseancisrereusincemm| x | | | | | syyasl ovo » | | | | | | | fof ff
+T|11|. , NAME: Rohit anna Page tha et
+T|11|| npecttrmancin | | ——oateettampcion| name | preety
+T|11|TT Ee ee doe oe ee oe a Te
+T|11|ftxreed Portict $i,0or- S2S,.001- } $50,002 ~ $$100,001- 1$250,001-) $500,003- }$1,000,001-} $5,000.001- Over Dependent Child Asset over
+T|11|hi Provide full name, not ticker symbol, Purchase 200 Transaction nH 15,000 $50000 | s1an.nMd | $7500N0 | $s00 000 | $1,000,000 | $5,000,900 | $25 000.000 | $25,000,001-530.000.000 | $50,000,000 1,000.000
+T|11|THE PROCTER & GAMBLE COMPANY in |
+T|11|, CMIN 12/12/25} 01/04/26
+T|11|CMN 12/12/25] _ 01/04/26
+T|11|se enncenow INC CMN Pelt | | 12/12/25] 01/04/26 Pi.t} ett] typ
+T|11|Lg PAYCHEX, INC. CMIN tL | | | sananal ound ot | | Et | | EE
+T|11|| | CHIPOTLE MEXICAN GRILL, INC. CMN Pit i] 12/12/25| 01/04/26 Pt tte tt 5
+T|11|e ADOBE INC CMN = Fett | | 12/12/25) 01/04/26 Pt ttt] Et tt
+T|11|Ly lnwencm txt | | | | 12/12/25! 01/04/26 Pt tee ET] Ef
+T|11|os lemopsvs INC. CMN el | | | nas! oye » 1 1 | | | | | ff fl
+T|11|ey lewroromenco,ncam |x] | | |_| 12/12/25] 01/04/26 eee eee
+T|11|mi EQUITY RESIDENTIALCMN LL LL | ssnanl onan | | | tf ty tt
+T|11|eo EQUIFAX INC. CMN tt tL 12/12/25] 01/04/26 eee eee
+T|11|| HORMEL FOODS CORPORATION CMN ttt LY nan 01/04/26 eee
+T|11|TRADE DESK, INC. (THE) CMN PEL ff 12/12/25} 01/04/26 ftp tet ttt UE]
+T|11|DECKERS OUTDOORS CORP CMN Pit Lt 12/12/25] 01/04/26 Pf eotE EEE LEE
+T|11|CLASS A 12/12/25{ 01/04/26
+T|11|T-MOBILE US, INC. CMIN alt | ft 12/12/25} 01/04/26 Pf ttt tL tt tu ;
+T|12|: WAME: Robh Khanna Page tte, al
+T|12|| petasername restrain | | onset anc) rence reat
+T|12|pire 1: on Transaction ourt of Transaction
+T|12|a SS SE NOR RS RS YS QT OND NT -S Q  S S
+T|12|Gcins . Tromoction in @ Spouse or
+T|12|sppocfiT Provide full name, not ticker symbot. Purchase Exchange. $200 Transottion MIM/O0/VY $15,000 $50,000 __ | $100,000 | $250,000 } $500,000 | $7.G00.000 | $5.000.000 | $25,000,000 | $25 000.002-$50.000,000_| $50 000.[00 $2,000,000
+T|12|ao arn CORPORATION CMN elt | 12/12/25] 01/04/26 i tt et EE
+T|12|| PUBLIC STORAGE CMN Pett | | 12/12/25] __ 01/04/26 tt ett tt tT
+T|12|es LULULEMON ATHLETICA INC CMN tt | | | 12/12/25} 01/04/26 ef | EE EEE Pr
+T|12|| CINTAS CORPORATION CMN ttt ot 12/12/25] 01/04/26 el FEEL EL fl
+T|12|o MOTOROLA SOLUTIONS INC CMIN Petit ft [| 12/12/25| 01/04/26 tf tite tt EU
+T|12|AMERICAN TOWER CORPORATION yf ||
+T|12|CMN 12/12/25; 01/04/26'
+T|12|| AVALONBAY COMMUNITIES INC CMN elt ft 12/12/25| 01/04/26 ee ee eee
+T|12|soon, INC. CMN Fett | | 12/12/25| 01/04/26 et |e tet] | ft |
+T|12|| FISERV, INC. CMN wll tt 12/12/25} 01/04/26 ef t-te Et tr
+T|12|o COSTAR GROUP, INC. CMN rel {| | 12/12/25| 01/04/26 et | tT fe tT |
+T|12|| MOLINA HEALTHCARE, INC. CMN ret] { |. | 12/12/25| 01/04/26 a eee
+T|12|«| PAYPAL HOLDINGS, INC. CMN et{ bb 12/12/25| 01/04/26 el EE tt; |] ft
+T|12|ae fearcom SOFTWARE, INC. CMN Pel} | | 12/12/25! 01/04/26 ef EE T_T |] | lu
+T|12|| SYSCO CORPORATION CMN tl tt 12/12/25] _ 01/04/26 ef FEL TT fe]
+T|12|| | ALIGN TECHNOLOGY, INC CMN Pei { of | 12/12/25| 01/04/26 Fe) ttt E T_T] | ft
+T|12|| CONAGRA BRANDS INC CMN ell [| 12/12/25] 01/04/26 wl ti EL EL, EE LY
+T|13|a a a ae
+T|13|a ie Pee de ee a ae
+T|13|Exceed Portict $2.00t- $15,001- | $50,001 - |$100,00%- $500,001. |$1.000,001-} $5,000,001- Over Dependent Child Asset over
+T|13|{DC Provide pame, not Fricker: be. Purchase | Sole § Exchong $200 Fromsoxtion M3400; $15,000 $50,000 100,000 | $250,000 $1.0N0.000 | $5,000 000 | $25,000,000 525,000 002-$50.000,0N0 | $50,000,000 51.006 000
+T|13|«| INTERNATIONAL PAPER CO. CMN Flt ft | 12/12/25] 01/04/26 P| EEE ETE
+T|13|oe | BAXTER INTERNATIONAL INC. CMN all | ft 12/12/25| 01/04/26 et EEE] EL
+T|13|e | GODADDY INC. CMN CLASS A Plt tt 12/12/25|__ 01/04/26 Pt ett, | tp]
+T|13|CMN 12/12/25| 01/04/26
+T|13|| KIMBERLY-CLARK CORPORATION CMN elt | oi 12/12/25|__ 01/04/26 wt ttt ttt tf
+T|13|CMN 12/12/25} 01/04/26
+T|13|eo DEXCOM, INC. CMN ett | ft | 12/12/25] 01/04/26 wt ttt] | tt ft fl
+T|13|CMN 12/12/25| 01/04/26
+T|13|| FACTSET RESEARCH SYSTEMS INC CMIN tt | i 12/12/25| 01/04/26 et ft EE_ | | tL
+T|13|ERIE INDEMNITY COMPANY CL-A CMN |
+T|13|CLASS A 12/12/25] 01/04/26
+T|13|A VOTING 12/12/25! 01/04/26
+T|13|, 02/20/2026 12/05/25| 01/04/26
+T|13|02/27/2026 12/19/25| 01/04/26
+T|13|02/06/2026 12/15/25] 01/04/26
+T|13|SP |CMN 12/12/25; 01/04/26
+T|13|| COLGATE-PALMOLIVE CO CMN td tt 12/12/25|__01/04/26 —[.E tt} |] tf]
+T|14|. NAME: Robit Khanna Page Tt f ot tt
+T|14|a Ne ee ere
+T|14|SR eee ee
+T|14|Exceed Portict $1,001- $15,003- | $$0,002- | $100,001- | $256,001-| $500,001- |$i.000.00t-| $5,000.001- Over Dependent Chitd Asse? over
+T|14|P/DG, Provide full name, not ticker symbol. 2 Oo | transaction MM DD, MADDY 15.000} 450.000 _| $100,000 3,000 | $500,000 | $1,000,000 | $5,000,000 | $25,000 000 | $25,000.001-550.000.000_| $50,000,000 $1,000,000
+T|14|oe INTUITIVE SURGICAL INC. CMN Pit | i 12/12/25] 01/04/26 Piet tit tr ot |
+T|14|so lecpaer INC. CMIN . Ld tL | snaps! ovored 1. | | | | | | tf ft
+T|14|es | INVITATION HOMES INC. CMN Lt td 12/12/25] 01/04/26 wit ttt Et ft]
+T|14|| PALO ALTO NETWORKS INC, CMN dt | La | sonans! ove | | | | | | | ff fl
+T|14|a ROPER TECHNOLOGIES INC CMN id tLe 12/12/25|__01/04/26 Plot tet tp
+T|14|se | REPUBLIC SERVICES INC CMN Lt | 12/12/25} 01/04/26 Pet EEE] Ey ;
+T|14|so HOME DEPOT, INC. CMN Pit ft ta 12/12/25] 01/04/26 eee eee
+T|14|VERIZON COMMUNICATIONS INC. P| tt |
+T|14|CMN ‘ 12/12/25| 01/04/26
+T|14|WALT DISNEY COMPANY (THE) CMN dat ft Le | 12/12/25| 01/04/26 et Et tT Et
+T|14|«| WASTE MANAGEMENT INC CMN LL | | | ans! vont | | 1 1 | | | of UE
+T|14|se | PHILIP MORRIS INTL INC CMN Ld | | | sanarsl ovound | | | | dt df dE EY
+T|14|| GENERAL MILLS INC CMN it | La 12/12/25] 01/04/26 el Ete; tL | i ft ty
+T|14|a MSCI INC, CMN Ld LL | see 01/04/26 Pet ft TT Ep
+T|14|se lnunmemorucom | tel | |_| 12/12/25, 01/04/26 Ff Et tt EE i
+T|14|DATADOG, INC.CMNCLASSA __- it tt 12/12/25| 04/04/26 ee eee
+T|14|| NEWS CORPORATION CMN CLASS A tt EL] sanana 01/04/26 el |i EEE EE UE
+T|15|[tenacmame | rppecttrmacton | | ostrcrtamncer Smee |p
+T|15|0 © 0 Date of Transaction Tremaction . punt of Transaction
+T|15|ee ee oe
+T|15|Exceed Partial $2001. $45,00!- | $50,001 - [$200,001-|$250,001- | $500,001- |$4,000,00t-| $5,000,001- Over Dependent Child Asset over
+T|15|for, Provide full nome, not ticker simbol. Purchase. Exchange $200 Tronsaction D 115 000 $sa.o00 3m™,000 | $250,000 | $500 000 | $3,000,000 000,000 | $25,000,000 | $25.000.002-$50,000,000_} $50,082,000 $3,000,000
+T|15|sp hoens INC. CMIN CLASS A Pid tt 12/12/25| 01/04/26 PE EET ELT Eo UE LY .
+T|15|- AIR PRODUCTS & CHEMICALS INC CMN i tt 12/12/25|__ 01/04/26 wi ft ttt | | ft
+T|15|oe | PALANTIR TECHNOLOGIES INC. CMN Tid tt 12/12/25 __01/04/26 Pet fT tT | | dL pr
+T|15|CLASS A 12/12/25| 01/04/26
+T|15|so lac INCORPORATED CMN Le || 12/12/25| 01/04/26 Ff tt tt ty tlt]
+T|15|oe | FORTINET, INC. CMN Poi | od 12/12/25] 01/04/26 et ttt Let ct UE
+T|15|oe | VERISK ANALYTICS, INC, CMN Pi ff 12/12/25} __ 01/04/26 pel EET YT ty] ff
+T|15|ge QNITY ELECTRONICS, INC. CMIN Pit | | 12/12/25| 01/04/26 et ELE. EE UE
+T|15|| OTIS WORLDWIDE CORPORATION CMN i ft 12/12/25| 01/04/26 st ft pt tt ft
+T|15|| INSULET CORPORATION CMN iL | Lt 12/12/25| 01/04/26 Pet Ett | | te tl
+T|15|NETFLIX, INC, CMIN Ad | | 12/12/25| 01/04/26 ttt ett | ft |
+T|15|| BROWN & BROWN, INC. CMN Ld | 12/12/25| 01/04/26 et Et TL EE
+T|15|| KIMCO REALTY OP, LLC CMN lat ft 12/12/25] __ 01/04/26 et Et tt; | | ft]
+T|15|oe VICI PROPERTIES INC. CMIN i td 12/22/25; 01/04/26 et ett] ET | UE
+T|15|| CLOROX CO (THE) (DELAWARE) CMN td fb | 12/12/25] __ 01/04/26 lel EE EE
+T|15|| VERALTO CORPORATION CMN Pid tf 12/12/25} 01/04/26 See
+T|16|a a a ee
+T|16|ee pits ot rntscton| tev
+T|16|eee a ee eee
+T|16|Exceed Portiat $L001- $15,001- | $50,001 - 1$100,001-|$250,001- | $500,001- |52,000,001- | $5,000,001- Over Dependent Chuld Asset over
+T|16|fDCj Provide full name. not ticker symbol. Purchase Exchonve uO Tromsoction £0, DO 15,000 $50,000 100,000 _| $750:000 | $500,000 | $1.000,000 } $5,000,006 | $25.000.000 | $25,000,001-$50,000,000 | $50,000,000 2,000,000
+T|16|| AMERIPRISE FINANCIAL, INC. CMN_ Pil dL | 412/12/25| 01/04/26 ft | ttt | dt ff ty
+T|16|se tones TECHNOLOGIES, INC. CMIN Si Et | 12/12/25) 01/04/26 ti teeter EE
+T|16|MASTERCARD INCORPORATED CMN | |
+T|16|CLASS A 12/12/25] 01/04/26
+T|16|THE MAGNUM ICE CREAM COMPANY a |
+T|16|BCMN 12/12/251 01/04/26
+T|16|sp (INC. 12/12/25| 01/04/26
+T|16|sp__|UNILEVER PLC SPONSORED ADR CMN id cL 12/12/25] 01/04/26 bt Ett | EE
+T|16|| ASML HOLDING N.V. ADR CMIN id fel. 12/12/25] 01/04/26 lt tii tte} ft |]
+T|17|. NAME: Rohit Khanna Pare i? of Vcd |
+T|17|Ptasnssmane | meri | | None cttnmaton) “tomer | nrmtettmn
+T|17|a a a ES OO RL NT NN DE YS TSO TS SS <A OT SE
+T|17|fxceed Partial $2.002- $90,003 - 1$200.001- |$2S0.003-} $S00,003- [$2.00R00t-| $5,000,003- Over Dependent Child Asset over
+T|17|SPfocint Provide full name. not ticker rymbot. g ag Tronsoction 400) D 25,000 0.000 _| $100000 2,000 } $500 000 | $1 000,000 | $5,000,000 } $25 900.000 7, 008 001-$50.000 000 } $50,000,900 000,000.
+T|17|12/01/33 JD 12/01/25] 01/04/26
+T|17|| | COLGATE-PALMOLIVE CO CMN LL LL] anenn “01/04/26 Piet EEL EP
+T|17|se fanose INC CMN rel | fb 12/30/25| _ 01/04/26 Pt Te] te Et te
+T|17|| EXTRA SPACE STORAGE INC. CMN tt | 12/30/25|__01/04/26 whet tT tL Et ff cp
+T|17|| ZOETIS INC. CMN CLASS A eld fd 12/30/25] 01/04/26 et tt tt tt
+T|17|oe | BUILDERS FIRSTSOURCE, INC. CMN aliol ft | 12/30/25| 01/04/26 lL tet bt te
+T|17|se | SALESFORCE INC CMN Pett ft 12/30/25) 01/04/26 el | ft tet tet]
+T|17|HYBRID PERPETUAL USD 12/15/25] 01/04/26
+T|17|| SEMPRA HYBRID 04/01/2056 FeLi | | 12/15/25|__01/04/26 let EEE tt
+T|17|| INTERNATIONAL PAPER CO. CMN ali | tf 12/30/25|___ 01/04/26 PE EEE TE TE Ef] ‘
+T|17|: USD 12/15/25| 01/04/26 :
+T|17|| CITIGROUP INC. HYBRID PERPETUAL ttt | 12/15/25 wont! | | | | | | | ff
+T|17|Le | GENERAL MILLS INC CMN elt tt 12/30/25| 01/04/26 ef | Ee EET Tf]
+T|17|HYBRID PERPETUAL USD 12/12/25|__ 01/04/26
+T|17|se he FISHER SCIENTIFIC INC CMN et tL LT sn 01/04/26 Pt tet ttt pt
+T|17|| DOVER CORPORATION CMN Fel to| ft | 12/30/25} 01/04/26 et | ttt EE TUE
+T|17|. :
+T|18|. MAME: Rohit Khanna ran 10 8 ot 24
+T|18|7 Date Notified of ; :
+T|18|a a ES NE NS COS TS GUESENEPSS OEY SORES SOS SOT NO-NO SS <Q ES OE EY OE RO OTE
+T|18|Exceed |  Portict $1001- | $15,001. | $sq001- |$100.001-|$252.002-| sso0.o01- |$2,00Q001- | $\00R.001- Over Depeadent Child Asset ever
+T|18|fine Provide full nome, nat ticker syrmbal. 2 $200 x 2) yoo, $15.000 $50,000 _| $100.000 @.c00 | $500,000 | $1.000.000 00,000 | $25,000000 5, O00 001-$50,000,000_} $50,000,000 1,000,000
+T|18|se STARBUCKS CORP. CMN Pit FE 12/30/25} 01/04/26 FE TET E EL | ff
+T|18|SOLVENTUM CORPORATION CMN ttt | | 12/08/25| 01/04/26 el EEL LE Et
+T|18|Fs fuvenum CORPORATION CMN ett | ft 12/23/25] _ 01/04/26 ee ee
+T|18|| | HCA HEALTHCARE, INC CMN Pit ft 12/19/25| 01/04/26 wt ttt t tT | tf |
+T|18|oe GENERAL MOTORS COMPANY CMIN Ld tet 12/19/25| 01/04/26 Se ee eee
+T|19|NAME: Robit Khanna Pago 14 ZA
+T|19|a ee ee
+T|19|(Re Date of Transaction) Transaction ounto? Transaction .
+T|19|- A SS SS SR SP PS
+T|19|Exceed Partict $1.001- $15,001- | $50,001 - |$100,00%- |$250,00%-| $s00,001- |$1,00Q.00s-| $5.000,002- Over Dependent Child Asset over
+T|19|OX, Provide full name, not ticker symbol. Purchase $200 Jromsoction MMDOAY ay) $15,000 $50,000 _} Sraq.cn0d | $250,000 | $500,000 | $1 000 000 | $5,000,000 | $75.000.000 } $25,600.001-$30.000,000 } $50,000,000 $2.000.000 _~
+T|19|OHIO ST REV 5% 12/01/26 JD alt [| 12/04/25} 01/04/26 Pi.E Et tt Eff
+T|19|Dc |06/15/26 JD 12/05/25} 01/04/26
+T|19|LOUSIANA PUB FACS AU REV RFDG REV aie
+T|19|Dc |5.5000% 05/15/32-CA MN 12/16/25| 01/04/26
+T|19|HAMILTON OHIO DB 4% 12/15/26 JD _ tt | | 12/04/25| 01/04/26 He ieE EEE LE | Uf]
+T|19|DC {COPS 5% 06/01/26 JD 12/11/25} 01/04/26
+T|19|DC [06/01/26 JD 12/02/25 01/04/26
+T|19|OHIO sT GO 5% 08/01/26 FA ltd | 12/17/25|_ 01/04/26 -[,- Ft Ee, |] |
+T|19|DUBLIN OHIO DB 5% 12/01/26 JD Sina 12/03/25} 01/04/26 ~ teed tt pt
+T|19|Dc |09/01/26 MS 12/03/25| 01/04/26
+T|19|OHIO ST GO 5% 09/15/26 MS tt tt 12/12/25| 01/04/26 Pe t.t Ett tt
+T|19|OHIO STATE UNIVERSITY (THE) REV rely] |
+T|19|oc |5.0000% 12/01/26 JD 12/02/25| 01/04/26
+T|19|OC §5% 07/01/26 JJ 12/16/25| 01/04/26
+T|19|DC |CMN 12/17/25! 01/04/26
+T|19|PITTSBURGH PA GO 5% 09/01/26 MS Pett fd 12/10/25] 01/04/26 Pte ttt
+T|19|MISSISSIPPI ST GO 5% 11/01/36 MN itt ft 12/11/25] 01/04/26 ete tt] tL]
+T|19|FLORIDA ST DEPT TRANSN FING REV Pet i | Lana
+T|19|pc (5% 07/01/26 JJ 12/11/25] 01/04/26
+T|20|: eS a SS SS RS SS a SS Wa OS 2 OS 0
+T|20|Exceed Portiat $£001- $15,001. | $80,001 - | $200,001- |$250,00!- | $500,00!- |$1,000,001-| $5,000,001- Over Dependent Quild Asset over
+T|20|Dp Provide name, not ticker bet. Sale b; oo Transaction MIM/DD, $15,000 $30.006 $100,000 | $2752.000 $00,000 | $1,000,000 | $5.00 000 | $25.000 000 | $275.000,002-550,000000 $8,000. G00 1,000,000 .
+T|20|OHIO STATE UNIVERSITY (THE} REV in
+T|20|pc _|5.0000% 12/01/26 JD 12/18/25| 01/04/26
+T|20|Dc |REV 5.0000% 06/01/26 JD 12/10/25] 01/04/26
+T|20|OHIO ST WTR DEV AUTH WTR REV 5% | | 1} seas ‘
+T|20|Dc _}12/01/33 JD 12/01/25| 01/04/26
+T|20|TEMPLE TEX UTIL SYS REV REV 5% | |
+T|20|Dc |08/01/26 FA 12/05/25| 01/04/26
+T|20|pc |12/01/26 JD . 12/17/25| 01/04/26
+T|20|Dc _|REV 5.0000% 06/01/26 JD 12/09/25| 01/04/26
+T|20|DC _|5% 07/01/26 3) 12/16/25) 01/04/26 ‘
+T|20|. CINCINNATI OHIO GO 5% 12/01/26 JD Pit LE 12/03/25| 01/04/26 bE te; EE pT
+T|20|, Dc |5% 08/15/26 FA 12/18/25] 01/04/26
+T|20|MARYLAND ST DEPT TRANSN CONS Pt | P|
+T|20|pc_ [REV 5% 10/01/26 AO 12/17/25} 01/04/26
+T|20|CINCINNATI OHIO WTR SYS REV REV a | | agp
+T|20|pc {5% 12/01/36 JD 12/19/25} 01/04/26
+T|20|Dc |5% 12/01/26 JD 12/05/25| 01/04/26
+T|20|DC [5% 06/01/27-CA JD 12/24/25] 01/04/26
+T|20|pc [REV 5% 05/01/26 MN 12/11/25| 01/04/26
+T|20|OHIO ST GO 5% 09/15/26 MS et Lb | canons 01/04/26 Ff fi yd ty yet UE
+T|20|OHIO WATER DEVELOPMENT AUTH Ld ara
+T|20|DC |REV 5.0000% 06/01/26 JD 12/22/25) 01/04/26
+T|21|: : ; . NAME: Roht Khanna page 2b gy ZU
+T|21|[ccuantame | tggnattemescn | | eeattenntinl nm | astrtn
+T|21|oe ee de eG Ta COU Ee
+T|21|fxeed Portiat $2001- $18.00f- | $50,001- {$200 002- Is2sq001-| Ssan.adi- |$1,000,001-| $s.on0.001- Over Dependent Child Asset over
+T|21|JOC; Provide full nome, not ticker rymbdt. Purchase $200 Trentoction MM/DONY DD. 25.000 $50,000 _| $100,000 } $750,000 | $500 000 | $2,000,000 | 55.000, 000 | $25,000,000 | $25,000,001-$50,000.000 | $50,000,000 $3,000,000
+T|21|; Dc {11/01/26 MN x 12/03/25| 01/04/26
+T|21|POWELL OHIO GO 4% 12/01/26 JD tt ft 12/08/25/__ 01/04/26 Pt EEL E EL EL EE
+T|21|AMEREN CORPORATION CMN nina 12/17/25| 01/04/26 Pet FEET Tp EE
+T|21|pc |CMN 12/17/25} 01/04/26
+T|21|OHIO ST GO 5.0000% 10/01/26 AO tt ft 12/03/25] 01/04/26 rs] | tt} tpt
+T|21|MINNESOTA ST GO 5% 08/01/26 FA tt fd 12/11/25} _ 01/04/26 Ft | ET TE
+T|21|CMS ENERGY CORPORATION CMN ett | | 12/17/25] __01/04/26 i EEE EEE fut
+T|21|oe le ATE OF OHIO REV 5% 04/01/26 AO tt ft 12/23/25] 01/04/26 eb ft EEE EE
+T|21|pc {04/01/26 AO 12/11/25] 01/04/26
+T|21|pc |05/01/26 MN 12/18/25} 01/04/26
+T|21|| pe 06/01/26 ID 12/17/25} 01/04/26 .
+T|21|OHIO ST WTR DEV AUTH WTR REV 5% i
+T|21|pc |12/01/26 JD 12/19/25} 01/04/26
+T|21|oc | OHIO ST GO 5% 05/01/26 MN tt tL 12/09/25} 01/04/26 Ft i tT eet
+T|21|Dc _|EMERSON ELECTRIC CO. CMN std fel | 12/17/25] 01/04/26 piet | Pt |} ty ,
+T|21|Dc _|EXPAND ENERGY CORP CMN Pd | 12/17/25|__ 01/04/26 wl it tt tt ff ll

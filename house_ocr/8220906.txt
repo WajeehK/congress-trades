@@ -1,0 +1,978 @@
+#house_ocr v2 doc=8220906 pages=51
+R|1|0||BDinsnas ean tha athaarhadl|||0.012,0.025,0.019|0.034,0.017,0.037,0.016,0.018,0.010,0.008,0.028,0.029,0.043,0.014
+R|1|1||Bn|||0.009,0.024,0.032|0.017,0.010,0.019,0.012,0.022,0.008,0.012,0.036,0.014,0.019,0.018
+R|1|2|||||0.021,0.018,0.024|0.026,0.022,0.020,0.016,0.008,0.011,0.014,0.015,0.023,0.021,0.022
+R|1|3||Bn|||0.014,0.016,0.017|0.016,0.008,0.018,0.019,0.008,0.013,0.013,0.011,0.016,0.010,0.026
+T|2|aaa
+T|2|2 gia o im |§ ff [4 | 8 El Sir
+T|2|7 Fe) eg) ee) |e) be) ge
+T|2|z 2| &| 8 2 el | 4 ay
+T|2|SEES SE ESE
+T|2|a
+T|2|SSSRSGSRRRGRRRee Bel,
+T|2|SERRE EEE et
+T|2|FELT ELITE TEE ge
+T|2|S02s3050099930000 oe
+T|2|SERRE Oe
+T|2|Ti TTT TTT TTT TT TT get |
+T|2|BEEEREREREEEREEES
+T|2|CEEEEEE EEE at
+T|2|SeGsseeeeeGnennnee (of
+T|2|CCCCeECEC eC
+T|2|BERRRREERERREEEES
+T|2|SRRERRRRRRRRERREES
+T|2|mah et BR t
+T|2|Pit Ett Et EEL] EL ae iP
+T|3|Ce aS
+T|3|TOU] TTT Tf Tf eee 8 tT cc fT of ¢€ T - TT aftouw fetryfyds ft .« |
+T|3|eSpecse or
+T|3|Capita? Oapendent
+T|3|Goks Child Asset
+T|3|fod Portig! $18,001- | $52,003 - |$10Ran0l-|$230,001-| $s0q.ca}- |$1,coRD01-| $5,002,002- | $25,000, 001- over
+T|3|en | TL TT Towle TT TT TT
+T|3|CMN 04/17 08
+T|3|oc [eenenazmoronscomeanvemn | tx] | | x | onpoans| oso | | | | | [| [| [| [ | |
+T|3|| oc laancoramencacorroun | |x| | | x | oyoras| oswans, » | | | | | | | | [ ||
+T|3|Po farmer LTT Tea owl [PLT
+T|3|CMN 04 /o8
+T|3|vc lcovssrzsamouvecoom | |x| | |» | oysrasl osmonst » {| | | | | | (| | | [|
+T|3|HARTFORD INSURANCE GROUP INC/T pe Pet fd
+T|3|CMN 04/04 05/08/25
+T|3|oc lem NAMM COMPANY TTL LL | eons! oss! x | | | | | | | [| | |
+T|3|CMN ng /
+T|3|| oc lwistemamocmerncey | || | | | cours! oss | | | | oT | ||
+T|3|fi
+T|3|500 INDEX 04/17/25 /08
+T|3|| oc francercononmoncwn | x | | | | | owoups| osoanst » | | | | | | | | [| |
+T|3|| oc [novosicinconronarencon | x1 | | | | owowrst ovens » | | | | | | | | | [|
+T|3|oc [apose wicca et | [| cunrrs| esoansl » | | | | | | | | {| |
+T|3|oc hmmswstaumenrsncemn | x | | | |_| oweans| oswans x | | | | | | | | | [|
+T|3|| oc lctosaeamaenrswecmn | x | | | | | cuprps| osponss » | | | | | | | | | | |
+T|3|oe tnoose we cu et | | | | ewsns| osoans! » | [| | | | | | [| | [|
+T|3|| oc lrnuisrrmancaconronsnoncan) x | | | | | oyoanst oxmansl » | | | | | | | | {| ||
+T|3|| oc fmustemancarconroranioncan) x | | | | | oussasl osoomel «1 1 | | | | {| | | |_|
+T|4|FARRER ee RRR RRR RRR RE
+T|4|vel cee RRP ERE REREER It
+T|4|a | secs le 2 le GU le fe (2 ee 8 EF
+T|4|a cue sepakeeae ae be @ |
+T|4|gle g 68 PFEBE EEE EE
+T|4|BREE EE Ey
+T|4|So
+T|4|| SERRE el
+T|4|SEE EE
+T|4|rEeRRI PEL TTT EEL LT ie th
+T|4|HAHN
+T|4|rrEEE EE RRP EEE EE EEE Bf
+T|4|PTET EEL EET ETT LL ERE
+T|4|SERRE
+T|4|BEERS
+T|4|SERRE ee: |
+T|4|SRR |
+T|4|HH
+T|4|LE ETE EE
+T|4|TELE LTE EEL LB yi
+T|4|TELE ELT TTL ET eb ik
+T|4|LEE EEE EEL ET Ly TSH ye
+T|5|FREE eE RRR RRR RRR RRR
+T|5|gees | | B84 EE ELE al af ef
+T|5|a Eee
+T|5|Seeeeeeee ceo eae a
+T|5|SGSSG008 SORGenee el
+T|5|OU UUEnG sees
+T|5|SERGREEEE Bideeeee ee
+T|5|SRRRESEEE iiaeeeee
+T|5|BRSRREREE GRRE me:
+T|5|ERREEEEEE EEE i
+T|5|EEEEEEEEE SERRE
+T|5|SeSGGe008 GOGSeee oe:
+T|5|BERREEREE EER
+T|5|BEREEEEER EERE | t
+T|5|SRRRREEEE BERR i
+T|5|BERREEEEE BERR Ml
+T|5|BRRRREEEE BRRRRRO ni;
+T|6|PERERETEETRETES EET
+T|6|z |f 18 Z 2 2 iy a 13 | = f
+T|6|412 2 | aa | 2 = * &
+T|6|FERRER SEER
+T|6|SRR el
+T|6|EERE
+T|6|BREE ee
+T|6|z & s Rh f
+T|6|eee
+T|6|Ly felelepef lei [[[-[e [i= [ft
+T|6|[iri t TT Ti yt erty et
+T|6|PTE TT TTT Trt yy et
+T|6|TT TET TTT TT er i
+T|6|SERRE
+T|6|LETT TTT TTT TTT | i
+T|6|SERRE ERREeeee ee
+T|6|TTT ETT TTT Ey i
+T|6|SERRE
+T|6|SERRE RRR al:
+T|7|FREER RRR RRR RR RR RR
+T|7|2 5 |2 i2 2 IE 2 8 18 & la |e lBZis [2 le (E §
+T|7|2 |e |g 5 Pi = |? if | 2 rs a
+T|7|s s | p i
+T|7|= = : é 2 ; g g
+T|7|PEERS EEE Et
+T|7|tii tet ttt Tey yet
+T|7|Hinssstiftffaasst a
+T|7|THAT
+T|7|PRR EPR ERP RRR Oe
+T|7|SER
+T|7|Titi ttt tty tt ety ee
+T|7|CCCP eee pt
+T|7|tii ti tii ty ty tt | at
+T|7|SERRE
+T|7|PP EEE
+T|7|See
+T|7|BERR RRRRRRe
+T|7|TEETER a ye
+T|7|PEL EET EY EEE EEE St Ue
+T|8|a
+T|8|b SEER ale E PER PSE fe EF |
+T|8|s/ £ & i if E Be | i6 |e ie @
+T|8|| EEE BE Be | ae EEG
+T|8|a aao Sees eee oe
+T|8|SeRRRERRRRReeee el
+T|8|HEE
+T|8|PERU RUT TREE EE fe
+T|8|MANN Bi
+T|8|LETT TTT TR RRR EE EEF
+T|8|etefelb ele} eT TTT TET |
+T|8|SERRE
+T|8|SERRE
+T|8|SERRE me:
+T|8|SERRE RERRRERR
+T|8|SOSSESESSSEEEREE Ee,
+T|8|SERRE RRRRRRR RRS
+T|8|Sees
+T|8|BRRERRRREERRe
+T|8|BERERRRRRRRRRREEE a:
+T|9|FRR RRR RRR RRR RR RR |
+T|9|i) See |g ge | gf 2
+T|9|SZaaaRRREAAnEAand ceil
+T|9|Se
+T|9|BEERS ERERRERRRE
+T|9|isnaantsaat tant a
+T|9|TTT
+T|9|rEEEEREEEEEREEEE | BF
+T|9|Lith i tdi TP yt epee
+T|9|ee ee:
+T|9|pfiLiii ttt ttt ttt tt at
+T|9|PTii iti tT TT Tit ty i
+T|9|Tit TTT tet ty TT ee
+T|9|Pf paki eae at
+T|9|BERRRERRERRRRReee
+T|9|SERRE RRRRRR Rees
+T|9|CCE ee
+T|9|LETT TET ETT ET TE ABD Uh
+T|10|FReEe eR RRR RRR RRR RE
+T|10|TTT TTT ett ty tt eh
+T|10|pee ee ee ie
+T|10|BREE RREReERe el
+T|10|RUE ERRREROROR Ee
+T|10|ELT TRREE LT ETT et
+T|10|g g le ls 2 |e f i
+T|10|rFeP EERE EERE EE EE EOE
+T|10|PTT ETT TTT TTT ee
+T|10|SERRE
+T|10|SRR
+T|10|a pee et
+T|10|SERRE ae:
+T|10|titi ttt |
+T|10|SERRE RRERRRRREEEE
+T|10|Oe el
+T|10|ae g
+T|10|See el.
+T|10|FETT ETT LY TT ETT BSR Ue
+T|11| PReR RRR ERR RRR RR
+T|11|ee oe ee
+T|11|z| Ble zB | ae = ; : ts 5 (e a5 § oii F
+T|11|a) aig fee ie | ee fe fe eee | Bp
+T|11|See sc
+T|11|SERRE op
+T|11|Ca
+T|11|SERRE REEREERee el
+T|11|HE EE Heth
+T|11|pity P RELL ETT RET Re Uf
+T|11|TWAT il
+T|11|peep PRE RRR REE EEO OF
+T|11|LEE TEE EEE
+T|11|BERR
+T|11|SERRRRRRRee
+T|11|SERRE
+T|11|SERRE RERREEREe
+T|11|SRRRREEEREEReeE
+T|11|SERRE
+T|11|eee eRe
+T|11|See ee SEE PA RRRESEE Pi t
+T|11|BRRRRERRSRRREREES ni
+T|12|chee eee eRe RR PRR EERE I
+T|12|e 6 3 22 l4 (6 ja [4 [2 | § nis f
+T|12|SREREREERREREEE OS el
+T|12|SER
+T|12|ERRRERERREEEEEE OE
+T|12|@ lg g g g ie i
+T|12|FREER REREREEL TT BPE Re
+T|12|BRERERERREEEE Ee
+T|12|ERRREEEEEEEEEEE OS
+T|12|See ee
+T|12|ERERRREREREe
+T|12|4titit ttt |
+T|12|EERRERREREREEEE Oe
+T|12|SRGSGSGGRGenee G0 eel
+T|12|SERRREEREREREEe BS il
+T|12|BERREREERERREEE BO in:
+T|13|ee fe ee ee fe ie i fe fe fs fe fe fe fe BO
+T|13|SEER EEE eRe | dee RE EE FE :
+T|13|aaaoaaeee SESS Soe |
+T|13|SERRE el,
+T|13|Et
+T|13|rReE; TT EEE EET fe dp
+T|13|THT il
+T|13|rheeR> ER RRR ERE RE OP
+T|13|See
+T|13|TT LTT TT ttt TT et tt me
+T|13|PTT ETTT TET TTT Tri -
+T|13|SERRE ee:
+T|13|SREB
+T|13|SERRRRRSRRRRRREEE
+T|13|EEE EEE ET ETT EE Eb
+T|13|BERGER EERE
+T|13|PEPE EEE fie yi
+T|13|LEER EEE EET EEE EE Re
+T|14|Pe | 2 Ge EE a p i. 22 |g fi
+T|14|eels gee 2] ae] gel se ee ff
+T|14|Pla eee lg laa dele PO
+T|14|Seo oT
+T|14|BERR RR RRR el
+T|14|Na eee a
+T|14|rPEEIL PP RI PRE E EEL EE
+T|14|rFRKE EP PERE R EPR PEE RY
+T|14|PELE EEE TLL ET TL
+T|14|PTET TTT TT TT ett te
+T|14|EET TT TT TET Teer i &
+T|14|SRR eRe ee:
+T|14|SEEEREERRERERe
+T|14|tH
+T|14|See
+T|14|See eRe eee
+T|14|COC e_4 It
+T|14|ELT TEV EE EET LL SAT
+T|15|ehieehbee he bk ke RR |
+T|15|PRE EER RRR GE EU Ray
+T|15|PERE EE fa geeee 2) se |e
+T|15|@ 2B Ee g giz |= 6 ig 2 if | 2] fi
+T|15|gi 2 8 ie le F | a ae siz i |e & i
+T|15|a 8 5 B 2s] £EREEI| Ee
+T|15|Phe R RR REE ERE EE Oh
+T|15|Pfr
+T|15|SERRE el
+T|15|LEP TEE EET ETT TT eee |
+T|15|ERRRRRERRREReee
+T|15|ERERRERREERER
+T|15|GSRRRRRRERoooeee ee
+T|15|SSSGGSS0008eRe0e ee
+T|15|ERRRRRRRREREEEES le:
+T|15|Se
+T|15|EERE
+T|15|TTT TT TTT TT TT TT gi i
+T|15|SERRE SERERREe
+T|15|EERRERERERREEE
+T|15|| z
+T|15|SERRE ERe |:
+T|15|BERERERRRERERRES Tai:
+T|16|-FEPREFPPEPEPPE PER |
+T|16|oie Fae fe fe Pee ie Paees ae 2 i | |
+T|16|SESE RE | ERE a ae Pee ERE RP |;
+T|16|Pe eel el] ee] lag ja | ER
+T|16|EERE EE
+T|16|SRREREREEERe el
+T|16|SERRE Ce
+T|16|PEELE EEE EEE LE fie
+T|16|reEeek&RER RRP ERP RE | OE
+T|16|EERE
+T|16|SERRE
+T|16|ERR
+T|16|TT ETT TEL TTT ttt tt Ta
+T|16|LET EEL Ee
+T|16|TT TT ETT TTT TTT tT i
+T|16|eee eee
+T|16|titi T Pi TE a |i
+T|16|a F
+T|16|LEE TEEPE TE Ey EE [ABE [ie
+T|17|‘FEEEEREEPPEREEERE I]
+T|17|[EEE ET PRD ERIE] GEE UF
+T|17|FESR
+T|17|—— }- - Fp + - f+ 4414+
+T|17|SRE EReEEee el
+T|17|ERE REREREERER CE
+T|17|ETT)
+T|17|PER RRR R RRP ER RE OT
+T|17|SERRE ERREERER
+T|17|SERRE ee:
+T|17|[iit ttt titty et ty ae
+T|17|CCE ie
+T|17|SERSRRRERERER
+T|17|SERRE RREERRReees
+T|17|CCE
+T|17|SORRRRRSRRRReeee eee
+T|17|Ce
+T|17|PCE ea
+T|18|FEEREPEREEREEREER |
+T|18|PES EEE ESSE EERE
+T|18|a a
+T|18|SERRE el,
+T|18|SS sctsattaattantan
+T|18|FREER RE REE REE REE OE
+T|18|SERRE RRRReeeee ee
+T|18|SERRE REREEERERe
+T|18|SERRE
+T|18|SRR
+T|18|BERRRERREERRR
+T|18|LEAL ER
+T|18|BERBER ERRRREREEE
+T|18|COCOA I
+T|18|BERRERERERREEEEEE
+T|18|PCCEPEEEEEE ECE sire |
+T|19|-PFFFFERFER PERSE RE]
+T|19|3 eR EEREE BR aa ep 7
+T|19|=| fee) Be eee] | eee
+T|19|PREECE EEE EEE if
+T|19|SRR el,
+T|19|EERE
+T|19|PELL E ie
+T|19|PREP RRP PPR ER EERE Ht
+T|19|PT ELLEEEE ET LEE TT BE
+T|19|SERRE ae
+T|19|SERRE
+T|19|SERRE ee:
+T|19|iit i ttt ttt Ty et | mo
+T|19|ppp BE
+T|19|PELE L EEL EL EL EB Vf
+T|19|SRRRRERRRRRREREEE
+T|19|ELE ELEL LEE LE LT fie ip
+T|19|PERT E TL EE ELT Ly RRA ip
+T|20|PERE EERE REP EEREETE T
+T|20|ssi |g ce iS iss 2 ia Ale a lea
+T|20|i = f | ge fz S|} ze ie & | sf
+T|20|ae) Ble g/ eel) @ | ee] | FF
+T|20|F = Z| on
+T|20|PERE EEE
+T|20|a
+T|20|Litt TT TE tT T tte tt te
+T|20|FcEEPEEPEErETEE rR
+T|20|g g 2 i iS e |e 4
+T|20|PUESEREREREEE AREER [|
+T|20|PERE EERE REEF EEE EEE
+T|20|TEE ELT ET TET Ey Ly pt
+T|20|PTT TT TT TE Ty tty tT i
+T|20|SERRE
+T|20|SRR ee
+T|20|tii ti tt tte ty | i
+T|20|Pitti tit ttt ty tt | i
+T|20|TELE ET TLE TEE Ly
+T|20|SERRE RSRR Re
+T|20|PTTL TELE RL TLE ei
+T|20|LEE TTT EEE EET TL REE [Is
+T|21|Fee RE RRR RRR RR RR ER
+T|21|aie GG be PEER Ge REree |
+T|21|Ks = i 8 = f8 2 15 lo | Fd : |
+T|21|FEES EERE EEE EE
+T|21|tt TT tt TT ety py
+T|21|REE Ee
+T|21|See Ee ie
+T|21|PRKEE RRR ERE RE RE OE
+T|21|SERRE EREREREE eee
+T|21|EERESREREEERREE
+T|21|PEt TT} Pe
+T|21|EERE
+T|21|SERRE REERRER
+T|21|EEA Ht
+T|21|DERE Reeees
+T|21|See eee eee
+T|21|SERRE RRRREREReeee ee:
+T|21|RERRSRRRRRRRERRO inl
+T|22|eek ee ee eR ee eB
+T|22|JLT ERE ERE REE OL
+T|22|J SPR R Ree | Ze Ry, ER
+T|22|BREE EERE EEE
+T|22|Oe eee eee
+T|22|SERRE EREREReEe el,
+T|22|SEER EE
+T|22|SERRE RRR RRRReee
+T|22|ee
+T|22|eee ee,
+T|22|SERRE ee:
+T|22|SRR RRR
+T|22|PL tli titty Pt ty eT et
+T|22|SERRE ER ERR
+T|22|pata at te
+T|22|BREE RRR
+T|22|te
+T|22|SRR
+T|22|BRRRRRRRRERRRR REE hal:
+T|23|elk bee eh ee ee eee ee eB |
+T|23|PEER EEEREEEEE EEE
+T|23|ERR el
+T|23|EEE
+T|23|SRR
+T|23|ee
+T|23|PEE TTT ETT yy me
+T|23|PLU TET TT Te ttt ty] yy ee
+T|23|ERR
+T|23|ERR
+T|23|ERE
+T|23|He Pe
+T|23|SERRE eee
+T|23|ERERRRERRRRRReee inl,
+T|23|LEE ETE ELE EL Re ie
+T|23|PEL EE EET EET LET petty i
+T|24|oe |
+T|24|zee Ee Gs eee 8 ie Peese ey
+T|24|2 zie | gs lo ke Ee B) gla ig |
+T|24|PRESSES EEE
+T|24|a
+T|24|SERRE el,
+T|24|BRRRERERRERER Ce
+T|24|SER RRERERRRREREE
+T|24|PEPE EERE EEE EEE EEE BF
+T|24|TTT ET TT Try | Tey ie
+T|24|SERRE
+T|24|EEE
+T|24|SESS R Geese ee:
+T|24|PTET TET TTT TT TT
+T|24|tii tt ttt tt |
+T|24|BRRREERERERRREEEE
+T|24|BERRRERRRRERRee
+T|24|SERRE RRRRRREEeee
+T|24|PEPE EEE YE EE Ly yy Re UP
+T|25|3 8 | 3g | ge : :
+T|25|a| e| e 2 e @ ote a | ao ze 3 : ‘ F
+T|25|Bg 8) fee eee | al | ae Poe io
+T|25|] 8) 8) a 8 8) ce] |g | ga | BEY
+T|25|5|2 al | a2 | ie | f
+T|25|s Z| z |
+T|25|PEER EE
+T|25|SERRE ERR ei,
+T|25|EEE
+T|25|LEE EET ie
+T|25|ee
+T|25|Litt tereL TTT ET Et ee
+T|25|SERRE
+T|25|ERR
+T|25|ptt ETT tT ty Ey TT Er
+T|25|SERRRERERERER
+T|25|Hae tf
+T|25|BERRRREREEREReEEE
+T|25|BERRRRREEEREEEEES
+T|25|SITET PTET TTT TT i
+T|25|BERERERERRERRRRE nl
+T|26|egy 09933
+T|26|5 Ee ee 8 2 Gs BSsSeSeseseseses
+T|26|gf sR 1 FB | ol ol ol «| of of of of
+T|26|52] |/8 ER] & | é a g & 8 8 2 ee
+T|26|>a] isl | e@] & | § 3 8 3 8 8 8 ay
+T|26|SES et
+T|26|PERRREER EER ER REE ET ® 7
+T|26|SERRE el,
+T|26|aE
+T|26|TURRET PERE TT eo
+T|26|LP ET ERE ER EP
+T|26|eiefetedelePe} ep Tp tT |
+T|26|SERRE ee:
+T|26|BERR
+T|26|SERRE
+T|26|SERRE RR ERE
+T|26|BRREERRRREEEEe
+T|26|pe bt
+T|26|LPL EET TT ETT Ty pyr
+T|26|COAT
+T|26|BRRRRRRERARRRRE ER in
+T|27|eee eb ek ee ee fe eee |
+T|27|SPEER REE ER REE RE EEE |
+T|27|Saeao sees ones oe
+T|27|ERR RRR el
+T|27|~RiL TT RT RT ETT TT Eb pee [P
+T|27|FETE RRL LL ee
+T|27|e |e le pie ip ip yi
+T|27|ree EE PRET TTL | |
+T|27|ELE LL eee
+T|27|ERR RRR ei
+T|27|SERRE
+T|27|ERR
+T|27|SRR
+T|27|SERRE
+T|27|eee wl
+T|27|Pee EEE ET EE TE |i
+T|27|Se
+T|27|SR ini
+T|28|Fee eeeb eee ee Re Ree
+T|28|See eee oT
+T|28|PTET ET ETT EET TTT Tr
+T|28|EE et
+T|28|PEELE RR REET RET pe
+T|28|rhe RR RR RE REE RE Eb OB
+T|28|PTET Ty
+T|28|EET TT EET TEE EL] ae
+T|28|Pitti tT tet tT tet dy | iE
+T|28|SERRE
+T|28|Peli tty Tt ty tT | tt io
+T|28|TEL TT EEE ET yy Bs
+T|28|See
+T|28|PEL EEE EEE EE
+T|28|PELE LTE LEE ELLER i ti
+T|28|TELE EEL EE EEE LTT Beith ue
+T|29|eis fee fe ie is fs fe fs fe fe fo fee ee
+T|29|gHeanE EE Re EE EB
+T|29|2 F 5
+T|29|Saos eee oes oe
+T|29|BRR el
+T|29|EEE et
+T|29|rREE TRU RT RL ELT ee |
+T|29|URE REE REE OE
+T|29|BERR
+T|29|BEERS
+T|29|BERR
+T|29|SERRE ERE
+T|29|SERRERRSRRREREEES
+T|29|pp
+T|29|LTTE EET LETTE bi
+T|29|SERRE RRRERERS
+T|29|PEPE EEE Ee
+T|29|PEELE EEE ELL LL ELE RR Ue -
+T|30|oF FEEFPEREFR PPR ER 1
+T|30|TEE fee Fe EE RE rT
+T|30|PEG REI HERE RB | ee | fete |
+T|30|Soe
+T|30|| ee
+T|30|ERR el
+T|30|SEE HEHEHE
+T|30|FRET TL EL ELRL ELL Me I)
+T|30|Pee REE RRR R RR RE ORE
+T|30|SRR ee:
+T|30|Et EEE EEL TL LEE LL EL at
+T|30|SERRE
+T|30|ERR
+T|30|ERR
+T|30|Ee} 44 ta Le
+T|30|EPEC Ih
+T|30|PEELE EECA EI
+T|30|SAERRUREERERER00 2
+T|30|PELE Te I
+T|31|eee eb eee eee ee ee |
+T|31|PEER PRE EE EEE ERR EE
+T|31|ceP REE EEE
+T|31|SERRE RERRERReee el
+T|31|BaNSaSNNS0I023930 aE
+T|31|SEER 8 |e |e ie fe ie fs ai
+T|31|PER PER RPE REE REE EO
+T|31|SERRE RERERREREe
+T|31|| PTT TTP iy yr yy Ty yt Ty re
+T|31|EERE REEREEReeee ee:
+T|31|SERRE
+T|31|Litt ity TT Tye ty | Re
+T|31|Hi a
+T|31|BERERRERRSRRREEEE i
+T|31|BERRERREREREReeee el
+T|31|TUTTE TTT TT eis
+T|31|BERRRRSRERRRRRREE Tai:
+T|32|FReRR eRe ERE RR RRB |
+T|32|PA PEERY PERLE EG REE SESE
+T|32|PEPER SEEE EEK He B | 3] 3 |
+T|32|PETRI GRP GREE la GR
+T|32|eR | ee gee] Bele ela a ae it
+T|32|ple | ge] se | ssf) 6] | 8 | sl 3
+T|32|| Baeaooe sooo |
+T|32|SRRERER EER el
+T|32|EE EEE
+T|32|— EPECPRECE ED
+T|32|ree PPR RRR RRR ER EEE Rf
+T|32|SERRE ERRRREEReeee
+T|32|SERRE ee:
+T|32|LETT Ty EET TT TT TT
+T|32|SERRE ee:
+T|32|SERRE RERREEREeee
+T|32|EEE
+T|32|GRRE RERRORERRees
+T|32|SRRERRRRRR RRs ee
+T|32|TTT TTT et ip
+T|32|BERRRRRRERRRRERRS Ll:
+T|33|ee |
+T|33|lz @ i | alg io | fie F la |
+T|33|Saesmogaueseseage ony
+T|33|pfs ee ty
+T|33|SERS RRERReeeeee el
+T|33|SE JESERRER2 200200 [ais
+T|33|SL RRL LTT PERI RR] fe
+T|33|PEER RRR RRR ERE REE EO
+T|33|SERRE RERRReRe ee ee:
+T|33|SSSR Sees ee:
+T|33|CECE EEE
+T|33|CCE EEE
+T|33|EERE RERRRREReee
+T|33|tity tty Ty 7
+T|33|SERRE RARER RRREeE
+T|33|SERRE RRR RRRRRRees
+T|33|JETT T TTT TT TTT ee
+T|33|BERRRRRRRRRRRRRES Thal:
+T|34|rRebesR EER ERE BRR BE
+T|34|Es = 16 15 a |S ‘9 i
+T|34|2 22) & ie F |
+T|34|Saaaoosseoooeeaes oe
+T|34|CN
+T|34|SOSSRRRRReeeeeeee ee
+T|34|SRRRRRE2EN0330300 C05
+T|34|FLT REL EL EL ERR EL ie UP
+T|34|pbb ERPE EEE ERE CET
+T|34|SESE eeeeeeeeeeee ee
+T|34|PTE EEE ETT TTT TT | Le
+T|34|PL tt ELT EEE L_ ELT LLL LO
+T|34|ERR
+T|34|PAE ie‘ 4
+T|34|PEE -
+T|34|PEEL LELELLELLE LLL Ee Th
+T|34|TELE ELLE Et
+T|34|: Z
+T|34|SR
+T|34|PT ELELELELEL ELL ELE fn ir
+T|35|eee keke ee eee eee ee RL
+T|35|sso ae e fae & eee eg EE ee a I
+T|35|ERE ESE Ee Rie eB Fe L |
+T|35|SEGRE ERE SEREREREER
+T|35|| eR ERI SRE SERRE R CREP IF
+T|35|"ae la | 5 a | gE a: ee) Else
+T|35|Sa tT :
+T|35|pee ee REPRE PR
+T|35|ERR el,
+T|35|ERR CE
+T|35|PERLE LTE ELLER LEE eth
+T|35|h hh &
+T|35|TN
+T|35|FREER ER PPP ERE EEE EE OF
+T|35|| LEE EEE TT LEE EE
+T|35|TT TTT TTT Ett TT ye
+T|35|TTT TTT ETT Tet tt i
+T|35|TTT TTT TT EEE TT | | | EF
+T|35|SERRE
+T|35|PTET TT ETT TTT ttt a
+T|35|LETTE TET ah
+T|35|TEE it
+T|35|SRR
+T|35|TEE TEE EEE TTT Ly petit is
+T|36|aT]
+T|36|TPTT ER ERERE EE EEE =
+T|36|ESSSGRRRRReee el
+T|36|| EEE er
+T|36|PEPER REL LLL LL ie
+T|36|FERRE REE EERE EE EEE OP
+T|36|SERRE ee
+T|36|COC et
+T|36|SSGSGSGGGR08000e8
+T|36|COCO at
+T|36|S0GGSSGRRR
+T|36|TTT TTT TTT TT ert TT ii
+T|36|EERRRRERRRREREEEE
+T|36|TET T TTT TT EL ie yi
+T|36|TELL ETT TT EEE TT Et mm "
+T|36|PLLET EEE LTT EEE ith ie
+T|37|FREER RRR RRR REE EEL
+T|37|p/ she ee Perel See Rl a seep |i
+T|37|2) SGRF BB) a sel see] Gg] a ae eh
+T|37|C/ ERs Plage |) bl 8 ee eG
+T|37|eld Fi leas | ir laa | |
+T|37|-EREEEE EES eH
+T|37|BESREEEEREEE Bee el
+T|37|EE HIRE
+T|37|GERRREEEREEE Saeee ee
+T|37|SEREREEEEEEE Sane0
+T|37|c[e[elee[e>e [lee] | BT | tT ft
+T|37|COCO EC
+T|37|ERERREEREEES BE
+T|37|SGSSGGGG0008 Sees
+T|37|BERRREEREREE BEE
+T|37|—} i} | Re
+T|37|BEREREEREREE BRR
+T|37|BEGERERREREE BER
+T|37|SRRRREREREEE BE ee ee
+T|37|BERRERREREEE GRRE Tal:
+T|38|Phe BRR ERR RRR |
+T|38|Fie | se 8 ssa Bess8s ,
+T|38|ze ee | 88 & | ge fe sea
+T|38|g 5 zie | se | de | gl alee
+T|38|; c g 2 alg 4 a5 a 5 7
+T|38|5 | 8 a a & z
+T|38|a EeaanEaaaea a
+T|38|ERR el
+T|38|REE
+T|38|rE eE LE ET | fe
+T|38|, 2 le |g lo | F
+T|38|TAHT ll
+T|38|PEEP ERE ECE br
+T|38|| Ee tereE LT LE
+T|38|ERE
+T|38|| SERRE
+T|38|Titi tit ttt | Ft
+T|38|SERRE
+T|38|Se
+T|38|BERRRERRE
+T|38|CEEEECEE C$ | I
+T|38|PEELE EER
+T|38|RRR Taal:
+T|39|e[selefelelelelels[sfels[sfele[ pM |
+T|39|S Sz\“Sis <= B2/85
+T|39|3;8 |] =| 8) 2] 2) a] &) ge} =
+T|39|| g2 e] 8 El ge) BF eT
+T|39|rrr =
+T|39|p={x|x[x[x[{=]{ [x[=«[=[=[=[=[=[~[~ Be i
+T|39|ERGGSGGSGRRGeeee = el,
+T|39|ERGRSGRSGREREeee =e
+T|39|SERRERRGEEREREEE ll
+T|39|g g aE
+T|39|HOBEBBEEGGHEUEGO =i
+T|39|ele[efeD LT [ff [-[-[-[-[- fief
+T|39|EEEEERREEREEEEEE ee
+T|39|CCEEE ECE
+T|39|CCEEEE EEE
+T|39|SSGG0000000000008 (oe:
+T|39|EESGEREEeReeee
+T|39|EESERSREReeeeeee
+T|39|TUTTLE TTT TT TTT iH)
+T|39|BRGRRGRRREREEeee
+T|39|EERRRRERREEERe |:
+T|39|—LLET EET ETE eit fp
+T|40|BOSOSSOS0Oo0000000 mal
+T|40|pele Slelaleleleralevaielelelalel el
+T|40|: al | alei [2] [el BYE :
+T|40|PEERS EEE eee
+T|40|SS er a eee eee
+T|40|SER Geeneeeeeeeeeee
+T|40|CCE pt
+T|40|ERRRRRRRR RRR
+T|40|LEE REERBEEBEGE Blt
+T|40|ANE BEEBAROAAREALE
+T|40|eee eee eee ee.
+T|40|ERR we
+T|40|See Geeneeeeeeeeeee ee
+T|40|COPE eee
+T|40|COE Eee cer
+T|40|See
+T|40|SERSRERRee eee
+T|40|TUITE ETT i
+T|40|SERRE ERRRRRRRRR EE
+T|40|TEE EEE ET TYEE TTT Tet is
+T|40|LTTE EET EEE Esti
+T|41|PEELE EEE]
+T|41|Spat ae tetetet o
+T|41|BREE RRERER Eee ei, |
+T|41|Pet dei tT TT EE EE ET ey TP eet
+T|41|SERRE RERERRRRRR REE el
+T|41|BBE AGBREEGG alt
+T|41|HCG a
+T|41|efepefel=tefe}e] felefe}et [ede |e [fh
+T|41|BERRRRRRERERe ee
+T|41|SERRE
+T|41|PT TTT tte tt tt tt re
+T|41|ERREERRREER
+T|41|SERRE RERERERR
+T|41|ERRRERRR RRR
+T|41|LTP PTET ELT TT ETE tb fh
+T|41|LETTE TTT ET ET io i
+T|41|TEE T TT ET EE ie ii
+T|41|LEE EEE ETP Ey TL yt fet Us
+T|42|elele[s[s[els/s[s[s(s[e[s]sfels/sfef |
+T|42|Sooo SC e coco oSaeeS ae]
+T|42|Se ee ee
+T|42|SERRE el
+T|42|eee Ce |
+T|42|Lit titi TET TT y yy he
+T|42|£/s E/& & £/2h 4
+T|42|BOER HARA EANAEE MM
+T|42|[epee Def LE-LL-T-[-[ f+;
+T|42|Titi TE TT rye el Tt
+T|42|PET a
+T|42|See ee:
+T|42|SERS eee ee
+T|42|TPP i TP erry ry yy i
+T|42|PTET ETT ETT TTT yy i a
+T|42|See
+T|42|tet ite Pf
+T|42|TEEET ET ELLE Ee F Wi
+T|42|FEEL E ELE ETE yy yy ey Yrs
+T|43|me
+T|43|aL BELL
+T|43|Cee
+T|43|Scene Seeeeeeee
+T|43|fC eee
+T|43|Pao
+T|43|ee eee
+T|43|eee Be
+T|43|Sees ER
+T|43|fa CCC LCL
+T|43|S/T GOOeeeo Boooeo
+T|43|TE BEEBE }=BEBBEEEE
+T|43|ae BELLE
+T|43|CREE ERR
+T|43|1 Ree HRRREREE
+T|43|IM SEGRoRS EES
+T|43|HB Eee eee
+T|43|Im OODDODG OOOcoO0o0
+T|44|alale[s[e]a[e[e|s[e[a]a]a[n[s[s[elap |
+T|44|a; | 23] |2) [a] |e] ele af
+T|44|3 g ° : * Bal . :
+T|44|= ; |
+T|44|eis at aatetapa att if
+T|44|x{x{ [etxtx{ [ | ix[x{xf[x[<[x[x{=] Bo ii |
+T|44|PEELE Eee re
+T|44|FLEE rE pee tr
+T|44|eRe
+T|44|LBBB BEBE EE REECE Blt
+T|44|HABE AB EBACE Ma
+T|44|BSE G Gee eee eee ae
+T|44|SERRERReeee eee ee
+T|44|SERRE
+T|44|BREE
+T|44|EERE ee:
+T|44|CCC i
+T|44|CCCP ae
+T|44|eee eee
+T|44|LTTE TTT ET TE Et
+T|44|SO Et ,
+T|44|PLLET TEE en
+T|45|sjalalsislalais|alals|aisisialais|ak ||
+T|45|@| S| 4] & |
+T|45|gl g| § :
+T|45|Fass sate
+T|45|LT ETT EL ET ETT ET TTT
+T|45|USE RRRRRORRRRA Ain
+T|45|See ee
+T|45|HEEB EB EEEEBEGE al
+T|45|OOOOH Enno ICCC Ma
+T|45|at [ele[efe) [e[e[e fa/fa] def @[e fF
+T|45|cele T TET
+T|45|TTT ETT TTT ey ey re
+T|45|RRR
+T|45|TEETT ETT TTT TT eT ee i
+T|45|SERRE
+T|45|Se
+T|45|TUTE ETT Ey fn
+T|45|tet
+T|45|SERRRERR ER RRRE EERE .
+T|45|TELE TET TTT LT EE UP
+T|46|ala[s|ajale[siajaleieisis[s|aieis [ef |
+T|46|g/g/s] j@| |8) |2) Isle] | |a! | #er
+T|46|6|s|& 8 g 3 =\s 5 5| 2 fi
+T|46|See cee ee ooo oeeee |
+T|46|pxtx[xfxtx[=[ [fof [xtxf{x[x[ | [x{ BU :
+T|46|litt tt ttt t yy tt Tf
+T|46|PR
+T|46|LE EET TT TT Ey ee
+T|46|HBG BEBRDEREOOROBEG alt
+T|46|HOOD GEUEEEBEEE at
+T|46|etefelettpe[ed [spel fel] [eff
+T|46|PEPE E TT det TT te
+T|46|itt TTT tty TTT tet tet ee
+T|46|BREESE
+T|46|EL ETT TTT TTT Tey ie
+T|46|SERRRERERREERee
+T|46|TE EE ETE TE EE EE
+T|46|SE
+T|46|SERRE RRR RRee eee
+T|46|HL te F
+T|46|LEE EET EE EEE EE Ey YE path is
+T|47|| ql TT
+T|47|| a tii
+T|47|i RRR
+T|47|Ya wT
+T|47|Face
+T|47|CC
+T|47|a SERRE OC
+T|47|7 SERRE OC
+T|47|i SERRE
+T|47|CcccGeeeeeneeee ©
+T|47|PMEGGESSRGREoRooe Gl
+T|47|i " 2 ale — — ae
+T|47|IE OERROOERABEOA B
+T|47|i SRRGRRREeeeee
+T|47|eC
+T|47|fies Seeeneseeeeeeee ©
+T|47|i SEGRE 6
+T|47|Il DOO OROO0O000000 Hc
+T|48|sja[aisis|alais|slals|alaiais|alae | ||
+T|48|Slalelglglale ieee sececeeeseacarch ||
+T|48|° 88} 8) 3] Elo} §| 3l el Se
+T|48|Patefsie set feet at
+T|48|| fxfxtx{x[x{x[x] |x{x[=[=[x[xjx[= fe Tf
+T|48|PTT ET PETE TTT Tey Tr Tt
+T|48|Et
+T|48|STEELE EEE ELLE ey
+T|48|HEE REEEE RE BEGEE aT
+T|48|BAA UE SaUU neo a
+T|48|a[etelebeie[ePe] fe[ePee [de] gf
+T|48|Se
+T|48|Titty itty ttt tt ee
+T|48|See
+T|48|Titty it ttt ytd tt ee
+T|48|See
+T|48|LIT Titi Ett ity Tt i
+T|48|eee eee
+T|48|eee eee i
+T|48|Se
+T|48|PETE EEE ELLE EL i LAH UE
+T|49|BOOOOREG00CR00000 mal
+T|49|BEE SE hae
+T|49|ECC ee
+T|49|BESS RRR el
+T|49|Hrasiiitosssiiias a
+T|49|HEEB ADER EGER EEBGE aT
+T|49|HEQUUAUTAUUUHETE |i
+T|49|aa a a a a
+T|49|tit ee ty yt yy et
+T|49|SERRE
+T|49|SERRE ee:
+T|49|BRR
+T|49|BEREREREEREEEEEEE
+T|49|Roe eee eeeeeen
+T|49|tite eT Tt i
+T|49|Tite i
+T|49|SERRE RRReee es el
+T|49|ot is
+T|49|TTT E TT TTT EET Ey petit Us
+T|50|; 3 ‘18/8/s/Gl/e Sele] s | = 8 28 2
+T|50|il
+T|50|Ptash leh elPette —
+T|50|fx[o[txt [| [xtx{xix{ [x{ of fx[{x[xf i
+T|50|PEE EPPLEECEELE T_T
+T|50|EEE ee
+T|50|LLL EEE fe
+T|50|HEB BEBEEEEEEBEBEE i
+T|50|BAER AEAE a
+T|50|[ete fe[tefefel[efe[ deff fp
+T|50|SERRE ee:
+T|50|CCE EECA
+T|50|PPE
+T|50|CCE
+T|50|PEPE ae -9
+T|50|tit; titi ti ttt Tt io
+T|50|LTPP T TT TTT TT Ty i yh
+T|50|SER en
+T|50|at Pi
+T|50|PLEELLELLELLELE LL ER
+T|51|PUR ]a]e |e |=] *]*]*]*|*[F_|
+T|51|eae Bale [elelalel@(ei2 ie) 2/8 |
+T|51|gs} | 8 ° :
+T|51|ea
+T|51|S 8 BSS cee ee
+T|51|= 8 SSeeeneeen oe
+T|51|fe SEER RRRREA en
+T|51|E 8 BSeeeeeeehs me:
+T|51|E 8 SRE
+T|51|i meet
+T|51|Ef 8 SSS0ee00en
+T|51|Gf 8 SRERERRER
+T|51|Y ee
+T|51|EE BRR
+T|51|Bo BRRRRRRE
+T|51|Eo BERRRRREE
+T|51|EH 2 BERBER al:

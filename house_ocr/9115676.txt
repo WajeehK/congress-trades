@@ -1,0 +1,272 @@
+#house_ocr v2 doc=9115676 pages=15
+R|1|0||Blasco cena tha saharhoad|||0.033,0.031,0.042|0.012,0.026,0.035,0.033,0.027,0.020,0.025,0.034,0.028,0.015,0.034
+R|1|1||: .|||0.034,0.025,0.027|0.025,0.047,0.032,0.034,0.042,0.041,0.026,0.037,0.028,0.025,0.030
+R|1|2|||||0.029,0.034,0.045|0.025,0.022,0.023,0.031,0.019,0.029,0.021,0.022,0.020,0.018,0.027
+R|1|3|||7||0.036,0.023,0.037|0.024,0.022,0.029,0.019,0.021,0.041,0.024,0.021,0.026,0.030,0.040
+T|2|ee ee eee
+T|2|a) He") chee |] e) SeReReRR | cee JE
+T|2|gi (| ae 2 | gl gl °) 8 a | 2 8 Ete
+T|2|TEE TE RR RRR OR =] :
+T|2|fe fe fe efe le epee [| Tf TT itt fT Tt Te aa
+T|2|ISIE
+T|2|| eee
+T|2|ce beer ere LT LE TLE Le
+T|2||
+T|2|RR
+T|2|— FLU UT EE eT ETT TTT
+T|2|Ti aiit t tT eT T ERRE
+T|2|Pe eT Ee
+T|2|IRR ie
+T|2|Pe
+T|2|ee
+T|2|TUTTE
+T|2|ISRIBNRERRRRI
+T|2|EA ills
+T|2|- i
+T|3|ae Tae eT)
+T|3|& Ze ZS eR Res eso.
+T|3|ea
+T|3|s/2lglaleis| =| glaleieieia Feel ah
+T|3|g|° =|2| |” 5 gl] a »
+T|3|UT bb ee |
+T|3|e febebe by T TTTTT PTT ae TG
+T|3|RII Bl,
+T|3|RRR Ce
+T|3|A GID
+T|3|robbR Eber PERRIER
+T|3|BMRB is:
+T|3|TTT ETE TUE
+T|3|TTT | TTT Tt
+T|3|| SH H
+T|3|BER
+T|3|RR in
+T|3|| LT TE HY)
+T|3|Eh
+T|3|| BIRR Be
+T|3|ik
+T|4|eT)
+T|4|a
+T|4|ed a al
+T|4|pete edhe Deb ee fe Pe fe eb =]
+T|4|pti itt] ty ty ee
+T|4|I l,
+T|4|IE Te
+T|4|SUT T ie
+T|4|wbeREEE Re bere bE ERE REREEEERE PEED Bie
+T|4|SU ET TT i
+T|4|SATE
+T|4|SEE
+T|4|SAT
+T|4|SUT ET ET
+T|4|SUT TT TT ET
+T|4|a
+T|4|CEUTA
+T|4|STU TTT ie
+T|4|i
+T|4|i
+T|5|Tee EE EF We Eb i Be |
+T|5|== 3 R 2915/5 z rs 3 | > Hy
+T|5|a | Hee Re | cei eeeaag | G2 2 eee Gee cH Gm ||
+T|5|qi ER TRE) @ TSR ak | See fs IE
+T|5|TT TT TR eR RRR OO =] |
+T|5|peepee RE LT oT EET Roe
+T|5|PLL EE EE Ee ET
+T|5|SIS Ce
+T|5|SRR
+T|5|ve RRR ERE TT TUBER ER ORE OEE EEE Oe BR
+T|5|TOUT TERA TTT
+T|5|SIRE
+T|5|BIRR REEIIe
+T|5|BIBI ln:
+T|5|TET ETT TT
+T|5|BIGIBNERERINIERRIEI
+T|5|LUT PE
+T|5|STAC ETT
+T|5|IEA EE a fs
+T|5|| | i
+T|5|a
+T|6||
+T|6|sla als| Siege cai aReael SIRES RISE! SI] SIGNI ||
+T|6|e F ree a i : ‘ iE if
+T|6|EL TEE TEE EEE =]
+T|6|pee fee fo fo be fee fo be fe fe Pe be ee fe feeb be ff ee fe fee fe
+T|6|ee 6
+T|6|ey ee ET eye Ye] ie
+T|6|RUPEE TELL FEEL EEE ELE LL Bie UT
+T|6|rhort RREERERPER Freee EERE beer EER EERE ET
+T|6|ee
+T|6|RI nt
+T|6|POCA TET
+T|6|TUTTE TEE ET EF
+T|6|ee
+T|6|a
+T|6|i
+T|6|LVL i
+T|6|Se Bie
+T|6|UUIAIAIETUIEEA
+T|7|a a UE
+T|7|| | ere a
+T|7|, “ z 5| &
+T|7|LET =]
+T|7|ISIS
+T|7|SinIn Mi,
+T|7|PURE ee [Beet] |
+T|7|TT
+T|7|| See le
+T|7|Si
+T|7|| | Bin ini
+T|7|Sinin if
+T|7|| Bimini
+T|7|| BRIE
+T|7|Sin
+T|7|Siieie Bi
+T|7|Ey
+T|7|ane ie
+T|8|re Fe isle fs fe fe lee ls Beh fe Keseble fe fe GU |
+T|8|z| Z\s s\z = 3 3| £ > |S [
+T|8|Py BP) BP isl gT a} la] ste gi al || a] eF FRR al |
+T|8|a) 3] i) $) 8) a} "| 8 | 2 2
+T|8|TCT RE RR EEE OE ORERERE FE -}
+T|8|eee ee ee amr
+T|8|IRIs
+T|8|Sa Tananiaiiats 3
+T|8|eRe RRR eT Lt PRR ERROR OERREBE OE Bi
+T|8|IER
+T|8|TATE
+T|8|POAC Pee
+T|8|Pee 2s
+T|8|PIER nt
+T|8|FE EEE EE HY |
+T|8|FLEE EEE |
+T|8|HOWE ETT
+T|8|FH EEE i
+T|8|EUS BEP
+T|9|oe a
+T|9|e| SGaiecEGer| Sesue El FeReReaCReR esa] Be | fee elm |i
+T|9|a) APES SEV GT © 0 Bl GeBEeERFES SURI 28 eee
+T|9|; PRATT ail TILT Fy ae | 8 : |
+T|9|ee Pelee elle Peer ee bel bbb be DE] =]
+T|9|Lt jt Ee
+T|9|: ee el,
+T|9|Ce Cle
+T|9|ee il
+T|9|Pe PPrREE PEE eRe Pe Per eeb Reber et bob be HRY TH
+T|9|AUT AE Ee
+T|9|TTT UT TT tT
+T|9|UT EE EE EE
+T|9|eee
+T|9|ee
+T|9|ee
+T|9|ee
+T|9|a
+T|9|TU TT TTT a
+T|9|RT ie
+T|10|FEA wl
+T|10|al aleceer) @| €] SEER ece) EER Uae reer ee |
+T|10|PE EREEE EE FEEEPEPEEE Fe FPO PPERREEE FPEE zi
+T|10|P tT tt TTT TT TT Ee
+T|10|ae =,
+T|10|PLT TTT ee
+T|10|I il
+T|10|RRR ER ERPEERPEEE ER EE ERP Eee bb Rim
+T|10|PL TL EEE
+T|10|CC il ||
+T|10|ETAT AE
+T|10|COTE
+T|10|SEU ET TT
+T|10|LUE TT TTT
+T|10|BAUTMAAAUTTIVORNATITARU itt
+T|10|OECTA Tif
+T|10|LEE TTT ep
+T|10|UICC ETI
+T|11|ee Eee Ct ereaeet-cee-eroe Cr err |
+T|11|Pa 2| 2 z| 3 zis | ISisle | 2/2 S| ls] ae
+T|11|TE TL RR OER RP ORE RO OER =]
+T|11|ele fee fe fe fe fe TT tT Tet tt Te tt tT
+T|11|Eee ll,
+T|11|[BIRR RERRIe ee
+T|11|[GRRE SBMe OO
+T|11|PPR PEER LiL ler eer tr reget
+T|11|TCE Ree at
+T|11|IRI RRR in
+T|11|ISIE a
+T|11|IRIRERRERRRIRIee Gt
+T|11|LEE
+T|11|CCEA
+T|11|ECC |b
+T|11|ALL UI
+T|11|i
+T|12|RS ree oe eee ei ot rere et ees bee
+T|12|eee ee
+T|12|ECE TTT EEE EET Hf
+T|12|pee ef fee bef fee fre eee eff fof om ef fee eee
+T|12|eee le
+T|12|SC
+T|12|eee OE
+T|12|Pete RRR RP GPPE ebb Ree PER ere OF bee HMR
+T|12|ee
+T|12|OCC
+T|12|CCC
+T|12|PoOC TE
+T|12|ee
+T|12|ee ie
+T|12|ee !
+T|12|WUT UT
+T|12|ees Bi:
+T|12|eT
+T|13||
+T|13|eeseey eeeGRE al uue es
+T|13|eal ae) ceFeel| Bf ee Gs te
+T|13|| LE LE TET EE TY =]
+T|13|pe fe be fede beetle bebe fe be tebe be fee le -
+T|13|Se el
+T|13|| ee
+T|13|Se iE
+T|13|g 8 ig sisi E lk
+T|13|ALL PPEEREE b Eb HEB
+T|13|OPER ETUTTTE TTT TT it
+T|13|LI in
+T|13|Le
+T|13|HIBIER if:
+T|13|IR ie
+T|13|TTT TTT TTT Ta
+T|13|TRIG —
+T|13|VOU LA
+T|13|AUT TTT | UT a b
+T|13|[UIT
+T|14|Sao)
+T|14|_ cel ae EeGeee E (8 ie
+T|14|TEPER FEM =
+T|14|eb Eb TET TT Te
+T|14|HIRE Gl
+T|14|RET TEE eat
+T|14|| cme ll
+T|14|ree FE LFEEFE FEE f
+T|14|Ie
+T|14|| Li of
+T|14|| CCC
+T|14|I! in: |
+T|14|Pee
+T|14|Enea
+T|14|| | I i
+T|14|Ta ahh
+T|14|I a
+T|15|ee ae
+T|15|teeeae ester Geeseeaereest ccm ||
+T|15|gy eR Gel ae Eeteehes gre Sh me ||
+T|15|i] kee RR RRR RO Oe bE = |
+T|15|epee | oT fo tt titer | tT te te
+T|15|TERRE Ai,
+T|15|| RSE
+T|15|TERE EEE Ee
+T|15|PeereE LTT TR bbe OE A
+T|15|GEER!
+T|15|HIER ERRee OG |
+T|15|TTT | PEE TT a
+T|15|UT ET ET TT RE
+T|15|DEERE
+T|15|cE TT TTT TT
+T|15|IR ERERe i
+T|15|WE
+T|15|TET TT Te a S
+T|15|PETE TARP

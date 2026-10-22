@@ -1,0 +1,29 @@
+#house_ocr v2 doc=8220958 pages=1
+T|1|1 1
+T|1|UNITED STATES HOUSE OF REPRESENTATIVES HAND Page —_ of
+T|1|Periodic Transaction Report DE LIME RED
+T|1|ws;
+T|1|NAME: OFFICE TELEPHONE: U5 KAY 29 PH 5,
+T|1|Harold Dallas Rogers 202-225-4601 1s tte 716
+T|1|ee SUE LS. HON ers UF THE cr rp,
+T|1|| H AN ote Rese
+T|1|Xx] Member of the U.S. House of Representatives [| Officer or Employee AN D D E L iva
+T|1|Stale: KY petit; OO Employing Office; L 7 ~~
+T|1|File an original and 2 coplas, File an original and 1 copy, W\
+T|1|A $200 penalty shall be assessed against Please indicate whether this is an initial report or an amended report. For
+T|1|anyone who files more than 30 days late. amendments, please provide the date of the report you are amending.
+T|1|Did you purchase any shares that were allocated as a part of an initial Report [| Amendment
+T|1|intial Pubic feng? [] YES [><] NO Dale ofReper beng Amended, (For Official Use Only)
+T|1|DATE
+T|1|TYPE OF le NOTIFIED
+T|1|FULL ASSET NAME TRANS- OF AMOUNT OF TRANSACTION
+T|1|TRANS-
+T|1|ACTION ACTION TRANS-
+T|1|ACTION
+T|1|A B c D E F G H \ J
+T|1|JT 2! | 8 ole
+T|1|* Provide full name, not ticker symbol, 2 = : (MMIDDIYY) | (MM/DD/YY) ‘ : g eo g 3 g & g g g ee eS se :
+T|1|* re|2s|g2|28/88|8s|c2| ss! 8s | 3
+T|1|Pe] | owe fowe [Tet | | TP Ty
+T|1|pfsvnmnene tt P | t1>)1..)._
+T|1|(This page will be publicly disclosed.)

@@ -1,0 +1,82 @@
+#house_ocr v2 doc=9115689 pages=4
+R|1|0|ST|Example: Mega Corp, Common Stock|8/14/12||0.000,0.030,0.000|0.000,0.021,0.000,0.000,0.000,0.005,0.000,0.000,0.000,0.006
+R|1|1||Sell Vng Growth Index @ 473.42|9/26/25|10/8/25|0.000,0.118,0.000|0.105,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.002,0.000
+T|2|UNITED STATES HOUSE OF REPRESENTATIVES Page of.
+T|2|Periodic Transaction Report
+T|2|LEGISLATIVE RESQURCE CENTER
+T|2|| NAME: OFFICE TELEPHONE: | 20250CT 16 PH 2:27 |
+T|2|Harold Dallas Rogers 202-225-4601 |
+T|2|_——$—$—$—$ as OFFICE OF THE CLERK
+T|2|| U.S. HOUSE OF REPRESENTATIVES
+T|2|x] Member of the U.S. House of Representatives [| Officer or Employee | '
+T|2||
+T|2|f Stata: KY istic; OO Employing Office;
+T|2|,
+T|2|File an original and 2 copies. File an original and 1 copy. HA N D D E L IVE R E ;
+T|2|A $200 penalty shall be assessed against Please indicate whether this is an Initial report or an amended report, For
+T|2|anyone who files more than 30 days Iate. amendments, please provide the date of the report you are amending,
+T|2|Did you purchase any shares that were allocated as a part of an Initial Report [|] Amendment
+T|2|inital Public Offering [_] No Date of Report being Amended: (For Official Use Only)
+T|2|| DATE | .
+T|2|: TYPE OF | PATE | NOTIFIED}
+T|2|FULL ASSET NAME TRANS- OF | AMOUNT OF TRANSACTION
+T|2|TRANS-
+T|2|ACTION ACTION TRANS-
+T|2|ACTION |
+T|2|A B C D E F G H 1 |
+T|2|| sp Pravide full name, not ticker symbol. 5} 2 | = | moony) | (mony) oleoleslseisgsl/22/88/88:88] 8]
+T|2|| oc 5|°] 2 1$8/88/88/82)82)Ss\es|s8| 8s +1
+T|2|F a. Wu ‘ pon lnag!/ oS (SH Hg] ae]Co!;}anl wal] sa
+T|2|pon (oe | Be laS)/88)/ 8s) a8!/82,/938) 68
+T|2|ee ee ee
+T|2|! | |
+T|2||
+T|2|Sell Bridge Builder Core Bond @ 9.10 xX | 92625 | tovei2s x
+T|2|p Sell Bridge Builder Large Value @ 18.32 xt 9/26/25 | 10/8/25 x EE ttt bo
+T|2|(This page will be publicly disclosed.)
+T|3|i.
+T|3|UNITED STATES HOUSE OF REPRESENTATIVES rae 3 ot
+T|3|Periodic Transaction Report
+T|3|NAME:
+T|3|Harold Dallas Rogers
+T|3|DATE
+T|3|TYPE OF ne NOTIFIED
+T|3|FULL ASSET NAME TRANS- OF AMOUNT OF TRANSACTION
+T|3|TRANS-
+T|3|ACTION ACTION TRANS-
+T|3|ACTION
+T|3|A 8 Cc D E F G H | J
+T|3|wT B ww z ’ . ’ +o ro 2
+T|3|j 5/2 of} t = +8/88/se|/ss|] 8
+T|3|xc Provide full name, not ticker symbol. 2 x = (MM/DDIYY) 9 (MM/DD/YY) 3 3 3g 38 5s 38 Be 3s 3 sg :
+T|3|| a i Selee| 8/88) 8s)/s8|S5/ Sa) ss| ss
+T|3|eel wel ewe l wel ee [wow | wen |] 6H! BH Oe
+T|3|[_[ersensnmaone LD Poms Poem pxP TTT TT Tf
+T|3|Od dc
+T|3|OO
+T|3|ee
+T|3|FOOTNOTE
+T|3|NUMBER | FILER NOTES (optional)
+T|3|(This page will be publicly disclosed.)
+T|4|UNITED STATES HOUSE OF REPRESENTATIVES Page —_.of__-
+T|4|Periodic Transaction Report
+T|4|NAME:
+T|4|Harold Dallas Rogers : .
+T|4|DATE
+T|4|TYPE OF | "Or INOTIFIED|
+T|4|FULL ASSET NAME TRANS- OF {| AMOUNT OF TRANSACTION
+T|4|; TRANS:
+T|4|ACTION ACTION TRANS- |
+T|4|ACTION
+T|4|. A B Cc it) E F G H t J
+T|4|SP Provide full name, not ticker symbol. ra] = E (MMwDDYY) 7 (MMIDDIYY) ol< egeise/se/1s8s/3s/s S 8S 2
+T|4|bo 2|° | £2) 28/25) 25|s2|e2|88| =| 28/2
+T|4|os|58/385/58/)88|/8s5158/88/ 88 68]
+T|4|[emamememese | x [mmefom] | TT |. | |
+T|4|[lcemnsaronrneewann | x, Poof TT | TT | |||
+T|4|[lasiimsaocwreaneies fix fowmfome| TTT TT) | |
+T|4|eS
+T|4|[[eeenenennertcmaniane | Dl ome ome TTT TT |
+T|4|FOOTNOTE |
+T|4|NUMBER _ | FILER NOTES (optional)
+T|4|(This page will be publicly disclosed.)

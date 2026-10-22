@@ -1,0 +1,996 @@
+#house_ocr v2 doc=9115726 pages=43
+R|1|0||Dioscea can tha atarhaaA|||0.022,0.011,0.000|0.015,0.007,0.016,0.012,0.003,0.014,0.009,0.003,0.004,0.004,0.019
+R|1|1||—|||0.011,0.035,0.022|0.025,0.007,0.019,0.011,0.026,0.011,0.018,0.025,0.008,0.016,0.020
+R|1|2|||||0.009,0.016,0.013|0.003,0.016,0.023,0.016,0.019,0.008,0.019,0.017,0.013,0.005,0.029
+R|1|3||a|||0.006,0.011,0.008|0.004,0.006,0.019,0.010,0.010,0.026,0.001,0.030,0.010,0.009,0.009
+T|2|NAME. R hi Khanna Page = _ tt 3 3
+T|2|pas me teat wee ||| errant | OP nate
+T|2|wns ~~ _— fonsassps puter
+T|2|| | | fx ed Pastial | $4,004 3 5,002 $ Goo $ ager | $250,001 [$509,002 ism $5,000 00 | Over Dep dom ChilaAs ver
+T|2|sofosnt Provid fult am — _Uck_ ymbo!_____‘lpsschave | Sal _| Excho $200 | Trensaction | sanynbyy mavoppry | $15,001 | $0,000 | $00,000 | s2sqana | $500,000 | $ ,000,000 | $5,000,000 | $25,000,009 | $24,000,002 $sa.00g,000 | $50,000,002} ___$1,9aa,q00
+T|2|Monte and Usha Ahuja 2010 Irrev Trust FBO
+T|2|Grandchildren
+T|2|BANK OF MONTREAL LNKD TO VANECK
+T|2|Dc |GOLD MINERS ETF x 03/16/26] 04/02/26
+T|2|NATIONAL BANK OF CANADA LINKED
+T|2|DC |TO BASKET OF INDICES _ Xi — 03/03/25] 04/02/26
+T|2|— = i
+T|2|WELLS FARGO & COMPANY HYBRID Pett of T
+T|2|Dc |PERPETUAL _ 03/11/26| 04/02/26 ——
+T|2|oc pronpcom we om - xt | | || carers] onward » | | | [ | ff jt
+T|2|ROGERS COMMUNICATIONS IN — P|
+T|2|DC }HYBRID 07/31/2056 03/24/26| 04/02/26
+T|2|~ ~ Fi
+T|2|EMERA US FINANCE LLC HYBRID |
+T|2|Dc {10/01/2056 —_ —_ 03/17/26| 04/02/26
+T|2|FIRST HORIZON CORPORATION PFD a ad i
+T|2|pc j67500_._ | 03/05/26} 04/02/26, x
+T|2|CALL/INJ FLEX EURO PM~@ 220 EXP | ~
+T|2|oc 93/06/2026 _ 03/06/26} 04/02/26 __
+T|2|| c_lexron cone uc cn ee re eee ee ee Oe ee
+T|2|“= ~— 1
+T|2|META PLATFORMS INC CLASS A CMN |
+T|2|DC |CLASSA 03/06/26} 04/02/26 _
+T|3|NAME. R hR Khana Page 3 o #3
+T|3|| Geins ~~ Transa
+T|3|Exceed Pusttat } $2 002 $15,001 | $50,002 [$10q001 /$250,003 | $500,001 | $1,000,002 | $5.009001 fe Chlé desc
+T|3|SPIT Prot ff ot sicker symbol Purctase |S fo | Exch ag | $200 |] Transaction MB/DD/YY RIWYDDAY $15,000 { $50,009 4 $ 99,000 $ 50,000 | $500,000 | $1,000,000 | $5,000,000 | $25,000,000 | $25 000,001 $50,000,000 ss cont bere “uon000 “
+T|3|'
+T|3|Ahuja Grandchildren s Education Trust
+T|3||
+T|3|DC_|NASDAQINC CMN fel te Le 03/24/26) 04/02/26|__ x _ P| | ft fl
+T|4|MAME. R hit Khanna Pog Tt StF
+T|4|Exceed Partios $4,00 $15,001 | $7002 |S.00001 | $250,001 | $ 00.002 {$3 c6Q007 | $4,000,001 Ove Depe atthiddss ove
+T|4|Shout —_Praxble Aubpame fot <ter yrrtok fcchore | S$ | Exch $200 | Tra sation |___ MaM/OD/VY MAYDOSYE $ $000 } $50,009 | $100000 } $250 600 | $500,000 | $1 000.000 | $5,000,000 | $75,000,000 | $75,000.00 $50,000 000 | $ aco0.000 $3,00q.000 _
+T|4|2020 Trust FBO Khanna Children |
+T|4|DC |MCDONALDSCORPCMN |. _ x ! 03/30/26 04/02/26 x _ a - {J
+T|4|~ |
+T|4|~~ 7
+T|4|DC _|COCA COLA COMPANY [THE} CMN x Py yy 03/30/26} 04/02/26
+T|4|UNITEDHEALTH GROUP INCORPORATE
+T|4|Bc ICMN — 03/30/26 04/02/26) \
+T|4|BOSTON SCIENTIFIC CORP COMMON Pt | | ~ |
+T|4|Be j|STOCK 03/30/26 04/02/26 =
+T|4|THE PROGRESSIVE CORPORATION | ||
+T|4|DC |CMN 03/30/26 04/02/26 _ - ~
+T|4|nc_{aMAzon coM Nc cMN Pett | | | ovsoas! ovr i» | | | | | | {| | | |
+T|4|Fp¢_Jnurrmecwn xt | | | TE css! oval | | | | f | | | ft |
+T|4|i = =
+T|4|TRUIST FINANCIAL CORPORATION = P|
+T|4|oc iCMN — ln x 03/30/26, 04/02/26
+T|5|NAK Ro Khanna Page Ss he 2S
+T|5|er ee na nn I
+T|5|xered Part! $z001 || $ soos | ssanar |siancor $250,002 | $s00.001 | Si.ccna07 | $5,000,001 Over || Qependent Chlid Asset over
+T|5|Se/DCgTT Provides am ao tickersym of Porpare | Sole- $200 | Tronsextion MM/DD/YY aanefaafer $25,000 | SSa000 | $120,000 | $25a,000 | $S00,0n0 | $2,000,000 | $5,000,000 } $25,cod.c00 | $25,00R0Rr $sa.c0gzed | $50,000,000 $1,000,000
+T|5|2020 Trust FBO Khanna Children
+T|5||
+T|5|DC |JPMORGANCHASER®COCMN  __sj|_six 03/30/26| 04/02/26) x
+T|5|THE PROCTER & GAMBLE COMPANY bell es (1 =
+T|5|pc |CMN _ 03/30/26] 04/02/26 t x» | || |
+T|5|AUTOMATIC DATA PROCESSING INC | —
+T|5|DC jCMN 03/30/26{ 04/02/26 fx
+T|5|oc_fegn co Inc. cM s|/ | | assoc] onnoans| | x! | | | | [| | | | |
+T|5|‘oc_[auropesy, nc cM ett 1 | I coor oxvoan |x| | | | | | | J ||
+T|5|ve lowescommamesnicemy |x| t | | | oaonsl owmnel |x| | | | | | [| | |
+T|5|F
+T|5|1 — =
+T|5|be_fresta ic cw Pet | | fe copsnys] ovens] | | | | | [| | ff |
+T|5|Foe | MONDELEZ INTERNATIONAL INC Pei —
+T|5|HILTON WORLDWIDE HOLDINGS INC Pet fet = = =
+T|5|oc lw cxsors| owns x | | |_| | |
+T|5|oc linevre conPoramioN cut sit | | | csrsorasl oeornei x | | | | | | | | | ft
+T|5|MARTIN MARIETTA MATERIALS ING — |} | —
+T|5|DC |CMN _ x 03/30/26| 04/02/26
+T|5|— = =
+T|5|DC {UBER TECHNOLOGIES INC. CMN iy 03/30/26| _ 04/02/26
+T|6|WAME Rohit Khanna a at 3
+T|6|ee ee a
+T|6|Galas ~ ataction.n Spows or
+T|6|Provid fu «k= symba ‘leurchas fSot | Exch ag $200 | Tronsactian MaAyDo/YY $75,000 }| Ssa.c00 | $ 09.900 | $25Q.900 | $500,000 | $1,000,000 | $5,000,000 | $25,000,000 | Sz$c00 80 $50,000,000 _| $50,000,000 $2,900,000
+T|6||
+T|6||
+T|6|2020 Trust FBO Khanna Children
+T|6|DC {iWASTE MANAGEMENT INC CMN —xX— | 03/30/26 04/02/26 x
+T|6||
+T|6||oc Jcewuneommscocmm | x | | ||| oxsonsl ovr x | | | | | | | fo | |
+T|6|Me tet | | oso
+T|6|OC ICMN 03/30/26) __ 04/02/26
+T|6|I ; =
+T|6|oc fsa com cuss tol | | caso ovens | tf | PTT
+T|6|ir
+T|6|DC |BERKSHIRE HATHAWAY INC, CLASS B td ft x 03/30/26} 04/02/26
+T|6|MASTERCARD INCORPORATED CMN | | ~
+T|6|DC /CLASSA x 03/30/26! _ 04/02/26
+T|6|— |TCHARLES SCHWAB CORPORATION Poi ot] |
+T|6|DC |CMN 03/30/26 04/02/26 _j =
+T|7|NAME. Rohit Khanna Paso 2 m WZ
+T|7|pnts | te treet || [tae tannin] tm wetattoms
+T|7|Exce df art $1,001 $s S50,D01 | $ 00,001 }$250001 | $500,001 |$ ocqa0Z | $5,000,001 , Ove Depen en ChitAsser ver
+T|7|SP/OCHT Provid fulliram no cher yirbol. rch se- | Sate | Exch $200 | Tronsactio Mwoo/rr musi $15000 | $50,000 { $200,000 | $25Q.000 | $509,000 | $1,000,000 | $5,009,000 | $25 000.000 | $ 5 000 001 $s0.000,000 | $50,000,000 $2000000
+T|7|2020 Trust FBO Khanna Children
+T|7|DC |ABBOTT LABORATORIES CMN x | | 03/30/26 04/02/26 x
+T|7|\
+T|7|i
+T|7|| oc leemmcenownceom |x t Le | x | oon owl |x| | | | | | [| | | J
+T|7|pe [pocen nc cv ee ee ee ee
+T|7|Dc |CMN 03/30/26|__04/02/26
+T|7|DC {CMN ———— __ | __.~!— 03/30/26 04/02/26
+T|7|APOLLO GLOBAL MANAGEMENT INC | iad | fo] =
+T|7|DC |CMNCLASSA 03/30/26] 04/02/26] x
+T|7|COGNIZANT TECHNOLOGY SOLUTIONS | i ~
+T|7|DC |CORP CLASSA 03/30/26 04/02/26
+T|7|pe_[sM company cM tab LL I capsore! oval » | | | | | [| | [| jt |
+T|8|a ee a a ee
+T|8|nS eG pee TO ee
+T|8|Exceedt PerthaS $1001 $18,002 | $50,001 | $zoqo0! |S250001 | S$sogocr | S1,c0001 | Ssoooor Over Depends Child Atret over
+T|8|sect Provide fulinam ne deker symbol. Purches | Sole | Fachange | $290 | Trensaction Am, OO/rY a myr $18,000 | $5q000 | $100,000 | $250,002 | $50q.n00 | $1,000 000 | $5,000,000 | $25,000,000 | $25,000.00 $52,000,000 | $50,000,000 $1,000,000
+T|8|2020 Trust FBO Khanna Children _
+T|8|META PLATFORMS INC CLASS A CMN ; - —_—
+T|8|pc_|CLAssA _ 03/30/26| 04/02/26 |
+T|8|oc leaanrarzcuvowosisinc evn | |x| | | x | osraomael oyoansl x | | | | (| {| [| {| — | [|
+T|8|pc _JINC _ x 03/30/26) 04/02/26
+T|8|oc uwecassecuncusss | te} | |_| ossorsl oon _» |__| || tf | fo
+T|8|oc _|eserure inc co let | | | oasonst ound » | || ; | | | | | |
+T|8|| pc laapone MEXICAN GRILL INC CMN_ A a 03/30/26|_04/02/26 Pet | ft fe ft Pp
+T|8||] |
+T|8|RAYMOND JAMES FINANCIAL INC L oiyt | a
+T|8|OC {CMN = -_ 03/30/26| _—04/02/26 P|
+T|8|~ i
+T|8|_0c_[PARKER HANIF CORP CAN ix] || | sors] oomnl «| | | | | | | | [ | |
+T|8|TRANE TECHNOLOGIES PUBLIC LIMI ma | — |
+T|8|Dc |CMN 03/30/26 04/02/26 x
+T|8|~~ /STATE STREET CORPORATION (NEW)
+T|8|Bc jCMN | 03/30/26] _ _ 04/02/26
+T|8|MEDTRONIC PUBLIC LIMITED COMPA || =
+T|8|CMN 03/30/26 04/02/26
+T|8|EDWARDS LIFESCIENCES CORPORAT! =
+T|8|Dc {|CMN 03/30/26 _04/02/26
+T|9|WAME & bit Khanna Page q 43
+T|9|po dd}
+T|9|| | Gains | ~~ Transoction in Spouseor ||
+T|9|éxnee Portiat $2,001 $15,001 | $50,002 | $200,001 |$25,001 | Ssonoor | S1oon0Nr | $5,000.001 1 Ove Dependent CH Asset ove
+T|9|saree Frovid full ama tacke symbol, Sate | Exchance | $200} sansactlon mMvt/DpyYy uponyr $15000 | $50,000 | $100,000 | $250,000 | $500.00 | $2,000,000 | $5,002,000 | $25,000,000 | $25,000,002 $S@.000.000 | $su 000,000 $4,000,000
+T|9|2020 Trust FBO Khanna Children — .
+T|9|—
+T|9|DC _JEMERSON ELECTRIC CO CMN 03/30/26 04/02/26] x I
+T|9|1
+T|9|oc lwwpsemiconnucronsnvewn | |x| | | | none!’ owpoane x» | | | | | | | | |
+T|9|ESTEE LAUDER COS INC CL ACMN na | | | | | | |
+T|9|DC {CLASSA 03/30/26 04/02/26! x
+T|9|Oe | _ '
+T|9|Foc Iwscwcewm | et | | asmrael_ ool » | | | |) | OT UT CTT
+T|9|DC DOLLAR GENERAL CORPORATION CMN Pett Ll | 03/30/26) — 04/02/26 | | | {[ fF | | |
+T|9|VERTEX PHARMACEUTICALS INCORPO ||
+T|9|pc |CMN _. x —1 — 03/30/26 04/02/26
+T|9|bc _PUBuCsToRAGE GUN ix] | te | ovsorsl onan »| | | | | | | | | | |
+T|9||
+T|9|ROYAL CARIBBEAN GROUP ISIN
+T|9|Dc |LROdOgs62868 03/30/26| _ 04/02/26) __
+T|9|APPLOVIN CORPORATION CMN CLASS |. | caysone,
+T|9|A 03/30/26}___-04/02/26
+T|9|1
+T|9|oc lanane wecmncrassa | fx} | | x [cranes oon | | | | [| fj | ft
+T|9|DC |CLASSA 03/30/26} _ 04/02/26
+T|10|NAME Phi hanna rare SO ot 43
+T|10|es ee ee a ee
+T|10|pa Pe a
+T|10|Exceed Portia $1001 $15,001 | Ssana1 |$ aacor | S2sqocs | $500,002 | $1,000.001 | $5,000.00 Ove Depenae Chit Asse ve
+T|10|srt | _——__Prowslefs om no icker ymbot Purchase | Sale | Exchonce | $200 | Transceron Moor MM/DDYYY $25,000 | $50000 j $100,900 | $25Q000 | $08,000 | $2 060,000 | $5,000,000 | $25,000,000 | $25,090,002 359,000,000 | $$9,000,0c0 $1,000,000
+T|10|2020 Trust FBO Khanna Children
+T|10|! 1
+T|10||
+T|10|oc heunconveriaincom | [at | | x | ovsoas| word x | | | | | | | { | |
+T|10|oc [meme on a
+T|10|Dc _{CMN 03/30/26|__.04/02/26
+T|10||
+T|10|oc franevesx nc ouacmm | txt | | | xmas oman » | | | | | | | | UT
+T|10|| oc fooconmcam || | || mre orang x | | | | | f fF Pt TT
+T|10|NORWEGIAN CRUISE LINE HLDG LTD
+T|10|DC {|CMN 03/30/26 04/02/26] __x
+T|10|joc junconronsnoncmy | de] | | dans! owl» | | | | ff ot tT TT
+T|10|i
+T|10|joc lonvomonmeam | xl | | x | uso owns » | | at | ft fT TP
+T|10|[oc jaurorone we can ee Oe
+T|10|oc_|peswe ine cn xf | || osvaorzel owas! x | | | | | | | |
+T|10|!
+T|11|NAME R hit Khanna Pag Mt 13
+T|11|Tre re BO
+T|11|ceed Pa ial $2,003 $iSao1 | ssao0 |$10000 |$2s000 | $s00.00 | $1,40Q 001 | $5,000,001 Over Orpen en Chit As ct ver
+T|11|sp oesit Provid fu nem not tckersynbol Puma | Sale | Exchong $200 | Tronsection MayDOo/rY MM DO $isq@0 | $50,000 | $ 0,000 | $252,000 | $Soq.and | $2,000,000 | $5,000,000 | S$z5,000000 | Sas o02OnISs0G00.000 | sse0000m | ——— S$LORtOO
+T|11|2020 Trust FBO Khanna Children _ ——.
+T|11|STERIS PUBLIC LIMITED COMPANY | oapoaras
+T|11|DC {|CMN = _ 03/30/26 04/02/26
+T|11|| oc feosrancrour incom | tx! | |__| cna oyun x | | | | | [| | | | |
+T|11||
+T|11|vc leamacconoranovewn | |x| | | | oxael ouomne x | | | | | | | | |
+T|11|= =
+T|11|DC |THE HERSHEY COMPANY CMN sf 03/30/26} __ 04/02/26 x | —— _ =
+T|11|ZEBRA TECHNOLOGIES INC CMN CLASS
+T|11|Oc |A —03/30/26!} _ _04/02/26
+T|11|MICROCHIP TECHNOLOGY INCORPORA Poi foi]
+T|11|DC |CMN _ — __ 03/30/26 04/02/26
+T|11|MCCORMICK & CO NON VTG SHRS TL dad — 1 1
+T|11|DC |[CMNCLASSN 03/30/26) 04/02/26
+T|11|MOHAWK INDUSTRIES INC COMMON ma Pf 7 |
+T|11|DC {STOCK 03/30/26 04/02/26 Le -
+T|11|tl
+T|11|vc Leeworermmcem | del | || sone owed xt | | | | | | tt ft
+T|12|NAM FAoh Khanna page Ae 143
+T|12|free Pe fo | 52,00 $39,001) $50.00 | $20R,001 |$zSQ.002 | $599,c01 | $3,000,002 | $5,000,003 Over Dependen Ch0d Asse over
+T|12|SPEDE Pro fd futlname — veker symbol. Purchore | Salv ] Pehorge | 3200 —- wayonyy MADDY $8000 | $50.00 | $150,000 | $259.00 | $500,000 | $2,000,000 } $5,090,000 | $25 GaR.000 | $23,000,002 $5,000,000 | $50,002,000 $3,000,000 _
+T|12|Ritu Ahuja Declaration of Trust
+T|12|BOFA FINANCE LLC LINKED TO S&P 500 | Pot
+T|12|SP jINDEX _ _ 03/12/26 04/02/26 x
+T|12|se_lsanoramencaconrcon | x1 | | | || oor oma | » | | | | | | | | |
+T|12|MASTERCARD INCORPORATED CMN
+T|12|CLASS A 03/10/26| 04/02/26 a
+T|12|| se lcocacoiacompanrirurcmn |x || [| | oasoyrel oojoor [>| | | | | | [| | | |
+T|12|}
+T|12|se [tc DONALDs cone cv pet | [| Tempore onan |x| | | | | | | jf [
+T|12|MERCK8.CO_INC CM el | LJ capo! owjoane | >| | | | | | | | [| |
+T|12|rue mornsinmnceyn | x | | 1 |_| axsoreel omar |e | | | | | |) | | |
+T|12|sr lowescowranesmcewn | x | | | |_| oxaorel cuore | | | | | | | | | | |
+T|12|UNITEDHEALTH GROUP INCORPORATE
+T|12|sp |CMN __ 03/10/26] __ 04/02/26 |
+T|12|——— — —
+T|12|— ===
+T|12|sp lassorriasonaronescmn | x | | | |__| oaoyael ovo » | | | | | | | | | | |
+T|12|UNITED PARCEL SERVICE INC. CLASS B
+T|12|COMMON STOCK | 03/10/26] 04/02/26
+T|12||
+T|13|NAME, RohRt Kh Pag _t3 34u_43
+T|13|ains ~~ | | | Trons cuon! Spouse or
+T|13|Exceed Partisl $1,002 $15,001 $50,001 |3 00,001 [5250002 |] $500,002 |Si.00Q0n2 | 55,cQD00 Ove Depend ChidAr over
+T|13|SPDCIT Proads fullnam na richer gimbol, Purch Sc | Exch age [| $200 Transaction MDDOT $25,000 $50,000 Is 00,000 | $250,000 { $500,000 | $1,000,0nd | $5 200,000 | $25,000,000 | $25,000,001 $50,000,000 | s5Q,00Q000 | _— $3,002,000
+T|13|Ritu Ahuja Declaration of Trust
+T|13|omaccorrorsronem ||| | | | eanonel ouoane_» | | | _ | | {|
+T|13|— SS =
+T|13|; —
+T|13|se uccusseemnensse | x | | | || oxo ovo x | | | | | | | |
+T|13|CHARLES SCHWAB CORPORATION J Pf ft | |
+T|13|SP |CMN | x 03/10/26; 04/02/26
+T|13|ALEXANDRIA REAL ESTATE EQUITIES | | fo
+T|13|SP JINC x 03/10/26| 04/02/26
+T|13||
+T|13|so lconmecn tw | || || eanorel oman x | | | | | | P|
+T|13|APOLLO GLOBAL MANAGEMENT INC [! ~~ ~ ~~
+T|13|CMIN CLASS A x _ 03/10/26] 04/02/26
+T|13|BOSTON SCIENTIFIC CORP COMMON Pt | jl
+T|13|SP |STOCK _- 03/10/26; 04/02/26
+T|13|INTERCONTINENTAL EXCHANGE INC | a in
+T|13|sp jCMN 03/10/26| 04/02/26
+T|13|s»_[awszon cominecon Patt | | expend coon | [| | ft | ft ff |
+T|13|is ni
+T|13|CMN = = 03/10/26} _ 04/02/26
+T|13|se frown cn ee ee
+T|13|rcuenrrecnovoces weewm | x | | | | ovsoas ovo » | | | | | | { | | |
+T|13|werencom |e L ||| enone oman » | | | | | tT TP
+T|13||
+T|13|TRACTOR SUPPLY COMPANY CMN Pett of 7 03/10/26| 04/02/26] x |
+T|13|ravoarnouones wecwn | x | | || | expe ond 2 | | | | | TP
+T|14|NAM shi Khanna rept t_ 43
+T|14|re ee ee amount rsa
+T|14|pate Te fe De Pe TT TT k
+T|14|—— ape —
+T|14|Gan | | Tra sont Spouse
+T|14|sen] veer ews ms [ose fan | 3 [etter] sman [aa | 22 | ese [nme eet te [ome fem ee | ca anen a] SSS =
+T|14|foun Provd full m ot ck sfrbol urthas | Sat | Exch g $290 __| Tron octioa AtYDONY __MM/DoO/y $15,000 {$50,000 | $200,000 | $250,000 | $500,000 | $1,002.D00 | $5,008,000 { $25,004,000 | $25,000,001 $ G00 n00 | $5 902,000 $4,000,000
+T|14|Ritu Ahuja Declaration of Trust —
+T|14|sp lexreco INC CMN x 03/10/26} 04/02/26] x |
+T|14|se_lnsevnccmm te | || || osorts| onan » | | | | | | | | | | |
+T|14|_ fo |
+T|14|{
+T|14|so mooarswceu xt | | | | extol ovo | ff | | | ff PUP UT
+T|14|powncems tw LLL || ssovsl onmarel x | | | | | [| | | | fl
+T|14|cosmncrourmeem |x| | | | | oanone ovo | | | | | | | {| [|
+T|14|VERTIV HOLDINGS LLC CMN CLASS A P~ i | ot 03/30/26 owns x1 | 1 Ff |
+T|14|sores ne cv xt] | || corel ovr | | | 7 ft {| | ft
+T|14|SP |CLASSA _ = — 03/10/26] 04/02/26;
+T|14||
+T|14|se |cenusseomrsicmn | x | | | | ft cxynyasl onmrral x | | | | | | | | ||
+T|14|ALBERTSONS COMPANIES INC. CMN ; | ] | | | |
+T|14|CLASS A | 93/04/26| 04/02/26
+T|15|NAME Rabi Kha na Peg +S; €3
+T|15|[ ==} }| | it PG Te ee Fn ee
+T|15|Exceed Partial $1001 $ 5002 $50,00 $ 00,003 | $25a00f | s50R,60 $41,000,002 | $3 000,002 Over Depencen Child Asset ve
+T|15|set ? onde fullname, of ticker symbol. Purchas | Sof | Exchan $200 | Troasaction MA/DDY PnALDDVY $2§000 | $5000 | SrDQ000 | SzSZ000 j $500,000 | $1,00Q.000 | $3,002,G00 | $75,000,000 | $25,000,001 $sQ.00R,000 | $50,002,000 __ $2,00R600
+T|15|Ritu Ahuja Declaration of Trust
+T|15|ALBERTSONS COMPANIES INC CMN oO
+T|15|CLASS A x 03/12/26! 04/02/26.
+T|15|| se fmemmorsnenscennacmcom | |x| | | | exrone oumat || | | | | | | | |
+T|15|CONSTELLATION BRANDS INC CMN ee i
+T|15|CLASS A _ _ | 03/10/26} 04/02/26},
+T|15|—— _
+T|15|MONSTER BEVERAGE CORPORATION
+T|15|CMN 03/10/26] 04/02/26
+T|15||
+T|15|COPART INC CMN iL 03/10/26; 04/02/26
+T|15|CMN 03/10/26} 04/02/26
+T|15|sp {STOCK — 03/10/26} 04/02/26
+T|15|d
+T|16|WAME: Roha Khanna w_ le 6 F323
+T|16|a ee ee ee
+T|16|_ _ Ppt a eo J eee Te Te
+T|16|| olor ] | ! 7 — | Transoct! fa Spouse or
+T|16|Excucd Purtiat Ho $x001 $500 | $sn00r |$ 00,002 $25a,001 $509,002 || $2,000,002 $5,000,001 Ove Depend Chi Asset er
+T|16|soy t f defutname nett herrympot Purchose excho g | $200, | Tronsocton | amyony | vpn $15.000 | $50,000 | Sraqano | $250,000 | $500,000 } $2,000.000 | $5,000,000 | $25,000,000 | $25,000,001 $59,000,000 | $s0,000,000| = $1,009,.000__
+T|16|&rtu Ahuja Declaration of Trust
+T|16|PRINCIPAL FINANCIAL GROUP INC |
+T|16|SP |CMN — x _ - 03/10/26) 04/02/26 x a
+T|16|APPLOVIN CORPORATION CMN CLASS Pott | |
+T|16|sp {A _ . x 03/10/26}! 04/02/26 |
+T|16||
+T|16|HEWLETT PACKARD ENTERPRISE CO oil of | |
+T|16|SP ICMN = 03/10/26 04/02/26
+T|16|se poouconecwn fT | | cxonel ogee x {| | | | tT of ft
+T|16|so lwaurossevconraverunemm | |x| | | | canons! omer» | | | {| | | | | | [|
+T|16|EXPEDITORS INTERNATIONAL OF WA ~ ~ ~~
+T|16|SP |CMNCLASSA 03/10/26! 04/02/26 . _
+T|16|— {
+T|16|se luunewonanuencancam | |x| | ix | expos ome x | | | | | | | | | [| |
+T|16|sr lonraoos wecmmeussa | txt | | x | omp ou x | | | | | | | | |_|
+T|16||
+T|16|lvencanewrnesscocmn |x| | x | x | ovsone word x | | | | | | | | | | |
+T|16|MICRON TECHNOLOGY INC _CMN Sled ba de | canard want x | |_| et] ft
+T|17|x NAME R hit Kh Page wats Tat 2
+T|17|pratnnae | ect esate || onetramante | Warmer
+T|17|Soins ~~ ~ | Transact] Spous or
+T|17|or! mers saumvas — ewe Ls Lene [Se Vatttiel same | mame | tie [2s samnoco | s2sooa | sano | szooqan | sconneo | $2 6r0000 on ° * syeoanno
+T|17|serpent Pro td ft rot ucker ymbol Peréoye | J | Exchon $200 | Tranzretian MM/DD/rr Mayo fry $15.000 | _ $50,000 || $100,000 | $250,000 | $500,000 | $1,000,000 | $5 200,000 | $25 000,000 | $25,000,003 $56,000,000 | $50,000,090 $4,000,000
+T|17|Ritu Ahuja Declaration of Trust
+T|17||
+T|17|SP__|COOPER COS INC/THE CMN x | | 03/10/26! 04/02/26| x
+T|17|1
+T|17|se | ARCH CAPITAL GROUP LTD_CMN |. | L,| 03/10/26 | owonndl x Pi; |
+T|17|MONOLITHIC POWER SYSTEMS. INC | i canoe ]
+T|17|_SP_{CMN ~ 03/10/26} 04/02/26
+T|17|— oy = 1
+T|17|| i
+T|17|SP |DECKERS OUTDOORS CORP CMN ft ft 03/10/26||__04/02/26 Pet | | [|
+T|17|NASDAQINC CN = _ 03/24/26] 04/02/26
+T|17|ROBINHOOD MARKETS INC CMN PL | | et anon 04/02/26 tf | te fF yp
+T|17|MICRON TECHNOLOGY INC CMN Ii feb 03/18/26 | ovo’ | | | | | f tf
+T|17|SOUTHWEST AIRLINES CO CMN id tal | 03/10/26] 04/02/26 fF. | fT cL LE]
+T|17|AMETEKINC(NEW)CMN __ el || [canon 04/02/26 el it tit tt ut
+T|17||
+T|17|es | AXALTA COATING SYSTEMS LTD CMN it tb 03/18/26) 04/02/26 st ttt EE
+T|17|SP__| CARNIVAL CORPORATION CMN Pt tL | 03/10/26) 04/02/26} x_ ee eee eee
+T|17|SP__ [MICROSOFT CORPORATION CMN Ld tt 03/10/26; 04/02/26 ef ft Ey | fe ct ft
+T|17||
+T|17|/
+T|17|NASDAQINC CMN —_ Ad | x 03/30/26] _ 04/02/26 F.C ELE ET EL Ef
+T|17|FRANKLIN RESOURCES INC CMN Ad 03/10/26 ovr | 1 | | | | | fo] ==
+T|17|I | i
+T|17|SP__|INCYTE CORPORATION CMN Pid ft | 03/10/26| 04/02/26 eet fF LT EP | |
+T|18|NAME, Roh Khanna Pere 1B otf 3
+T|18|fe
+T|18|poe} oP tO fe Pe Pa
+T|18|| eee
+T|18|Exceed Pastial $2001 $15,903 } $50,001 |5 0000 |$25 O02 | $50,002 | $1,000,002 | $§,00R.00 Over Depend Child Ans ¢ ve
+T|18|{DCT Provid full am no ch symbol Purch ve | So | Eveho g | $200 | Transaction | ine/pofyy _ $ 5000 |; $50,000 | $ onc0e | $250,000 | $300,000 | $2,000,000 | £5:000,000 | $25,000,000 | $25,000,001 $54,000,000.| $5a,000,000 | ___— $4,000,000
+T|18|'| Ritu Ahusa Declaration of Trust
+T|18|WILLIAMS SONOMA INC CMN 03/10/26; 04/02/26] __x | !
+T|18|| — =
+T|18|UNITED AIRLINES HOLDINGS INC CMN tot ot 03/10/26] 04/02/26
+T|18|AIR PRODUCTS & CHEMICALS INC cun| | pL 03/10/26 wor | | | | | | | jf
+T|18||
+T|18|CIGNA GROUP/THE CMN ti. nm 03/10/26 mer x | | ||| | i | |
+T|18|«| STANLEY BLACK & DECKER INC. CMN— Pid bt 03/10/26 ewan! Pik; | | ft
+T|18|ERIE INDEMNITY COMPANY CL. A CMN I fy | ft
+T|18|CLASS A | 03/10/26] 04/02/26] _x
+T|18|se lasona INC _CMN an 03/25/26 mrs» | | | | {| | | | | | |
+T|18|l
+T|18|se hremuene cMN | | || 03/10/26 word {| | | | | i | {| | | |
+T|19|NAME. AR Khanna P ga HE F432
+T|19|poe
+T|19|| Gains | | | ! | | sansacha In Spouseor
+T|19|| Exceed |] Partlat $ fat $15,001 | Ssaora {$200 002 | $250,002 | Ssogon '|$z.00q00 | ($5,000,002 Over Dependent ChY Asset over
+T|19|spjoeimt Provide full not trcker ymabat Parchase | Sst | Exchang | $200 | Trans ction| __Anypory _}  Athypayy =} $28,000 | $ qano | $300.00 | $zsq,000 | $500,000 | $1,000,000 | $5,000,000 | $25,00,0N0 | $25 000,002 $50,000,000 | $50,000,000 | $1,000,000
+T|19|Ritu Ahuja 1994 Trust
+T|19|MORGAN STANLEY FINANCE LLC S| ~ Te |
+T|19|SP |UNKED TO S&P 500 INDEX 03/12/26| 04/02/26 I x
+T|19|| MICROSOFT CORPORATION CMN ott tf] 03/23/26 | overt || | | | | | | | [|
+T|19|I
+T|19|ABBOTT LABORATORIES CMN tt | 03/23/26 owns || | | | | ft tof |
+T|19|so low HOME DEPOT INC CMN Lt LL conans 04/02/26 Pie} i ett |]
+T|19|UNITEDHEALTH GROUP INCORPORATE Pett od |
+T|19|CMN 03/23/26| 04/02/26
+T|19|| INTUITIVE SURGICAL, INC_CMIN ltt 03/23/26| 04/02/26 Piet pie
+T|19|COCA COLA COMPANY (THE) CIN .{| | | | 03/23/26 wont [»{ | | | | | [| 4 ||
+T|19|AMAZON COM INC CMN ld fb |__03/23/26 wont |x! | |_| | | {| | | |
+T|19|SP__|BOOKING HOLDINGS INC CMN | an 03/23/26 word |x} | 1 | | | ft | ||
+T|19|AUTOMATIC DATA PROCESSING INC | aa ~ 1
+T|19|sp |CMN 03/23/26| 04/02/26 -— — [- —
+T|19|~ —
+T|19|SP |ACCENTURE PLCCMNCLASSA _ x {| | | 03/23/26) 04/02/26 et,E tet tl ft |
+T|19|[
+T|19|so loner recnoxoct INC_CMN x PF ot | 03/23/26 scans] __| Pt i] ft ft |
+T|19|I
+T|19|SP__|AMERICAN INTLGROUP INC CMN i et | 03/23/26 saan] _| -t iE EL, tf
+T|19|fle
+T|19|SP [SALESFORCE INC CMN |x ss | exons word |» | | | | | | |. _ |_|
+T|19|1
+T|19|i
+T|19|1 sp {S&P GLOBALINC CMN  ____ | 1 03/23/26} _ wot [st |. | | ft | |
+T|20|NAME hh Khanna Pag 2° oO, 42.
+T|20|po ie ee
+T|20|Gain | a ~ maas ct:o Spouse or
+T|20|sepoeat ovdef it om ther symbol urch se }Sa | Exchan $200 | Transaction A. YORAY __j _ MM/DDAY $25,000_| $50,000 }} $200,000 } $250,000 | $500,009 | 5 a00.000 | $5,000,000 | $25 000,000 | $28,000,001 $8f,002.007 | $50,000,000 $1.000,000
+T|20|Ritu Ahuja 2994 Trust
+T|20|sp so GROUP INC/THE CMIN il 03/23/26|'_ 04/02/26 , ee ee
+T|20|~~ _ “ |
+T|20|{
+T|20|sp_|PALO ALTO NETWORKS INC_CMN elt ft | 03/23/26| 04/02/26 tet itt i tt
+T|20|sp_|ARTHUR J GALLAGHER & CO CMN ttf cna omand [| | | | | | | [|
+T|20|| we | INVITATION HOMES INC _CMIN Pelt LL | ead ond fot LLL ib fp
+T|20|i
+T|20||
+T|20|ROPER TECHNOLOGIES INC CMN_ tt ft 03/23/26] 04/02/26
+T|20|APOLLO GLOBAL MANAGEMENT INC of _
+T|20|CMN CLASS A 03/23/26| 04/02/26
+T|20|PRUDENTIAL FINANCIAL INC CMIN _ Pett | —| _ 03/23/26] 04/02/26) _x pti tt | | pp
+T|20|KKR & CO INC CMN el 03/23/26| _ 04/02/26 wl te EL_ ETE ft tl
+T|20|INTERCONTINENTAL EXCHANGE INC
+T|20|sp ICMN fx 03/23/26] 04/02/26
+T|20|~~ |
+T|20|selva INC. CMIN x FEL [| 03/23/26) 04/02/26 .| i
+T|20|APPLOVIN CORPORATION CMN CLASS Pt} i ~
+T|20|A 7 03/23/26} 04/02/26 a
+T|20|CROWN CASTLE INTL CORP CMN ain _! 0323/26] 04/02/26 Fei | | it tf td _
+T|20|AMERICAN TOWER CORPORATION
+T|20|CMN _ 03/23/26] _ 04/02/26
+T|20|sp_|AUTOZONE INC CMN Fett || 03/23/26 wont» | | | 1 |_|
+T|20|sp {CMN _ 03/13/26} 04/02/26 __ _ _
+T|21|NAME, bR khan Pare at i
+T|21|atten te rms | Yoweri [Po item Daan trams
+T|21|po Te Te Te TT
+T|21|cone | — | ~ | ~ | | rensarion Spouse
+T|21|Exceed Portlat $1.00 $15,002 | $50,001 |$100,00 {$2sa,co1 | $500001 |$ 00 00t } $5,000,00 Over Dependen Chl Asset ve
+T|21|sefocpr Provid full m ther yenbol. Purensse |S i [Ec ge} $200 ransoctioan | aOtyyY MADDY $15.009 4 $50,000 | $100,000 | $250,000 | $590,000 | $2,000,000 | $5 000,000 | $75,00@000 | $ 5 a0n,007 $sq.anqad0 | $50,000,000 $4,000,000
+T|21|Ritu Abuja 1994 Trust _
+T|21|I
+T|21|SP__JGARTNER INC CMN =) = === —|__ 03/23/26) 04/02/26) _x FE ft tf
+T|21|sp__|BXP INC COMMON STOCK Pit fd 03/23/26| 04/02/26 tl ft ETL |
+T|21|- |
+T|21||
+T|21|sp__|PAYPAL HOLDINGS INC CMN | | | cand wont | | | | b | | | | |
+T|21|COGNIZANT TECHNOLOGY SOLUTIONS |
+T|21|CORP CLASS A 03/23/26| 04/02/26 _ |
+T|21|NATIONAL GRID PLC SPONSORED AOR |
+T|21|CMN - —*x 03/13/26] 04/02/26
+T|21|= — = r =
+T|21|VICI PROPERTIES INC_CMN x | | tf 03/23/26| 04/02/26 See ee
+T|21|— !
+T|21|I
+T|21|SHELL PLC SPONSORED ADR CMN x | || f emone omat »| | | | | | | | [| jf |
+T|21|| WALT DISNEY COMPANY (THE) CMIN Pit Ef 03/23/26 owed s} | | |} | | to | fo |
+T|21|.
+T|21|RIO TINTO PLC SPONSORED ADR x 03/13/26] 04/02/26
+T|21|'
+T|21|CAPITAL ONE FINANCIAL CORP CMN tt [| 03/23/26 swap a ttt TE
+T|21|~ — |
+T|21|a> laseanec PLC CMIN Fett fof 03/13/26| 04/02/26 Pt te tt
+T|21|i
+T|21||
+T|21|AUTODESK INC CMN allo tt 03/23/26 worst | | | | | | | | |
+T|21|— == 1
+T|21|AMERICAN EXPRESS CO_CMN eft |] 03/23/26 wori.| | | | | | | | of | |
+T|21|WELLS FARGO & COMPANY CMN ld tt 03/23/26 wwf pL
+T|22|MAME otis eure 294 3.
+T|22|ee ee ae a Sa
+T|22|Po ae Te ee To Te Te
+T|22|Exceed Portia $1,003 $ S001 | $50001 | $300,001 |$250,001 | $500,001 | $2,000.00 | $§,00Qcor Over Deperdent Ohid Asse ove
+T|22|srroear rovid fullname, ot dcke symbol, Purchos |S? | Exthe g $200 | Trensaction MA/Onyy MMOD $15,000} $50,000__| $200,000 | $250,000 | $500,000 | $2 000 000 | $5,000,000 | $25,000,000 | $25 000,002 $59,000,000 | $50,000,000 $1,000,000
+T|22|Ritu Ahuja 1994 Trust
+T|22|BROADRIDGE FINANCIAL SOLUTIONS
+T|22|_SP__|INCMN _ x 03/23/26] 04/02/26] x
+T|22|AFLAC INCORPORATED CMN ett |b 03/23/26 wont » | {| | | | | {| | |
+T|22|FACTSET RESEARCH SYSTEMS INC CMN a _03/23/26| 04/02/26 et fi; tt | tt
+T|22|se fevoons PAYMENTS INC _CMN |b | eyzared 04/02/26 el |] tet ttf
+T|22|= _~
+T|22|sp {BLOCK INC CMN CLASS A x 03/23/26| adfazjz6| x
+T|22|sp_|VERISK ANALYTICS INC CMN x | | | 03/23/26} _04/02/26|__ x t-te Et eye _-
+T|22|SP__|COSTAR GROUP INC CMN = tt = 03/23/26 won | 1 | || | | | of ||
+T|22|| I
+T|22|os le R BERKLEY CORPORATION CMN tt | 03/23/26| 04/02/26.
+T|22|EDWARDS LIFESCIENCES CORPORATI ||
+T|22|CMN 03/23/26|__ 04/02/26
+T|22||
+T|22||
+T|22|se Iwontoay we CMN CLASS A Petit tf 03/23/26 | owmad »| | 1 | | | | | [|
+T|22|JPMORGAN CHASE & CO CMN x Piet 03/23/26} 04/02/26 et tT EE ET ]
+T|22|I
+T|22|MOODy 5 CORPORATION CMN elt bf 03/23/26, 04/02/26 ee eee
+T|22|a» lamoess INC_CMN _x tot 03/23/26|_ awa | eee
+T|22|SP__|INTERNATIONAL PAPER CO_CMN Pelt ot dL 03/23/26 /owmed | | | | | | | | | ||
+T|22|SP__JESSEX PROPERTY TRUSTINCCMN  _ Kt! | || 03/23/26 ome | ||| | {if | ||
+T|23|AME. Roh hanna Paga 23 43
+T|23|en en OS
+T|23|I Gains ——_ == ym
+T|23|éxteed Portiat | $100 $35,00t | $50,00f | $400 002 |$25n p01 | $500,002 | $1,000,003 | $5,000 002 Over 4 pd Chasse ve
+T|23|SPIDUIT Prod fullname, —_chersymbol. Purchas | sot |] Exchang | $200. | Transaction |! agneympyyy teA7OO fe $35,000 | $50.00 | $100,000 | $250,000 | $sa0,000 | $2,000,000 | $5 000,000 | $25 000.000 | $25,900.002 $50.000,000 | $5q.000,000 $2,000,000 _
+T|23|Ritu Ahuja 1994 Trust
+T|23|SP |VERISIGN INC CMN 03/23/26| 04/02/26] x | tL
+T|23||
+T|23||
+T|23|SP__|AMERIPRISE FINANCIAL INC. CMN 03/23/26| 04/02/26
+T|23|SP__|NOVO-NORDISK A/S ADR ADR CMN x i bt _ 03/13/26} 04/02/26 wf Etat tt tL
+T|23|SP__ | TYLER TECHNOLOGIES INC _CMN ett Et compl oye »| | | t | tb | | — | [|
+T|23|U
+T|23|sp |SANDISKLLCCMN | et he 03/23/26 | owned «|_| | | | fi ft te
+T|23|SP (DR. HORTON INC. CMN Pelt fot 03/23/26 | owns} | | | | | | | |_|
+T|23|SBACOMMUNICATIONS ma |
+T|23|CORPORATION CMN 03/23/26; 04/02/26, =
+T|23||
+T|23|CBRE GROUP INC CMN CLASSA x Pe] of fl 03/23/26| 04/02/26 _
+T|23|HARTFORD INSURANCE GROUP INC/T a
+T|23|CMN 03/23/26| 04/02/26 _
+T|23|HUMANA INC. CMN Petit {| 03/23/26 | wand x | | | {| Ff
+T|23|TIX COMPANIES INC (NEW) CMN x P} | | 03/23/26| 04/02/26 f. | Lt | ||
+T|23|BECTON DICKINSON AND COMPANY od
+T|23|CMN - 03/23/26} 04/02/26
+T|23|oe | MC DONALDS CORP CMN tt ft 03/23/26] 04/02/26 fet | | pL Ed | |
+T|23|| lpesconponation CMN___ et ft | 03/23/26 want | | | | | | ft |
+T|23|oe | LAMB WESTON HOLDINGS INC CMN Pitt | tf wnapd oye «| | | | | | tot. 4d
+T|24|NAM Rohit Kh on page __2 4 43
+T|24|ea eae a PS a
+T|24|= - poopy at a eee TO
+T|24|Exceed Portia! $ fas $25.00% 155000 jS$1anan |$250,00 | $s0q002 [$2,003,002 | $5,000,002 Ove caden Child Asse over
+T|24|So | ose mene | full me, ottickersymbol | | ean EI | cer | ma as | | Je | as | ms $San.000 | $1,000,000 } $5 Dan,903 | $25 909,000 cam sama |aeol "aE | $50,000,000 _} $5Q000,000 $1,000,000
+T|24|Ritu Ahuja 1994 Trust
+T|24||
+T|24|SP__|GENUINE PARTS CO CMN x 03/23/26} 04/02/26| x | Pt tf ff
+T|24|sP Iaearen PROPERTIES INC _CMN tt ft | sapaps cunt «| 1 | | 1 |_| | |. ||
+T|24|| 1
+T|24|sP_|CARVANA.CO CMN CLASS A ti { [ft 03/23/26 | owned {| | | | | i tt |
+T|24|sp lrane DESK INC (THE) CMN tl ff | 03/23/26 ond | | | | | EL |]
+T|24|i
+T|24|SP__|MOSAIC COMPANY (THE) CMN ail 7 03/23/26{ 04/02/26 ref beet e | tt
+T|24|SP |THE KRAFT HEINZ CO CMIN mil || cxmans ond | |, | | | | | [| |
+T|24|sP__|CORPAY INC CMN tt fet 03/23/26] 04/02/26 Pet tte tf tt
+T|24|sP oumswve secorrscnsionssse| x | | | |_| capapal 04/02/26 fel ttt] | | tp
+T|24|so lammoovcsecramousmcemn| «4 | | |_|, capane 04/02/26 eee eee
+T|24|| MSCI INC CMN el LL || sapere 04/02/26 ef LEE tT Ef |
+T|24|SP__ |ECOLABINC CMN Pt ff] | 03/23/26 cyond «| | | |) | |_| | oo
+T|24|if! VERTEX PHARMACEUTICALS INCORPO , ft |
+T|24|SP {CMN 03/23/26} 04/02/26 !
+T|24|03/31/2026 — | |} ft_03/30/26} 04/02/26
+T|24|03/13/2026 03/13/26| 04/02/26 |
+T|24|03/13/2026 03/13/26] 04/02/26
+T|25|NAME, DW KRa na Page 25 7, 43
+T|25|ee ee ee ee
+T|25|| Gams | { | antes main Spouse or
+T|25|feeeed Portia! $1 002 $15,001 | $50,001 15 o0,0ar {$2SD001 | Sscq002 |$z00QMmr | Ss.000.N01 Quer Be ende thithAsrtore
+T|25|sefocny Provid full ome nothcke symbol. Purchas | Sot | Exhaoge | $200 | tronsactio rtd MYDD $25,000 | $50,000 | $20<,000 | $250,000 | $500 000 | $1,090,000 | $5,008,000 | $25,000,000 | $25 axqent $50,000,000 | $50,000,090 $1,000,000
+T|25|Ritu Ahuja 1994 Trust
+T|25|PUT/XSP @ 660 EXP
+T|25|03/20/2026 x 03/19/26] 04/02/26] x
+T|25|SP {03/13/2026 03/13/26) 04/02/26 __
+T|25|CALL/CCEP FLEX EURO PM 94 EXP PPh ~
+T|25|03/13/2026 _ 03/13/26] 04/02/26
+T|25|PUT/XSP @ 610 EXP
+T|25|06/30/2026 03/30/26! 04/02/26 a
+T|25|PUT/XSP @ 610 EXP a
+T|25|SP 1/06/18/2026 __ . 03/19/26} 04/02/26
+T|25|l PUT/XSP @ 625 EXP S| | ; yo
+T|25|SP j05/29/2026 03/06/26} 04/02/26] x I
+T|25|=
+T|25|SP__|VISAINC CMN CLASSA__ _ ie | | ~ 03/23/26| 04/02/26 PtP Pet tt tt
+T|25|MASTERCARD INCORPORATED CMN Pty yf
+T|25|CLASS A 03/23/26) _ 04/02/26
+T|25|| INTL BUSINESS MACHINES CORP CMN Po Ll | rapanal 04/02/26 ete) Ee EE ft
+T|25|FISERV INC CMN i Ff | 03/23/26 i ovont |i | ) | | | |. | ||
+T|25||
+T|25|BERKSHIRE HATHAWAY INC CLASS B dt [ot teen 04/02/26 te Et tt
+T|25|y |
+T|25|a | MARSH ORD CMN PL | Le 03/23/26| 04/02/26 ef,e | tt TT FT
+T|25|se ona CORPORATION CMN PL ded _ 03/23/26] _ 04/02/26 Pe ft,f ft | dt fl
+T|25|BOSTON SCIENTIFIC CORP COMMON |
+T|25|STOCK 1 x 03/23/26] 04/02/26
+T|25|ADOBE INC CMN te =X 03/23/26 o4son/24 tet itt tl}
+T|26|_ NAME. R hh Kh a wt
+T|26|Lr Lin | | ss een | sa |
+T|26|Ritu Ahuja 1994 Trust
+T|26|SP {STRYKER CORPORATION C©N x | 03/23/26; 04/02/26 x Pf
+T|26|— ft
+T|26|o lrvommcom tal || | eres) oumed te | tt | ob [| ft |
+T|26|: on
+T|26|a = = ———
+T|26|; pms] oo) Ll eg ae}
+T|26|k
+T|26|w lonsaseammucnve ecm pp mp ff EL Lt
+T|26|bwowencamremmencom | [el | | | cxmanl owl |x| | { [ [|
+T|26|esemocrncomonanonconl [x] fx | x | cxmane comms | | | | | [ | | of |
+T|26|prcmmmnemen —|_to} 7s fatal Ltt tL Pf ff
+T|26|[2 lotoneneccmemncom | ix) | | | owed oon | | | | | | | Pf
+T|26||v lewmmonniscoom — | tel | | | amma ound » | | ff | ft | [| [|
+T|26|| o leowemeroonesncom |. [et || | ove oma | | | | [| {| [| [| [| |
+T|26|ge huruiemon aruenicane.cem | ATHLETICA INC. CMIN STL fT crane ps tf ep
+T|26|-s Iruowomsunncom | [si | | x | oma cond «| | | | | | | tt ft
+T|27|NAME: Rohl Khana pase Ae “S
+T|27|| | | | E ee cet
+T|27|Exceed Partial $3,002 S2goot | $80,001 {$100.001 | $250,001 | $500,002 |s2000,002 | 35,000,001 Ove Dep nden Chid Asset ver
+T|27|P/OGtT Provid fullname — ocker symbon. __ Purcho =| Sot | Evchanse | $200__| _Transection MM/DDAY _ MvyDorYY $15,000 | $50,000 | $ 00,000 | $252,000 | $500,000 | $1,000,000 | 35 000,000 | $z5 DoD Oca | $25,000.00 $5q,000,000 | $50,.G0q,000 $1,000 009,
+T|27|Ritu Ahuja 1994 Trust
+T|27|sP_|AT&TINC CMN af | fb | 03/23/26] 04/02/26|__x | tif | fl
+T|27|SP__ |THE PROGRESSIVE CORPORATION CMN le FL | conand omnes | — ef ft ft
+T|27|I
+T|27|sp_|MCKESSON CORPORATION CMN LL LL | ewand onmone 2 | ef} Ef ty
+T|27|SP ocmerncemn | dnt | 03/23/26| 04/02/26 ef ttt | ot ftp
+T|27|SP__|METUFE INC _CMN idl | | | 03/23/26! 04/02/26 ete ye ft fe fy] |
+T|27|sp |PUBLIC STORAGE CMN te tL | camps! oooand «| (|_| | | | | ft ||
+T|27|MONSTER BEVERAGE CORPORATION |
+T|27|CMN _ __03/23/26| 04/02/26
+T|27|sp |ADRCMN 03/13/26] 04/02/26
+T|27|~ i
+T|27|SP__|TRACTOR SUPPLY COMPANY CMN Pitt | ssrspdl word »| | 1 | | | | | | ||
+T|27||
+T|27|sp__|DOORDASH INC CMNN CLASS A Std | fa dL cansrad ova s | | ) t | | | fy |
+T|27|ERIE INDEMNITY COMPANY CL A CMN |
+T|27|SP {CLASSA _ 03/23/26|_ 04/02/26 _ _
+T|27|SP cansuces CORP CMN Pie} 03/23/26 sonnel x | | ptf to] fe
+T|27|sP_| EQUITY RESIDENTIAL CMIN [ane 03/23/26 wean x | | nae |
+T|27|CHARTER COMMUNICATIONS INC
+T|27|sp |CMN 03/23/26] 04/02/26
+T|27|SP_|CINTAS CORPORATION CMN | |. | apap oy 2 | | |) | ft |
+T|28|HAP Roh henna Poge 28 XZ
+T|28|a ee Oi
+T|28|pe PO ee re fee Ts To J OT TO
+T|28|ss et men emerson [8 [ottel er | ama | 2 | sas (es acl ees fame rm | samme st SOA :
+T|28|Exceed Partial $1,002 $1§,001 $50,001 |5100,001 |$25 O01 | $50Q00I $1,090,003- $500,002 Over Orpend = Chili Asset ove 1
+T|28|SP/OGs T Provid fud nam fewer symb 1 Purebase | Sale | Beh g $200 Treasoction MM/DD/YY } nuvooyyy $25.000 $500c0 |!5209,000 } $250,000 | $500,000 | $_.000,000 | $5,000,000 | $25 000,000 | $25 cog,0n1 $50,000,000 | $50 cn 000 $1 009,000
+T|28|Ritu Ahuja 1994 Trust
+T|28||
+T|28|WEYERHAEUSER COMPANY CMN x 03/23/26| 04/02/26| x
+T|28|ZIMMER BIOMET HOLDINGS INC | | | | eure coma | | | i | | | fo of |
+T|28|MEDTRONIC PUBLIC LIMITED COMPA || P|
+T|28|CMN | 03/23/26| 04/02/26
+T|28|IBERDROLA SOCIEDAD ANONIMA |
+T|28|SPONSORED ADR CMN | x 03/13/26] 04/02/26
+T|28|I
+T|28|o GODADDY INC CMN CLASSA lel LL | euzane ovo » | | | tet ft
+T|28|ALEXANDRIA REAL ESTATE EQUITIES ~ 7 _
+T|28|INC | 03/23/26 04/02/26 _
+T|28|MARTIN MARIETTA MATERIALS INC |
+T|28|CMN _ ' 93/23/26|_ 04/02/26 es ae
+T|28|SP_|GEN DIGITAL INC CMN | it ot || 03/23/26| 04/02/26 lL ft gt |
+T|28|SP_|ENEL SOCIETA PER AZIONI ADR CMN_ idle Le, 03/13/26 | ound x | | | ptf i
+T|28|f
+T|28|SP__|T ROWE PRICE GROUP INC CMN nnn 03/23/26) 04/02/26 ff ttt tp
+T|28|sp |CMN _ _ 03/23/26| 04/02/26
+T|28|NEWMONT CORP CMN Lt tb. 03/23/26| _ 04/02/26 ef | | tt EE
+T|28|~~ ~ |
+T|28|ABB LTD SPONSORED ADR CMN | am _ x} 03/13/26|__ 04/02/26 ot EEE TL EE
+T|28|SP__|NIKE CLASS B CN CLASS B || P| | 03/23/26 | owed | | | | | | | ff
+T|28|sp |CMN _ 03/23/26] 04/02/26, x
+T|29|NAME. ht Khana aga 29 t 43
+T|29|ee ee SS _ sims _ ‘Teneo
+T|29|| Ered | Portal | $1001 | $18,001 | $so001 | s100.0ar |s2s0001 |!ss09.00 | s1,00q003 | $5,003.02 Over | Depe en Chit Asset ver
+T|29|SP/DCHT Pro d full ome, not ucker symbol. wrchase | Sole | Exhang | $200 | Transaction MMODIYY meynppry__| $15,000 | $50,000 | $ aton9 | $250,000 | $500 000 | $1,000,009 | $5,000,000 | $25 000,000 | $25,000,001 $54,000,000 | $50,000,000 $2,000000 0 8 _
+T|29|futu Ahuja 1994 Trust _
+T|29|4
+T|29|| VINCI SA ADR CMN it | x | x 03/13/26; 04/02/26| x Pitt | tt ft
+T|29|CMN 03/23/26] 04/02/26
+T|29|SHARES 03/13/26 __ 04/02/26
+T|29|INSULET CORPORATION CMN Ai 03/23/26 | owed «| |_| | | | | fo | |
+T|29|STERIS PUBLIC LIMITED COMPANY
+T|29|SP |CMN _ —— s+ 03/23/26; 04/02/26
+T|29|= — == an
+T|29|eo EXTRA SPACE STORAGE INC_CMIN bt LL yaar 04/02/26 ett | ft ft Ft
+T|29|= {
+T|29|COMPASS GROUP PLC SPONSORED | i
+T|29|ADR CMN - 03/13/26| 04/02/26
+T|29|| AVALONBAY COMMUNITIES INC CMN it ff 03/23/26) 04/02/26 el EE EE LE |]
+T|29|AON PUBLIC LIMITED COMPANY CMN
+T|29|CLASS A - ee 03/23/26| 04/02/26
+T|29||
+T|29|FRANKLIN RESOURCES INC CMIN te | 03/23/26] 04/02/26 al FEE EL ft fe
+T|29|CENCORAINCCMN _ ___ Ld et | 03/23/26| 04/02/26! _x ett et EL
+T|29|DELL TECHNOLOGIES INC CMN CLASS Pf fy |
+T|29|Cc 03/23/26; 04/02/26
+T|29|CIN — 03/23/26; 04/02/26
+T|29|DECKERS CUTDCORS CORP CMN 03/23/26; 04/02/26
+T|29|POOL CORP CMN 03/23/26; 04/02/26 =
+T|30|NAM — oht Khan rege 2 O in ed
+T|30|[tne | imecramason |_| tncrranne mee | we
+T|30|PP ee ee ee ee ne
+T|30|Exceed Sertiof $4,001 $25,002 {$5000 |siagcor | $2sooar || S500007 |S.0ononr | Skocanar Ove Dependen ChfidAs ve
+T|30|seman | __ Prd full ame, ott cher symbot, Parchese | Sale | Exchorge.| _$200_{| Tronsaction |__ nerypoyry__}__nenynnrry___ |_$25,000_| _55G.000_ | $200,000 | $250,000 | $500 900 } $1,090,000 | $5,000,000 | $75,060,000 | $25,000,001 $5@.000,000_| $50,000,000 |_$1,00,000_
+T|30|Ritu Ahuya 1994 Trust
+T|30|i |
+T|30|| |
+T|30|SP [NETAPP INC CMN S| x x | x 03/23/26] 04/02/26; x f l
+T|30|TRIMBLE INC CMN_ _— 03/23/26| 04/02/26 _ jj ——
+T|30|| | 03/23/26| 04/02/26 Pet fee EE
+T|30|ce loanoen RESTAURANTS INC CMN al || | cwsze ono of | ot | EE
+T|30|}
+T|30|SP__|COINBASE GLOBAL, INC _CMN CLASS A i Td td gL eweane 04/02/26 ef ttt
+T|30|SP__}CAMDEN PROPERTY TRUST CMN ie | Lt 03/23/26 wont x) | | | i | | | | |
+T|30||
+T|30|ZOETIS INC_CMN CLASS A i 03/23/26, 04/02/26 et |) te
+T|30|GE HEALTHCARE TECHNOLOGIES INC od Pf |
+T|30|CMN 03/23/26) 04/02/26)
+T|30|| DANAHER CORPORATION CMN let | || cananel coon «| | | | | | | fo |
+T|30|_ |
+T|30|AGILENT TECHNOLOGIES INC_CMN lal || | ewan wont | | | | pf | | | fo
+T|30||
+T|30|!
+T|30|f
+T|30|WILLIAMS SONOMA INC_CMN Pi ft 03/23/26 won x | | | | | Ly |) |
+T|30|se leem SYSTEMS INC. CMIN i | ft 03/23/26|_ wont |_| |_| | | i | | ||
+T|30|BROWN & BROWN INC_CMN i ft | 03/23/26 oumny | |_| ef Ep tt
+T|30|SIEMENS AKTIENGESELLSCHAFT ~ | Pf |
+T|30|SPONSORED ADR CMN 03/13/26) 04/02/26
+T|30|SPONSORED ADR CMN 03/13/26] — 04/02/26
+T|31|a PO al
+T|31|pe et ee Pee Pe Es
+T|31|vm | re “| tee etl un Spous
+T|31|nor| mae weer som Ie le [rame ‘no rset | 3150 Sen00 or s2sant | s0aon igen sess | gow onan mane |ono| SG
+T|31|$ pent Provid full me not teke symbol Purchase [sar | Fence | $209 fl msoction | poy a Yaotrr | $15.00 | 350,000 | $100,000 | 's250,000 | $500,000 | $2,000,000 | $5,000,000 | $25 000,000 | $25 000,002 $50,000,000 | $50,000 000 $2,000 000
+T|31|Ritu Ahuja 1994 Trust
+T|31|TOYOTA MOTOR CORPORATION SPON | 1
+T|31|ADR x x 03/13/26|| 04/02/26
+T|31|sp__|cMN 03/13/26| 04/02/26
+T|31|SP__|LENNAR CORPORATION CMN CLASS A Ife 03/23/26| 04/02/26 wt itt tip t tf
+T|31|cMN 03/23/26] 04/02/26)" _x_
+T|31||
+T|31|SUPER MICRO COMPUTER INC. CMIN td fp 03/23/26} 04/02/26 tf ft tt TY |] lf
+T|31|RESMED INC CMN ae || conan ovoned » | | 1 | | | | | | | |
+T|31|SP_|INTUITINCCMN | | 03/23/26| 04/02/26 Se eee eee
+T|31|sp JA _ 03/23/26| 04/02/26] _x
+T|31|SUMITOMO MITSUI FINANCIAL GRP
+T|31|sp_|SPONSOREDADRCMN | |__x 03/13/26| _04/02/26|_x
+T|31|TAIWAN SEMICONDUCTOR MFG ADS | Wy
+T|31|LTD ADS 2ADS EQUALS SORDS 03/13/26} 04/02/26 ]
+T|31|SCHNEIDER ELECTRIC SE
+T|31|UNSPONSORED ADR (FRANCE) 03/13/26|__04/02/26 ] __
+T|31|31 GROUP PLC UNSPONSORED ADR et ||
+T|31|CMN ix 03/13/26] _ 04/02/26
+T|31|INDUSTRIA DE DISENO TEXTIL 5 ADR |
+T|31|CMN ~ x |_| x 03/13/26} 04/02/26 a _
+T|32|NAM hi Khanna Pag 92 2, %3
+T|32|Prt |e im |] ert] meet |e
+T|32|™ Tro section ta Spouse or
+T|32|Excend Pertigt $1002 $25,203 | $50,00£ $100,001 |$25a,00r ; $500.00: | $2,000,001 | $5,000,001 ve Depe ¢ ar Child Asse over
+T|32|Ritu Ahuja 1995 Trust —_
+T|32|WELLS FARGO & COMPANY HYBRID | | {
+T|32|PERPETUAL x _ __ |_03/11/26| _ 04/02/26] _x i | |
+T|32|HYBRIO 07/31/2056 03/24/26| 04/02/26
+T|32|COREBRIDGE FINANCIAL, INC. HYBRID ||
+T|32|SP |PERPETUAL _ _ 03/27/26| 04/02/26 =
+T|32|FIRST HORIZON CORPORATION PFD Pt | S|
+T|32|6 7500 03/05/26; 04/02/26, |
+T|32|~ EMERA US FINANCE LLC HYBRID | 5; ||
+T|32|SP |10/01/2056 03/17/26] 04/02/26 ~ —j_
+R|33|0|SP|Prove full me.not ticke menbot _|//||0.033,0.031,0.036|0.071,0.073,0.088,0.105,0.108,0.100,0.087,0.109,0.056,0.066,0.106
+R|33|1||aK OF MONTE LNKD TO VANECK|03/16/3|4/07/31|0.013,0.006,0.000|0.000,0.000,0.000,0.010,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|2|C|aaneelle BANK PLC LINKED TO S&P|03/02/2|04/02/23|0.021,0.000,0.000|0.000,0.000,0.023,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|3|p|Sa eM TREAL LINKED TO S&P|03/1 / 2|04/02/28|0.029,0.000,0.000|0.000,0.000,0.023,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|4|DC|no cep eccinn al CANADA LINKED|03/04/2|04/02/2|0.024,0.000,0.000|0.000,0.000,0.022,0.000,0.000,0.005,0.000,0.000,0.000,0.000,0.000
+R|33|5|C|BWX TECHNOLOGIES INC CIMN|03/19/2|04/02/2|0.024,0.000,0.000|0.000,0.020,0.003,0.000,0.000,0.000,0.008,0.000,0.000,0.000,0.000
+R|33|6|pC|OHIO ST GOS 0000% 06/15/26 ID|03/02/2|04/02/2|0.025,0.000,0.000|0.000,0.022,0.000,0.006,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|7|p|KLA CORP CMN oe|7 03/18/2|04/02/2|0.024,0.000,0.000|0.005,0.020,0.006,0.000,0.000,0.004,0.000,0.014,0.000,0.000,0.000
+R|33|8||SON Oe bono ues|03/02/2|04/02/2|0.023,0.000,0.000|0.019,0.000,0.005,0.000,0.003,0.000,0.000,0.000,0.000,0.000,0.001
+R|33|9|D|INTUIT INC 5 2% 09/15/2033 USD|03/02/2|04/02/2|0.024,0.000,0.011|0.031,0.000,0.000,0.010,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|10|p|NEXTERA ENERGY INC CMN|03/159/2|04/02/26|0.022,0.002,0.000|0.020,0.000,0.000,0.000,0.000,0.011,0.000,0.000,0.000,0.001,0.001
+R|33|11||MARVELL TECHNOLOGY INC CMN||04/02/26|0.029,0.000,0.000|0.018,0.000,0.000,0.000,0.000,0.005,0.000,0.000,0.000,0.000,0.000
+R|33|12|C|XCEL ENERGY INC CMN|03/19/2|04/02/26|0.024,0.000,0.000|0.020,0.005,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|13|DC|Tey UCKER CO 2 125% 03/15/2032|03/02/2|04/02/26|0.029,0.001,0.000|0.020,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+R|33|14|pC|CONSTELLATION ENERGY CORP CMN|03/19/2|04/02/2|0.023,0.000,0.000|0.022,0.000,0.000,0.000,0.000,0.000,0.008,0.004,0.000,0.009,0.000
+R|33|15|p|OP LESE STATION TEX DB SY /|03/27/2|04/02/26|0.024,0.000,0.000|0.019,0.000,0.000,0.000,0.000,0.009,0.000,0.000,0.000,0.000,0.000
+R|33|16|C|0 140 ST WTR DEV AUTH WTR REV 5%|03/23/2|04/02/26|0.000,0.038,0.000|0.000,0.000,0.024,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000
+T|34|NAME Rodit khanna n 24. 43
+T|34|po de ee a
+T|34|| Exceed Porth $L00L $5001 | $sao0 |$ m.00 {$2 Qo0l |'$5od001 | Siconoor | SSoUuonr Ove Depencent Chiid Ass ove
+T|34|rfec} f Provide full nome, not ther symbok Purchase | ole | Exchange |_.$200__j Tramsoctioa MAYDOSrY manna $18,000 | ssqoc0 | $ cao00 | $250,000 | $500,000 | $2,000,000 | $5,000,000 | sz5.0cc.000 | $2 non.oat $sacnQ.con | Ssn.000.c00 $ 000,000
+T|34|M & R Trust Partnership
+T|34|DEL VALLE TEX INDPT SCH DIST GO 5%
+T|34|pc 06/15/26 ID _ x 03/26/26, 04/02/26 x
+T|34|= DC_|HONEYWELL INTL INC CMN Sit Ld | 03/19/26|__ 04/02/26 Piet | Et | ty ft
+T|34|OHIO WATER DEVELOPMENT AUTH ' a
+T|34|Dc_|REV 5 0000% 06/01/26 JD 03/26/26} 04/02/26 x
+T|34|oc ownasus OHIO DB 5% 10/01/26 AO ana 03/26/26| 04/02/26 ef ET] |i tf
+T|34||
+T|34|DC OHIO ST REV 5% 12/01/26 ID _ Pit | fy 03/23/26| 04/02/26
+T|34|DC_|MISSISSIPPI ST GO 5% 11/01/36 MN Pid | 03/23/26 word || | | {| | | yf |
+T|34|OHIO STATE UNIVERSITY (THE) REV ot | po
+T|34|DC |5 0000% 12/01/26 ID _ 03/23/26] 04/02/26
+T|34|DC_|OHIO ST GO 5 000% 06/15/26 JD Pied | 03/26/26|__ 04/02/26 —t.t tet tt tf
+T|34|DC__|OHIO ST GO 5% 08/01/26 FA ad | || — 03/26/26| 04/02/26 Piet | Pee
+T|34|oc fons CORPORATION CMN Sd | 03/18/26| 04/02/26 Pi ttt? tt ft tt |
+T|34|DC_|DUBLIN OHIO DB 5% 12/01/26 1D td | 03/26/26| 04/02/26 tf titi tt ut
+T|34|OHIO STATE UNIVERSITY (THE) REV |
+T|34|pc |5 c000Y 12/01/26 ID 03/26/26| 04/02/26
+T|34|HONOLULU HAWAII CITY & CNTY GO Poy dt |
+T|34|pe _|s%o7/o1/26) 03/26/26] 04/02/26
+T|34|OHIO ST GO 5% 09/15/26 MS Poi td a 03/26/26} 04/02/26 ot ttt Ep
+T|34|OHIO ST DEPT ADMINISTRATIVE COPS
+T|34|pc |5 0000% 09/01/26 CA MS x 03/26/26| 04/02/26
+T|34|bc |5 0000” 09/01/26 CAMS 03/23/26| _ 04/02/26
+T|35|AM toh Khana re 3 Fu VD
+T|35|——, =— = —=T Pte hoited o = —
+T|35|Pt | [of of ee
+T|35|Exceed | Partio? . |] $200 | $18.00 | ssa.901_|szonoor |sesqoor }'ss000 | sx,00,00 | Ss,q0q0n if Ove Depenne ChitdAsset over |
+T|35|i rowd fullrame, otticke symbol. ___ _._|Punkine |S ¢_] Ech ge $200 | Transaction f hypoprr MM/DD/YY $15,000 | $50,000 | £ opcuD | S250000 | $590,000 } $3,000,000 | 55,000,000 | $25 oD0.000 | $25,000 008 $50,000,000 | $50,000,000 $ ¢oa000
+T|35|Mi & R Trust Partnership
+T|35|tL La | canna cummed ||
+T|35|DC jDATADOG INC.CMNCLASSA  __ ~ —'X _ x 03/18/26 04/02/26; x |
+T|35|oc 06/01/26 JD I 03/26/26 1 04/02/26 x —
+T|35|MINNESOTA ST GO 5Y 08/01/26 FA pt 03/26/26 owl | | | | i tt tT
+T|35|DC [OHIO ST GO 5% 05/01/26 MN LL | = ma ——_.03/26/26 04/02/26 F.tL et} |] | tl dt |]
+T|36|NAME, Rohit Rha na 3 V3 3
+T|36|Date fats! do
+T|36|er Oe PG nd a ee
+T|36|Goins | \ i | Transactio In Spousear
+T|36|Exceed Partiot $1001 $i8.001 | $50,002 | S1oqan | S2sa.002 | $520,002 [$1000002 | $3,000,002 Over Dependent Child Asset ove
+T|36|SP/DEIST Provite fullname, no ticker symbol. Exchonge | $200 | Transaction aewoogny $28,000 | ssa,000 | $ cpau | $730,000 | $Sog.000 | $1,000,000 | $5,000,000 | $25,a0q.000 | $25,003,001 $5,000,000 | ss@.o0n.on0 $1000.00
+T|36|Zara Ahuja Khanna UTMA _
+T|36|DC_{PORTFOLIOCLASSP —____ 03/10/26] 04/02/26] yx __ _ _
+T|37|NAME B tut Khanna Page JT 7 MZ
+T|37|TE EO
+T|37|| ain | i fe ott! in Spow or
+T|37|. Exceed Partial $2001 | $15001 | $50,001 $300,007 | $7 9,202 | $s0D001 | $1.com"0r | $500,001 Ove Dependent Calid Ast ver
+T|37|segocnt Provide full’ an ticker symb f Puryagie. jo ole | Eacnang $200 | \Trans ction mupoyy | $ 000 «| $80,000 | $300,090 } $230,000 | $500,000 | $2,000,000 | $ o0R.000 | $ 5.000.009 | ,$25 900.00T $50,000,000 | $50,000,000 $2,000,000
+T|37|Soren Ahuja Khanna UTMA _
+T|37|GS TAX ADVANTAGED GLOBAL EQUITY ~ : |
+T|37|DC {PORTFOLIO CLASS P x _ 03/10/26} 04/02/26 x |! t
+T|38|_ _ oo __ _ _ __NAM_ Rob Khanna Page 3S NZ
+T|38|aa ea SP Br |
+T|38|P BD teofTransaction Transacti =~ ——.. -——-_Amnunt of rancaction,
+T|38|a ee Pe a eT Te eT ee
+T|38|{ | | | I Transaction in
+T|38|i Spouse
+T|38|, Cxpitab Depend
+T|38|G uns Chid Ass
+T|38|Exceed Partial $207 Sik0as | $50,001 j$te000 [$250,00 | $so0,0or [$1,000,00 | $5,000,001 | $25,000,001 Over ver
+T|38|SpeOCHT Frovide full me, ticker bol. Sal | Exeha g $200 Tra_soction MRESOSYY PARADA S35.000" 0.050 100.000 0,000 | $509,000 200,000 | $5,000 000 | $25. 000 000 0.000.008 1 $s00006000 | $2000 00G
+T|38|MURA Holdings
+T|38|Rute Ahuja 1994 Trust
+T|38|BOFA FIN LLC SER A MTN ZERO CPN” | \ |
+T|38|0 conc0% 03/07/2028 _ x Po} | 03/02/ 26 03/ 02/26 ft _ |_| x
+T|38|PUT (NVDA) NVIDIA CORPORATION SEP 18 | — = —
+T|38|PUT {AVGO) BROADCOM INC COM SEP 18 26 — | ~ i
+T|38|SP [$280 (100 sis} Sofeh 03/16/26 | 03/16/26 | x rt fet -_ | |
+T|38|PUT (AMD} ADVANCED MICRO SEP 18 26 =}
+T|38|PUT (MSFT) MICROSOFT CORP SEP 18 26 oy ve 7 7
+T|38|sP none Ee a
+T|38|a
+T|38|PUT (AVGO) BROADCOM INC COM MAR 19 | ' fj
+T|38|js [risers own |x| | osners | osmens| x | | | ||
+T|38|PUT (MSFT) MICROSOFT CORP MAR 19 27 7 )
+T|38|js atom mooreomwansoz7 7 Tx? || fomens|onens| x | | | | | | {| | | |
+T|38|PUT {NVDA) NVIDIA CORPORATION MAR 19 | i —— ~ aa
+T|38|ie [issn nome? | txt ||| osnsrs|osnens| x) TT Tt TT TT
+T|38|PUT (AMD) ADVANCED MICRO MAR 19 27 ma \ q
+T|38|SP $165 (100 SHS) me _ 03/16/26 03/ 16/26 x
+T|38|MAR 1 —— — _
+T|38|ed a
+T|38|- —_— 1 — —
+T|38|phone |_| | | anmnsfoamanel | | | 71) ) |
+T|38|+ pwonesowoninnonionsel «| [|| _fammelommel > | | f | i | | | yt
+T|38|+ fsmmecorowrnas | fa] | | fovmnelomaee] x | | |_| ||| || |
+T|38|= en Os Oe Od
+T|39|__RAME Rohl Kh Page 3F 43
+T|39|ee age | ee ee
+T|39|FD Asset Name Tyoe of Transaction —— Qate fTransactic ransactes — = —— mou f Transactio }
+T|39|— a ne EE Te To eS
+T|39|—— = = i = — —a—
+T|39|| Trensaction in
+T|39|| Spous oF
+T|39|Capital | Depe den
+T|39|Ga Grild Asse
+T|39|1 fxceed Portia $200: | 1500) | 550.00 {$i00.00 |$ sa.ce | $50,09 1$2,000002 | $s.000,001 | $7 00900 ow over
+T|39|— SP/DC/IT Provide fullnam ot ck _symba! Purch $1 | exch re | $200 _ | transaction ABEDO/YY wees NE $15000 | ssa.nos_{ $ré0 00 | $2 2 000 | $500 090 | $2,000 asa | $5,000 o90 | $25. 000.000 | $50 000 000 | $s0.G00.000-5_$ 200.000
+T|39|MURA Holdings . . 7~ 7 soe
+T|39|1
+T|39|Ritu Ahuja 1994 Trust
+T|39|MOR 7 P ZZ
+T|39|PHILIP RIS INTERNATIONAL INC COM x ] 03/20/26 | 03/20/26
+T|39|NPV — | name Dae
+T|39|pe barnes dxf || Pern | vas | | Pp) PP
+T|40|_ _ _ NAME. R ht Khanna page %€ O 43
+T|40|D toNotified ¢ |~ ~ ~
+T|40|ae SP
+T|40|) a A SS SS (SONS NON. SS 2 ON eS ES = ES
+T|40|| | Tramsoction in
+T|40|Spoust or
+T|40|Capita? Depend at
+T|40|l Gols ' Child asset
+T|40|| | Breeed Portiat 32,002 | g1s001 | ssa,007 {$209 002 |$250,001 | $500,002 |$2,000,001 | $5,000,00 | $25,000.00 Over over
+T|40|SP/OCSIT Prond_ {full name, not ticker _mbol, Purchase | Sole | Exch nze | $200 Tronsoction MOAUDEY AM DONY $tx000 $50 000_|$ 22.000 | $250 060 | $500,000 j £2.000.c0D | 5 000.000 525 000 203 | $35,000.50 £30,000. 000 eet
+T|40|MURA Holdings ~
+T|40|iM ateand Usha Ahuja 201Girr Tru tfBO
+T|40|Gra d hildren
+T|40|BOFA FIN LLC SER AMTN ZERO CPN ~~ | ~~ | '
+T|40|DC Jo voana% 03/07/2028 x 03/ 02/26 03/02/26 — |_ - x |
+T|40|PUT (NVDA) NVIDIA CORPORATION SEP 18
+T|40|oc frestorwosn morons | tx] ||| oameras | cones} x) | | | | | | YT
+T|40|PUT {AVGO) BROADCOM INC COM SEP 18 26 7 - 4 naj
+T|40|ae PT fess | ones | x | | oT | | tf
+T|40|PUT (AMD) ADVANCED MICRO SEP 18 26
+T|40|Rae St tel | Tf osasns | canoe} x | | | | | | | | | |
+T|40|PUT {MSFT) MICROSOFT CORP SEP 18 26 Jantar |! am
+T|40|joc (onoomg rreowserssas | tx] || [essence fosass| x | | of | | tT | |
+T|40|PUT (AVGQ) BROADCOM INC COM MAR 19 - 7 -
+T|40|oc [emomcongnccommmns | et Tf fosrsas|omens| x | | | | ft tL
+T|40|PLT (MSFT) MICROSOFT CORP MAR 19 27
+T|40|oc [emo tL Ly [evnses omnes] xf | | | |
+T|40|PUT (NVDA) NVIDIA CORPORATION MAR 19 '
+T|40|joc reiseramangycmomanowmanse | txt || | ossrs | oases] x | || Pf |
+T|40|— |
+T|40|PUT {AMD} ADVANCED MICRO MAR 19 27
+T|40|joe seals fet | | [esses | omnes} x |] | fF | tT TT
+T|40|o fwrmnmrrsree | af [Yan faees | |
+T|40|o_fomovorn a
+T|40|pee fueesowowenscnnmromss| x | ||| famine} enmee! || | || |_| | |_|
+T|40|fe fomcmonconomoas [ix | | evione|omre] «| | || || | ||
+T|40|a dO
+T|40|x farmer Fy TTL faves)
+T|40|jc frrocrenmncaumscocom | [xp | | | osrmnne| osaors| x | | | | | | | ft |
+T|40|[rc funneosenrncrourme | ef | ff omnes | osvaors| x | [| | | | | ht UT
+T|41|_ ee NAME. Rohi Khana vace {6 1 47
+T|41|enn epee |
+T|41|Ful Asses Name. Tya_of Transact) Traneact!
+T|41|Sa SR OS (EE NS NO - D QON “SS (fee “SD Pet  * OD
+T|41|a =
+T|41|| { Trons étfo in
+T|41|1 Spotne or
+T|41|| | Capital | Cepe d nt
+T|41|Gin | | Culd Asset
+T|41|5 ocfit Provd full ome, atbeke symbol. Purchose | Sat_| Excn a. | $200 _|'Tenraction | _ Mat/Dd auerosyy | $15,000 1 ssac00_| $ oans0 | $280,000 | $500 090 | $2 c09 090 | £5,000 00 _| £25,000 o00 | $50,900,000 | ssa.000,000 | _$2.000.000
+T|41|MURA Holdings i >
+T|41|Monte and U ha Ahuja 2010 irre Trust FBO
+T|41|Grandchildren
+T|41|PHILI RNATIONA ! ~ _
+T|41|9
+T|41|x frances fe | | Teves | one = | tf tb PPP
+T|42|NAME. Rohtxhsnna Paz _*f Zot 3
+T|42|ee a ea es
+T|42|43 Date of Transact Transaction ——- — Amoun of an action — -
+T|42|TE eee ae ee eee
+T|42|i} Trans ctlo 1
+T|42|\| Spouse or
+T|42|Coprtal Ocpe dent
+T|42|HW Gat Ql Ass
+T|42|Exceed Partt I $4,001 $25,001: |$ 00% {$ 00,00 |$250,001| $sde00 |$1,00000 | $5,000,002 | f25.000,car Ove ove
+T|42|SP/DCAT Provide fict nome, not_ cher symbol Purchas Sae} Exchena $200 Tronsaction SLMJDD, WIAIDONY $15.00 $32.000 _| $700,055 | $250600 00.009 | $1,009,000 000,000 | $25,000,090 $50,000 DOD, 58,000,500 |_$ 000.000
+T|42|MURA H dings . .
+T|42|2020 Trust FBO Khanna Children
+T|42|BOFA FIN LLC SER A MTN ZERO CPN |
+T|42|~ 1
+T|42|PUT (NVDA) NVIDIA CORPORATION SEP 18
+T|42|a odd
+T|42|PUT (AVGO) BROADCOM INC COM SEP 18 26 7 .
+T|42|oc Fone ree] lx] || [osers | cones} x | | fF | | | | |
+T|42|PUT (AMD) ADVANCED MICRO SEP 18 26
+T|42|o¢ frame ore | tx] || osres | osasrs| x | ff | to) | |
+T|42|PUT (MSFT) MICROSOFT CORP SEP 18 26 == _
+T|42|ce fetsumaemrrcowmrine [Lat [ewnwne| oer TT
+T|42|_ TIF 26 $130 (100
+T|42|a
+T|42||
+T|42|PUT (AVGO) BROADCOM INC COM MAR 19 x | !
+T|42|DC | 7 280 (100 SHS) || 03/16/26 | 03/16/26 | Xx |
+T|42|_ PUT (MSFT) MICROSOFT CORP MAR 19 27 -
+T|42|PUT (NVDA) NVIDIA CORPORATION MAR 19
+T|42|oc Pasco | xt | | osres| ovens} x | | | | | | | |
+T|42|PUT (AMD) ADVANCED MICRO MAR 19 27 7
+T|42|oc [niwoey mcromanssey | dT nore] x] | | | | | | |i
+T|42|= farmmmmmnrnenee | fe | Lonel one | = TTT
+T|42|2 ein PT one |
+T|42|fae fuacwonsowowean | [aff | fewmne| amano] [TP
+T|42|pe _uernuxn pet tf | | osmores|oveons]| x} | | | | | | | | tl
+T|43|NAME, RohitKhann Page 47 143
+T|43|nnn ed
+T|43|panes | ters || iano | ag
+T|43|Tyg _ofTran action Date ftra sact on Tra sacio ———— — Amqu ofTra__ acti —
+T|43|SEE EE ee eT oe a K
+T|43|j
+T|43|| Tra ction
+T|43|| | Sp us or
+T|43|Copitot ; Dep nd at
+T|43|Gains Child £rset
+T|43|Exceed Portt I $1,001 $15,001} $s0.001 [$ 00,00 {$250,002 | $500,001 {$1,000,001 | $5,000,003 $25,000,001 Over over
+T|43|POUT Provide full home pot teére bol Purchase _| Sale | Excheniw | $200 | Sransochon | _ Atht/DOVYY BIL DOSY 515000 $59,000 _| £190 000 | $252,000 | $500 000 | $2 009 DBD | $$ C00 N00 | $25.000 000 | $50000 C00 1 550.001 000 | _$1.000,000
+T|43|MURA Holdings . : ~
+T|43|2020 Trust F8O Khanna Children

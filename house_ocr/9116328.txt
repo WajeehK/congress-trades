@@ -1,0 +1,357 @@
+#house_ocr v2 doc=9116328 pages=18
+R|1|0||Dieser cas thea atiankarl|||0.020,0.016,0.026|0.022,0.025,0.020,0.007,0.021,0.019,0.021,0.023,0.014,0.012,0.012
+R|1|1||||-|0.032,0.026,0.017|0.016,0.033,0.018,0.018,0.028,0.023,0.019,0.016,0.015,0.017,0.027
+R|1|2|||||0.024,0.030,0.022|0.021,0.016,0.011,0.017,0.031,0.019,0.037,0.017,0.011,0.017,0.017
+R|1|3|||||0.025,0.037,0.023|0.020,0.016,0.016,0.017,0.020,0.024,0.021,0.035,0.018,0.015,0.016
+T|2|NAME: R BR Khanna Pure a wt2
+T|2|Pe Oe Pee Pe oe TO
+T|2|Exe d | Partlod $3003 | $23002 | $50,001 |S1oqo02 | $250,001 | $sonc01 |$2,000,001 | $$.000,00r Over Dep ndent Chitd Asset over
+T|2|S/O ; drove full ome, _ Och : purchase |i | exchange | $200 Teonsactlo Le MODY MA/OD/YY $15,000 | $50,000 | $200,000 $259,000 | $500,000 | $1,000,000 | $5,000 cao | $25,000,000 | $25,000,001 $50,000,000 | $54,000,000 ‘$1,000 000
+T|2|Monte and Usha Ahujo2010 Irrev Trust FEO i eae, San [i : Wate tok
+T|2|_ |Grandchiidren > py Se eee a ate as eee ee yee OY uh gt a a aw oo
+T|2|jo [fersoomoe te | LL | oars comnrl | |
+T|2|S&P 500 INDEX 08/27/26) 09/01/26
+T|2|500 INDEX 08/06/26| 09/01/26
+T|2|| PC ence co we cw xt | | | | cswrae ool |x| [| | | | | | | [|
+T|2|. MARVELL TECHNOLOGY INC CMN 08/07/26] 09/01/26
+T|2|PERPETUAL 08/28/26] 03/01/26
+T|2|08/07/2026 08/07/26] 09/01/26
+T|2|08/07/2026 08/07/26; 09/01/26
+T|2|DC
+T|2|| ee |, MOBILE US INC. CMN td | 08/07/26] 09/01/25 el tt tEE_ tT | ft
+T|2|SCHNSON & JOHNSON CMN 08/07/26| 03/01/26
+T|2|ALPHABET INC CMN CLASS C a xX 08/07/26 09/01/26
+T|3|NAME. A hit Khanna P 2? _13
+T|3|Pr tmnt | te trams | | dete ttenate | tenet | et tte
+T|3|Tra soctionia Spovs or
+T|3|Bxceed Pastiat $2,001 $15,001 | $50,001 |$200,003-/$25Q001 | $sov0d | $1,000,001 | $$. 000,001 Over B pend t Child Asset over
+T|3|spsegt Provid full nome, not ticker symbol $200 | Trans ction MM/DD/YY MMfoD/eF $15,000 | $50,009 | $200,000 | $250,000 | $500,000 | $2,000,070 | $4,000,000 | $25 000,000 | $25 70G.002 $50,000,000 _ 51,000,000 :
+T|3|Seg eR ap ake OP OES A eR age he yin ec he SERN oe cali OOP ease BERT Ae age re. i oN eaSaten ge SEE | Se Rea ae Re gE RR Se a2
+T|3|e ry at vs io es i ae , a ae ee a i & ae pe? . = get zis “ea rae a : ed ape oe = a4 as " 7 ” ag a ava So . my he
+T|3|Abuja Grandchildren s Education Trust Is gk we tte Pilot Ee Bel 8 ee ees cee te ee eet a oe oe EE me Y Lanee At ae ee ee
+T|3|F06 Tasauze uo cam Pet | | | | corrasl coral x | | | | | | | | | |
+T|3|| P racrsernescancasrsrenswcown| |x| | | x | oops ovum »| | | | | | | | | | |
+T|3|| lenwamaveorrcomeanvcm | |x! | x | x | oyoyae oo x | | | | | | | | | | |
+T|3|owrenesrmcconcassa | [xl | | x | ouowae ood x | | | | | | | | | [| |
+T|4|HAME: Rohit Khanna md 18
+T|4|poe re ee
+T|4|Gofas Tronsoctionin §=pows or
+T|4|Sey cat 3 00 ra to Mivoniy MMOD $25,900 $5,000 | $toq.oco | $250,000 | 5502000 | $2,000,000 | $5,000,000 | $25,000,000 | $ 5,000,008 $80,000,000 | $4,000,000 $4,000,000
+T|4|2020 Trust FBO Khonna Children ~ Cone Poe 2 RR a RE art Sa eee ae TE eee BS
+T|4|INDEX 08/13/26 03/01/26
+T|4|500 INDEX 03/06/26 05/01/20
+T|4|STOCK 08/10/26 09/01/26
+T|4|| °C Irersco. nc ch ett | fT ctor] ovr » | | | | | | { | | [|
+T|4|[2 leqrow cone ec cm Pel | |] | crores} osrourl » | | | | | | | | | J
+T|4|| PC prerwe.coay Pelt | | | cso oor! s | | | | | | | | | | |
+T|4|[°c hrewnaconoranowcuncussal x | | | | | osoras| oom » | | | | | | | | | | |
+T|4|| PC leuaceeocerowons ncemm | x | | | | | owsyzel oop » | | | | | | | | | | |
+T|4|i
+T|4|[PC smesronce ct Pel | [| | coor! coor] x | | | | | | | [| | | |
+T|4|CMN 08/10/26 09/01/26
+T|4|| PC rsrsovan Ie. con Pelt | | | ctor} ooyorrl x | | | | | | [ | | |
+T|4|| 0c Iunescraconoucronsuvcws |x| | | | | onnons| oom x | | | | | | | | | | |
+T|4|CMN 08/10/26] ; 09/01/26
+T|4|| oC |eanpuoucunarencomranvoun | x | | | | | osanrasl_ooounel x | | | | | | | [| | |
+T|4|fice TTT LT wal ence
+T|4|CMIN CLASS A 08/10/26) 09/01/26
+T|4|[PC Iaccenrunenicem crassa | x | | | | | owaoresl cmyoyrel x | | | | | | | | | | |
+T|4|[PC |rscressonconronsnoncmn 1x | | | | | coon ool x1 | | | | | { [ {| [| |
+T|5|MAME, Roki Khanna PE S18
+T|5|men a)
+T|5|Gales ronsactionin Spout or
+T|5|Provid fof ome, not cher rymbol, Exceed | partial $xocr | $2s00r [ssqoor |szoqoor |s2sqoos | ssoqooz | 5%,00,001-| $5,000,002
+T|5|Exchang | $200 | Tre ochan Maao/ye MAYODAY $18900 | $50,000 | Stoqooc | $250,000 | $500 one | $1,00Q.000 | $5,000,000 | $25,000,009 | $25,000,001-$50 000,000 | $50,000,000 $2,000,000
+T|5|q une i oi te ee Sa an eS ye 7g * * * RE 3 gaat “eee a ee oe 7 . ex eae . “Kp oe re eae ke a ‘ Ste oe ‘ at “os “— . : LO, ae «
+T|5|2029 Trust FBO Khanna Children et Oe Eee Ee Ee aS eR Re ee a oe ae a
+T|5|| |umostoorwontscuww | x | | | | | onysonsl oy » | | | | | | | | | | |
+T|5|[06 sen inc cw et] | TI coporst coor » | | | | | | | | | | |
+T|5|| Nrowescomeanescesm | x | | | | | owyayrsl oom» | | | | | | | [| | | |
+T|5|DC |core class A 08/10/26| _ 09/01/26
+T|5|roromoroncompanveun | x | | | | | oonorasl coun » | | | | | | | | | | |
+T|5|[9 [ssvesassawoscom own | x | | | | | oworel ool x | | | [| | [| | | | | |
+T|5|| 9 lrencronsurrivcommanvcam | x1 | | | | conons| oom » | | | | | {| | | | [| |
+T|5|-[.% fooorosumcomesssa [|x| | | | | ononel oyoyel x | | | | [| | [| | | | |
+T|5|Foc lenconsrour ecm | x | | | | | owryrel onyounel x | | | | | | [| | | | |
+T|5|Cl tx | | | | copsoyel oor x | | | | | | | | | |
+T|5|DC Icy 08/10/26| 09/01/26
+T|5|} oc lqunyesccrowics ecm | x | | | | | coos ooo x | | | | | | | [| | [| |
+T|5|| 9¢ lanove nc cun Pel | | | coysl oor x | | | | | | | {| | |
+T|5|| °C Icoonatos cone cay | fel ff | cwryas! ovo | x] | | | | | | | | |
+T|5|[PC _jauaicona nic c¥ | fel | |e | snore} ooyoral | x} [ | | | | | | |
+T|5|} 0 lcewreneconvorarioncun | _|x{ | x | | onors! ono | *| | | | [| | | | | |
+T|5|0 resume con | ted fT cL coos! cova x | | | | | | | | | J |
+T|6|8AM sohit Xhanne rat bts
+T|6|Pf ee
+T|6|Gelns Tra section in Spows
+T|6|1S ee ee eee
+T|6|r Purchate Teaasaction MSDONY $15,000 | sn,200 | $iz00en } $25,000 | $500,000 | $1,000,000 } $5,000 | $25/004000 | $28,002,008 $50,000,000 | $52,000)000 $1,000,000
+T|6|BRR eg ee on oie _ . ” : “ “ed . ae on . ; ’
+T|6|20260 Trust FBO Knanna Children bes ee ee ee "beg cee we to, as te gee, an 2 a .
+T|6|| % |cusmenciosarconrorsnoncwn| |x} | _|_x | oworel oor x | | | | | | | | | |
+T|6|[PC frome us ive con Fel [LT coors! oul x | | | | | | | | | | |
+T|6|| © Iaracmcoaronaeocm | |x} |x| | omsor ome x | | | | | | | | | | |
+T|6|USA | fel | | x | cornpel ooyours!_ x | |
+T|6|CLASS A 08/10/26 09/01/26
+T|6|| Inecussocmmensss | |x| | | | cononel ovr, «| | | | | | | [| | | |
+T|6|CMN 08/10/26 09/01/26
+T|6|0 Rt del | | xb conaes] corre) x | |_| ) | |
+T|6|A 08/10/26] _09/01/26;
+T|6|/ C leaoence vesisnsrsremsincomm | |x| | | | onsoyas] oounel » | | | | | | | | [ | |
+T|6|| PC | senvicenow we om | tet | [ix | cones! oyornel x | | | | | | | | | | |
+T|6|INC 08/10/26} _ 69/01/26
+T|6|} 9 leowanseciosa nccmncussal |x| | | | oannael ond » | | | | | | | | | | |
+T|6|| Ireusmessmacuwesconrcwn | |x| | | x | omsosl ooo » | | | | | (| | [| | | |
+T|6|iene ee ee
+T|6|CMN 08/10/26 09/01/26
+T|6|| Pf eueno sciences cu | tet Le Lx | conore] ore] x | | | | | | | [ | |
+T|6|| |rnceronr mewonan nce | |x| | | x | oysoasl ooo » | | | | | | | | | |
+T|6|| O |yucansaatenmiscocmm | {x} | | x | onsopel ooo x | | | | | | | [| | | |
+T|6|| P romnver we com | tel TT x | eto! oom x | | | | | | | [|  f | |
+T|6|FC |rumvesuncica,mc.cm | |x| | | x | conors| oom x} | | | | | [| [| | | |
+T|6|[PC larramGROUP WC cM | del | |e | cme! ool x} | | | | | | | J | |
+T|7|NAME. Rohit Khanna ne ee 2
+T|7|fp retnsetts | pe remmcton || onttamacion| trmecton | aeetetoatn
+T|7|sons Trensattlonin Spoweror
+T|7|Provide full acme, not Uecker symbat. Euxed Portia} $1,002 $25 002 | S$sa001 [$200.00 [$2sqoor | $$00,001 | $L00Q001 | $5,000,001 Over Cépendes Gils Asset aver
+T|7|Exhong $200 Trans ctled MMyOO/Y MMfoD/YY $25,009 $50000 | $102,000 | $250,000 | $500,000 | $1,000,000 | $5,00q000 ($25,000,000 $25,000,003 $52,000,000 $50,000,000 L $1,005,000
+T|7|age eer se ve =. ad a ae ae . °
+T|7|2029 Trust FBO Khanna Chifdren get AU wea thTe y? oe Min eg Ee ne 4 cee ee : - . *
+T|7|COMMON STOCK 08/10/26 09/01/26
+T|7|fo lnoersrnsrsouncemcom | xl | | | owsonel ooo x | (| | | | | | [ | | |
+T|7|| Imosumvcionamc cm | |x| | | | canons, ono x | | | | | | | | | | ‘|
+T|7|i PA
+T|7|CMN 08/10/26} 09/01/26
+T|8|NAME: Rohft Khanna Pog Ss 1B
+T|8|po et Pe Pe PO
+T|8|Gebs Tronsocionin Spout or
+T|8|Provid full ome, not ticker ymbo! Exce ¢ Porth} $1003 $35,001 | $50001 |$100.001 | $250,001 | $500,001 | $1,000 001 | $5,900,001 Over D penden ChidAss ve
+T|8|BS aa ie Bee a Biot ye Eg Tg ee Bae FT pale ae _ PS Sez 8 aa i a. ip taal rs m5 . wr
+T|8|Ritu Ahuja Declaration of Trust Re Te ee ees Ae Eee oe ea eA S .
+T|8|500 INDEX 08/06/26] 09/01/26
+T|8|S&P 500 INDEX 08/27/26] 09/01/26
+T|8|S&P 500 INDEX 08/27/26{ 09/01/26
+T|8|| lquacconma me om pel | | | | cyanea! ooo [| | | | [| | f ft |
+T|8|on | | |_| expand |
+T|8|cMN 08/24/26} 09/01/26
+T|8|| howescoummusucam | x | | | | | cxpuas| ood «| | [| | | | | | of | |
+T|8|[5 |owaciecomonnovcom | x | | | | | cansns ood » | [| | | | | | | | [|
+T|8|5 [pvaze eo co pet | | | | werasl comad x | | | { | | fp tot ft
+T|8| Ipweurecinorosy neem | x | | | | | ooze comnd » | | | | {| | | [ [| |
+T|8|= locennn oe ce pet | | | | cwnsasl ood » | | | ff ft f Pt
+T|8|| 5 Jovwrmecnvevssa fx | | | | | consae! coord x | | | | {| | [ fof |
+T|8|| s fowcwvmcomarsss tx | | | || gous! oon x | {| | | | | [| | | [|
+T|8|% leumncomerssa |x| | | | | conapsl coord » | | | | {| | { | [| | |
+T|8|| Iumurvesuccawe cm | x | | | | | owas ovo x | | | | | | | | J |
+T|8|5 Jumocrsswsrsounce mewn | x | | | | | cgpursl ood x | | | | | | | jf fp
+T|8|| Jinarcomensnovcuneussal x | | | | | case ommd x1 | | | [ [| [ | | |
+T|9|NAME, Rohh Khanna PE 4 13
+T|9|pop dd Pe Po Pe pe Pe Po Pe
+T|9|Guing Tranta jonin Spoure or
+T|9|Exchang $200 Trensaction MAM/DOAY $15,000 $50,000 | $203,000 | $250,000 | $500,000 | $1,000,000 | $5,000 G00 | $25,000,000 | $25,000,002 $52,002,000 | $59,009,000 $1,000,000
+T|9|Ritu Afuja Declaration of Trust Lay ph, SBE eee, okt oth os REE eet iy uae, SAR wl eh ES SN
+T|9|CMN Q8/24/26| 09/01/26
+T|9|$ave uso can ett | [| osnancl oon | | [| | | [| | | | [|
+T|9|5? evewric com cass Fett | | | csnvee ooo x | | | | | | [| [| | | |
+T|9|| s [wasrancrwoms wecwn | x | | | {| | caraps| oom x | | | { | | | {| | [|
+T|9|| 5 lcoorencoswermecun | x | | | | ‘| ownasl oon » | | | | ( | [| | | [|
+T|9|CMN 08/04/26! 09/01/26
+T|9|A 08/24/26] 09/03/26] x
+T|9|| 5 lrexsmstaumentswvc cm | |x| |__| _x | oazaael ono x | | | | | | | | | [| |
+T|9|[5 Niwoe ucca fet || x | erent ool x | | | | | | | | | |
+T|9|5 fresun we. feet | [x | owouzel ooou x | | | | | | | | | | |
+T|9|[5° lowrenesrmccmmcssa _|_|xl | | x | owowzel oval » | | | | | [| | | | | |
+T|10|NAME, R ht Kha na Peg fo f_ {3%
+T|10|Gains Tronsection in Spous oF
+T|10|rovid full ame, obtick symbol Exce of Partist $1001 $i500t | $5001 |$200001 |$250,002 | $500,001 $2,000,001 | $$.000,001 Over Dependen Child Asset ov
+T|10|Sete | Bech age | $200 | Transaction $15,000 | $sQ000 | $ no00 | $250,000 | $500,000 | $2,000,000 | $4,00R,a00 | S25 Cogone | $25,000,001 $50,000,000 | $50,000 000 wc
+T|10|s ~ . ae ET eS on oie Ra, See eg sees e ERO’ a Mae then Se tr* . p REREES TES tet Ree ae, wh, WER 3 55° Fo rages & A TEEReY Oa
+T|10|Ritu Ahuys Deciora.son of Trust a ee SO EE Ee ET a MORE Ey Bee SEES ee ee ee ee ee
+T|10|° lcaawarcourcommanveny | te} |x | x | opyas| om »| | | | | | | | | | |
+T|10|| 5 [oowancenenarcorroranoncw| {x| | | | owas) oon x | | | | | | | [ | |
+T|10|| 5 escosems weemn | txt | | x | onus opou x | | | | | | | [ | |
+T|10||? luecusscmensss | [el | | « | owas ooo x] | | | | | | | | [|
+T|10|5? evs eau cone cm | tel | fe | corzee] conn] x | | | | | | | | | | |
+T|10|| 5 lrwrenestmccmncussa | |x| | | x | owsrel cool x | | | | {| | | [| | [|
+T|10|| 5 [ews roars tr own Stel Te | x | ows oma x | | | | | | | | | | |
+T|10|| $? Iaurozone se cn | tet TL | owaesl oooual x | | | | | | | | | | |
+T|10|ty | de Pt; | [ fl
+T|10|CMN a 08/24/26] 09/01/26] _x
+T|10|| 5 lcauawaveotrcoranvoun | [ut | x |» | oomaps! ous x | ( | | | | {| [| | |
+T|10|[5 _fstea corp cra _ | tel | | I corns! oorouel » | | | | | | | {| | | |
+T|10|| 5 esnmencosnconrorsmovcmn| |x| | | | cormps| ovo x | | | | | (| [| [| | |
+T|10|CNN 08/24/26} 09/01/26
+T|11|ee
+T|11|eon | __tmrtrmemsemee ||| || | man | 7 $a $izno0o | sanooo | smooo | sueco 0 | Ssooq000 | S25 0040
+T|11|SPiOcAT : Purchose | 7 Exchoave | $200 Feensortion avoohey MM/oDiry $ 5,000 $50,000 | $100,000 | $250,000 $3,000 000 $5,000,000 $25,002,000 $25,000,003-850, 000,000 $50,000,000 =
+T|11|Futu: Ahuja 1994 Trust = ~__PGE Sare eg S es A Ee a cing cae ees WO ee Lio fee ae aR a ed 9
+T|11|INDEX 08/06/26| 09/01/26
+T|11|S00 INDEX 08/27/26| 09/01/26
+T|11|| 5° |nacrosorrcorroramoncun | x | | | | | ooysysel oor, |x| | | | | | | | | |
+T|11|| 5 losacreconrorsnoncmn | x | | | {| onwayast oma |. {| | | | { [| | | | |
+T|11|| 5° Jeronacona we. ex el | ff | nye omy |x| | | | [| | [| | | |
+T|11||_ 5° |rowescommanesmcems |x| | | | | cnoare| opus » | | | | | | | | | |
+T|11|| 5° Irexasmsrmumenrsmccun | x | | | | | ommsnsl oom | | | | | | | [| | [|
+T|11|| = Warrossevcommanirurcem | x | | | | | oyoarsl ooo «| | | | | | | | | | |
+T|11|[5 lewconerour mc cu el | | | | cxyose} comma »{ | | | | | | | | | |
+T|11|S |vemnveconesuccuncussa |x| | | | | overs ono x1: | | | | [| | [| [| [| |
+T|11|CORP CLASS A 08/03/26} 09/01/26
+T|11|Fs |ararc,cxm Pel | tf | [consyasl oot x | ' | | | | | | [| [| |
+T|11|| §? fr mosweus ine cw Fe] | | | cxpayzs} corour) » | | | | | [| | | | [|
+T|11|} 5° | acto SUPPLY COMPANY CMN tt fof 08/03/26) 09/01/26 el EE EE} EEE
+T|12|NAME, Robi Xhanna Poze ata td
+T|12|po ee Pe TO a
+T|12|Provide ful om sot tkher sym of face d arty $t0ax | $1s001 | ssc002 |$100,00% |5zs0,002 | $s0a001 | $1,000,008 | $%.000,002 Over ependen Chid Asretove
+T|12|sP/ocsT Exchange | $200 fam rion eAVOOIY MOOT $15000 | $spo0e | $20,000 | $252,000 | £500,000 | $4,000,000 | S4.090,000 | $25,000,000 | $25,000.00 $50,004.00 | 550,004, 000 $1,000,000 wt
+T|12|Ritu Ahuja 1994 Trust A Sede N= ee ee ee ee Ee asin Be oi RDA Bi eaten ME Ek re ag ee
+T|12|| lesetror MCMORAN INC CMN x ef ft 08/03/26| 09/01/26 tf itd ltt bf
+T|12|STOCK 08/03/26) 05/01/26
+T|12|5 lone RENTALS INC. CMIN Pett ft [ 08/03/26 woud. { | | { | | | { | | |
+T|12|| | BUILOERS FIRSTSOURCE_ INC. CMN. alt fb | 08/03/26 sont | | | | | | | | [| |_|
+T|12|5 lee enoue ne CMN CLASS A ttt | 08/03/26 wont | | | | | | | | |] ||
+T|12|| se | MARVELL TECHNOLOGY INC. CMN LL LT | cmap 09/01/26 | ttt tt tpt
+T|12|5 | seein INC_CMN att ft ft 08/03/26 so » |_| | 1 | |_| Po
+T|12|5 | re AN HOLDINGS INC CMN ti tt sarane| om x |_| 1 | | |_| Ff
+T|12|LENNAR CORPORATION CNIN CLASS A 08/03/26] 09/01/26
+T|12|5 | uewrum HOLOINGS INC CHIN lt tt 0g/03/26| 09/01/26 tf ttt i ttt tt
+T|12|5 [ener INC. CMN Plt tt 08/03/26{ 09/03/26 wb EEE LT Et fo of
+T|12|t
+T|12|L$ deus LAUREN CORP CMN_CLASS A. At bd 08/03/26 cont x) | | | | | | | [| |
+T|12|> buen ATHLETICA INC CIN Pet] ft ty 08/03/26 wont » |_| | | | | | | | [|
+T|12|Ea HORTON INC CMN tt tL | 08/03/26} _039, woe | | | |] |} jf
+T|12|CMN 08/03/26; 09/01/26
+T|12|= desu CASTLE INTL CORP CMN ett ff. 08/03/26| 09/01/26 elt ttt tL | fo ft fl
+T|13|NAME: & W Khanna Pag 13,18
+T|13|Gein atcttionin «paneer
+T|13|mn] totereamirme ||| | “200 ol Seam | S500 $000 $ioaes Seaton s0a00 eer $500 $15 0000
+T|13|Sefogn = : | : $200 Trapsactlod EMV EDIYY $15,000 $50,000 $100,000 $252,000 | $500,000 | $1,009,000 | $5,000,000 | $25,000,000 $28,000,001-550,000,000 $50,009,000 _ $1,000,000 :
+T|13|Ritu Anuja 1894 Trust sh RS eet des Fee sg eB Pr ee, le pees ea 8 ee eT ee ete
+T|13|CMN 08/03/26} 09/01/26
+T|13|| FLEX LTD CMN i} tL 08/03/26] 09/01/26 Ff tte EET EL
+T|13|| | DECKERS OUTOGORS CORP CMN Pett tf 08/03/26) __ 05/01/26 Pt tt tt te tt
+T|13|| | ROLLINS INC, REGOFF SCTASKO796538 Plt Lt 08/03/26} _ 03/01/26 See eee
+T|13|Ea CRH PUBLIC LIMITED COMPANY CMN tt ft 08/03/26) 09/02/26 tf | Ett tt tt |
+T|13|| 5 lncuerconmommonewn |e | | | | 08/03/26} 09/02/26 Ft Et EET | EU
+T|13|A 08/03/26) 09/01/26
+T|13|~ RESMED INC CM!N 08/03/26} 03/01/26
+T|13|| | KEYSIGHT TECHNOLOGIES_INC_CMN tt ft 08/03/26] 09/01/26 EEE, EE tt
+T|13|CLASS A 08/03/26} 09/01/26
+T|13|| | IDEXX LABORATORIcS CMN tt tt 08/03/26) 09/01/26 tf fet t tet tt
+T|13|ZOETIS INC CMIN CLASS A Pett tb 08/03/26} 09/03/26 Pf Et Tt EE ET cE
+T|13|ULTA BEAUTY INC CMN tt ot 08/03/26} 09/01/26 st EEE; Ed df
+T|13|| | AMAZON COM INC CMN tt LL 08/03/26) _03/01/26' Pott ETE tT Et
+T|13|08/14/2026 08/14/26} 09/01/26
+T|13|08/14/2026 08/14/26} 09/01/26)
+T|14|NAM Rohit khanna Pe 14, £8
+T|14|Geles Transoctionin Spous or
+T|14|ie ee eed
+T|14|Exchong | $200 { Transortion | __ man/nd/vy $15,000 | $ 200 | $ co,000 | $250 000 | $500,000 | $2,000,000 | $3,000,000 | $28,000,000 | $25,000,002 $5q.000,c00 | $54,00Q.000 $1,000,000
+T|14|Ritu Abuja 1994 Trust____- by ied eee ES Reds EE te, SEE oan ees RE oe Rt Pe, te FO et
+T|14||e PUT/XSP @ 730 EXP 11/20/2026 Pid tt 08/31/26] 09/01/26 PL ELLE LL
+T|14|S| PUT/XSP @ 735 EXP 10/30/2026 it Et 08/12/26) 09/01/26 et Et ET EE fT ff
+T|14|| se | PUT/XSP @ 735 EXP 09/30/2026 Pit} | 08/06/26] 09/01/26 Pt tt tt tt Sf
+T|14|| se PUT/XSP @ 725 EXP 10/30/2026 | it | tf 08/20/26] 09/01/26 Pf Ett tt] fl] |
+T|14|he HOME DEPOT INC CMN it tt 08/03/26| 09/01/26 Pte ttt Et EE
+T|14|| s [evsconcom | tat | x |_| oman 09/01/26 Ptet et tt EE EE
+T|14|TESLA INC, CMIN 08/03/26] 09/01/26
+T|14|Ps be COMPANIES INC (NEW) CMN . | | fet | 08/03/26| 09/01/26 —t,-t Ett i dt ut
+T|14|| se | srumvesuncicn INC_CMN Le ft 08/03/26] 09/01/26 eb tt TE TE tr
+T|14|| se APPLOVIN CORPORATION CMN CLASS A id {ff 08/03/26] 09/01/26) Pet ff ttt tf
+T|14|se CITIGROUP INC_CMN ie Et 08/03/26] 05/01/26 Pf Ft tet LET LUT cE
+T|14|Ee SYNOPSYS INC. CMN ia ft 08/03/26) 09/01/26 Pet EEE ET Et tf
+T|14|se QUALCOMM INC CMN iat tg 08/03/26] 03/01/26 Ff tit tt tt
+T|14|Ee INTEL CORPORATION CMN PT tt | 08/03/26] 09/01/26 tf ttt] iE tu
+T|14|| UBER TECHNOLOGIES INC CMN Ld | dd 08/03/26| 09/01/26 ef Et LTE ft
+T|14|| INTL BUSINESS MACHINES CORP CMIN Ad tL 08/03/26) 99/04/26 Pt tE EEE, Et Et
+T|15|,
+T|15|er Pm Ce Ok
+T|15|Poe Te De Pe Pe fT Os
+T|15|Transeetoain Spous oF
+T|15|me Benes meee ‘fo. ee $5000 Steqoco | szaoeo | San0o $v0one Ssona0e | Sesconen meneame ate) a
+T|15|sP/ocpt 3200 _ | Tronsactlon MODY ¥ se0e | $50,000 | St00,000 | $250,000 | $500,000 | $1,000,000 | $5,000,000 | $25,000,000 ¢ $28,000 c01-$s0,000,000 | $59,000,000 $1,000,000
+T|15|(SSS * te Ses, ecto, on mee” le Ne ce See ae ee a” ears fee OE ay ew. an th Sate tak oy = . gr see.
+T|15|Ritu Ahuja 1994 Trust i La ig ge Es: He tae Ee a ee EER PE ee Re ee
+T|15|| NIKE CLASS B CMN CLASS B Pid ff 08/03/26) 09/01/26 Pet Et EE ET EE
+T|15|| CADeNCE DESIGN SYSTEMS INC CMIN eit tL | 08/03/26} 09/01/26; Ff tEEEE | | ff tf
+T|15|| OLD DOMINION FREIGHT UNE INC CMN | am 08/03/26 Ete EE EE tf
+T|15|VICI PROPERTIES INC CMN ine 08/03/26] 03/01/26
+T|15|VULCAN MATERIALS CO CMN 08/03/26| 09/01/26
+T|15|| lcomunencoroneam | lx} | |_| 08/03/26 oom «t | |i {| {| ff oj Jo
+T|15||e CORPORATION CMN Pi | fa 08/03/26{ 09/01/26 P| TEE ET TE ] lt
+T|15|A : 08/03/26) 09/01/26
+T|15|| LENNOX INTERNATIONAL INC CIN it tt | 08/03/26} 09/01/26 Pt Et; EL | Ep
+T|15|5 vance MICRO DEVICES INC_CMN Pid tL 08/03/26 ome | | | | | | | | of ||
+T|15|| | CISCO SYSTEMS. INC. CMN Dold tad 08/03/26] 09/01/26 Pfet tt EE
+T|15|NETFLIX INC. CMN 08/03/26] 09/01/26
+T|15|| | LAM RESEARCH CORPORATION CMN | it | | 08/03/26! 09/01/26 Ft tt td] Ef tt
+T|15|| se | HUBBELL INCORPORATED CMN tt tf 08/03/26; 09/02/26 ot EEE LE Et
+T|15|| se | CIENA CORPORATION CMN i Et 08/03/26| 09/02/26 at tt tt EE | UE
+T|15|Ea COLGATE PALMOLIVE CO CMN PoLd | fa 08/03/26] 09/01/26 Pet Ett] | tt UE
+T|16|Galas Tronsoctionin Spouse of
+T|16|mon | totter ||| | od sis $000 $ aca | ssno00 | se0ne su0sne ‘Sone | Sasooumn a
+T|16|fxhong | $200 | Tronsoctioa | mvonpry mawonire | $1500 | sq000 | $ 00,000 | $250,000 | $500,000 | $1,000,000 | $$00n.000 | $25,00n.000 | $28,00Q00 $50 003,000 | $ 000,000 | $1,000,000 =
+T|16|= “of = ™ es St HecMeae Een Eker om ae deters Sy Rat Oe hae a ha Til Mr I i Ode a ie ae Neg ee os Be FES
+T|16|| = |eoonooy INC_CIMN CLASS A PL | 08/03/26 wood «| | | | | | | ff to
+T|16|CMIN x 08/03/26] 09/02/25
+T|16|| = | ei CMN Ld td 08/03/26] 09/01/26 Pitt ttt tt tf
+T|16|CMN 08/03/26| 09/01/26
+T|16|| MASCO CORPORATION CMN et tL 08/03/26} 09/01/25 sf | ttt} | te ft yp
+T|16|5 lesavana CO_CMN CLASS A i ff. | 08/03/26 wos «|_| | | | | | | of |
+T|16|_ MERCK&CO_ INC. CMN 08/03 26] 09/01/26
+T|16|\ =
+T|16|_ ABIL INC CMI 08/03/26! _99/01/26| _x
+T|16|FEDEX CORPORATION CMN 08/03/26] 09/01/26
+T|16|5 Joon BASE GLOSAL INC CMN CLASSA id fd 08/03/26 won | | | | | | tiff | |
+T|16|| COHERENT CORP.CMIN aid | | 08/03/26} 09/01/26 Fal tf ELE Ef EEE
+T|16|t !
+T|16|5 | prormn INC_CMN ' PL Ld 08/03/26} _ 09/01/26 iets
+T|16|~ Fl
+T|16|5
+T|16|| | ASML HOLDING NV ADR CMI Pd | fe, 98/14/26} 09/01/26 Pita? tt tf}
+T|17|NAME, Rohit Khanna Paz {7 18
+T|17|Po ratapertame |e tame || ot tram | tet Pam tata
+T|17|po a ee a oe Te To a
+T|17|Tronsattionin Spouse or
+T|17|Frond full m ne cher symbol fxce ¢ Fartlal $zoot | S$1s002 | 550,001 | $400,002 |$z5q001 | $s0Q.002 }$2,000,002-| $5,000 002 Ove Bp d¢ chidAsset er
+T|17|sprocit Purchase $200 | Troasoctlo MM/oDftY muyooyre | $15.00 | $50900 | $100,000 | $2sqac0 | $S0Q.000 | $1,200 000 | £5,000,000 | $25,000,000 | $25,000.001-$50,000,000 | $50,000 000 $1,000,000 ~
+T|17|. See ee ee ee ee omk  e Sae ra ey & eg ae Sree! ye Pa ey PEIEe aie Dea ea a Pag Sees, eR aly EPS ae we . we OY Sper a. 4 og f
+T|17|Ritu Ahuja 1995 Trust - Bae eR Ti eae ory ada to a BP PRT SC a ERE 4 dane OP ee eS
+T|17|$Y 11/15/33 MN . 08/31/26} 09/01/26
+T|17|PERPETUAL 08/18/26] 03/01/26
+T|17|HY&RID PERPETUAL USD 08/18/26) 09/01/26
+T|17|PERPETUAL USD 08/18/26} 09/01/26
+T|17|PERPETUAL 08/17/26] 09/01/26
+T|17|HYBRID PERPETUAL 08/18/26] 09/01/26
+T|17|(> ere a
+T|17|PLRPETUAL 08/18/26] 05/01/26; x
+T|17|_ PCREETUAL } 08/05/26| , 09/01/26
+T|18|a
+T|18|HANMEs Robit Khanna tb, ti 8
+T|18|Pattee ram eres || cu ttm etn | man | ate
+T|18|PT ee De Te Te TO Oe TO
+T|18|Ls] rte mer ang [oS | me || | es ee | nee in| se |
+T|18|Exceed Part! t $100 $15,00 $50,002 | $400,001 | $250,002 | $50Q001 | $1,000,001 | $5,000 001- Ger Depend ChidA ove
+T|18|Provid foll me, not ticker ymbol $200 Transoction MAMIODIYY 515000 850,000 $200,000 $250,000 $500,000 St.pe.00 5 000,000 1 $25,005000 Te bainsd crn -
+T|18|[7 lewconsrourwcemn |x| | | | | owevael coon || (| | | | | | {| | |
+T|18|OHIO ST WTR DEV AUTH REV REV SY
+T|18|ec femara Te) | | LL our oma » | | | | | | | | | | |
+T|18|| oc {ro 09/26/2012 GO 5% Ff | 08/17/26] 03/01/26) | | |
+T|18|potion te] | | || copsrasl ool x | | | | | | | | | | |
+T|18|AG 08/19/26 09/01/26
+T|18|} °C feoumsusontocos/oyoyzraol x | | | | | counas| ooourel x | | | | | | | | | | |
+T|18|OHIO ST WTR DEV AUTH WIR REV 5%
+T|18|| bogmyar te | | | || orn} ooyourel » | | | | | | | | | | |
+T|18|Pe aca sed sx =
+T|18|OC |e 0000? 06/01/2710 et | | | | corse] coma » | {| | | | | | | | |
+T|18|CITY OF COLUMBUS OHIO GO
+T|18|| oc [ccomovauaran | x | | | | | ouyssael coyomnel » | | | | | | | | | | |
+T|18|oc leomm amr |e | | LL | oso, oom > | =| | | | | | CUT CC CT
+T|18|§ 00007 05/01/27 MN x 08/10/26| 05/01/26
+T|18|¢ lsoomosaavim | x || | || cone oom » | | | | | | | | | | |
+T|18|5 000096 05/01/27 MN 08 07/26] 09/01/26
+T|18|| ¢ lvasouerm Te | | | | | onal coy » | | | | | | | | | [| |
+T|18|SY 05/01/27 MN 68/03/26) 69/01/26
+T|18|| lvoyary te | | | || oars] oa x | | | | | | | | | |
+T|18|4¥ 01/01/27 IJ 08/13/26] 09/01/26
+T|18|MIRION TECHNOLOGIES INC CMIN
+T|18|po [isa | xl | | | want oomnd [si | | | | | | | | |

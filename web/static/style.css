@@ -699,3 +699,43 @@ main{overflow-x:clip}
 .hcard b{color:var(--ink)}
 .hcard b small{color:var(--mute);opacity:1}
 .hcard span{color:var(--mute)}
+
+/* ---------- floating glass dock with a fluid selection blob (iOS-style) ---------- */
+@media (max-width:860px){
+  .dock{left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom));height:64px;padding:6px;border-radius:999px;isolation:isolate;
+    touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+    background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.42));
+    backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);
+    border:1px solid rgba(255,255,255,.7);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(0,0,0,.04),0 0 0 .5px rgba(20,16,10,.08),0 12px 34px -10px rgba(20,16,10,.30),0 2px 8px -2px rgba(20,16,10,.10)}
+  [data-theme=dark] .dock{background:linear-gradient(180deg,rgba(40,40,42,.62),rgba(22,22,24,.52));border-color:rgba(255,255,255,.10);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.6),0 14px 38px -10px rgba(0,0,0,.75)}
+  .dock a{position:relative;z-index:1;border-radius:999px;background:none!important;color:var(--mute);gap:2px;
+    transition:color .28s ease,transform .32s cubic-bezier(.34,1.56,.64,1)}
+  .dock a.on,.dock.scrub a.hov{color:var(--brand-ink)}
+  .dock.scrub a.on:not(.hov){color:var(--mute)}
+  .dock a.press{transform:scale(.88);transition:transform .12s ease,color .2s}
+  .dock a svg{transition:transform .38s cubic-bezier(.34,1.56,.64,1)}
+  .dock a.on svg{transform:translateY(-1px) scale(1.06)}
+  .dock-blob{position:absolute;left:0;top:6px;bottom:6px;width:25%;z-index:0;border-radius:999px;pointer-events:none;will-change:transform;
+    transform-origin:50% 50%;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--brand-ui) 13%,rgba(255,255,255,.75)),color-mix(in srgb,var(--brand-ui) 9%,rgba(255,255,255,.45)));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(193,18,31,.10),0 4px 14px -6px rgba(193,18,31,.35);
+    transition:opacity .22s ease,top .3s cubic-bezier(.34,1.56,.64,1),bottom .3s cubic-bezier(.34,1.56,.64,1)}
+  [data-theme=dark] .dock-blob{background:linear-gradient(180deg,rgba(255,74,85,.24),rgba(255,74,85,.13));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,74,85,.20),0 6px 18px -6px rgba(255,40,50,.45)}
+  .dock-blob.off{opacity:0}
+  .dock.scrub .dock-blob{top:2px;bottom:2px}  /* the lens swells while you drag it */
+  main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  @media (max-width:860px){
+    .dock{background:rgba(253,252,250,.97)}
+    [data-theme=dark] .dock{background:rgba(24,24,26,.97)}
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .dock .dock-blob{transition:opacity .16s ease!important}
+  .dock a.on svg{transform:none}
+}

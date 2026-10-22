@@ -211,6 +211,7 @@ function showView(v) {
   document.body.classList.toggle('on-pol', v === 'pol');
   const nav = v === 'pol' || v === 'stock' ? null : v === 'mb' ? 'home' : v;
   $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
+  dockSync(nav);
 }
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
@@ -1034,6 +1035,110 @@ $('#reset').onclick = () => {
   loadFeed(); loadKpis();
 };
 $('#more').onclick = () => { F.offset += F.PAGE; $('#more').textContent = 'Loading…'; loadFeed(true).then(() => $('#more').textContent = 'Show more trades'); };
+
+/* ============ dock: floating glass bar with a springy selection blob ============ */
+const DK = {el: $('#dock'), blob: null, links: [], x: 0, v: 0, tx: 0, w: 0, raf: 0, last: 0, nav: 'home', shown: false,
+  drag: null, dragEnd: 0, rm: matchMedia('(prefers-reduced-motion: reduce)')};
+function dockInit() {
+  const d = DK.el; if (!d || DK.blob) return;
+  DK.blob = document.createElement('span'); DK.blob.className = 'dock-blob'; DK.blob.setAttribute('aria-hidden', 'true');
+  d.prepend(DK.blob); DK.links = [...d.querySelectorAll('a')];
+  if ('ResizeObserver' in window) new ResizeObserver(dockResize).observe(d);
+  addEventListener('resize', dockResize);
+  addEventListener('orientationchange', () => setTimeout(dockResize, 120));
+  d.addEventListener('pointerdown', e => {
+    if (e.button || !DK.w) return;
+    DK.drag = {id: e.pointerId, x0: e.clientX, on: false};
+    const a = e.target.closest('a'); if (a) a.classList.add('press');
+  });
+  d.addEventListener('pointermove', e => {
+    const g = DK.drag; if (!g || g.id !== e.pointerId) return;
+    if (!g.on && Math.abs(e.clientX - g.x0) > 8) {
+      g.on = true; d.classList.add('scrub'); DK.links.forEach(a => a.classList.remove('press'));
+      try { d.setPointerCapture(e.pointerId); } catch (_) {}
+      if (!DK.shown) dockShow(true);
+    }
+    if (g.on) { dockAim(dockLeftFor(e.clientX)); dockHover(dockIndexAt(e.clientX)); }
+  });
+  const end = (e, cancel) => {
+    const g = DK.drag; if (!g || g.id !== e.pointerId) return;
+    DK.drag = null; DK.links.forEach(a => a.classList.remove('press', 'hov')); d.classList.remove('scrub');
+    if (!g.on) return;
+    DK.dragEnd = Date.now();
+    const a = DK.links[dockIndexAt(e.clientX)];
+    if (!cancel && a && a.dataset.v !== DK.nav) a.click(); else dockPlace(false);
+  };
+  d.addEventListener('pointerup', e => end(e, false));
+  d.addEventListener('pointercancel', e => end(e, true));
+  // a trusted click straight after a scrub would double-navigate; the scrub already chose the tab
+  d.addEventListener('click', e => { if (e.isTrusted && Date.now() - DK.dragEnd < 400) { e.preventDefault(); e.stopPropagation(); } }, true);
+}
+function dockGeom() {
+  const d = DK.el, r = d.getBoundingClientRect(), a0 = DK.links[0];
+  if (!r.width || !a0) return null;
+  const ar = a0.getBoundingClientRect();
+  return {left: r.left + d.clientLeft, pad: ar.left - r.left - d.clientLeft, w: ar.width, n: DK.links.length};
+}
+function dockIndexAt(cx) {
+  const g = dockGeom(); if (!g) return 0;
+  return Math.max(0, Math.min(g.n - 1, Math.floor((cx - g.left - g.pad) / g.w)));
+}
+function dockLeftFor(cx) {
+  const g = dockGeom(); if (!g) return 0;
+  return Math.max(g.pad, Math.min(g.pad + g.w * (g.n - 1), cx - g.left - g.w / 2));
+}
+function dockHover(i) { DK.links.forEach((a, j) => a.classList.toggle('hov', j === i)); }
+function dockShow(on) { DK.shown = on; DK.blob.classList.toggle('off', !on); }
+function dockSync(nav) {
+  dockInit(); if (!DK.blob) return;
+  const was = DK.nav; DK.nav = nav;
+  dockPlace(was == null || !DK.shown);
+}
+function dockResize() {  // only re-place when the geometry really changed (or the tab changed while the bar was hidden)
+  const g = dockGeom(); if (!g) return;
+  if (Math.abs(g.w - DK.w) > 0.5 || DK.placed !== DK.nav) dockPlace(true);
+}
+function dockPlace(snap) {
+  if (!DK.blob) return;
+  const g = dockGeom(); if (!g) return;  // hidden (desktop or politician page): re-placed by the ResizeObserver
+  DK.w = g.w; DK.blob.style.width = g.w + 'px'; DK.placed = DK.nav;
+  const i = DK.links.findIndex(a => a.dataset.v === DK.nav);
+  if (i < 0) { dockShow(false); return; }
+  const tx = g.pad + i * g.w;
+  if (snap || DK.rm.matches) {
+    if (DK.rm.matches && !snap && DK.shown && Math.abs(tx - DK.x) > 1) {  // reduced motion: fade out, move, fade in
+      DK.blob.classList.add('off'); setTimeout(() => { DK.x = DK.tx = tx; DK.v = 0; dockPaint(0); DK.blob.classList.remove('off'); }, 140);
+      return;
+    }
+    cancelAnimationFrame(DK.raf); DK.raf = 0; DK.x = DK.tx = tx; DK.v = 0; dockPaint(0); dockShow(true); return;
+  }
+  dockShow(true); dockAim(tx);
+}
+function dockAim(tx) {
+  DK.tx = tx;
+  if (DK.rm.matches) { DK.x = tx; DK.v = 0; dockPaint(0); return; }
+  if (!DK.raf) { DK.last = performance.now(); DK.raf = requestAnimationFrame(dockStep); }
+}
+function dockStep(now) {
+  // damped spring (slightly under-damped: a small overshoot, then settle)
+  const K = 360, C = 26;
+  let dt = Math.min(0.032, (now - DK.last) / 1000); DK.last = now;
+  for (let s = 0; s < 4; s++) {  // sub-steps keep it stable on slow frames
+    const h = dt / 4, a = K * (DK.tx - DK.x) - C * DK.v;
+    DK.v += a * h; DK.x += DK.v * h;
+  }
+  dockPaint(DK.v);
+  if (Math.abs(DK.tx - DK.x) < 0.3 && Math.abs(DK.v) < 8 && !(DK.drag && DK.drag.on)) {
+    DK.x = DK.tx; DK.v = 0; dockPaint(0); DK.raf = 0; return;
+  }
+  DK.raf = requestAnimationFrame(dockStep);
+}
+function dockPaint(v) {
+  // stretch along the direction of travel (liquid feel), squash a touch vertically; lean toward the destination
+  const st = Math.min(0.4, Math.abs(v) / 4400), w = DK.w || 1;
+  const lean = Math.sign(v) * w * st * 0.22;
+  DK.blob.style.transform = `translate3d(${(DK.x + lean).toFixed(2)}px,0,0) scale(${(1 + st).toFixed(4)},${(1 - st * 0.28).toFixed(4)})`;
+}
 
 /* ============ boot ============ */
 const qp = new URLSearchParams(location.search);

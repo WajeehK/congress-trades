@@ -10,10 +10,10 @@ def _sig(x):
     return float(f"{x:.5g}")
 
 
-def series(c, ticker, first_tx=None):
+def series(c, ticker, first_tx=None, max_years=MAX_YEARS):
     """{d0, dd, c}: first date, day deltas, closes. Covers the ticker's trades (60 days before the first one) up to
     MAX_YEARS back, and at least 3 years."""
-    floor = date.today() - timedelta(days=365 * MAX_YEARS)
+    floor = date.today() - timedelta(days=365 * max_years)
     start = date.today() - timedelta(days=365 * 3)
     if first_tx:
         try:

@@ -104,6 +104,7 @@ def main():
             for hr in stock_page.holder_rows(h["ticker"], name, {"holdings": [h]}, pf):
                 holders.setdefault(h["ticker"], []).append(hr)
 
+    dump(data / "bench.json", app.bench_api())
     # stock pages: one small file per traded ticker (price series + estimated holders)
     first_tx = {}
     for r in rows:

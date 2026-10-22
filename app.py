@@ -663,6 +663,10 @@ EST_SQL = """UPDATE trades SET
     WHERE ticker=? AND est_price IS NULL AND (asset_type IS NULL OR asset_type IN ('ST','EF'))"""
 
 
+BENCH_TICKERS = ("SPY",)
+BENCH_FROM = "2014-12-01"
+
+
 def update_prices(max_tickers=None):
     """Fetch daily history for tickers lacking an estimated trade price, then refresh stale current quotes."""
     week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
@@ -682,6 +686,14 @@ def update_prices(max_tickers=None):
     need_set = {r["ticker"] for r in need}
     jobs = [(r["ticker"], (datetime.fromisoformat(r["mind"]) - timedelta(days=10)).date().isoformat()) for r in need]
     jobs += [(r["ticker"], None) for r in stale if r["ticker"] not in need_set]
+    # benchmark(s) for the copy-trade simulator: full history once, then the usual recent refresh
+    with db() as c:
+        for b in BENCH_TICKERS:
+            q = c.execute("SELECT hist_from, checked_at FROM quotes WHERE ticker=?", (b,)).fetchone()
+            if not q or not q["hist_from"] or q["hist_from"] > BENCH_FROM:
+                jobs.append((b, BENCH_FROM))
+            elif (q["checked_at"] or "") < (datetime.now(timezone.utc) - timedelta(hours=6)).isoformat():
+                jobs.append((b, (date.today() - timedelta(days=10)).isoformat()))
     if not jobs:
         return 0
 
@@ -1072,6 +1084,14 @@ def portfolio_summaries():
                         "top": [h["ticker"] for h in r["holdings"][:3]]})
         _pf_cache["__summary__"] = out
         return out
+
+
+@app.get("/api/bench")
+def bench_api():
+    """Benchmark daily closes (SPY) for the copy-trade simulator, same compact format as /api/stock."""
+    import stock_page
+    with db() as c:
+        return {b: stock_page.series(c, b, BENCH_FROM, max_years=12) for b in BENCH_TICKERS}
 
 
 @app.get("/api/stock")

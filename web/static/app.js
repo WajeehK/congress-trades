@@ -434,6 +434,7 @@ async function openPolitician(name) {
         <div class="stat"><div class="k">Trades</div><div class="v">${num(d.n)}</div><div class="f"><span class="up">${num(d.buys)} buys</span> · <span style="color:var(--sell)">${num(d.sells)} sells</span></div></div>
         <div class="stat"><div class="k">Holdings</div><div class="v">${num(d.n_holdings)}</div><div class="f">Since ${fmtDY(d.first_tx)}</div></div>
       </div>
+      ${has ? `<div class="h2s"><h2>If you’d copied ${esc(name.split(' ').slice(-1)[0])}</h2><small>Estimate</small></div><div class="card cpy" id="copySim">${skRows(2)}</div>` : ''}
       ${d.holdings.length ? `<button class="btn mirror-btn" id="mirrorBtn">${I.copy}Mirror portfolio</button>` : ''}
       ${d.holdings.length ? `<div class="h2s"><h2>Current Holdings</h2><small>${num(d.n_holdings)} positions · est.</small></div>
       <div class="card hlist" id="holdings"></div>` : ''}
@@ -444,7 +445,7 @@ async function openPolitician(name) {
       <div class="card flist" id="polFilings">${skRows(2)}</div>
       <p class="note">${I.info}<span>Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.chamber === 'Executive' ? ' The President\'s reports are scanned PDFs read with OCR, so some trades are missing.' : ''}</span></p>
     </div>`;
-  if (has) { renderPeriod(); }
+  if (has) { renderPeriod(); POL.cp = POL.cp || '1Y'; renderCopy(); }
   renderHoldings();
   loadPolTrades();
   loadFilings(name);
@@ -459,6 +460,42 @@ async function openPolitician(name) {
   if (route.after === 'follow') openFollowSheet(name);
   route.after = null;
   if ($('#rtabs')) $$('#rtabs button').forEach(b => b.onclick = () => { POL.period = b.dataset.v; $$('#rtabs button').forEach(x => x.classList.toggle('on', x === b)); renderPeriod(); });
+}
+/* ---- copy-trade simulator: the portfolio's time-weighted index vs SPY over the same dates ---- */
+let BENCH = null;
+const decodePx = px => { const out = []; if (!px) return out; let ms = D(px.d0).getTime(); px.dd.forEach((x, i) => { ms += x * 864e5; out.push([new Date(ms).toISOString().slice(0, 10), px.c[i]]); }); return out; };
+const CP_DAYS = {'3M': 91, '1Y': 365, '3Y': 1095, '5Y': 1826, 'ALL': 1e5};
+async function renderCopy() {
+  const el = $('#copySim'); if (!el) return;
+  const name = POL.name, s = POL.data.series, n = s.d.length, last = s.d[n - 1];
+  if (!BENCH) { try { BENCH = decodePx((await api('/api/bench')).SPY); } catch (e) { BENCH = []; } }
+  if (POL.name !== name || !$('#copySim')) return;
+  const k = POL.cp, since = D(last); since.setUTCDate(since.getUTCDate() - CP_DAYS[k]);
+  const sIso = since.toISOString().slice(0, 10);
+  let j = s.d.findIndex(x => x >= sIso); if (j < 0) j = n - 1;
+  const base = j > 0 ? j - 1 : 0, startD = s.d[base], bi = j > 0 ? s.i[base] : 1;
+  const amt = 10000, me = amt * s.i[n - 1] / bi;
+  const at = d => { let v = null; for (const p of BENCH) { if (p[0] <= d) v = p[1]; else break; } return v; };
+  const b0 = at(startD), b1 = BENCH.length ? BENCH[BENCH.length - 1][1] : null, spy = b0 && b1 ? amt * b1 / b0 : null;
+  const r1 = (me / amt - 1) * 100, r2 = spy ? (spy / amt - 1) * 100 : null, diff = r2 == null ? null : r1 - r2;
+  // two normalised lines
+  const idx = []; for (let q = base; q < n; q++) idx.push(q);
+  const step = Math.max(1, Math.floor(idx.length / 300)), pick = idx.filter((_, q) => q % step === 0 || q === idx.length - 1);
+  const A = pick.map(q => amt * s.i[q] / bi), B = pick.map(q => { const v = at(s.d[q]); return v && b0 ? amt * v / b0 : null; });
+  const all = A.concat(B.filter(x => x != null)), mn = Math.min(...all), mx = Math.max(...all), rr = mx - mn || 1, W = 1000, Hh = 140;
+  const X = q => pick.length === 1 ? W : q / (pick.length - 1) * W, Y = v => Hh - 8 - (v - mn) / rr * (Hh - 16);
+  const path = vals => vals.map((v, q) => v == null ? '' : `${q && vals[q - 1] != null ? 'L' : 'M'}${X(q).toFixed(1)},${Y(v).toFixed(1)}`).join('');
+  const before = startD < s.d[0] || j === 0;
+  el.innerHTML = `<div class="cp-tabs pills">${Object.keys(CP_DAYS).map(x => `<button data-v="${x}" class="${x === k ? 'on' : ''}">${x}</button>`).join('')}</div>
+    <div class="cp-q">$10,000 copied ${before ? 'from their first priced trade' : 'on'} <b>${fmtDY(before ? s.d[0] : startD)}</b> would now be about</div>
+    <div class="cp-rows">
+      <div class="cp-r"><span class="sw me"></span><span class="l">Copying ${esc(name)}</span><b>${usd(me, 0)}</b><span class="${r1 >= 0 ? 'up' : 'dn'}">${r1 >= 0 ? '+' : ''}${pct(r1)}</span></div>
+      <div class="cp-r"><span class="sw spy"></span><span class="l">S&amp;P 500 (SPY)</span><b>${spy ? usd(spy, 0) : '—'}</b><span class="${r2 == null ? '' : r2 >= 0 ? 'up' : 'dn'}">${r2 == null ? '' : (r2 >= 0 ? '+' : '') + pct(r2)}</span></div>
+    </div>
+    <svg class="cp-ch" viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none"><path d="${path(B)}" class="spy" vector-effect="non-scaling-stroke"/><path d="${path(A)}" class="me" vector-effect="non-scaling-stroke"/></svg>
+    ${diff != null ? `<div class="cp-v ${diff >= 0 ? 'up' : 'dn'}">${diff >= 0 ? 'Beat' : 'Trailed'} the S&amp;P 500 by ${Math.abs(diff).toFixed(1)} points</div>` : ''}
+    <p class="cp-f">Estimate. Each disclosed trade is copied on its trade date at the estimated price (range midpoint ÷ that day's close), using the same time-weighted return as the chart above. In reality you'd only see trades after disclosure (avg ${POL.data.avg_delay != null ? Math.round(POL.data.avg_delay) : '?'} days later); fees, taxes and dividends are ignored.</p>`;
+  $$('#copySim .cp-tabs button').forEach(b => b.onclick = () => { POL.cp = b.dataset.v; renderCopy(); });
 }
 function headerAt(s, sl, idx) {
   const pnl = s.p[idx] - sl.bp, r = (s.i[idx] / sl.bi - 1) * 100, up = pnl >= 0;

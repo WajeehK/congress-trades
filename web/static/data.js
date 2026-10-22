@@ -59,6 +59,7 @@
     },
     async refresh() { return {started: false, message: 'This site updates itself every hour'}; },
     async portfolios() { return get(`data/portfolios.json?v=${await v()}`); },
+    async bench() { return get(`data/bench.json?v=${await v()}`); },
     async stock(p) {
       const t = (p.get('ticker') || '').toUpperCase(), f = t.replace(/[^A-Za-z0-9.\-]/g, '_');
       try { return await get(`data/stock/${encodeURIComponent(f)}.json?v=${await v()}`); } catch (e) { return {ticker: t, px: null, holders: []}; }

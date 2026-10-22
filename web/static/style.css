@@ -491,3 +491,13 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 #v-mb .page-h{padding-top:var(--s3)}
 .mbp-pills{display:flex;margin-bottom:12px}
 @media (max-width:700px){.mbp-pills{width:100%}.mbp-pills button{flex:1;height:32px;font-size:13px}}
+/* ---- Notifications card (Web Push) ---- */
+.pushcard{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.pushcard .pc-t b{font-size:16px;font-weight:700}
+.pushcard .pc-t p{margin-top:4px;font-size:13.5px;color:var(--mute);line-height:1.45}
+.pushcard .pc-on{align-self:flex-start;height:40px;padding:0 18px;font-size:14.5px}
+.pushcard .pc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--line);font-weight:600;font-size:14.5px}
+.pushcard .pc-row .mute{font-weight:500;font-size:12.5px;text-align:right}
+.pushcard .pc-row input{width:20px;height:20px;accent-color:var(--ink);margin:0}
+.pushcard .pc-btns{display:flex;gap:8px}
+.pushcard.on .pc-t b::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:8px;vertical-align:2px}

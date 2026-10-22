@@ -57,6 +57,7 @@ jobs:
     env:
       DB_PATH: state/trades.db
       NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
       NTFY_SENDER: ${{ vars.NTFY_SENDER || 'auto' }}
       BOX_STATUS_URL: ${{ secrets.BOX_STATUS_URL }}
       PUBLISH_SENATE: ${{ vars.PUBLISH_SENATE || '1' }}

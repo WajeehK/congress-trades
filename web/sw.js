@@ -3,7 +3,7 @@
 const SHELL = 'ct-shell-__BUILD__';
 const DATA = 'ct-data';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './static/style.css?v=__BUILD__', './static/search.js?v=__BUILD__', './static/data.js?v=__BUILD__',
-  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg'];
+  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg', './static/badge-96.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('ct-shell-') && k !== SHELL).map(k => caches.delete(k)))).then(() => self.clients.claim()));
@@ -33,4 +33,25 @@ self.addEventListener('fetch', e => {
     return;
   }
   e.respondWith(caches.match(req).then(hit => hit || fetch(req)));
+});
+
+/* native Web Push (payload from webpush.py: {title, body, url, tag}) */
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (_) { d = {body: e.data ? e.data.text() : ''}; }
+  e.waitUntil(self.registration.showNotification(d.title || 'The Black House', {
+    body: d.body || 'New trades disclosed', icon: './static/icon-192.png', badge: './static/badge-96.png',
+    tag: d.tag || undefined, renotify: !!d.tag, data: {url: d.url || self.registration.scope}}));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || './', self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({type: 'window', includeUncontrolled: true}).then(async cs => {
+    for (const c of cs) {
+      if (c.url.startsWith(self.registration.scope)) {
+        try { await c.focus(); if (c.url !== url) await c.navigate(url); return; } catch (_) {}
+      }
+    }
+    return self.clients.openWindow(url);
+  }));
 });

@@ -743,6 +743,12 @@ def follow_topic(name):
 def notify(new_rows):
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
     new_rows = [r for r in new_rows if r["first_seen"] >= cutoff]
+    if new_rows:
+        try:  # native Web Push to installed PWAs (same rows, same dedupe/backfill rules as ntfy)
+            import webpush
+            webpush.send(new_rows, meta_get, meta_set, note)
+        except Exception as e:
+            note(f"push failed: {e}")
     if not NTFY_TOPIC or not new_rows:
         return
     url = (PUBLIC_URL_FILE.read_text().strip() if PUBLIC_URL_FILE.exists() else "") or None
@@ -811,6 +817,11 @@ def refresh(force_senate=False, do_notify=True):
                 note(f"Executive (OGE) failed: {e}")
                 _state["last_error"] = f"OGE: {e}"
         meta_set("last_refresh", now())
+        try:
+            import webpush
+            webpush.sync(meta_get, meta_set, note)
+        except Exception as e:
+            note(f"push sync failed: {e}")
         if do_notify:
             notify(new_rows)
         try:

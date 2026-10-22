@@ -400,7 +400,7 @@ const isFollowing = n => following().includes(n);
 (() => { const H = new Set(['mr', 'mrs', 'ms', 'miss', 'dr', 'hon', 'rep', 'sen', 'honorable', 'md', 'facs', 'phd', 'dds', 'dvm', 'cpa', 'esq']);
   const clean = n => { const o = []; for (const w of n.split(/\s+/)) { const k = w.toLowerCase().replace(/^[.,]+|[.,]+$/g, ''); if (!w || H.has(k)) continue; if (o.length && k === o[o.length - 1].toLowerCase().replace(/^[.,]+|[.,]+$/g, '')) continue; o.push(w); } return o.join(' ') || n; };
   try { const f = following(), g = [...new Set(f.map(clean))]; if (g.join('|') !== f.join('|')) store.set('follows', g); } catch (e) {} })();
-function setFollow(n, on) { const f = following().filter(x => x !== n); if (on) f.push(n); store.set('follows', f); }
+function setFollow(n, on) { const f = following().filter(x => x !== n); if (on) f.push(n); store.set('follows', f); if (typeof pushRefresh === 'function') pushRefresh(true); }
 
 async function openPolitician(name) {
   POL.name = name; POL.period = 'ALL'; POL.showAll = false; POL.offset = 0;
@@ -620,6 +620,50 @@ async function openTicker(tk) {
 }
 
 /* ============ alerts (screenshot 06) ============ */
+/* ============ native Web Push (see webpush.py) ============ */
+const PUSH_KEY = 'BFR_8mhNgGoPpD-5cQIyJmoyC5dCsW3gk38_4cUh0h9MJhxZ7_bn9Hj3uwKVALUsrX1j80doKWHMJmZ3cVivd9Y';
+const PUSH_TOPIC = 'https://ntfy.sh/bh-subs-0ddc01105a955b4f';
+const pushOK = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const b64u = s => { const p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+async function pushSub() { if (!pushOK()) return null; const r = await navigator.serviceWorker.getRegistration(); return r ? r.pushManager.getSubscription() : null; }
+async function pushPublish(sub, off) {
+  const body = {v: 1, sub: sub.toJSON(), all: store.get('pushAll', true), follows: following(), off: !!off};
+  const r = await fetch(PUSH_TOPIC, {method: 'POST', body: JSON.stringify(body)});
+  if (!r.ok) throw new Error('register ' + r.status);
+  store.set('pushPub', Date.now());
+}
+async function pushEnable() {
+  if (!pushOK()) return toast('This browser can’t receive notifications');
+  const reg = await navigator.serviceWorker.getRegistration();
+  if (!reg) return toast('Install the app from wajeehk.github.io/congress-trades first');
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') { toast('Notifications are blocked. Allow them in site settings.'); renderAlerts(); return; }
+  try {
+    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64u(PUSH_KEY)});
+    await pushPublish(sub);
+    toast('Notifications on');
+  } catch (e) { toast('Could not enable: ' + (e.message || e)); }
+  renderAlerts();
+}
+async function pushDisable() {
+  const sub = await pushSub();
+  if (sub) { try { await pushPublish(sub, true); } catch (e) {} await sub.unsubscribe(); }
+  toast('Notifications off'); renderAlerts();
+}
+async function pushRefresh(force) {  // keep the server-side list current (follows changed, or daily heartbeat)
+  try { const sub = await pushSub(); if (sub && Notification.permission === 'granted' && (force || Date.now() - store.get('pushPub', 0) > 20 * 3600e3)) await pushPublish(sub); } catch (e) {}
+}
+async function pushCard() {
+  if (!pushOK()) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>This browser can’t receive web notifications. On iPhone you need iOS 16.4+ and must add the app to your Home Screen first.</p></div></div>`;
+  const reg = await navigator.serviceWorker.getRegistration();
+  if (!reg) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>Open <a href="https://wajeehk.github.io/congress-trades/" style="text-decoration:underline">wajeehk.github.io/congress-trades</a> and install it to get notifications.</p></div></div>`;
+  const sub = await reg.pushManager.getSubscription(), perm = Notification.permission, on = !!sub && perm === 'granted', all = store.get('pushAll', true), n = following().length;
+  if (!on) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>${perm === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser’s site settings, then tap Enable.' : 'Get a notification on this device the moment new trades are disclosed. No extra app needed.'}</p></div><button class="sbtn pc-on" id="pushOn">Enable notifications</button></div>`;
+  return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : n ? `Only the ${n} ${n === 1 ? 'person' : 'people'} you follow` : 'Nobody yet: follow someone or turn on all trades'} · this device</p></div>
+    <label class="pc-row"><span>All new trades</span><input type="checkbox" id="pushAll" ${all ? 'checked' : ''}></label>
+    <div class="pc-row"><span>People you follow</span><span class="mute">${n} ${n === 1 ? 'person' : 'people'} · tap the bell on a politician</span></div>
+    <div class="pc-btns"><button class="chip-btn" id="pushTest">Send test</button><button class="chip-btn" id="pushOff">Turn off</button></div></div>`;
+}
 async function renderAlerts() {
   const s = statusData || {};
   const base = s.ntfy ? s.ntfy.topic : null, server = s.ntfy ? s.ntfy.server : 'https://ntfy.sh';
@@ -635,7 +679,8 @@ async function renderAlerts() {
     <div class="lock"><div class="time">${now.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})}</div>
       <div class="clock">${now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: false})}</div>
       <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
-    <div class="h2s" style="margin-top:8px"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
+    <div class="h2s" style="margin-top:8px"><h2>Notifications</h2></div>${await pushCard()}
+    <div class="h2s"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
     <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; const t = base ? `${base}-${slug(n)}` : null; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b>${t ? `<code>${esc(t)}</code>` : ''}</div>${t ? `<a class="sbtn" href="${esc(server)}/${esc(t)}" target="_blank" rel="noopener">Subscribe</a>` : ''}<button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
       : `<div class="empty"><b>You're not following anyone yet</b>Open a politician and tap the ${I.bell.replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} bell.</div>`}</div>
     <div class="h2s"><h2>How it works</h2></div>
@@ -654,6 +699,10 @@ async function renderAlerts() {
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
     </div>`;
   $$('[data-unfollow]').forEach(b => b.onclick = () => { setFollow(b.dataset.unfollow, false); renderAlerts(); });
+  if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
+  if ($('#pushOff')) $('#pushOff').onclick = pushDisable;
+  if ($('#pushAll')) $('#pushAll').onchange = e => { store.set('pushAll', e.target.checked); pushRefresh(true); renderAlerts(); };
+  if ($('#pushTest')) $('#pushTest').onclick = async () => { const r = await navigator.serviceWorker.ready; r.showNotification('The Black House', {body: 'Notifications are working on this device.', icon: 'static/icon-192.png', badge: 'static/badge-96.png', tag: 'test', data: {url: location.href.split('#')[0] + '#alerts'}}); };
 }
 
 /* ============ events ============ */
@@ -706,3 +755,5 @@ loadStatus();
 route();
 setInterval(loadStatus, 5 * 60e3);
 document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && loadStatus());
+
+setTimeout(() => pushRefresh(false), 4000);

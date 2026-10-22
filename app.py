@@ -756,11 +756,23 @@ def notify(new_rows):
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
     new_rows = [r for r in new_rows if r["first_seen"] >= cutoff]
     if new_rows:
-        try:  # native Web Push to installed PWAs (same rows, same dedupe/backfill rules as ntfy)
+        evs, sent = [], set()
+        try:  # unusual activity that these new disclosures created (each event alerted once)
+            import unusual
+            since = (date.today() - timedelta(days=unusual.LOOKBACK_DAYS + 5)).isoformat()
+            sent = set(json.loads(meta_get("unusual_sent") or "[]"))
+            with db() as c:
+                rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ?", (since,)).fetchall()
+                evs = unusual.for_new(c, rows, new_rows, sent)
+        except Exception as e:
+            note(f"unusual check failed: {e}")
+        try:  # native Web Push to installed PWAs (same rows, same dedupe/backfill rules as before)
             import webpush
-            webpush.send(new_rows, meta_get, meta_set, note)
+            webpush.send(new_rows, meta_get, meta_set, note, unusual=evs)
         except Exception as e:
             note(f"push failed: {e}")
+        if evs:
+            meta_set("unusual_sent", json.dumps((sorted(sent) + [e["key"] for e in evs])[-5000:]))
     # ntfy alert topics were retired on 2026-10-22: alerts are native Web Push only (webpush.py).
     # ntfy.sh is still used internally as the free registration channel for push subscriptions.
 
@@ -1084,6 +1096,16 @@ def portfolio_summaries():
                         "top": [h["ticker"] for h in r["holdings"][:3]]})
         _pf_cache["__summary__"] = out
         return out
+
+
+@app.get("/api/unusual")
+def unusual_api():
+    """Unusual activity on Home: buying clusters and unusually large trades disclosed in the last 30 days."""
+    import unusual
+    since = (date.today() - timedelta(days=unusual.LOOKBACK_DAYS + 5)).isoformat()
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ?", (since,)).fetchall()
+        return {"events": unusual.recent(c, rows)}
 
 
 @app.get("/api/bench")

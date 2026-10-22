@@ -552,3 +552,21 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .cp-ch .spy{stroke:#8b8b8b;stroke-dasharray:5 4}
 .cp-v{font-weight:700;font-size:14px;margin-top:8px}
 .cp-f{font-size:12px;color:var(--mute);margin-top:8px;line-height:1.45}
+
+/* ---- unusual activity ---- */
+.unrow{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:14px 18px;width:100%;text-align:left;border-top:1px solid var(--line)}
+.unrow:first-child{border-top:0}
+.unrow:hover{background:var(--card2)}
+.unrow>.av{width:46px;height:46px}
+.unrow .unb{position:absolute;top:10px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px}
+.unb.cl{background:rgba(124,92,255,.16);color:#8b6cff} .unb.lg{background:rgba(245,158,11,.16);color:#d98a06}
+.unrow .um{min-width:0}
+.unrow .t{font-size:15px;padding-right:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unrow .s{font-size:12.5px;color:var(--mute);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unrow .mbwho{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12.5px;color:var(--ink2);font-weight:600}
+.unrow .mbstack{display:inline-flex}
+.unrow .mbstack .av{width:22px;height:22px;border-radius:50%;font-size:8px;border:2px solid var(--card);margin-left:-7px;box-sizing:content-box}
+.unrow .mbstack .av:first-child{margin-left:0}
+.unrow .r{font-size:12px;align-self:end}
+.pc-row span small{display:block;font-size:12px;font-weight:500;margin-top:2px}
+@media (max-width:700px){.unrow{padding:12px 14px;gap:10px}}

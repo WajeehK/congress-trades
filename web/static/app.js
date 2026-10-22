@@ -252,6 +252,31 @@ async function loadMostBought() {
     renderMostBought();
   } catch (e) { MB.loaded = false; $('#mbList').innerHTML = $('#mbFull').innerHTML = empty('Could not load', String(e.message || e)); }
 }
+/* ---- unusual activity (unusual.py): clusters + large trades grouped per politician/disclosure ---- */
+const UN = {loaded: false};
+async function loadUnusual() {
+  UN.loaded = true;
+  let d; try { d = await api('/api/unusual'); } catch (e) { UN.loaded = false; return; }
+  const items = [], big = new Map();
+  for (const e of d.events || []) {
+    if (e.type === 'cluster') items.push(e);
+    else { const k = e.politician + '|' + e.disclosed; if (!big.has(k)) { const g = {type: 'big', politician: e.politician, bioguide: e.bioguide, disclosed: e.disclosed, seen: e.seen, ev: []}; big.set(k, g); items.push(g); } big.get(k).ev.push(e); }
+  }
+  items.sort((a, b) => (b.seen || '') < (a.seen || '') ? -1 : 1);
+  if (!items.length) return;
+  $('#unHead').hidden = false; $('#unList').hidden = false;
+  $('#unList').innerHTML = items.slice(0, 5).map(x => {
+    if (x.type === 'cluster') return `<button class="unrow" data-tick="${esc(x.ticker)}"><span class="unb cl">Cluster</span>${logo(x.ticker)}
+      <div class="um"><div class="t"><b>${esc(x.ticker)} · ${x.n_pols} buyers</b></div><div class="s">${esc(x.name || '')} · within ${Math.round((D(x.to) - D(x.from)) / 864e5) + 1} days</div>
+      <div class="mbwho"><span class="mbstack">${x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('')}</span><span>${esc(x.pols.map(p => p.name.split(' ').slice(-1)[0]).slice(0, 3).join(', '))}</span></div></div>
+      <div class="r mute">${fmtD(x.disclosed)}</div></button>`;
+    const ev = x.ev.sort((a, b) => b.amount_low - a.amount_low), e = ev[0];
+    return `<button class="unrow" ${ev.length === 1 ? `data-trade="${esc(e.uid)}"` : `data-pol="${esc(x.politician)}"`}><span class="unb lg">Large</span>${avatar(x.politician, x.bioguide, 'round')}
+      <div class="um"><div class="t"><b>${esc(x.politician)}</b></div><div class="s">${ev.slice(0, 3).map(v => `<span class="side ${v.side}">${v.side === 'buy' ? 'Buy' : 'Sell'}</span> ${esc(v.ticker)} ${esc(amtShort(v))}`).join(' · ')}${ev.length > 3 ? ` · +${ev.length - 3} more` : ''}</div>
+      <div class="s">${esc(e.why.startsWith('Top') ? e.why : `${ev.length} trade${ev.length === 1 ? '' : 's'} of $250K+`)}</div></div>
+      <div class="r mute">${fmtD(x.disclosed)}</div></button>`;
+  }).join('');
+}
 function mbRows(it) {
   if (!it.length) return empty('No purchases in this window', 'Try a longer window.');
   return it.map((x, i) => {
@@ -272,6 +297,7 @@ $$('#mbPills button, #mbPills2 button').forEach(b => b.onclick = () => { MB.days
 
 async function loadHome() {
   if (!MB.loaded) loadMostBought();
+  if (!UN.loaded) loadUnusual();
   const pfs = await portfolios();
   const list = [...pfs.values()];
   // top performers: meaningful portfolios only
@@ -747,7 +773,7 @@ const pushOK = () => 'serviceWorker' in navigator && 'PushManager' in window && 
 const b64u = s => { const p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); };
 async function pushSub() { if (!pushOK()) return null; const r = await navigator.serviceWorker.getRegistration(); return r ? r.pushManager.getSubscription() : null; }
 async function pushPublish(sub, off) {
-  const body = {v: 1, sub: sub.toJSON(), all: store.get('pushAll', true), follows: following(), off: !!off};
+  const body = {v: 1, sub: sub.toJSON(), all: store.get('pushAll', true), follows: following(), watch: store.get('watch', []), unusual: store.get('pushUnusual', true), off: !!off};
   const r = await fetch(PUSH_TOPIC, {method: 'POST', body: JSON.stringify(body)});
   if (!r.ok) throw new Error('register ' + r.status);
   store.set('pushPub', Date.now());
@@ -781,6 +807,7 @@ async function pushCard() {
   if (!on) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>${perm === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser’s site settings, then tap Enable.' : 'Get a notification on this device the moment new trades are disclosed. No extra app needed.'}</p></div><button class="sbtn pc-on" id="pushOn">Enable notifications</button></div>`;
   return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : n ? `Only the ${n} ${n === 1 ? 'person' : 'people'} you follow` : 'Nobody yet: follow someone or turn on all trades'} · this device</p></div>
     <label class="pc-row"><span>All new trades</span><input type="checkbox" id="pushAll" ${all ? 'checked' : ''}></label>
+    <label class="pc-row"><span>Unusual activity<small class="mute">Clusters of 3+ buyers and $250K+ trades</small></span><input type="checkbox" id="pushUnusual" ${store.get('pushUnusual', true) ? 'checked' : ''}></label>
     <div class="pc-row"><span>People you follow</span><span class="mute">${n} ${n === 1 ? 'person' : 'people'} · tap the bell on a politician</span></div>
     <div class="pc-btns"><button class="chip-btn" id="pushOff">Turn off</button></div></div>`;
 }
@@ -817,6 +844,7 @@ async function renderAlerts() {
   if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
   if ($('#pushOff')) $('#pushOff').onclick = pushDisable;
   if ($('#pushAll')) $('#pushAll').onchange = e => { store.set('pushAll', e.target.checked); pushRefresh(true); renderAlerts(); };
+  if ($('#pushUnusual')) $('#pushUnusual').onchange = e => { store.set('pushUnusual', e.target.checked); pushRefresh(true); };
 
 }
 

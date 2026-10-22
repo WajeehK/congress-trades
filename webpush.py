@@ -82,8 +82,10 @@ def sync(meta_get, meta_set, note=print):
                 changed += subs.pop(ep, None) is not None
                 continue
             fol = [str(x)[:80] for x in (b.get("follows") or [])][:300]
+            watch = [str(x).upper()[:12] for x in (b.get("watch") or [])][:300]
             subs[ep] = {"sub": {"endpoint": ep, "keys": {"p256dh": sub["keys"]["p256dh"], "auth": sub["keys"]["auth"]}},
-                        "all": bool(b.get("all")), "follows": fol, "ts": int(m["time"])}
+                        "all": bool(b.get("all")), "follows": fol, "watch": watch,
+                        "unusual": b.get("unusual", True) is not False, "ts": int(m["time"])}
             changed += 1
         except Exception:
             continue
@@ -124,6 +126,37 @@ def message(rows):
     return {"title": f"{n} new trade{'s' if n != 1 else ''} disclosed", "body": body, "url": f"{APP_URL}#trades", "tag": "all"}
 
 
+def _g(r, k):
+    try:
+        return r[k]
+    except (KeyError, IndexError):
+        return None
+
+
+def unusual_messages(evs):
+    """One notification per cluster, one per politician for large trades."""
+    out, big = [], {}
+    for e in evs:
+        if e["type"] == "cluster":
+            names = ", ".join(p["name"] for p in e["pols"][:4]) + (f" +{e['n_pols'] - 4}" if e["n_pols"] > 4 else "")
+            out.append({"title": f"Unusual: {e['n_pols']} politicians bought {e['ticker']}",
+                        "body": f"{names} · trades {e['from']} to {e['to']}", "url": f"{APP_URL}#t={quote(e['ticker'])}",
+                        "tag": "u-" + e["key"][:60]})
+        else:
+            big.setdefault(e["politician"], []).append(e)
+    for pol, es in big.items():
+        es.sort(key=lambda e: -(e["amount_low"] or 0))
+        e = es[0]
+        if len(es) == 1:
+            out.append({"title": f"Large trade: {pol}", "body": f"{e['why']} of {e['ticker']}" if e["why"].startswith(("Bought", "Sold")) else f"{e['side'].title()} {e['ticker']} ({e['amount']}) · {e['why']}",
+                        "url": f"{APP_URL}#x={quote(e['uid'])}", "tag": "u-" + e["key"][:60]})
+        else:
+            out.append({"title": f"{len(es)} large trades: {pol}",
+                        "body": "; ".join(f"{x['side'].title()} {x['ticker']} ({x['amount']})" for x in es[:3]) + (f" +{len(es) - 3} more" if len(es) > 3 else ""),
+                        "url": f"{APP_URL}#p={quote(pol)}", "tag": "u-big-" + re.sub(r"[^a-z0-9]+", "-", pol.lower())[:40]})
+    return out
+
+
 def deliver(sub, payload, vapid):
     """Returns 'ok', 'gone' (drop it) or an error string."""
     from pywebpush import webpush, WebPushException
@@ -138,8 +171,8 @@ def deliver(sub, payload, vapid):
         return str(e)[:160]
 
 
-def send(new_rows, meta_get, meta_set, note=print):
-    if not new_rows:
+def send(new_rows, meta_get, meta_set, note=print, unusual=()):
+    if not new_rows and not unusual:
         return 0
     subs = _load(meta_get)
     if not subs:
@@ -149,24 +182,39 @@ def send(new_rows, meta_get, meta_set, note=print):
         note("push: no VAPID private key configured; skipped")
         return 0
     sent, dead = 0, []
+    umsgs = unusual_messages(list(unusual))[:4] if unusual else []
     for ep, s in list(subs.items()):
-        fol = set(s.get("follows") or [])
-        rows = list(new_rows) if s.get("all") else [r for r in new_rows if r["politician"] in fol]
-        if not rows:
-            continue
-        res = deliver(s["sub"], message(rows), vapid)
-        if res == "ok":
-            sent += 1
-        elif res == "gone":
-            dead.append(ep)
+        fol, watch = set(s.get("follows") or []), set(s.get("watch") or [])
+        msgs = []
+        if s.get("all"):
+            rows = list(new_rows)
         else:
-            note(f"push: delivery failed ({res})")
+            rows = [r for r in new_rows if r["politician"] in fol or (_g(r, "ticker") or "").upper() in watch]
+        if rows:
+            m = message(rows)
+            if not s.get("all") and not any(r["politician"] in fol for r in rows):
+                ticks = sorted({(_g(r, "ticker") or "").upper() for r in rows})
+                m["title"] = f"Watchlist: {', '.join(ticks[:3])} traded"
+                if len(ticks) == 1:
+                    m["url"] = f"{APP_URL}#t={quote(ticks[0])}"
+            msgs.append(m)
+        if s.get("unusual", True):
+            msgs += umsgs
+        for m in msgs:
+            res = deliver(s["sub"], m, vapid)
+            if res == "ok":
+                sent += 1
+            elif res == "gone":
+                dead.append(ep)
+                break
+            else:
+                note(f"push: delivery failed ({res})")
     if dead:
         subs = _load(meta_get)
         for ep in dead:
             subs.pop(ep, None)
         meta_set("push_subs", json.dumps(subs))
-    note(f"push: sent to {sent} device(s){f', removed {len(dead)} expired' if dead else ''}")
+    note(f"push: sent {sent} notification(s){f', removed {len(dead)} expired' if dead else ''}")
     return sent
 
 

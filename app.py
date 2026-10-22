@@ -1105,7 +1105,7 @@ _MB_CACHE = {}
 
 
 @app.get("/api/most_bought")
-def most_bought_api(days: int = 90, etf: int = 0):
+def most_bought_api(days: int = 90, etf: int = 1):
     """Most-bought stocks by trade date window: distinct buyers, then # buys, then est. $ (see most_bought.py)."""
     import time
     import most_bought

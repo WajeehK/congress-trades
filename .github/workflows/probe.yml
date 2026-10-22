@@ -19,3 +19,5 @@ jobs:
       - run: pip install -q requests
       - name: Senate eFD (efdsearch.senate.gov)
         run: python pipeline/probe_efd.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Senate eFD parse check (2 recent PTRs)
+        run: python senate_efd.py 60 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"

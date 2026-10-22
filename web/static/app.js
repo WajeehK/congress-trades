@@ -388,7 +388,19 @@ function renderMostBought() {
 }
 $$('#mbPills button, #mbPills2 button').forEach(b => b.onclick = () => { MB.days = b.dataset.v; loadMostBought(); });
 
+async function loadIntro() {
+  if (loadIntro.done) return; loadIntro.done = true;
+  let d; try { d = await api('/api/intro'); } catch (e) { loadIntro.done = false; return; }
+  const sg = v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  const cards = [
+    d.late && d.late.trades ? [d.late.trades.toLocaleString('en-US'), `congressional trades filed past the 45-day deadline in the last year, by ${d.late.members} members`, '#unusual'] : null,
+    d.best_1y != null && d.spy_1y != null ? [sg(d.best_1y), `best 1-year portfolio return. The S&P 500 did ${sg(d.spy_1y)}`, '#people:ret:1Y'] : null,
+    d.eligible ? [`${d.beat}<small> of ${d.eligible}</small>`, 'tracked portfolios beat the S&P 500 over the past year', '#people:ret:1Y'] : null,
+    [d.trades.toLocaleString('en-US'), `trades disclosed · ${d.portfolios} portfolios tracked`, '#trades']].filter(Boolean);
+  $('#heroCards').innerHTML = cards.map(c => `<a class="hcard" href="${c[2]}"><b>${c[0]}</b><span>${c[1]}</span></a>`).join('');
+}
 async function loadHome() {
+  loadIntro();
   if (!MB.loaded) loadMostBought();
   if (!UN.loaded) loadUnusual();
   const pfs = await portfolios();
@@ -405,7 +417,6 @@ async function loadHome() {
   if (!H.loaded) {
     H.loaded = true;
     const tot = list.reduce((a, p) => a + p.value, 0);
-    $('#heroStats').innerHTML = `<div><b>${list.length}</b><span>portfolios tracked</span></div><div><b>${money(tot)}</b><span>est. holdings</span></div><div><b>${num(list.reduce((a, p) => a + p.n, 0))}</b><span>trades disclosed</span></div>`;
     const f = list.filter(p => p.n_priced >= 5 && p.periods.ALL && p.periods.ALL[1] > 0 && p.politician !== 'Donald J. Trump').sort((a, b) => b.value - a.value)[0];
     if (f && isWide()) {
       const all = f.periods.ALL;

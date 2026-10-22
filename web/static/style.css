@@ -10,6 +10,8 @@
   --shadow:0 1px 2px rgba(20,16,10,.04),0 6px 24px -12px rgba(20,16,10,.12);
   --shadow-lg:0 30px 80px -30px rgba(20,16,10,.35);
   --font:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --gold:#8a6510; --gold-grad:linear-gradient(100deg,#6f520c 0%,#a87a1e 45%,#8a6510 75%,#7a5a0e 100%);
+  --gold-glow:rgba(196,152,50,.16); --gold-line:rgba(160,120,30,.32); --gold-card:rgba(196,152,50,.07);
   color-scheme:light;
 }
 [data-theme=dark]{
@@ -17,6 +19,8 @@
   --ink:#f4f2ee; --ink2:#cfcbc4; --mute:#8d8982; --mute2:#5f5c57;
   --up:#22c55e; --up-bg:rgba(34,197,94,.14); --dn:#f87171; --dn-bg:rgba(248,113,113,.14); --sell:#ff7a52; --sell-bg:rgba(255,122,82,.14);
   --accent:#f4f2ee; --on-accent:#111; --shadow:none; color-scheme:dark;
+  --gold:#e2c06a; --gold-grad:linear-gradient(100deg,#f6e3a1 0%,#d9b14f 40%,#b98a30 70%,#f0d48a 100%);
+  --gold-glow:rgba(214,170,70,.13); --gold-line:rgba(226,192,106,.28); --gold-card:rgba(226,192,106,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
@@ -614,3 +618,37 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .und-p .av{width:30px;height:30px;border-radius:50%;font-size:10px}
 .und-p small{margin-left:2px}
 .unchips + .mb-sub{margin-top:10px}
+
+/* ---------- intro: black, white and gold ---------- */
+.hero{position:relative;isolation:isolate}
+main{overflow-x:clip}
+.hero-copy{position:relative}
+.hero::before{content:"";position:absolute;z-index:-1;inset:-60px -40px 0;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 45%,transparent);mask-image:radial-gradient(closest-side,#000 45%,transparent);
+  background:radial-gradient(60% 55% at 12% 18%,var(--gold-glow),transparent 70%),radial-gradient(40% 40% at 90% 0%,var(--gold-glow),transparent 70%)}
+.hero::after{content:"";position:absolute;z-index:-1;inset:-60px -40px 0;pointer-events:none;-webkit-mask-image:radial-gradient(closest-side,#000 45%,transparent);mask-image:radial-gradient(closest-side,#000 45%,transparent);opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-cap{display:none;position:absolute;right:0;top:var(--s6);width:190px;height:auto;stroke:var(--gold);stroke-width:1.1;opacity:.28;z-index:-1}
+.hero-eb{display:flex;align-items:center;gap:10px;color:var(--gold);letter-spacing:.22em}
+.hero-eb i{display:block;width:26px;height:1.5px;background:var(--gold-grad)}
+.hero-h{font-size:58px;letter-spacing:-.045em}
+.gold-t{color:var(--gold);background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.hero-punch{margin-top:var(--s3);font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.01em;padding-left:12px;border-left:2px solid var(--gold)}
+.hero-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:var(--s6);max-width:640px}
+.hero-cards .sk-card{height:96px}
+.hcard{display:block;padding:14px 16px;border-radius:var(--r);border:1px solid var(--gold-line);background:linear-gradient(180deg,var(--gold-card),transparent 80%),var(--card);transition:transform .15s,border-color .15s}
+.hcard:hover{transform:translateY(-1px);border-color:var(--gold)}
+.hcard b{display:block;font-size:30px;font-weight:800;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--gold);line-height:1.1}
+.hcard b small{font-size:16px;font-weight:700;opacity:.8;letter-spacing:-.01em}
+.hcard span{display:block;margin-top:4px;font-size:12.5px;line-height:1.35;color:var(--ink2)}
+.hero-copy .credit{margin-top:var(--s5);font-size:12px}
+.hero-disc{margin-top:4px;font-size:11.5px;color:var(--mute)}
+@media (max-width:860px){
+  .hero-h{font-size:38px;line-height:1.04}
+  .hero-cap{display:block;width:130px;top:2px;opacity:.22}
+  .hero-punch{font-size:15.5px}
+  .hcard{padding:12px 13px}
+  .hcard b{font-size:24px}
+  .hcard b small{font-size:13px}
+  .hcard span{font-size:11.5px}
+  .hero-cards .sk-card{height:86px}
+}

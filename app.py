@@ -1216,6 +1216,33 @@ def portfolio_summaries():
         return out
 
 
+@app.get("/api/intro")
+def intro_api():
+    """Live numbers for the Home intro. Every figure is computed here from the database:
+    late = congressional trades disclosed in the last 12 months more than 45 days after the trade (STOCK Act limit;
+    annual OGE 278e entries excluded, same rule as unusual.py 'late'); beat = portfolios with enough data
+    (est. value >= $50K, 5+ priced trades, the same rule as Top performers) whose 1-year time-weighted return beat SPY's."""
+    yr = (date.today() - timedelta(days=365)).isoformat()
+    with db() as c:
+        n_trades = c.execute("SELECT COUNT(*) FROM trades").fetchone()[0]
+        late = c.execute("""SELECT COUNT(*), COUNT(DISTINCT politician),
+                SUM(CASE WHEN julianday(disclosure_date) - julianday(tx_date) > 45 THEN 1 ELSE 0 END),
+                COUNT(DISTINCT CASE WHEN julianday(disclosure_date) - julianday(tx_date) > 45 THEN politician END)
+            FROM trades WHERE chamber IN ('House', 'Senate') AND disclosure_date >= ? AND tx_date IS NOT NULL
+              AND tx_date <= disclosure_date AND COALESCE(description, '') NOT LIKE 'From the OGE 278e%'""", (yr,)).fetchone()
+        a = c.execute("SELECT adjclose, d FROM prices WHERE ticker='SPY' AND adjclose > 0 ORDER BY d DESC LIMIT 1").fetchone()
+        b = c.execute("SELECT adjclose, d FROM prices WHERE ticker='SPY' AND adjclose > 0 AND d <= ? ORDER BY d DESC LIMIT 1", (yr,)).fetchone()
+    spy = round((a[0] / b[0] - 1) * 100, 1) if a and b else None
+    S = portfolio_summaries()
+    el = [p for p in S if p["value"] >= 50_000 and p["n_priced"] >= 5 and (p["periods"].get("1Y") or [None, None])[1] is not None]
+    rets = [p["periods"]["1Y"][1] for p in el]
+    return {"as_of": a[1] if a else None, "trades": n_trades, "portfolios": len(S),
+            "politicians": len({p["politician"] for p in S}),
+            "late": {"trades": late[2] or 0, "members": late[3] or 0, "of_trades": late[0], "of_members": late[1], "days": 365},
+            "spy_1y": spy, "eligible": len(el), "beat": sum(1 for r in rets if spy is not None and r > spy),
+            "best_1y": round(max(rets), 1) if rets else None}
+
+
 _un_cache = {"t": 0.0, "v": None}
 
 

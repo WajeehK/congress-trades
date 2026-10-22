@@ -7,7 +7,7 @@ Stock trades disclosed by members of Congress and the President, rebuilt into es
 - `.github/workflows/pipeline.yml` runs **every hour** (and on push / manual dispatch):
   1. restores the SQLite state (`state/trades.db`: trades, filings, parsed OCR results, Yahoo price cache) from the Actions cache, or from the AES-encrypted backup on the `state` branch if the cache was evicted;
   2. `pipeline/ci_refresh.py` fetches new House Clerk PTRs, Senate trades (Bargo API), OGE 278-T filings (the President) and Yahoo Finance prices, incrementally;
-  3. sends ntfy push alerts for genuinely new trades (see below);
+  3. sends native Web Push alerts for genuinely new trades (see below);
   4. `pipeline/export_static.py` writes pre-generated JSON (`data/*.json`) plus the frontend in `web/` to `_site`, which is deployed to GitHub Pages.
 - The frontend (`web/`) is the same app as the server version; `web/static/data.js` emulates the API in the browser, so filtering, sorting, estimated prices, portfolios, Mirror and the Alerts tab all run client-side.
 
@@ -28,13 +28,18 @@ Health check: `ps -fp $(cat /workspace/ct-build/box-feed/senate_feed.pid)` shoul
 Restart (only that PID): `cd /workspace/ct-build/box-feed && kill <pid>; nohup setsid ./senate_feed.sh loop >> senate_feed.log 2>&1 < /dev/null &`.
 The hourly slot and last feed hash live in `last_hourly` / `last.sha`, so a restart neither double-dispatches nor re-pushes.
 
-## Alerts (ntfy)
-Exactly one sender at a time. `NTFY_SENDER` (repository variable):
+## Alerts (native Web Push)
+Alerts go straight to the installed PWA (Alerts tab > Enable notifications); the ntfy alert topics were retired on 2026-10-22.
+- Subscriptions: the app posts its PushSubscription (plus "all trades" flag and follow list) to the internal ntfy.sh topic in
+  `webpush.py` (`SUB_TOPIC`), used only as a free, account-less registration inbox. Every refresh (Actions and box) merges it
+  into the `meta.push_subs` row of its own DB. The app re-posts at least every 20 h and on follow changes.
+- Sending: `webpush.send()` from `app.notify()`; VAPID private key = Actions secret `VAPID_PRIVATE_KEY` / box `data/vapid_private.pem` (600).
+  404/410 responses drop the subscription. Check: `python webpush.py` prints the number of stored subscriptions.
+
+Exactly one sender at a time. `NTFY_SENDER` (repository variable, name kept for compatibility):
 - `auto` (default): the workflow sends only if the self-hosted server at `BOX_STATUS_URL` (secret) is down or hasn't refreshed for 3 hours;
 - `actions`: the workflow always sends (use this once the self-hosted server is retired);
 - `box`: the workflow never sends.
-
-Topic name comes from the `NTFY_TOPIC` secret; per-politician topics are `<topic>-<politician-slug>`.
 
 ## Data sources and attribution
 - U.S. House Clerk financial disclosures (public domain)

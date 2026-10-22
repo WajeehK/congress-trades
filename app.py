@@ -7,7 +7,7 @@ Sources
     because the official Senate eFD site (efdsearch.senate.gov) refuses this machine (HTTP 403).
   * Party / state / bioguide IDs: unitedstates/congress-legislators (public domain).
   * Prices: Yahoo Finance public chart endpoint (daily bars), cached in SQLite.
-  * Notifications: ntfy.sh topic (optional).
+  * Notifications: native Web Push to the installed PWA (webpush.py).
 """
 import functools
 import hashlib
@@ -734,7 +734,7 @@ def update_prices(max_tickers=None):
     return ok
 
 
-# ---------------------------------------------------------------- notifications (ntfy.sh)
+# ---------------------------------------------------------------- notifications (Web Push, see webpush.py)
 def follow_topic(name):
     slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:40]
     return f"{NTFY_TOPIC}-{slug}" if NTFY_TOPIC else None
@@ -749,46 +749,8 @@ def notify(new_rows):
             webpush.send(new_rows, meta_get, meta_set, note)
         except Exception as e:
             note(f"push failed: {e}")
-    if not NTFY_TOPIC or not new_rows:
-        return
-    url = (PUBLIC_URL_FILE.read_text().strip() if PUBLIC_URL_FILE.exists() else "") or None
-    by_pol = {}
-    for r in new_rows:
-        by_pol.setdefault((r["politician"], r["party"], r["state"], r["chamber"]), []).append(r)
-    lines = []
-    for (pol, party, st, ch), rows in sorted(by_pol.items(), key=lambda kv: -len(kv[1]))[:8]:
-        parts = []
-        for r in rows[:4]:
-            arrow = "🟢 Buy" if r["side"] == "buy" else "🔴 Sell" if r["side"] == "sell" else r["tx_type"]
-            parts.append(f"{arrow} {r['ticker'] or (r['asset'] or '')[:28]} ({r['amount']})")
-        more = f" +{len(rows) - 4} more" if len(rows) > 4 else ""
-        lines.append(f"{pol} ({party or '?'}-{st}, {ch}): " + "; ".join(parts) + more)
-    if len(by_pol) > 8:
-        lines.append(f"…and {len(by_pol) - 8} more politicians")
-    title = f"The Black House: {len(new_rows)} new trade{'s' if len(new_rows) != 1 else ''} disclosed"
-    headers = {"Title": title, "Tags": "classical_building"}
-    if url:
-        headers["Click"] = url
-    try:
-        requests.post(f"{NTFY_SERVER}/{NTFY_TOPIC}", data="\n".join(lines).encode("utf-8"), headers=headers, timeout=20)
-        note(f"ntfy: notified {len(new_rows)} new trades")
-    except Exception as e:
-        note(f"ntfy failed: {e}")
-    # one message per politician on their own follow topic ("<base>-<name-slug>"), used by the in-app bell
-    for (pol, party, st, ch), rows in sorted(by_pol.items(), key=lambda kv: -len(kv[1]))[:30]:
-        body = []
-        for r in rows[:6]:
-            arrow = "Buy" if r["side"] == "buy" else "Sell" if r["side"] == "sell" else r["tx_type"]
-            body.append(f"{arrow} {r['ticker'] or (r['asset'] or '')[:28]} ({r['amount']})")
-        if len(rows) > 6:
-            body.append(f"+{len(rows) - 6} more")
-        h = {"Title": f"{pol} disclosed new trades.", "Tags": "classical_building"}
-        if url:
-            h["Click"] = f"{url.rstrip('/')}/#p={quote(pol)}"
-        try:
-            requests.post(f"{NTFY_SERVER}/{follow_topic(pol)}", data="\n".join(body).encode("utf-8"), headers=h, timeout=20)
-        except Exception as e:
-            note(f"ntfy follow topic failed for {pol}: {e}")
+    # ntfy alert topics were retired on 2026-10-22: alerts are native Web Push only (webpush.py).
+    # ntfy.sh is still used internally as the free registration channel for push subscriptions.
 
 
 # ---------------------------------------------------------------- refresh loop
@@ -1151,7 +1113,7 @@ def portfolio(name: str, holdings: int = Query(200, le=2000)):
     return {**dict(p), **{k: v for k, v in r.items() if k != "holdings"}, "politician": name,
             "holdings": r["holdings"][:holdings], "n_holdings": len(r["holdings"]),
             "periods": {k: pf.period_stats(r["series"], k) for k in pf.PERIODS} if r["series"]["d"] else {},
-            "follow_topic": follow_topic(name), "ntfy_server": NTFY_SERVER, "win_days": pf.WIN_DAYS}
+            "win_days": pf.WIN_DAYS}
 
 
 @app.get("/api/trade")
@@ -1176,7 +1138,6 @@ def status():
             "refresh_minutes": REFRESH_MINUTES, "senate_min_hours": BARGO_MIN_HOURS, "bargo_key": bool(BARGO_KEY),
             "sources": [dict(r) for r in by], "house_filings": {r["status"]: r["n"] for r in fil},
             "prices": dict(pc), "bargo_rate": json.loads(meta_get("bargo_rate", "{}") or "{}"),
-            "ntfy": {"server": NTFY_SERVER, "topic": NTFY_TOPIC} if NTFY_TOPIC else None,
             "house_years": HOUSE_YEARS, "log": _state["log"][-15:]}
 
 

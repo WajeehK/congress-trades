@@ -1,6 +1,6 @@
 """Hourly data refresh for GitHub Actions.
 
-Fetches House Clerk, Senate (Bargo), OGE and Yahoo prices into the SQLite state (DB_PATH), and sends ntfy
+Fetches House Clerk, Senate (Bargo), OGE and Yahoo prices into the SQLite state (DB_PATH), and sends Web Push
 alerts for new trades -- unless another sender is active, so subscribers never get the same alert twice.
 
 NTFY_SENDER:

@@ -524,16 +524,14 @@ function toggleFollow(name) {
   $('#bellBtn').classList.toggle('on', on);
   if (on) openFollowSheet(name); else toast(`Unfollowed ${name}`);
 }
-function openFollowSheet(name) {
+async function openFollowSheet(name) {
   const d = POL.data && POL.data.politician === name ? POL.data : null;
-  const topic = d ? d.follow_topic : null, server = (d && d.ntfy_server) || 'https://ntfy.sh';
+  const sub = await pushSub().catch(() => null), on = !!sub && Notification.permission === 'granted';
   openSheet(`<div class="td-head">${avatar(name, d && d.bioguide)}<div><h2 style="font-size:22px">Following ${esc(name)}</h2><div class="an">Saved on this device</div></div></div>
-    ${topic ? `<div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
-    <div class="steps">
-      <div class="step card"><div><b>Install ntfy</b><p>Free and open source, for <a href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener" style="text-decoration:underline">iPhone</a>, <a href="https://play.google.com/store/apps/details?id=io.heckel.ntfy" target="_blank" rel="noopener" style="text-decoration:underline">Android</a> or the web.</p></div></div>
-      <div class="step card"><div><b>Subscribe to this topic</b><p><code>${esc(topic)}</code></p><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><a class="sbtn" href="${esc(server)}/${esc(topic)}" target="_blank" rel="noopener">Open in ntfy</a><button class="sbtn ghost" data-copy="${esc(topic)}">Copy topic</button></div></div></div>
-      <div class="step card"><div><b>Done</b><p>When a new filing from ${esc(name)} is picked up, you get “${esc(name)} disclosed new trades.”</p></div></div>
-    </div>` : '<p class="prose">Notifications are turned off on this server.</p>'}`);
+    <div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+    ${on ? `<p class="prose">You’ll get a notification on this device when ${esc(name)} discloses new trades.${store.get('pushAll', true) ? ' (You also get every new trade; turn that off in Alerts to hear only about people you follow.)' : ''}</p>`
+      : `<p class="prose">Turn on notifications to hear about ${esc(name)}’s new trades on this device.</p><button class="sbtn pc-on" id="sheetPushOn" style="height:40px;padding:0 18px">Enable notifications</button>`}`);
+  if ($('#sheetPushOn')) $('#sheetPushOn').onclick = async () => { await pushEnable(); closeSheet(); };
 }
 
 /* ============ mirror calculator (screenshot 03) ============ */
@@ -662,15 +660,13 @@ async function pushCard() {
   return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : n ? `Only the ${n} ${n === 1 ? 'person' : 'people'} you follow` : 'Nobody yet: follow someone or turn on all trades'} · this device</p></div>
     <label class="pc-row"><span>All new trades</span><input type="checkbox" id="pushAll" ${all ? 'checked' : ''}></label>
     <div class="pc-row"><span>People you follow</span><span class="mute">${n} ${n === 1 ? 'person' : 'people'} · tap the bell on a politician</span></div>
-    <div class="pc-btns"><button class="chip-btn" id="pushTest">Send test</button><button class="chip-btn" id="pushOff">Turn off</button></div></div>`;
+    <div class="pc-btns"><button class="chip-btn" id="pushOff">Turn off</button></div></div>`;
 }
 async function renderAlerts() {
   const s = statusData || {};
-  const base = s.ntfy ? s.ntfy.topic : null, server = s.ntfy ? s.ntfy.server : 'https://ntfy.sh';
   const fol = following();
   const pfs = await portfolios();
   const now = new Date();
-  const slug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
   const newest = (s.sources || []).map(x => x.newest_disclosure).sort().pop();
   const by = c => (s.sources || []).filter(x => x.chamber === c).reduce((a, x) => a + x.n, 0);
   const sample = fol[0] || 'Nancy Pelosi';
@@ -681,17 +677,14 @@ async function renderAlerts() {
       <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
     <div class="h2s" style="margin-top:8px"><h2>Notifications</h2></div>${await pushCard()}
     <div class="h2s"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
-    <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; const t = base ? `${base}-${slug(n)}` : null; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b>${t ? `<code>${esc(t)}</code>` : ''}</div>${t ? `<a class="sbtn" href="${esc(server)}/${esc(t)}" target="_blank" rel="noopener">Subscribe</a>` : ''}<button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
+    <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b><small class="mute">${esc(p.party ? metaShort(p) : '')}</small></div><button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
       : `<div class="empty"><b>You're not following anyone yet</b>Open a politician and tap the ${I.bell.replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} bell.</div>`}</div>
     <div class="h2s"><h2>How it works</h2></div>
     <div class="steps">
-      <div class="step card"><div><b>Tap the bell on a politician</b><p>It saves them to your follow list on this device and shows their personal alert topic.</p></div></div>
-      <div class="step card"><div><b>Subscribe in the free ntfy app</b><p>Install <a href="https://ntfy.sh" target="_blank" rel="noopener" style="text-decoration:underline">ntfy</a> (iPhone, Android or web) and subscribe to the topic. No account needed.</p></div></div>
-      <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>The server checks filings every ${Math.round(s.refresh_minutes || 60)} minutes. When it finds new trades by someone, it sends one push to their topic with the tickers and amounts. Tap it to open their page.</p></div></div>
+      <div class="step card"><div><b>Turn on notifications</b><p>Tap Enable notifications above and allow them. Works in the installed app on Android and desktop, and on iPhone (iOS 16.4+) once it’s added to your Home Screen.</p></div></div>
+      <div class="step card"><div><b>Choose what you hear about</b><p>Every new trade, or only the people you follow: open a politician and tap the bell.</p></div></div>
+      <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>Filings are checked every hour. New trades arrive as one notification with the tickers and amounts; tap it to open their page.</p></div></div>
     </div>
-    ${base ? `<div class="h2s"><h2>Everything</h2></div>
-    <div class="card"><div class="frow"><span class="logo sm brandmark">${I.cap}</span><div class="t"><b>All new trades</b><code>${esc(base)}</code></div><a class="sbtn" href="${esc(server)}/${esc(base)}" target="_blank" rel="noopener">Subscribe</a></div></div>
-    <p class="fine">Topics are public names on ntfy.sh. Anyone who knows a topic can read its alerts, which only ever contain public disclosure data.</p>` : ''}
     <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">
       <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> (rolling 3 months), and <b>${by('Executive').toLocaleString()}</b> trades from the President's <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE 278-T reports</a> (scanned, read with OCR). Newest filing ${fmtDY(newest)}.</p>
@@ -702,13 +695,13 @@ async function renderAlerts() {
   if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
   if ($('#pushOff')) $('#pushOff').onclick = pushDisable;
   if ($('#pushAll')) $('#pushAll').onchange = e => { store.set('pushAll', e.target.checked); pushRefresh(true); renderAlerts(); };
-  if ($('#pushTest')) $('#pushTest').onclick = async () => { const r = await navigator.serviceWorker.ready; r.showNotification('The Black House', {body: 'Notifications are working on this device.', icon: 'static/icon-192.png', badge: 'static/badge-96.png', tag: 'test', data: {url: location.href.split('#')[0] + '#alerts'}}); };
+
 }
 
 /* ============ events ============ */
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href^="http"]'); if (a) return;
-  const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Topic copied')).catch(() => toast(cp.dataset.copy)); return; }
+  const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Copied')).catch(() => toast(cp.dataset.copy)); return; }
   if (e.target.closest('[data-back]')) { if (history.length > 1 && document.referrer !== undefined && route.prev) history.back(); else location.hash = baseView === 'home' ? '' : baseView; return; }
   if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
   const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }

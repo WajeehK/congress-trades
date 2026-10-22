@@ -232,7 +232,39 @@ function portfolioCard(p, pf) {
 
 /* ============ home ============ */
 const H = {period: '1Y', loaded: false};
+const MB = {days: '90', etf: false, all: false, loaded: false, items: [], seq: 0};
+const MB_NOTE = {'30': '30 days', '90': '90 days', '365': 'year'};
+async function loadMostBought() {
+  MB.loaded = true;
+  const el = $('#mbList'), seq = ++MB.seq;
+  if (!MB.items.length) el.innerHTML = skRows(6);
+  try {
+    const d = await api(`/api/most_bought?days=${MB.days}&etf=${MB.etf ? 1 : 0}`);
+    if (seq !== MB.seq) return;
+    MB.items = d.items || [];
+    $('#mbNote').textContent = `Ranked by how many politicians bought · trades in the last ${MB_NOTE[MB.days]}`;
+    renderMostBought();
+  } catch (e) { MB.loaded = false; el.innerHTML = empty('Could not load', String(e.message || e)); }
+}
+function renderMostBought() {
+  const el = $('#mbList'), it = MB.items, n = MB.all ? it.length : Math.min(10, it.length);
+  if (!it.length) { el.innerHTML = empty('No purchases in this window', 'Try a longer window.'); return; }
+  el.innerHTML = it.slice(0, n).map((x, i) => {
+    const av = x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('');
+    const more = x.n_pols > 4 ? `<span class="av round more">+${x.n_pols - 4}</span>` : '';
+    const who = x.n_pols === 1 ? x.pols[0].name.split(' ').slice(-1)[0] : `${x.n_pols} politicians`;
+    return `<button class="mbrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${i + 1}</span>${logo(x.ticker)}
+      <div class="mbmid"><div class="tk">${esc(x.ticker)}${x.kind === 'etf' ? ' <span class="tag">ETF</span>' : ''}</div><div class="nm">${esc(x.name || '')}</div></div>
+      <div class="r"><div class="val">${money(x.est_total)}</div><div class="g ${x.chg == null ? '' : x.chg >= 0 ? 'up' : 'dn'}">${x.chg == null ? '' : (x.chg >= 0 ? '+' : '') + x.chg.toFixed(1) + '%'}</div></div>
+      <div class="mbwho"><span class="mbstack">${av}${more}</span><span>${esc(who)} · ${x.n_buys} buy${x.n_buys === 1 ? '' : 's'}</span></div></button>`;
+  }).join('') + (it.length > 10 ? `<button class="viewall${MB.all ? ' open' : ''}" id="mbAll">${MB.all ? 'Show top 10' : `See all ${it.length}`} ${I.chevd}</button>` : '')
+    + `<div class="mb-foot">$ = est. amount bought (range midpoints) · % = price change since the buys</div>`;
+  if ($('#mbAll')) $('#mbAll').onclick = e => { e.stopPropagation(); MB.all = !MB.all; renderMostBought(); };
+}
+$$('#mbPills button').forEach(b => b.onclick = () => { $$('#mbPills button').forEach(x => x.classList.toggle('on', x === b)); MB.days = b.dataset.v; MB.all = false; loadMostBought(); });
+$('#mbEtf').onchange = e => { MB.etf = e.target.checked; MB.all = false; loadMostBought(); };
 async function loadHome() {
+  if (!MB.loaded) loadMostBought();
   const pfs = await portfolios();
   const list = [...pfs.values()];
   // top performers: meaningful portfolios only
@@ -258,7 +290,7 @@ async function loadHome() {
     const top = list.filter(p => p.n_priced >= 5).sort((a, b) => b.value - a.value).slice(0, isWide() ? 8 : 6);
     $('#homeGrid').innerHTML = top.map(p => portfolioCard(p, p)).join('');
     $('#homeTrades').innerHTML = skRows(5);
-    const d = await api('/api/trades?limit=8&sort=disclosure_date');
+    const d = await api('/api/trades?limit=5&sort=disclosure_date');
     $('#homeTrades').innerHTML = d.trades.map(t => tradeRow(t)).join('');
   }
 }

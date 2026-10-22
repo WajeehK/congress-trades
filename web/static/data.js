@@ -59,6 +59,10 @@
     },
     async refresh() { return {started: false, message: 'This site updates itself every hour'}; },
     async portfolios() { return get(`data/portfolios.json?v=${await v()}`); },
+    async most_bought(p) {
+      const d = await get(`data/most-bought.json?v=${await v()}`), w = d.windows[p.get('days') || '90'] || d.windows['90'];
+      return {days: w.days, since: w.since, items: p.get('etf') === '1' ? w.all : w.stocks};
+    },
     async politicians() { return get(`data/politicians.json?v=${await v()}`); },
     async portfolio(p) { return (await pol(p.get('name'))).portfolio; },
     async politician(p) { return {filings: (await pol(p.get('name'))).filings}; },

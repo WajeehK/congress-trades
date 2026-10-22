@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ.setdefault("NO_SCHEDULER", "1")
 import app  # noqa: E402
+import most_bought  # noqa: E402
 
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / "_site")
 RECENT_DAYS = 100
@@ -79,6 +80,7 @@ def main():
     dump(data / "politicians.json", pols)
     pfs = [p for p in app.portfolios() if p["politician"] in published]
     dump(data / "portfolios.json", pfs)
+    dump(data / "most-bought.json", most_bought.build(rows))
 
     by_pol, fil_by = {}, {}
     for r in rows:

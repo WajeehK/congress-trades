@@ -1061,6 +1061,27 @@ def portfolio_summaries():
         return out
 
 
+_MB_CACHE = {}
+
+
+@app.get("/api/most_bought")
+def most_bought_api(days: int = 90, etf: int = 0):
+    """Most-bought stocks by trade date window: distinct buyers, then # buys, then est. $ (see most_bought.py)."""
+    import time
+    import most_bought
+    days = days if days in (30, 90, 365) else 90
+    key = (days, bool(etf))
+    hit = _MB_CACHE.get(key)
+    if hit and time.time() - hit[0] < 600:
+        return hit[1]
+    since = (date.today() - timedelta(days=days)).isoformat()
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.side='buy' AND t.tx_date >= ?", (since,)).fetchall()
+    out = {"days": days, "since": since, "items": most_bought.rank(rows, days, bool(etf), 50)}
+    _MB_CACHE[key] = (time.time(), out)
+    return out
+
+
 @app.get("/api/portfolios")
 def portfolios():
     """Estimated portfolio summary for everyone with priced stock trades (see portfolio.py for the method)."""

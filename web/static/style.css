@@ -450,3 +450,36 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 
 .lag.atag{white-space:nowrap;flex:none;font-size:10.5px;padding:1px 6px}
 .trow .l1 .tk{flex:none}
+
+/* ---- Most bought (home) ---- */
+.mb-sub{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-6px 0 12px;color:var(--mute);font-size:13.5px}
+.mb-etf{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--ink2);cursor:pointer;flex:none;white-space:nowrap}
+.mb-etf input{accent-color:var(--ink);width:16px;height:16px;margin:0}
+.mbrow{display:grid;grid-template-columns:18px auto 1fr auto;align-items:center;gap:6px 12px;padding:12px 18px;width:100%;text-align:left;border-top:1px solid var(--line)}
+.mbrow:first-child{border-top:0}
+.mbrow:hover{background:var(--card2)}
+.mbrow .rk,.mbrow>.logo{grid-row:span 2}
+.mbrow .rk{font-size:13px;font-weight:700;color:var(--mute);text-align:center;font-variant-numeric:tabular-nums}
+.mbrow .mbmid{min-width:0}
+.mbrow .tk{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.mbrow .tk .tag{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--bg2);color:var(--mute);vertical-align:2px}
+.mbrow .nm{font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbrow .mbwho{grid-column:3/5;display:flex;align-items:center;gap:8px;margin-top:-2px;font-size:12.5px;color:var(--ink2);font-weight:600;min-width:0}
+.mbrow .mbwho>span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbrow .mbstack{display:inline-flex;flex:none}
+.mbrow .mbstack .av{width:22px;height:22px;border-radius:50%;font-size:8px;border:2px solid var(--card);margin-left:-7px;box-sizing:content-box}
+.mbrow .mbstack .av:first-child{margin-left:0}
+.mbrow .mbstack .av.more{background:var(--bg2);color:var(--ink2);font-size:9px;font-weight:700}
+.mbrow .r{text-align:right;font-variant-numeric:tabular-nums}
+.mbrow .r .val{font-size:16px;font-weight:600}
+.mbrow .r .g{font-size:13.5px;font-weight:500;margin-top:1px}
+.mb-foot{padding:10px 18px 12px;font-size:12px;color:var(--mute);border-top:1px solid var(--line)}
+.mb-h{margin-top:var(--s6)}
+.more-btn{margin-top:10px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);color:var(--ink)}
+.perf-h .more-link{margin-left:auto}
+.hero-end{margin-top:var(--s10)}
+@media (max-width:700px){
+  .mbrow{padding:12px 14px;gap:6px 10px;grid-template-columns:14px auto 1fr auto}
+  .mb-h{margin-top:var(--s4)}
+  .perf-h .pills{order:3}
+}

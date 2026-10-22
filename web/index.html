@@ -36,7 +36,21 @@
 <main id="main">
   <!-- HOME -->
   <section class="view" id="v-home">
-    <div class="hero">
+    <div class="sec-h mb-h"><h2>Most bought</h2><div class="pills" id="mbPills"><button data-v="30">30D</button><button data-v="90" class="on">90D</button><button data-v="365">1Y</button></div></div>
+    <div class="mb-sub"><span id="mbNote">Stocks bought by the most politicians · trade dates in the last 90 days</span><label class="mb-etf"><input type="checkbox" id="mbEtf"><span>ETFs</span></label></div>
+    <div class="tlist card mblist" id="mbList"></div>
+
+    <div class="sec-h"><h2>Recent trades</h2><a class="more-link" href="#trades">See all</a></div>
+    <div class="tlist card" id="homeTrades"></div>
+    <a class="viewall more-btn" href="#trades">See more trades</a>
+
+    <div class="sec-h"><h2>Portfolios</h2><a class="more-link" href="#people">See all</a></div>
+    <div class="pgrid" id="homeGrid"></div>
+
+    <div class="sec-h perf-h"><h2>Top performers</h2><a class="more-link" href="#people">See all</a><div class="pills" id="perfPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div></div>
+    <div class="perf-rail" id="perfRail"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
+
+    <div class="hero hero-end">
       <div class="hero-copy">
         <div class="eyebrow">Full transparency</div>
         <h1>See exactly what<br>they trade.</h1>
@@ -47,14 +61,6 @@
       <div class="phone" id="heroPhone" aria-hidden="true"></div>
     </div>
 
-    <div class="sec-h"><h2>Top performers</h2><div class="pills" id="perfPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div></div>
-    <div class="perf-rail" id="perfRail"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
-
-    <div class="sec-h"><h2>Portfolios</h2><a class="more-link" href="#people">See all</a></div>
-    <div class="pgrid" id="homeGrid"></div>
-
-    <div class="sec-h"><h2>Latest trades</h2><a class="more-link" href="#trades">See all</a></div>
-    <div class="tlist card" id="homeTrades"></div>
     <p class="fine">Portfolio values, returns and prices are estimates built only from disclosed trades (range midpoints × Yahoo daily closes). Not investment advice.</p>
   </section>
 

@@ -1,0 +1,21 @@
+name: Probe data sources
+
+# Manual check, outside the deploy pipeline (no state, no deploy): can GitHub's runners reach each source?
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests
+      - name: Senate eFD (efdsearch.senate.gov)
+        run: python pipeline/probe_efd.py 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"

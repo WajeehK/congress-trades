@@ -52,6 +52,12 @@ def apply(row):
     return row
 
 
+_EST = """(SELECT {col} FROM prices p WHERE p.ticker=trades.ticker AND p.d<=trades.tx_date
+              AND p.d >= date(trades.tx_date,'-4 days') ORDER BY p.d DESC LIMIT 1)"""
+_EST_ROW = ("UPDATE trades SET est_price = " + _EST.format(col="close") + ", est_adj = " + _EST.format(col="adjclose")
+            + ", est_date = " + _EST.format(col="d") + " WHERE rowid = ? AND (asset_type IS NULL OR asset_type IN ('ST','EF'))")
+
+
 def migrate(c):
     """Fix stored rows; returns [(old, new, asset, n)]."""
     done = {}
@@ -62,6 +68,10 @@ def migrate(c):
         new, changed = corrected(t, a)
         if changed and new != t:
             c.execute("UPDATE trades SET ticker = ?, est_price = NULL, est_adj = NULL, est_date = NULL WHERE rowid = ?", (new, tid))
+            c.execute(_EST_ROW, (tid,))   # re-price from stored history (the price job only prices freshly fetched tickers)
             k = (t, new, (a or "")[:60])
             done[k] = done.get(k, 0) + 1
+    # rows fixed by an earlier run before re-pricing existed: price any still-unpriced row of a corrected symbol
+    targets = sorted({n for _, _, n in FIXES if n} | {"GOOG", "GOOGL"})
+    c.execute(_EST_ROW.replace("rowid = ?", "est_price IS NULL AND tx_date IS NOT NULL AND ticker IN (%s)" % ",".join("?" * len(targets))), targets)
     return [(*k, n) for k, n in done.items()]

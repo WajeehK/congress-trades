@@ -126,6 +126,11 @@ def init_db():
         CREATE INDEX IF NOT EXISTS ix_tr_tick ON trades(ticker);
         CREATE INDEX IF NOT EXISTS ix_tr_seen ON trades(first_seen);
         """)
+        # one-off fix-up of names stored before clean_name existed (cheap: distinct names only)
+        for tbl in ("trades", "filings"):
+            for (n,) in c.execute(f"SELECT DISTINCT politician FROM {tbl}").fetchall():
+                if n and clean_name(n) != n:
+                    c.execute(f"UPDATE {tbl} SET politician=? WHERE politician=?", (clean_name(n), n))
 
 
 def meta_get(k, default=None):
@@ -225,6 +230,23 @@ def senate_lookup(state, name):
     return None, None
 
 
+_HONORIFICS = {"mr", "mrs", "ms", "miss", "dr", "hon", "rep", "sen", "honorable", "md", "facs", "phd", "dds", "dvm", "cpa", "esq"}
+
+
+def clean_name(name):
+    """Normalise a filer name: drop honorifics that some filers type into the First field ("John J Mr McGuire",
+    "Mark Dr Green") and collapse doubled words ("Scott Scott Franklin" -> "Scott Franklin")."""
+    out = []
+    for w in (name or "").split():
+        k = w.lower().strip(".,")
+        if k in _HONORIFICS:
+            continue
+        if out and k == out[-1].lower().strip(".,"):
+            continue
+        out.append(w)
+    return " ".join(out) or (name or "").strip()
+
+
 def side_of(tx_type):
     t = (tx_type or "").lower()
     if "exchange" in t:
@@ -237,6 +259,8 @@ def side_of(tx_type):
 
 
 def insert_trade(c, row, ignore=False):
+    if row.get("politician"):
+        row["politician"] = clean_name(row["politician"])
     vals = [row.get(k) for k in TRADE_COLS]
     verb = "INSERT OR IGNORE" if ignore else "INSERT OR REPLACE"
     return c.execute(f"{verb} INTO trades({','.join(TRADE_COLS)}) VALUES({','.join('?' * len(TRADE_COLS))})", vals)
@@ -256,7 +280,7 @@ def fetch_house_year(year):
         first, last, suffix = ((m.findtext(k) or "").strip() for k in ("First", "Last", "Suffix"))
         ptrs.append({
             "doc": m.findtext("DocID").strip(), "year": int(m.findtext("Year") or year),
-            "name": " ".join(x for x in (first, last, suffix) if x), "last": last,
+            "name": clean_name(" ".join(x for x in (first, last, suffix) if x)), "last": last,
             "state_dst": (m.findtext("StateDst") or "").strip(), "filing_date": iso(m.findtext("FilingDate")),
         })
     with db() as c:

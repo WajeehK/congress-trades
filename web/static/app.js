@@ -176,6 +176,7 @@ function route() {
   let v = 'home';
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'alerts'].includes(h)) v = h;
+  else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
   const changed = v !== route.cur || (v === 'pol' && h !== route.h);
   showView(v); route.cur = v; route.h = h;
@@ -218,13 +219,13 @@ async function portfolios() {
   if (!PF) PF = api('/api/portfolios').then(rows => { const m = new Map(); rows.forEach(r => m.set(r.politician, r)); return m; }).catch(() => new Map());
   return PF;
 }
-function portfolioCard(p, pf) {
-  const all = pf && pf.periods ? pf.periods.ALL : null;
+function portfolioCard(p, pf, o = {}) {
+  const all = pf && pf.periods ? pf.periods[o.period || 'ALL'] : null;
   const up = !all || all[1] == null || all[1] >= 0;
   return `<button class="pcard" data-pol="${esc(p.politician)}">
-    <div class="ph">${portrait(p.politician, p.bioguide)}<div class="tag"><i class="pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}</div><div class="nm">${esc(p.politician)}</div></div>
+    <div class="ph">${portrait(p.politician, p.bioguide)}${o.rank ? `<span class="rank">${o.rank}</span>` : ''}<div class="tag"><i class="pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}</div><div class="nm">${esc(p.politician)}</div></div>
     ${pf ? `<div class="b"><div class="k">Portfolio Value</div><div class="v">${usd0(pf.value)}</div>
-      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>` : ''}</div></div>
+      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>${o.period ? `<small class="per">${o.period}</small>` : ''}` : ''}</div></div>
       <div class="spark">${sparkSVG(pf.spark, up)}</div>`
     : `<div class="b"><div class="k">${num(p.n)} disclosed trades</div></div><div class="none">No priced stock trades to build a portfolio from.</div>`}
   </button>`;
@@ -294,7 +295,7 @@ async function loadHome() {
     $('#homeTrades').innerHTML = d.trades.map(t => tradeRow(t)).join('');
   }
 }
-$$('#perfPills button').forEach(b => b.onclick = () => { $$('#perfPills button').forEach(x => x.classList.toggle('on', x === b)); H.period = b.dataset.v; loadHome(); });
+$$('#perfPills button').forEach(b => b.onclick = () => { $$('#perfPills button').forEach(x => x.classList.toggle('on', x === b)); H.period = b.dataset.v; $('#perfAll').href = '#people:ret:' + H.period; loadHome(); });
 
 /* ============ trades feed ============ */
 const F = {offset: 0, range: '90', side: '', chamber: '', ticker: null, total: 0, PAGE: 40, seq: 0, loaded: false};
@@ -346,7 +347,14 @@ async function loadKpis() {
 }
 
 /* ============ politicians ============ */
-const P = {sort: 'value', dir: -1, chamber: '', list: null};
+const P = {sort: 'value', dir: -1, chamber: '', list: null, period: '1Y'};
+// same eligibility as Home > Top performers, so "See all" continues that ranking
+const perfOK = (pf, k) => !!(pf && pf.value >= 50000 && pf.n_priced >= 5 && pf.periods && pf.periods[k] && pf.periods[k][1] != null);
+function syncPolPills() {
+  $$('#polSort button').forEach(x => x.classList.toggle('on', x.dataset.v === P.sort));
+  $$('#polPeriod button').forEach(x => x.classList.toggle('on', x.dataset.v === P.period));
+  $('#polPeriod').hidden = P.sort !== 'ret';
+}
 async function loadPeople() {
   if (!P.list) {
     $('#polGrid').innerHTML = Array(8).fill('<div class="sk-card"></div>').join('');
@@ -356,13 +364,15 @@ async function loadPeople() {
   const q = $('#pq').value.trim(), m = window.BHSearch ? BHSearch.compilePeople(q) : (p => p.politician.toLowerCase().includes(q.toLowerCase()));
   let L = P.list.filter(p => (!P.chamber || p.chamber === P.chamber) && (!q || m(p)));
   const key = {
-    value: p => p.pf ? p.pf.value : -1, ret: p => p.pf && p.pf.periods['1Y'] && p.pf.periods['1Y'][1] != null && p.pf.value >= 50000 ? p.pf.periods['1Y'][1] : -1e9,
+    value: p => p.pf ? p.pf.value : -1, ret: p => perfOK(p.pf, P.period) ? p.pf.periods[P.period][1] : -1e9,
     n: p => p.n, volume: p => p.volume || 0, latest: p => p.latest || '', name: p => p.politician,
   }[P.sort];
   L.sort((a, b) => { const x = key(a), y = key(b); const c = x < y ? -1 : x > y ? 1 : 0; return P.sort === 'name' ? c * -P.dir : c * P.dir; });
   if (P.sort === 'ret' && P.dir === 1) L = L.filter(p => key(p) > -1e9).concat(L.filter(p => key(p) <= -1e9));
   $('#polDir span').textContent = P.sort === 'name' ? (P.dir === -1 ? 'A → Z' : 'Z → A') : (P.dir === -1 ? 'High → low' : 'Low → high');
-  $('#polGrid').innerHTML = L.map(p => portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, party (e.g. Democrat) or state (e.g. Texas or TX).') : empty('Nobody found', ''));
+  syncPolPills();
+  const ret = P.sort === 'ret', nOK = ret ? L.filter(p => key(p) > -1e9).length : 0;
+  $('#polGrid').innerHTML = L.map((p, i) => ret ? portfolioCard(p, p.pf, {period: P.period, rank: key(p) > -1e9 ? (P.dir === -1 ? i + 1 : nOK - i) : 0}) : portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, party (e.g. Democrat) or state (e.g. Texas or TX).') : empty('Nobody found', ''));
 }
 
 /* ============ politician page ============ */
@@ -381,6 +391,10 @@ function periodSlice(s, key) {
 }
 const following = () => store.get('follows', []);
 const isFollowing = n => following().includes(n);
+// names are normalised server-side (clean_name in app.py); migrate follows saved under the old spelling
+(() => { const H = new Set(['mr', 'mrs', 'ms', 'miss', 'dr', 'hon', 'rep', 'sen', 'honorable', 'md', 'facs', 'phd', 'dds', 'dvm', 'cpa', 'esq']);
+  const clean = n => { const o = []; for (const w of n.split(/\s+/)) { const k = w.toLowerCase().replace(/^[.,]+|[.,]+$/g, ''); if (!w || H.has(k)) continue; if (o.length && k === o[o.length - 1].toLowerCase().replace(/^[.,]+|[.,]+$/g, '')) continue; o.push(w); } return o.join(' ') || n; };
+  try { const f = following(), g = [...new Set(f.map(clean))]; if (g.join('|') !== f.join('|')) store.set('follows', g); } catch (e) {} })();
 function setFollow(n, on) { const f = following().filter(x => x !== n); if (on) f.push(n); store.set('follows', f); }
 
 async function openPolitician(name) {
@@ -658,6 +672,7 @@ pills('rangeSeg', v => { F.range = v; $('#custom').hidden = v !== 'custom'; if (
 pills('sideSeg', v => { F.side = v; loadFeed(); });
 pills('chamberSeg', v => { F.chamber = v; loadFeed(); loadKpis(); });
 pills('polSort', v => { P.sort = v; P.dir = -1; loadPeople(); });
+pills('polPeriod', v => { P.period = v; loadPeople(); });
 pills('polChamber', v => { P.chamber = v; loadPeople(); });
 $('#polDir').onclick = () => { P.dir *= -1; loadPeople(); };
 let deb;

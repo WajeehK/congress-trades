@@ -96,7 +96,8 @@ const ISSUER_RE = [[/\bishares\b/i, 'ishares'], [/blackrock/i, 'blackrock'], [/v
   [/proshares/i, 'proshares'], [/direxion/i, 'direxion'], [/global x/i, 'globalx'], [/lord abbett/i, 'lordabbett'], [/doubleline/i, 'doubleline'],
   [/blackstone/i, 'blackstone'], [/dimensional|\bdfa\b/i, 'dimensional'], [/yieldmax/i, 'yieldmax'], [/oakmark/i, 'oakmark'], [/eventide/i, 'eventide'],
   [/westwood/i, 'westwood'], [/neuberger/i, 'neuberger'], [/janus/i, 'janus'], [/morgan stanley/i, 'morganstanley'], [/american century|avantis/i, 'americancentury'],
-  [/dodge\s*&?\s*cox/i, 'dodgecox'], [/baron/i, 'baron'], [/edgewood/i, 'edgewood'], [/fuller\s*&?\s*thaler/i, 'fullerthaler'], [/icapital/i, 'icapital']];
+  [/dodge\s*&?\s*cox/i, 'dodgecox'], [/baron/i, 'baron'], [/edgewood/i, 'edgewood'], [/fuller\s*&?\s*thaler/i, 'fullerthaler'], [/icapital/i, 'icapital'], [/nuveen/i, 'nuveen'], [/causeway/i, 'causeway'],
+  [/^fs\s+(specialty|credit|energy|kkr|multi)/i, 'fs'], [/^column\s/i, 'column']];
 const FUNDISH = /\b(fund|funds|portfolio|trust|etf|shares class|class [a-z0-9-]+ shares|money market)\b/i;
 const issuerLogo = n => { if (!n) return null; for (const [re, k] of ISSUER_RE) if (re.test(n) && ISS[k]) return 'static/logos/' + ISS[k]; return null; };
 const isTreasury = (kind, n) => /treasur|t-?bills?\b|\bu\.?s\.? (govt?|government)\b/i.test(n || '');

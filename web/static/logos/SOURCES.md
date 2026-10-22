@@ -68,3 +68,7 @@ Cached so the app doesn't hotlink these. Logos are trademarks of their owners, s
 | the.png | parqet logo of KHC |
 | toelf.png | site icon of www.tel.com|tel.co.jp (Google favicon service) |
 | twod.png | parqet logo of TWO |
+| issuer_nuveen.png | site icon of nuveen.com (favicone.com) |
+| issuer_causeway.png | site icon of causewaycap.com (favicone.com) |
+| issuer_fs.png | site icon of fsinvestments.com (favicone.com) |
+| issuer_column.png | site icon of columnfunds.com (DuckDuckGo icon service) |

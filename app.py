@@ -38,6 +38,7 @@ from fastapi.staticfiles import StaticFiles
 
 from ptr_parser import parse_ptr_pdf
 import oge_parser
+import ticker_fixes
 import portfolio as pf
 
 BASE = Path(__file__).resolve().parent
@@ -127,6 +128,8 @@ def init_db():
         CREATE INDEX IF NOT EXISTS ix_tr_seen ON trades(first_seen);
         """)
         canonical_names(c)
+        for old, new, asset, n in ticker_fixes.migrate(c):   # typo'd / misread tickers (see ticker_fixes.py)
+            log.info("ticker fix: %s -> %s x%d (%s)", old, new, n, asset)
 
 
 def meta_get(k, default=None):
@@ -275,6 +278,7 @@ def side_of(tx_type):
 def insert_trade(c, row, ignore=False):
     if row.get("politician"):
         row["politician"] = clean_name(row["politician"])
+    ticker_fixes.apply(row)
     vals = [row.get(k) for k in TRADE_COLS]
     verb = "INSERT OR IGNORE" if ignore else "INSERT OR REPLACE"
     return c.execute(f"{verb} INTO trades({','.join(TRADE_COLS)}) VALUES({','.join('?' * len(TRADE_COLS))})", vals)

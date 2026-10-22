@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT))
 os.environ.setdefault("NO_SCHEDULER", "1")
 import app  # noqa: E402
 import most_bought  # noqa: E402
+import stock_page  # noqa: E402
 
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / "_site")
 RECENT_DAYS = 100
@@ -33,6 +34,10 @@ COLS = ["uid", "chamber", "politician", "party", "state", "district", "bioguide"
 
 def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def stock_file(t):
+    return re.sub(r"[^A-Za-z0-9.\-]", "_", t)
 
 
 def senate_ok(r):
@@ -87,6 +92,7 @@ def main():
         by_pol.setdefault(r["politician"], []).append(r)
     for f in filings:
         fil_by.setdefault(f["politician"], []).append({k: f[k] for k in ("source", "filing_date", "url", "status", "n_tx")})
+    holders = {}
     for name, trs in by_pol.items():
         try:
             pf = app.portfolio(name, holdings=2000)
@@ -94,6 +100,20 @@ def main():
             continue
         pf.pop("log", None)
         dump(data / "p" / f"{slug(name)}.json", {"portfolio": pf, "filings": fil_by.get(name, []), "trades": pack(trs)})
+        for h in pf.get("holdings") or []:
+            for hr in stock_page.holder_rows(h["ticker"], name, {"holdings": [h]}, pf):
+                holders.setdefault(h["ticker"], []).append(hr)
+
+    # stock pages: one small file per traded ticker (price series + estimated holders)
+    first_tx = {}
+    for r in rows:
+        if r["ticker"] and r["tx_date"]:
+            t = r["ticker"]
+            first_tx[t] = min(first_tx.get(t, r["tx_date"]), r["tx_date"])
+    with app.db() as c:
+        for t, f in first_tx.items():
+            hs = sorted(holders.get(t, []), key=lambda h: -h["value"])
+            dump(data / "stock" / f"{stock_file(t)}.json", {"ticker": t, "px": stock_page.series(c, t, f), "holders": hs})
 
     st = app.status()
     st["log"] = []

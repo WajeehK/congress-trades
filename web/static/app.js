@@ -157,16 +157,15 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb'];
+const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb', 'stock'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
-  const nav = v === 'pol' ? null : v === 'mb' ? 'home' : v;
+  const nav = v === 'pol' || v === 'stock' ? null : v === 'mb' ? 'home' : v;
   $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
 }
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
-  if (h.startsWith('t=')) { openTicker(h.slice(2)); return; }
   if (h.startsWith('x=')) { openTrade(h.slice(2)); return; }
   if (h.startsWith('m=')) { history.replaceState(null, '', '#p=' + encodeURIComponent(h.slice(2))); route.after = 'mirror'; }
   if (h.startsWith('f=')) { history.replaceState(null, '', '#p=' + encodeURIComponent(h.slice(2))); route.after = 'follow'; }
@@ -177,11 +176,12 @@ function route() {
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'alerts'].includes(h)) v = h;
   else if (h === 'mostbought') v = 'mb';
+  else if (h.startsWith('t=')) v = 'stock';
   else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
-  const changed = v !== route.cur || (v === 'pol' && h !== route.h);
+  const changed = v !== route.cur || ((v === 'pol' || v === 'stock') && h !== route.h);
   showView(v); route.cur = v; route.h = h;
-  if (v !== 'pol' && v !== 'mb') baseView = v;
+  if (v !== 'pol' && v !== 'mb' && v !== 'stock') baseView = v;
   if (changed) window.scrollTo({top: 0, behavior: 'instant'});
   if (v === 'home') loadHome();
   if (v === 'mb' && !MB.loaded) loadMostBought();
@@ -189,6 +189,7 @@ function route() {
   if (v === 'people') loadPeople();
   if (v === 'alerts') renderAlerts();
   if (v === 'pol' && changed) openPolitician(h.slice(2));
+  if (v === 'stock' && changed) openStock(h.slice(2));
 }
 addEventListener('hashchange', route);
 addEventListener('scroll', () => $('#top').classList.toggle('scrolled', scrollY > 4), {passive: true});
@@ -606,16 +607,100 @@ async function openTrade(uid) {
     <div class="infobox">${I.info}<span>Prices are estimates from Yahoo Finance daily data for the trade date: any fill that day was between the low and high, and the close is our single best guess. Disclosures only give dollar ranges.</span></div>
     <div class="btns"><a class="btn" href="${esc(t.url || '#')}" target="_blank" rel="noopener">${I.doc}Original filing</a>${t.ticker ? `<button class="btn ghost" data-tick="${esc(t.ticker)}">All ${esc(t.ticker)} trades</button>` : ''}</div>`);
 }
-async function openTicker(tk) {
-  if (!route.cur) { showView('home'); route.cur = 'home'; loadHome(); }
-  openSheet(`<div class="td-head">${logo(tk)}<div><h2>${esc(tk)}</h2><div class="an" id="tkName">Loading…</div></div></div><div class="card tlist" id="tkList">${skRows(4)}</div>`);
-  const d = await api(`/api/trades?ticker=${encodeURIComponent(tk)}&limit=60`);
+/* ============ stock page ============ */
+const ST = {t: null, s: null, rows: [], total: 0, range: '1Y', pts: [], shown: 15, mb: {}};
+const openTicker = tk => { location.hash = 't=' + encodeURIComponent(tk); };
+async function openStock(tk) {
+  tk = decodeURIComponent(tk).toUpperCase(); ST.t = tk; ST.shown = 15; ST.range = '1Y';
+  const el = $('#v-stock'), enc = encodeURIComponent(tk);
+  el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
+    <div class="st-head">${logo(tk)}<div><h1>${esc(tk)}</h1><div class="mute" id="stName">Loading…</div></div></div><div class="sk-card" style="height:260px;margin-top:16px"></div>`;
+  let s, d;
+  try { [s, d] = await Promise.all([api('/api/stock?ticker=' + enc), api(`/api/trades?ticker=${enc}&limit=2000`)]); }
+  catch (e) { el.innerHTML += empty('Could not load', esc(String(e.message || e))); return; }
+  if (ST.t !== tk) return;
   d.trades.forEach(t => trades.set(t.uid, t));
-  const t0 = d.trades[0] || {};
-  const people = new Set(d.trades.map(t => t.politician)).size;
-  $('#tkName').innerHTML = `${esc(t0.company || cleanAsset(t0) || '')}${t0.cur_price != null ? ` · <b style="color:var(--ink)">${usd(t0.cur_price)}</b>` : ''}<br>${d.total} trades by ${people} ${people === 1 ? 'person' : 'people'}`;
-  $('#tkList').innerHTML = d.trades.map(t => tradeRow(t)).join('') || empty('No trades', '');
+  ST.s = s; ST.rows = d.trades; ST.total = d.total; ST.pts = [];
+  if (s.px) { let ms = D(s.px.d0).getTime(); s.px.dd.forEach((x, i) => { ms += x * 864e5; ST.pts.push([new Date(ms).toISOString().slice(0, 10), s.px.c[i]]); }); }
+  ST.mb = {};
+  await Promise.all(['90', '365'].map(async w => { try { const m = await api(`/api/most_bought?days=${w}&etf=1`); const i = m.items.findIndex(x => x.ticker === tk); if (i >= 0) ST.mb[w] = {rank: i + 1, ...m.items[i]}; } catch (e) {} }));
+  if (ST.t === tk) renderStock();
 }
+const ST_RANGES = {'3M': 91, '1Y': 365, '3Y': 1095, 'ALL': 1e5};
+function stRange() {
+  const P = ST.pts; if (!P.length) return [];
+  const since = daysAgoISO(ST_RANGES[ST.range]);
+  const r = P.filter(p => p[0] >= since);
+  return r.length > 1 ? r : P.slice(-2);
+}
+function stockChart(w) {
+  const P = stRange(), h = 230, pt = 14, pb = 24, pl = 4, pr = 46;
+  if (P.length < 2) return `<div class="empty"><b>No price history</b>Yahoo has no daily prices for this ticker.</div>`;
+  const t0 = D(P[0][0]).getTime(), t1 = D(P[P.length - 1][0]).getTime();
+  const lo = Math.min(...P.map(p => p[1])), hi = Math.max(...P.map(p => p[1])), pad = (hi - lo) * 0.08 || hi * 0.05;
+  const X = d => pl + (D(d).getTime() - t0) / Math.max(1, t1 - t0) * (w - pl - pr), Y = v => pt + (1 - (v - lo + pad) / (hi - lo + 2 * pad)) * (h - pt - pb);
+  const up = P[P.length - 1][1] >= P[0][1], col = up ? 'var(--up)' : 'var(--dn)';
+  const line = P.map((p, i) => `${i ? 'L' : 'M'}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join('');
+  const area = `${line}L${X(P[P.length - 1][0]).toFixed(1)},${h - pb}L${X(P[0][0]).toFixed(1)},${h - pb}Z`;
+  const idx = new Map(P.map(p => [p[0], p[1]]));
+  const near = d => { if (idx.has(d)) return idx.get(d); let best = null; for (const p of P) { if (p[0] <= d) best = p[1]; else break; } return best ?? P[0][1]; };
+  const g = new Map();
+  ST.rows.forEach(t => { if (!t.tx_date || t.tx_date < P[0][0] || t.tx_date > P[P.length - 1][0] || (t.side !== 'buy' && t.side !== 'sell')) return;
+    const k = t.tx_date + '|' + t.side; if (!g.has(k)) g.set(k, {d: t.tx_date, side: t.side, rows: []}); g.get(k).rows.push(t); });
+  ST.groups = [...g.values()].sort((a, b) => a.d < b.d ? -1 : 1);
+  const mk = ST.groups.map((m, i) => { const v = m.rows[0].est_price || near(m.d), r = 4.5 + Math.min(4, Math.log2(m.rows.length));
+    return `<circle class="mk ${m.side}" data-mk="${i}" cx="${X(m.d).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${r.toFixed(1)}"/>`; }).join('');
+  const ticks = [0, 0.33, 0.66, 1].map(f => { const t = new Date(t0 + f * (t1 - t0)), iso = t.toISOString().slice(0, 10);
+    return `<text x="${(pl + f * (w - pl - pr)).toFixed(1)}" y="${h - 6}" text-anchor="${f === 0 ? 'start' : f === 1 ? 'end' : 'middle'}">${ST.range === '3M' ? fmtD(iso) : D(iso).toLocaleDateString('en-US', {month: 'short', year: '2-digit', timeZone: 'UTC'})}</text>`; }).join('');
+  const yl = [hi, (hi + lo) / 2, lo].map(v => `<text x="${w - 2}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${usd(v, v >= 1000 ? 0 : 2)}</text><line x1="${pl}" x2="${w - pr + 4}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"/>`).join('');
+  return `<svg class="stc" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><defs><linearGradient id="stg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${up ? '#22c55e' : '#ef4444'}" stop-opacity=".22"/><stop offset="1" stop-color="${up ? '#22c55e' : '#ef4444'}" stop-opacity="0"/></linearGradient></defs>
+    <g class="grid">${yl}</g><path d="${area}" fill="url(#stg)"/><path d="${line}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>${mk}<g class="ax">${ticks}</g></svg>`;
+}
+function stockPop(i) {
+  const m = ST.groups[i]; if (!m) return;
+  const rows = m.rows.slice(0, 6);
+  $('#stPop').innerHTML = `<div class="sp-h"><span class="side ${m.side}">${m.side === 'buy' ? 'Bought' : 'Sold'}</span> ${fmtDY(m.d)}${m.rows.length > 1 ? ` · ${m.rows.length} trades` : ''}<button class="sp-x" aria-label="Close">×</button></div>`
+    + rows.map(t => `<button class="sp-r" data-trade="${esc(t.uid)}">${avatar(t.politician, t.bioguide, 'round')}<span class="n">${esc(t.politician)}</span><span class="a">${amtShort(t)}</span></button>`).join('')
+    + (m.rows.length > 6 ? `<div class="sp-more">+${m.rows.length - 6} more in the list below</div>` : '');
+  $('#stPop').hidden = false;
+  $('#stPop .sp-x').onclick = () => { $('#stPop').hidden = true; };
+}
+function renderStock() {
+  const s = ST.s, tk = ST.t, R = ST.rows, t0 = R[0] || {};
+  const name = t0.company || cleanAsset(t0) || '', P = stRange(), cur = t0.cur_price ?? (ST.pts.length ? ST.pts[ST.pts.length - 1][1] : null);
+  const ch = P.length > 1 ? (P[P.length - 1][1] / P[0][1] - 1) * 100 : null;
+  const yr = daysAgoISO(365), R1 = R.filter(t => (t.tx_date || '') >= yr);
+  const buyers = new Set(R1.filter(t => t.side === 'buy').map(t => t.politician)).size, sellers = new Set(R1.filter(t => t.side === 'sell').map(t => t.politician)).size;
+  const H = s.holders || [], hv = H.reduce((a, h) => a + h.value, 0);
+  const mb = w => ST.mb[w] ? `<b>#${ST.mb[w].rank}</b><span>${ST.mb[w].n_pols} politician${ST.mb[w].n_pols === 1 ? '' : 's'} · ${ST.mb[w].n_buys} buys</span>` : `<b>—</b><span>not bought</span>`;
+  $('#v-stock').innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
+    <div class="st-head">${logo(tk)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div></div>
+    <div class="st-px"><b>${cur != null ? usd(cur) : '—'}</b>${ch != null ? `<span class="${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}% <small class="mute">${ST.range === 'ALL' ? 'all' : ST.range}</small></span>` : ''}</div>
+    <div class="card st-chart"><div id="stChart"></div><div class="st-pop card" id="stPop" hidden></div>
+      <div class="st-leg"><span><i class="b"></i>Politician buy</span><span><i class="s"></i>Sell</span><span class="mute">Tap a dot</span></div></div>
+    <div class="pills st-rng" id="stRange">${Object.keys(ST_RANGES).map(k => `<button data-v="${k}" class="${k === ST.range ? 'on' : ''}">${k}</button>`).join('')}</div>
+    <div class="st-stats">
+      <div class="card"><div class="k">Most bought 90D</div>${mb('90')}</div>
+      <div class="card"><div class="k">Most bought 1Y</div>${mb('365')}</div>
+      <div class="card"><div class="k">Trades · last 1Y</div><b>${num(R1.length)}</b><span>${buyers} buying · ${sellers} selling</span></div>
+      <div class="card"><div class="k">Est. held by</div><b>${H.length}</b><span>${H.length ? money(hv) + ' est.' : 'nobody (from disclosures)'}</span></div>
+    </div>
+    <div class="sec-h"><h2>Estimated holders</h2><small class="mute">${H.length}</small></div>
+    <div class="card tlist">${H.length ? H.slice(0, 12).map(h => `<button class="hrow" data-pol="${esc(h.politician)}">${avatar(h.politician, h.bioguide, 'round')}
+      <div><div class="tk" style="font-size:15px">${esc(h.politician)}</div><div class="w">${esc(h.party || '')}${h.chamber ? ' · ' + esc(h.chamber) : ''} · ${num(h.shares)} sh</div></div>
+      <div class="r"><div class="val">${money(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div></button>`).join('')
+      : empty('No estimated holders', 'Nobody holds it according to the disclosed trades.')}</div>
+    <div class="sec-h"><h2>Recent trades</h2><small class="mute">${num(ST.total)}</small></div>
+    <div class="card tlist" id="stTrades">${R.slice(0, ST.shown).map(t => tradeRow(t)).join('') || empty('No trades', '')}</div>
+    ${R.length > ST.shown ? `<button class="viewall more-btn" id="stMore">See more trades</button>` : ''}
+    <p class="fine">Prices are Yahoo Finance daily closes. Dots are politicians' trades by trade date at the estimated price; holdings are estimates rebuilt from disclosed ranges.</p>`;
+  const draw = () => { const el = $('#stChart'); if (el) el.innerHTML = stockChart(Math.max(280, el.clientWidth)); };
+  draw();
+  $('#stChart').onclick = e => { const c = e.target.closest('[data-mk]'); if (c) stockPop(+c.dataset.mk); };
+  $$('#stRange button').forEach(b => b.onclick = () => { ST.range = b.dataset.v; renderStock(); });
+  if ($('#stMore')) $('#stMore').onclick = () => { ST.shown += 30; renderStock(); };
+}
+addEventListener('resize', () => { if (route.cur === 'stock' && ST.s && $('#stChart')) $('#stChart').innerHTML = stockChart(Math.max(280, $('#stChart').clientWidth)); });
 
 /* ============ alerts (screenshot 06) ============ */
 /* ============ native Web Push (see webpush.py) ============ */

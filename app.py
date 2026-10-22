@@ -1074,6 +1074,26 @@ def portfolio_summaries():
         return out
 
 
+@app.get("/api/stock")
+def stock_api(ticker: str):
+    """Stock page: daily closes since the first politician trade (compact) and estimated current holders."""
+    import stock_page
+    t = ticker.upper().strip()
+    with db() as c:
+        first = c.execute("SELECT MIN(tx_date) FROM trades WHERE ticker=?", (t,)).fetchone()[0]
+        pols = c.execute("SELECT politician, MAX(bioguide) bioguide, MAX(party) party, MAX(chamber) chamber FROM trades "
+                         "WHERE ticker=? GROUP BY politician", (t,)).fetchall()
+        px = stock_page.series(c, t, first)
+    holders = []
+    for r in pols:
+        try:
+            holders += stock_page.holder_rows(t, r["politician"], _pf(r["politician"]), dict(r))
+        except Exception:
+            pass
+    holders.sort(key=lambda h: -h["value"])
+    return {"ticker": t, "px": px, "holders": holders}
+
+
 _MB_CACHE = {}
 
 

@@ -17,6 +17,17 @@ Bargo answers GitHub Actions IPs with HTTP 403, so Senate trades come from the s
 and force-pushes it to the `senate-feed` branch; the workflow decrypts and ingests it. If the box is off,
 House, OGE and prices keep updating; Senate pauses until the box is back.
 
+The relay is also the scheduler: GitHub's hourly cron is often late or skipped for hours, so the relay checks every
+10 minutes (:07, :17, ...) and runs `gh workflow run pipeline.yml` right after pushing a new Senate feed, and once per
+UTC hour at ~:07 otherwise (skipped if a run is already queued or one started in the last 30 min). The cron stays as a
+backup; its `guard` job skips the run if another run succeeded or is running within the last 40 minutes, and the
+`pipeline` concurrency group serialises everything.
+
+Health check: `ps -fp $(cat /workspace/ct-build/box-feed/senate_feed.pid)` should show `senate_feed.sh loop`, and
+`senate_feed.log` should have a line at least every 10 minutes plus a `dispatched` / `skipped` line every hour.
+Restart (only that PID): `cd /workspace/ct-build/box-feed && kill <pid>; nohup setsid ./senate_feed.sh loop >> senate_feed.log 2>&1 < /dev/null &`.
+The hourly slot and last feed hash live in `last_hourly` / `last.sha`, so a restart neither double-dispatches nor re-pushes.
+
 ## Alerts (ntfy)
 Exactly one sender at a time. `NTFY_SENDER` (repository variable):
 - `auto` (default): the workflow sends only if the self-hosted server at `BOX_STATUS_URL` (secret) is down or hasn't refreshed for 3 hours;

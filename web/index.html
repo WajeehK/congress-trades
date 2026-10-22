@@ -36,6 +36,17 @@
 <main id="main">
   <!-- HOME -->
   <section class="view" id="v-home">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Full transparency</div>
+        <h1>See exactly what<br>they trade.</h1>
+        <p class="lede">Every stock trade disclosed by members of Congress and the President, rebuilt into estimated portfolios.</p>
+        <p class="credit">Sources: House Clerk · OGE · Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> · prices from Yahoo Finance</p>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+      <div class="phone" id="heroPhone" aria-hidden="true"></div>
+    </div>
+
     <div class="sec-h mb-h"><h2>Most bought</h2><div class="pills" id="mbPills"><button data-v="30">30D</button><button data-v="90" class="on">90D</button><button data-v="365">1Y</button></div></div>
     <div class="mb-sub"><span id="mbNote">Stocks and funds ranked by how many politicians bought · last 90 days</span></div>
     <div class="tlist card mblist" id="mbList"></div>
@@ -50,17 +61,6 @@
 
     <div class="sec-h perf-h"><h2>Top performers</h2><a class="more-link" id="perfAll" href="#people:ret:1Y">See all</a><div class="pills" id="perfPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div></div>
     <div class="perf-rail" id="perfRail"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
-
-    <div class="hero hero-end">
-      <div class="hero-copy">
-        <div class="eyebrow">Full transparency</div>
-        <h1>See exactly what<br>they trade.</h1>
-        <p class="lede">Every stock trade disclosed by members of Congress and the President, rebuilt into estimated portfolios.</p>
-        <p class="credit">Sources: House Clerk · OGE · Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> · prices from Yahoo Finance</p>
-        <div class="hero-stats" id="heroStats"></div>
-      </div>
-      <div class="phone" id="heroPhone" aria-hidden="true"></div>
-    </div>
 
     <p class="fine">Portfolio values, returns and prices are estimates built only from disclosed trades (range midpoints × Yahoo daily closes). Not investment advice.</p>
   </section>

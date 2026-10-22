@@ -113,6 +113,30 @@ const lagTag = t => t.lag_days == null || t.lag_days < 0 ? '' : `<span class="la
 const chgTxt = p => p == null ? '' : `<span class="${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(1)}%</span>`;
 
 /* Trade row, styled like Insiderwave's "Trades in this update" list */
+/* ---- committee context (committees.py): "possible overlap" between a member's current committees and the stock's sector ---- */
+let CTX = store.get('ctx', null);
+function overlap(t) {
+  if (!CTX || !t || !t.bioguide || !t.ticker || (t.tx_date || '') < CTX.since) return null;
+  const cs = CTX.m[t.bioguide], tk = CTX.t[(t.ticker || '').toUpperCase()];
+  if (!cs || !tk) return null;
+  const tags = tk.slice(1), hit = cs.map(k => { const lead = k.endsWith('*'), id = k.replace('*', ''), c = CTX.c[id]; const m = c && c.tags.filter(x => tags.includes(x)); return m && m.length ? {id, lead, n: c.n, tags: m} : null; }).filter(Boolean);
+  return hit.length ? {industry: tk[0], hit} : null;
+}
+const ovKey = t => `${t.bioguide}|${(t.ticker || '').toUpperCase()}|${t.tx_date || ''}|${t.politician}`;
+const ovTag = t => CTX ? (overlap(t) ? `<span class="ovtag" data-ov="${esc(ovKey(t))}" title="Possible committee overlap">Possible overlap</span>` : '') : `<span class="ovslot" data-ovk="${esc(ovKey(t))}"></span>`;
+const ovFromKey = k => { const [bioguide, ticker, tx_date, politician] = k.split('|'); return {bioguide, ticker, tx_date, politician}; };
+function ovExplain(t, o) {
+  const L = CTX.labels;
+  return `<div class="ovx"><div class="ovx-h"><span class="ovtag">Possible overlap</span></div>
+    ${o.hit.map(h => `<p><b>${esc(t.politician)}</b> ${h.lead ? 'is a leader (chair or ranking member) of' : 'sits on'} the <b>${esc(h.n)}</b>, which oversees ${h.tags.map(x => esc(L[x] || x)).join(' and ')}.</p>`).join('')}
+    <p><b>${esc(t.ticker)}</b> is classed as <b>${esc(o.industry)}</b> by Yahoo Finance.</p>
+    <p class="mute">This only means the committee's area and the company's sector line up. It is not evidence of wrongdoing or of inside information. Committee seats are current assignments from the congress-legislators project, so they are only matched to trades made since ${fmtDY(CTX.since)}; seats can change during a Congress. Broad committees (Appropriations, Ways and Means, Finance, Budget) are not counted.</p></div>`;
+}
+function openOverlap(k) { const t = ovFromKey(k), o = overlap(t); if (!o) return; openSheet(`<div class="td-head">${logo(t.ticker)}<div style="min-width:0"><h2>${esc(t.ticker)}</h2><div class="an">Committee context</div></div></div>${ovExplain(t, o)}`); }
+async function loadCtx() {
+  try { const d = await api('/api/context'); CTX = d; try { store.set('ctx', d); } catch (e) {} } catch (e) { return; }
+  $$('.ovslot').forEach(el => { const t = ovFromKey(el.dataset.ovk); el.outerHTML = overlap(t) ? `<span class="ovtag" data-ov="${esc(el.dataset.ovk)}" title="Possible committee overlap">Possible overlap</span>` : ''; });
+}
 function tradeRow(t, showWho = true) {
   const sh = t.est_price && t.amount_low ? mid(t) / t.est_price : null;
   const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
@@ -120,7 +144,7 @@ function tradeRow(t, showWho = true) {
   return `<button class="trow" data-trade="${esc(t.uid)}">
     ${logo(t.ticker, t.asset_type)}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
       <div class="l2">${sub}</div>
     </div>
     <div class="r">
@@ -654,6 +678,7 @@ async function openTrade(uid) {
   const k = t.pct_since != null ? 1 + t.pct_since / 100 : null;
   openSheet(`<div class="td-head">${logo(t.ticker, t.asset_type)}<div style="min-width:0"><h2>${esc(t.ticker || cleanAsset(t).slice(0, 34))}</h2><div class="an">${esc(t.ticker ? assetName(t) : t.tx_type)}</div></div><div style="margin-left:auto">${sideTag(t)}</div></div>
     <button class="who" data-pol="${esc(t.politician)}">${avatar(t.politician, t.bioguide)}<span><div class="nm">${esc(t.politician)}</div><div class="mt">${esc(metaShort(t))}</div></span></button>
+    ${overlap(t) ? `<div class="card ovcard">${ovExplain(t, overlap(t))}</div>` : ''}
     <div class="card" style="padding:16px;margin-top:16px"><div class="mute" style="font-size:13px">Estimated price on ${fmtDY(t.tx_date)}</div>${rangeBar(t)}</div>
     <div class="kv">
       <div><div class="k">Amount disclosed</div><div class="v">${esc(amtShort(t))}</div><div class="f">Midpoint ${money(mid(t))}</div></div>
@@ -869,6 +894,7 @@ document.addEventListener('click', e => {
   if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
   const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }
   const tk = e.target.closest('[data-tick]'); if (tk) { location.hash = 't=' + encodeURIComponent(tk.dataset.tick); return; }
+  const ov = e.target.closest('[data-ov]'); if (ov) { openOverlap(ov.dataset.ov); return; }
   const tr = e.target.closest('[data-trade]'); if (tr) { location.hash = 'x=' + encodeURIComponent(tr.dataset.trade); return; }
   if (e.target.id === 'sheet' || e.target.closest('#sheetX')) closeSheet();
 });
@@ -908,6 +934,7 @@ $('#more').onclick = () => { F.offset += F.PAGE; $('#more').textContent = 'Loadi
 const qp = new URLSearchParams(location.search);
 if (qp.get('chamber')) { F.chamber = qp.get('chamber'); $$('#chamberSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === F.chamber)); }
 loadStatus();
+loadCtx();
 route();
 setInterval(loadStatus, 5 * 60e3);
 document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && loadStatus());

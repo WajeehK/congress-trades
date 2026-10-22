@@ -814,6 +814,10 @@ def refresh(force_senate=False, do_notify=True):
             update_prices()
         except Exception as e:
             note(f"Prices failed: {e}")
+        try:
+            _committee_context(fetch_missing=150)
+        except Exception as e:
+            note(f"Committee context failed: {e}")
         meta_set("last_refresh", now())
         _pf_cache.clear()
         threading.Thread(target=portfolio_summaries, daemon=True).start()
@@ -1106,6 +1110,24 @@ def unusual_api():
     with db() as c:
         rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ?", (since,)).fetchall()
         return {"events": unusual.recent(c, rows)}
+
+
+def _committee_context(fetch_missing=0):
+    import committees
+    com, mem = committees.load_committees(_get_cached, DATA)
+    members = sorted({p["bioguide"] for k in committees.COMMITTEE_TAGS for p in mem.get(k, []) if p.get("bioguide")})
+    with db() as c:
+        cache = committees.load_sectors(meta_get)
+        if fetch_missing and members:
+            cache = committees.refresh_sectors(c, meta_get, meta_set, note, UA, members, max_n=fetch_missing,
+                                               sym=lambda t: yahoo_symbol(t) or t)
+    return committees.build(com, mem, cache)
+
+
+@app.get("/api/context")
+def context_api():
+    """Committee context: members' current committees, committee -> sectors, ticker -> sector (Yahoo)."""
+    return _committee_context()
 
 
 @app.get("/api/bench")

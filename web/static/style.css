@@ -577,3 +577,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .st-star span{font-size:11px}
 .wrow{cursor:pointer}
 .wrow .logo{width:40px;height:40px;border-radius:12px;flex:none}
+
+/* committee context */
+.ovtag{display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:.02em;color:#b7791f;background:rgba(214,158,46,.14);border:1px dashed rgba(214,158,46,.55);margin-left:6px;cursor:pointer;white-space:nowrap}
+.ovslot{display:none}
+.ovx p{margin:10px 0 0;font-size:14px;line-height:1.5}
+.ovx .ovx-h .ovtag{margin-left:0}
+.ovcard{padding:14px 16px;margin-top:16px}

@@ -60,6 +60,7 @@
     async refresh() { return {started: false, message: 'This site updates itself every hour'}; },
     async portfolios() { return get(`data/portfolios.json?v=${await v()}`); },
     async unusual() { return get(`data/unusual.json?v=${await v()}`); },
+    async context() { return get(`data/context.json?v=${await v()}`); },
     async bench() { return get(`data/bench.json?v=${await v()}`); },
     async stock(p) {
       const t = (p.get('ticker') || '').toUpperCase(), f = t.replace(/[^A-Za-z0-9.\-]/g, '_');

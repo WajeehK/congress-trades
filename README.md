@@ -41,9 +41,24 @@ Exactly one sender at a time. `NTFY_SENDER` (repository variable, name kept for 
 - `actions`: the workflow always sends (use this once the self-hosted server is retired);
 - `box`: the workflow never sends.
 
+## Data coverage
+- **Senate (eFD):** `senate_efd.py` reads the Senate's own eFD site (agreement form + CSRF, PTR search, e-filed PTR
+  tables). It runs in Actions (the site returns HTTP 403 to the box); first a 2-year backfill spread over runs
+  (`EFD_MAX_REPORTS` reports per run, `EFD_DELAY` s between requests, each report fetched once), then a 45-day rescan
+  per run. Paper PTRs are listed as `paper` filings (not parsed yet). Bargo rows the eFD data covers are dropped and
+  skipped on re-ingest, so a trade never alerts twice. The box server mirrors the published eFD rows.
+- **Scanned House PTRs:** `box/house_ocr_box.py` (box, tesseract) finds the form grid, OCRs the owner/asset/date cells
+  and measures the ticks in the type and amount boxes; the result is committed in `house_ocr/`, and
+  `house_scan_parser.py` turns it into trades (lenient dates, neighbour-date inference). New scans are OCR'd in Actions
+  (`HOUSE_OCR_MAX` per run) into the state cache.
+- **Vice President and Cabinet:** `exec_oge.py` lists their 278-T and 278e reports from OGE's PAS index API and parses
+  the Integrity.gov tables (scans fall back to the OCR path).
+- Backfilled rows (first eFD backfill, first Cabinet pass, OCR of already-listed scans) never send alerts.
+
 ## Data sources and attribution
 - U.S. House Clerk financial disclosures (public domain)
-- U.S. Office of Government Ethics, OGE Form 278-T (public domain)
+- U.S. Office of Government Ethics, OGE Form 278-T and 278e (public domain)
+- U.S. Senate eFD periodic transaction reports (public record)
 - **Senate trades via [Bargo](https://www.bargo.ai/free-apis/congress)** under its API terms. This site publishes only processed fields
   (politician, ticker, side, dates, amount range, our price estimates) for trades disclosed in the last 100 days,
   with visible credit to Bargo. Raw Bargo records are never committed or published; they live only in the encrypted state.

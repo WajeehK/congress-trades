@@ -299,7 +299,11 @@ def fetch_house_year(year):
         })
     with db() as c:
         done = {r["id"] for r in c.execute(
-            "SELECT id FROM filings WHERE source='house' AND status IN ('parsed','scanned','no_transactions')")}
+            "SELECT id FROM filings WHERE source='house' AND status IN ('parsed','scanned','no_transactions','ocr')")}
+        scanned = {r["id"] for r in c.execute("SELECT id FROM filings WHERE source='house' AND status='scanned'")}
+    # scanned (paper) filings are redone once their OCR text exists (committed house_ocr/ or made here, see house_ocr())
+    ocr_budget = [int(os.environ.get("HOUSE_OCR_MAX", "4"))]
+    done -= {f"house:{p['doc']}" for p in ptrs if f"house:{p['doc']}" in scanned and _house_ocr_text(p["doc"], None) is not None}
     todo = [p for p in ptrs if f"house:{p['doc']}" not in done]
     note(f"House {year}: {len(ptrs)} PTRs in index, {len(todo)} new to process")
 
@@ -307,6 +311,12 @@ def fetch_house_year(year):
         url = HOUSE_PDF.format(y=p["year"], doc=p["doc"])
         dest = PDFS / f"{p['year']}_{p['doc']}.pdf"
         try:
+            if f"house:{p['doc']}" in scanned:   # known paper filing whose OCR text now exists: no need for the PDF
+                text = _house_ocr_text(p["doc"], None)
+                if text is not None:
+                    import house_scan_parser
+                    txs = house_scan_parser.parse(text, date.fromisoformat(p["filing_date"]), _known_tickers())
+                    return p, url, ("ocr" if txs else "scanned"), txs
             if not dest.exists():
                 rr = requests.get(url, headers=UA, timeout=60)
                 if rr.status_code != 200:
@@ -314,7 +324,12 @@ def fetch_house_year(year):
                 dest.write_bytes(rr.content)
             txs = parse_ptr_pdf(str(dest))
             if txs is None:
-                return p, url, "scanned", []
+                text = _house_ocr_text(p["doc"], dest, ocr_budget)
+                if text is None:
+                    return p, url, "scanned", []
+                import house_scan_parser
+                txs = house_scan_parser.parse(text, date.fromisoformat(p["filing_date"]), _known_tickers())
+                return p, url, ("ocr" if txs else "scanned"), txs
             return p, url, ("parsed" if txs else "no_transactions"), txs
         except Exception as e:
             log.warning("PTR %s failed: %s", p["doc"], e)
@@ -327,6 +342,7 @@ def fetch_house_year(year):
         for p, url, status, txs in results:
             fid = f"house:{p['doc']}"
             party, bid = house_lookup(p["state_dst"], p["last"])
+            was_known = fid in scanned   # a paper filing we already listed: its OCR rows are history, not news
             c.execute("INSERT OR REPLACE INTO filings VALUES(?,?,?,?,?,?,?,?,?,?)",
                       (fid, "house", "House", p["name"], p["state_dst"], p["filing_date"], url, status, len(txs), now()))
             prev = {r["uid"]: r["first_seen"] for r in c.execute("SELECT uid, first_seen FROM trades WHERE filing_id=?", (fid,))}
@@ -341,9 +357,15 @@ def fetch_house_year(year):
                        "disclosure_date": p["filing_date"], "amount": t["amount"], "amount_low": t["amount_low"],
                        "amount_high": t["amount_high"], "description": t["description"], "url": url,
                        "fetched_at": now(), "bioguide": bid,
-                       "first_seen": prev.get(uid) or first_seen_for(p["filing_date"])}
+                       "first_seen": prev.get(uid) or (p["filing_date"] + "T12:00:00+00:00" if was_known
+                                                       else first_seen_for(p["filing_date"]))}
+                if status == "ocr" and not row["ticker"] and idx_ok():
+                    import house_scan_parser
+                    hit = ticker_index().match(t["asset"]) or ticker_index().match(house_scan_parser.match_name(t["asset"]))
+                    if hit:
+                        row.update(ticker=hit[0], asset_type="ST")
                 insert_trade(c, row)
-                if uid not in prev:
+                if uid not in prev and not was_known:
                     new_rows.append(row)
     with db() as c:
         canonical_names(c)
@@ -351,10 +373,57 @@ def fetch_house_year(year):
     return new_rows
 
 
+HOUSE_OCR_DIR = BASE / "house_ocr"   # committed cell OCR of scanned House PTRs (box/house_ocr_box.py)
+HOUSE_OCR_CACHE = DB_PATH.parent / "house_ocr"   # OCR made by this deployment for newer scans (kept with the state)
+
+
+def _house_ocr_text(doc, pdf, budget=None):
+    """OCR cell text of a scanned House PTR: committed copy, else cached, else (budget permitting) OCR it now."""
+    for d in (HOUSE_OCR_DIR, HOUSE_OCR_CACHE):
+        f = d / f"{doc}.txt"
+        if f.exists():
+            return f.read_text()
+    if pdf is None or not budget or budget[0] <= 0 or os.environ.get("HOUSE_OCR_DISABLE") == "1":
+        return None
+    budget[0] -= 1
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(BASE / "box"))
+        import house_ocr_box
+        HOUSE_OCR_CACHE.mkdir(parents=True, exist_ok=True)
+        dest, msg = house_ocr_box.run(str(pdf), str(HOUSE_OCR_CACHE))
+        note(f"House OCR {doc}: {msg}")
+        return Path(dest).read_text()
+    except Exception as e:
+        note(f"House OCR {doc} failed: {e}")
+        return None
+
+
+_kt = {}
+
+
+def _known_tickers():
+    """Tickers seen on e-filed rows: lets the scan parser accept a ticker written at the end of an asset name."""
+    if "s" not in _kt:
+        with db() as c:
+            _kt["s"] = frozenset(r[0] for r in c.execute("SELECT DISTINCT UPPER(ticker) FROM trades WHERE ticker IS NOT NULL "
+                                                         "AND source IN ('house_clerk','senate_efd','bargo')"))
+    return _kt["s"]
+
+
+def idx_ok():
+    try:
+        return ticker_index() is not None
+    except Exception:
+        return False
+
+
 # ---------------------------------------------------------------- Senate (Bargo)
 def ingest_bargo(trades):
+    import senate_efd
     new_rows, seen = [], {}
     with db() as c:
+        ek = senate_efd.efd_keys(c)   # trades the Senate's own eFD data already has: skip the Bargo copy
         for t in trades:
             if (t.get("chamber") or "").lower() != "senate":
                 continue
@@ -380,6 +449,8 @@ def ingest_bargo(trades):
                    "amount_low": t.get("amount_low"), "amount_high": t.get("amount_high"),
                    "url": t.get("filing_url") or t.get("filing_portal") or "https://efdsearch.senate.gov/search/",
                    "fetched_at": now(), "bioguide": bid, "first_seen": first_seen_for(t.get("disclosure_date"))}
+            if ek and senate_efd.bargo_dupe(ek, row):
+                continue
             if insert_trade(c, row, ignore=True).rowcount:
                 new_rows.append(row)
         for r in c.execute("SELECT uid, politician, state FROM trades WHERE source='bargo' AND bioguide IS NULL").fetchall():
@@ -542,9 +613,19 @@ def _dedupe_278e(c, politician, fid, txs):
 def fetch_oge(force=False):
     last = meta_get("oge_last_fetch")
     reparse = meta_get("oge_parser_version") != OGE_PARSER_VERSION
-    if last and not force and not reparse and time.time() - float(last) < OGE_MIN_HOURS * 3600:
+    cabinet_due = meta_get("oge_cabinet_seeded") != "1" and os.environ.get("OGE_CABINET_DISABLE") != "1"
+    if last and not force and not reparse and not cabinet_due and time.time() - float(last) < OGE_MIN_HOURS * 3600:
         return []
     fl = oge_filings()
+    cabinet_first = meta_get("oge_cabinet_seeded") != "1"   # first pass over the VP / Cabinet: history, no alerts
+    if os.environ.get("OGE_CABINET_DISABLE") != "1":
+        try:
+            import exec_oge
+            fl += exec_oge.filings(UA)
+        except Exception as e:
+            note(f"Executive (OGE cabinet index) failed: {e}")
+            cabinet_first = False
+            fl = [f for f in fl if not f.get("exec")]
     with db() as c:
         known = {r["id"] for r in c.execute("SELECT id FROM filings WHERE source='oge'")}
         done = set() if reparse else {r["id"] for r in c.execute(
@@ -556,17 +637,36 @@ def fetch_oge(force=False):
     new_rows, failed = [], 0
     for f in todo:
         fid = f"oge:{f['docid']}"
-        person = EXEC_PEOPLE[f["who"]]
+        if f.get("exec"):
+            import exec_oge
+            person = dict(exec_oge.PEOPLE[f["who"]], state="US")
+        else:
+            person = EXEC_PEOPLE[f["who"]]
         pdf = OGE_DIR / f"{f['docid']}.pdf"
         # a filing we had already processed, or any annual report, only adds history: never alert on those rows
-        backfill = fid in known or f["kind"] == "278e"
+        backfill = fid in known or f["kind"] == "278e" or (f.get("exec") and cabinet_first)
         received, note_txt, dropped = f["received"], None, 0
         try:
             if not pdf.exists():
                 rr = requests.get(f["url"], headers=UA, timeout=600)
                 rr.raise_for_status()
                 pdf.write_bytes(rr.content)
-            if f["kind"] == "278e":
+            if f.get("exec"):   # Integrity.gov e-filed reports (text layer); scanned ones go through the OCR path
+                import exec_oge
+                text = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
+                txs = exec_oge.parse_integrity(text)
+                if not txs and f["kind"] == "278e":
+                    txs = oge_parser.parse_278e(text)
+                if not txs and f["kind"] == "278t" and len(text.strip()) < 400:
+                    txs = _parse_oge_pdf(pdf, received, amended=f["amended"])
+                if f["kind"] == "278e":
+                    got = oge_parser.received_278e(text)
+                    received = got.isoformat() if got else received
+                    note_txt = f"From the OGE 278e {f['label'].lower()} report"
+                txs = exec_oge.sane_dates(txs, received)
+                for t in txs:
+                    t.setdefault("ticker", exec_oge.ticker_of(t["asset"]))
+            elif f["kind"] == "278e":
                 text = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
                 got = oge_parser.received_278e(text)
                 received = got.isoformat() if got else received
@@ -600,18 +700,19 @@ def fetch_oge(force=False):
                         uid = f"{fid}:{t['n']}-{k}"
                         k += 1
                 used.add(uid)
-                hit = idx.match(t["asset"]) if idx else None
+                hit = ((t["ticker"], None) if t.get("ticker") else None) or (idx.match(t["asset"]) if idx else None)
                 kind = oge_parser.asset_kind(t["asset"])
                 desc = note_txt or ("Amended by the filer (OGE 278-T amendment)" if t.get("amended") else
                                     "Reported more than 30 days after notification" if t.get("late") else None)
                 row = {"uid": uid, "source": "oge", "filing_id": fid, "chamber": "Executive",
                        "politician": person["name"], "last_name": person["last"], "party": person["party"],
                        "state": person["state"], "district": person["role"], "owner": None,
-                       "ticker": hit[0] if hit else None, "asset": t["asset"], "asset_type": "ST" if hit else kind,
+                       "ticker": hit[0] if hit else None, "asset": t["asset"],
+                       "asset_type": ("EF" if kind == "EF" else "ST") if hit else kind,
                        "tx_type": t["tx_type"], "side": side_of(t["tx_type"]), "tx_date": t["tx_date"],
                        "disclosure_date": received, "amount": t["amount"], "amount_low": t["amount_low"],
                        "amount_high": t["amount_high"], "description": desc,
-                       "url": f["url"], "fetched_at": now(), "bioguide": None,
+                       "url": f["url"], "fetched_at": now(), "bioguide": person.get("bioguide"),
                        "first_seen": prev.get(uid) or (received + "T12:00:00+00:00" if backfill else first_seen_for(received))}
                 insert_trade(c, row, ignore=True)
                 if uid not in prev and not backfill:
@@ -621,6 +722,8 @@ def fetch_oge(force=False):
         note(f"OGE {f['file_name']}: {status}, {len(txs)} transactions"
              + (f" ({dropped} already on a 278-T)" if dropped else "") + (" [backfill, no alerts]" if backfill else ""))
     meta_set("oge_last_fetch", str(time.time()))
+    if cabinet_first and not failed:
+        meta_set("oge_cabinet_seeded", "1")
     if reparse and not failed:
         meta_set("oge_parser_version", OGE_PARSER_VERSION)
     return new_rows
@@ -796,6 +899,13 @@ def refresh(force_senate=False, do_notify=True):
         except Exception as e:
             note(f"Senate failed: {e}")
             _state["last_error"] = f"Senate: {e}"
+        try:
+            import senate_efd
+            import sys as _sys
+            new_rows += senate_efd.fetch(_sys.modules[__name__])
+        except Exception as e:
+            note(f"Senate eFD failed: {e}")
+            _state["last_error"] = f"Senate eFD: {e}"
         if os.environ.get("OGE_DISABLE") != "1":
             try:
                 new_rows += fetch_oge()

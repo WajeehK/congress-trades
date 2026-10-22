@@ -41,7 +41,8 @@ def stock_file(t):
 
 
 def senate_ok(r):
-    if r["chamber"] != "Senate":
+    # only Bargo-sourced rows carry Bargo's redistribution limits; the Senate's own eFD data is public record
+    if r["chamber"] != "Senate" or r["source"] != "bargo":
         return True
     if not PUBLISH_SENATE:
         return False
@@ -50,7 +51,7 @@ def senate_ok(r):
 
 def row(r):
     d = dict(r)
-    if d["chamber"] == "Senate":  # processed fields only
+    if d["chamber"] == "Senate" and d.get("source") == "bargo":  # processed fields only
         d["description"] = None
     for k in ("est_price", "cur_price", "day_low", "day_high", "day_open"):
         if d.get(k) is not None:

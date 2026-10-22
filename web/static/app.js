@@ -95,7 +95,7 @@ function logo(ticker, kind, cls = '') {
 const cleanAsset = t => (t.asset || '').replace(/\s*\[[A-Z]{2}\]\s*$/, '').replace(/\s*\(([A-Z0-9.\-\/$]{1,10})\)\s*$/, '').replace(/\s+-\s+/g, ' – ').replace(/\s+/g, ' ').trim();
 const assetName = t => t.company || cleanAsset(t);
 function loc(p) {
-  if (p.chamber === 'Executive') return ROLE[p.politician] || 'Executive';
+  if (p.chamber === 'Executive') return ROLE[p.politician] || p.district || 'Executive';
   if (p.chamber === 'House' && p.district) {
     const m = p.district.match(/^([A-Z]{2})0*(\d+)$/);
     if (m) return m[2] === '0' ? `${m[1]}-AL` : `${m[1]}-${m[2]}`;
@@ -493,7 +493,7 @@ async function openPolitician(name) {
       <button class="btn ghost full" id="polMore" hidden>Show more trades</button>
       <div class="h2s"><h2>Disclosures</h2><small id="filN"></small></div>
       <div class="card flist" id="polFilings">${skRows(2)}</div>
-      <p class="note">${I.info}<span>Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.chamber === 'Executive' ? ' The President\'s reports are scanned PDFs read with OCR, so some trades are missing.' : ''}</span></p>
+      <p class="note">${I.info}<span>Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.politician === 'Donald J. Trump' ? ' The President\'s reports are scanned PDFs read with OCR, so some trades are missing.' : ''}</span></p>
     </div>`;
   if (has) { renderPeriod(); POL.cp = POL.cp || '1Y'; renderCopy(); }
   renderHoldings();
@@ -873,7 +873,7 @@ async function renderAlerts() {
     </div>
     <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">
-      <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> (rolling 3 months), and <b>${by('Executive').toLocaleString()}</b> trades from the President's <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE 278-T reports</a> (scanned, read with OCR). Newest filing ${fmtDY(newest)}.</p>
+      <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from the Senate's own <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">eFD</a> reports (plus <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> for the newest), and <b>${by('Executive').toLocaleString()}</b> trades from <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE reports</a> of the President, Vice President and Cabinet. Scanned paper filings are read with OCR. Newest filing ${fmtDY(newest)}.</p>
       <p>Prices come from Yahoo Finance daily data and photos from the public-domain congress-legislators project. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
     </div>`;

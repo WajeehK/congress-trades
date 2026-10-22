@@ -126,11 +126,7 @@ def init_db():
         CREATE INDEX IF NOT EXISTS ix_tr_tick ON trades(ticker);
         CREATE INDEX IF NOT EXISTS ix_tr_seen ON trades(first_seen);
         """)
-        # one-off fix-up of names stored before clean_name existed (cheap: distinct names only)
-        for tbl in ("trades", "filings"):
-            for (n,) in c.execute(f"SELECT DISTINCT politician FROM {tbl}").fetchall():
-                if n and clean_name(n) != n:
-                    c.execute(f"UPDATE {tbl} SET politician=? WHERE politician=?", (clean_name(n), n))
+        canonical_names(c)
 
 
 def meta_get(k, default=None):
@@ -247,6 +243,24 @@ def clean_name(name):
     return " ".join(out) or (name or "").strip()
 
 
+def canonical_names(c):
+    """One spelling per person: names already cleaned, then rows sharing a bioguide id but spelled differently
+    across filings ("John McGuire" / "John J McGuire III") take the spelling used on most rows."""
+    for tbl in ("trades", "filings"):
+        for (n,) in c.execute(f"SELECT DISTINCT politician FROM {tbl}").fetchall():
+            if n and clean_name(n) != n:
+                c.execute(f"UPDATE {tbl} SET politician=? WHERE politician=?", (clean_name(n), n))
+    rows = c.execute("SELECT bioguide, politician, COUNT(*) n FROM trades WHERE bioguide IS NOT NULL AND bioguide != '' "
+                     "GROUP BY bioguide, politician ORDER BY bioguide, n DESC, LENGTH(politician)").fetchall()
+    best = {}
+    for b, n, _ in rows:
+        if b not in best:
+            best[b] = n
+        elif n != best[b]:
+            c.execute("UPDATE trades SET politician=? WHERE politician=? AND bioguide=?", (best[b], n, b))
+            c.execute("UPDATE filings SET politician=? WHERE politician=?", (best[b], n))
+
+
 def side_of(tx_type):
     t = (tx_type or "").lower()
     if "exchange" in t:
@@ -331,6 +345,8 @@ def fetch_house_year(year):
                 insert_trade(c, row)
                 if uid not in prev:
                     new_rows.append(row)
+    with db() as c:
+        canonical_names(c)
     note(f"House {year}: {len(new_rows)} new transactions from {len(results)} filings")
     return new_rows
 

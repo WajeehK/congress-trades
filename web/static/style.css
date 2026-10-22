@@ -692,3 +692,10 @@ main{overflow-x:clip}
 .hero-name span{display:block}
 .hero-tag{margin-top:var(--s4);font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1.1;color:var(--ink)}
 @media (max-width:760px){.hero-tag{font-size:23px;margin-top:var(--s3)}}
+
+/* intro stat cards stay neutral: red is reserved for the name, accents and the drawing */
+.hcard{border-color:var(--line);background:var(--card)}
+.hcard:hover{border-color:var(--line2)}
+.hcard b{color:var(--ink)}
+.hcard b small{color:var(--mute);opacity:1}
+.hcard span{color:var(--mute)}

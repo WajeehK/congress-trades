@@ -55,6 +55,7 @@
 
     <div class="sec-h" id="unHead" hidden><h2>Unusual activity</h2><small class="mute">last 30 days</small></div>
     <div class="tlist card unlist" id="unList" hidden></div>
+    <a class="viewall more-btn" id="unMore" href="#unusual" hidden>See more unusual activity</a>
 
     <div class="sec-h"><h2>Recent trades</h2><a class="more-link" href="#trades">See all</a></div>
     <div class="tlist card" id="homeTrades"></div>
@@ -71,6 +72,17 @@
 
   <!-- TRADES -->
   <section class="view" id="v-stock" hidden></section>
+
+  <section class="view" id="v-un" hidden>
+    <div class="mbp-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="page-h"><div class="eyebrow">Worth a closer look</div><h1>Unusual activity</h1></div>
+    <div class="pills mbp-pills" id="unWin"><button data-v="7">7D</button><button data-v="30" class="on">30D</button><button data-v="90">90D</button></div>
+    <div class="unchips" id="unTypes"></div>
+    <div class="mb-sub"><span id="unNote"></span></div>
+    <div class="tlist card unlist" id="unFull"></div>
+    <p class="mb-foot">Ranked by a simple score: how strong the signal is (more politicians, bigger trades, bigger gaps from their norm), minus a point per day since it was disclosed. Built only from public disclosures and Yahoo prices. Hindsight and late-filing items look back, so they never trigger notifications. None of this is evidence of wrongdoing.</p>
+  </section>
+  <section class="view" id="v-und" hidden></section>
 
   <section class="view" id="v-mb" hidden>
     <div class="mbp-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button></div>

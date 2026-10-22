@@ -134,26 +134,13 @@ def _g(r, k):
 
 
 def unusual_messages(evs):
-    """One notification per cluster, one per politician for large trades."""
-    out, big = [], {}
-    for e in evs:
-        if e["type"] == "cluster":
-            names = ", ".join(p["name"] for p in e["pols"][:4]) + (f" +{e['n_pols'] - 4}" if e["n_pols"] > 4 else "")
-            out.append({"title": f"Unusual: {e['n_pols']} politicians bought {e['ticker']}",
-                        "body": f"{names} · trades {e['from']} to {e['to']}", "url": f"{APP_URL}#t={quote(e['ticker'])}",
-                        "tag": "u-" + e["key"][:60]})
-        else:
-            big.setdefault(e["politician"], []).append(e)
-    for pol, es in big.items():
-        es.sort(key=lambda e: -(e["amount_low"] or 0))
-        e = es[0]
-        if len(es) == 1:
-            out.append({"title": f"Large trade: {pol}", "body": f"{e['why']} of {e['ticker']}" if e["why"].startswith(("Bought", "Sold")) else f"{e['side'].title()} {e['ticker']} ({e['amount']}) · {e['why']}",
-                        "url": f"{APP_URL}#x={quote(e['uid'])}", "tag": "u-" + e["key"][:60]})
-        else:
-            out.append({"title": f"{len(es)} large trades: {pol}",
-                        "body": "; ".join(f"{x['side'].title()} {x['ticker']} ({x['amount']})" for x in es[:3]) + (f" +{len(es) - 3} more" if len(es) > 3 else ""),
-                        "url": f"{APP_URL}#p={quote(pol)}", "tag": "u-big-" + re.sub(r"[^a-z0-9]+", "-", pol.lower())[:40]})
+    """One notification per unusual-activity event (only alertable types reach here, see unusual.for_new)."""
+    head = {"cluster_buy": "Unusual: cluster buying", "bipartisan": "Unusual: bipartisan buying",
+            "cluster_sell": "Unusual: cluster selling", "large": "Unusual: large trade"}
+    out = []
+    for e in sorted(evs, key=lambda e: -(e.get("score") or 0)):
+        out.append({"title": f"{head.get(e['type'], 'Unusual activity')} · {e['title']}"[:120], "body": e["why"][:240],
+                    "url": f"{APP_URL}#unusual={quote(e['id'])}", "tag": "u-" + e["id"]})
     return out
 
 

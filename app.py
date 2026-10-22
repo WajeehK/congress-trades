@@ -864,9 +864,13 @@ def notify(new_rows):
             import unusual
             since = (date.today() - timedelta(days=unusual.LOOKBACK_DAYS + 5)).isoformat()
             sent = set(json.loads(meta_get("unusual_sent") or "[]"))
+            try:
+                ctx = _committee_context()
+            except Exception:
+                ctx = None
             with db() as c:
-                rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ?", (since,)).fetchall()
-                evs = unusual.for_new(c, rows, new_rows, sent)
+                rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ? OR t.disclosure_date >= ?", (since, since)).fetchall()
+                evs = unusual.for_new(c, rows, new_rows, sent, ctx)
         except Exception as e:
             note(f"unusual check failed: {e}")
         try:  # native Web Push to installed PWAs (same rows, same dedupe/backfill rules as before)
@@ -1212,14 +1216,39 @@ def portfolio_summaries():
         return out
 
 
+_un_cache = {"t": 0.0, "v": None}
+
+
+def _unusual_recent(max_age=600):
+    """All unusual-activity events of the last 90 days (full, with trade rows); cached for 10 minutes."""
+    import unusual
+    if _un_cache["v"] is not None and time.time() - _un_cache["t"] < max_age:
+        return _un_cache["v"]
+    since = (date.today() - timedelta(days=unusual.LOOKBACK_DAYS + 5)).isoformat()
+    try:
+        ctx = _committee_context()
+    except Exception:
+        ctx = None
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ? OR t.disclosure_date >= ?", (since, since)).fetchall()
+        v = unusual.recent(c, rows, ctx)
+    _un_cache.update(t=time.time(), v=v)
+    return v
+
+
 @app.get("/api/unusual")
 def unusual_api():
-    """Unusual activity on Home: buying clusters and unusually large trades disclosed in the last 30 days."""
+    """Unusual activity (see unusual.py): every event of the last 90 days, best first, without trade rows."""
     import unusual
-    since = (date.today() - timedelta(days=unusual.LOOKBACK_DAYS + 5)).isoformat()
-    with db() as c:
-        rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ?", (since,)).fetchall()
-        return {"events": unusual.recent(c, rows)}
+    return {"events": [unusual.summary(e) for e in _unusual_recent()], "alert_types": list(unusual.ALERT_TYPES)}
+
+
+@app.get("/api/unusual_event")
+def unusual_event_api(id: str):
+    for e in _unusual_recent():
+        if e["id"] == id:
+            return e
+    raise HTTPException(404, "event not found")
 
 
 def _committee_context(fetch_missing=0):

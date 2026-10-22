@@ -181,7 +181,7 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb', 'stock'];
+const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb', 'stock', 'un', 'und'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
@@ -200,12 +200,14 @@ function route() {
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'alerts'].includes(h)) v = h;
   else if (h === 'mostbought') v = 'mb';
+  else if (h === 'unusual') v = 'un';
+  else if (h.startsWith('unusual=')) v = 'und';
   else if (h.startsWith('t=')) v = 'stock';
   else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
-  const changed = v !== route.cur || ((v === 'pol' || v === 'stock') && h !== route.h);
+  const changed = v !== route.cur || ((v === 'pol' || v === 'stock' || v === 'und') && h !== route.h);
   showView(v); route.cur = v; route.h = h;
-  if (v !== 'pol' && v !== 'mb' && v !== 'stock') baseView = v;
+  if (!['pol', 'mb', 'stock', 'un', 'und'].includes(v)) baseView = v;
   if (changed) window.scrollTo({top: 0, behavior: 'instant'});
   if (v === 'home') loadHome();
   if (v === 'mb' && !MB.loaded) loadMostBought();
@@ -214,6 +216,8 @@ function route() {
   if (v === 'alerts') renderAlerts();
   if (v === 'pol' && changed) openPolitician(h.slice(2));
   if (v === 'stock' && changed) openStock(h.slice(2));
+  if (v === 'un') renderUnusualAll();
+  if (v === 'und' && changed) openUnusual(h.slice(8));
 }
 addEventListener('hashchange', route);
 addEventListener('scroll', () => $('#top').classList.toggle('scrolled', scrollY > 4), {passive: true});
@@ -276,30 +280,95 @@ async function loadMostBought() {
     renderMostBought();
   } catch (e) { MB.loaded = false; $('#mbList').innerHTML = $('#mbFull').innerHTML = empty('Could not load', String(e.message || e)); }
 }
-/* ---- unusual activity (unusual.py): clusters + large trades grouped per politician/disclosure ---- */
-const UN = {loaded: false};
-async function loadUnusual() {
+/* ---- unusual activity (unusual.py): every type, ranked; Home top 5, full list #unusual, detail #unusual=<id> ---- */
+const UT = {cluster_buy: ['Cluster buy', 'cl'], bipartisan: ['Bipartisan', 'bp'], cluster_sell: ['Cluster sell', 'cs'], large: ['Large', 'lg'],
+  committee: ['Committee', 'cm'], first_buy: ['First buy', 'fb'], options: ['Options', 'op'], burst: ['Burst', 'bu'], late: ['Late filing', 'lt'], hindsight: ['Hindsight', 'hs']};
+const UT_HELP = {
+  cluster_buy: 'Three or more different politicians bought the same stock or fund within 14 days of each other.',
+  bipartisan: 'A buying cluster (3+ politicians within 14 days) that includes both Democrats and Republicans.',
+  cluster_sell: 'Three or more different politicians sold the same stock or fund within 14 days of each other.',
+  large: 'A trade with a disclosed range starting at $250,000 or more, or one in the top 1% of that person’s own trades by size.',
+  committee: 'A $50K+ trade in a sector overseen by one of the member’s current committees. Possible overlap only: it does not show the trade was related to committee work.',
+  first_buy: 'A heavy trader (100+ disclosed trades) bought $50K+ of a stock they had never traded before in the disclosures.',
+  options: 'An options trade. Options are leveraged bets on a price move by a certain date.',
+  burst: 'Far more trades in one week than this politician usually makes (5x or more their weekly average over the prior year).',
+  late: 'Disclosed more than 45 days after the trade, past the STOCK Act deadline. Usually paperwork, sometimes not.',
+  hindsight: 'The price moved 15% or more in the trade’s favour within 30 days. This is hindsight: it shows timing, not intent or inside information.'};
+const UN = {loaded: false, all: [], win: '30', type: ''};
+const lastNm = n => { const w = String(n || '').replace(/,/g, ' ').split(/\s+/).filter(x => x && !/^(Jr|Sr|II|III|IV)\.?$/.test(x)); return w[w.length - 1] || n; };
+const unTag = t => `<span class="unb ${(UT[t] || [, 'lg'])[1]}">${esc((UT[t] || [t])[0])}</span>`;
+function unRow(e) {
+  const lead = e.ticker ? logo(e.ticker) : avatar(e.pols[0] && e.pols[0].name, e.pols[0] && e.pols[0].bioguide, 'round');
+  const stack = e.n_pols > 1 ? `<div class="mbwho"><span class="mbstack">${e.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('')}</span><span>${esc(e.pols.map(p => lastNm(p.name)).slice(0, 3).join(', '))}${e.n_pols > 3 ? ` +${e.n_pols - 3}` : ''}</span></div>` : '';
+  return `<button class="unrow" data-un="${esc(e.id)}">${lead}
+    <div class="um"><div class="ut">${unTag(e.type)}<span class="mute">${fmtD(e.disclosed)}</span></div><div class="t"><b>${esc(e.title)}</b></div><div class="s why">${esc(e.why)}</div>${stack}</div></button>`;
+}
+async function loadUnusual(force) {
+  if (UN.loaded && !force) return;
   UN.loaded = true;
   let d; try { d = await api('/api/unusual'); } catch (e) { UN.loaded = false; return; }
-  const items = [], big = new Map();
-  for (const e of d.events || []) {
-    if (e.type === 'cluster') items.push(e);
-    else { const k = e.politician + '|' + e.disclosed; if (!big.has(k)) { const g = {type: 'big', politician: e.politician, bioguide: e.bioguide, disclosed: e.disclosed, seen: e.seen, ev: []}; big.set(k, g); items.push(g); } big.get(k).ev.push(e); }
+  UN.all = d.events || [];
+  const cut = daysAgoISO(30), home = UN.all.filter(e => e.disclosed >= cut).slice(0, 5);
+  if (home.length) {
+    $('#unHead').hidden = false; $('#unList').hidden = false; $('#unMore').hidden = false;
+    $('#unList').innerHTML = home.map(unRow).join('');
   }
-  items.sort((a, b) => (b.seen || '') < (a.seen || '') ? -1 : 1);
-  if (!items.length) return;
-  $('#unHead').hidden = false; $('#unList').hidden = false;
-  $('#unList').innerHTML = items.slice(0, 5).map(x => {
-    if (x.type === 'cluster') return `<button class="unrow" data-tick="${esc(x.ticker)}"><span class="unb cl">Cluster</span>${logo(x.ticker)}
-      <div class="um"><div class="t"><b>${esc(x.ticker)} · ${x.n_pols} buyers</b></div><div class="s">${esc(x.name || '')} · within ${Math.round((D(x.to) - D(x.from)) / 864e5) + 1} days</div>
-      <div class="mbwho"><span class="mbstack">${x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('')}</span><span>${esc(x.pols.map(p => p.name.split(' ').slice(-1)[0]).slice(0, 3).join(', '))}</span></div></div>
-      <div class="r mute">${fmtD(x.disclosed)}</div></button>`;
-    const ev = x.ev.sort((a, b) => b.amount_low - a.amount_low), e = ev[0];
-    return `<button class="unrow" ${ev.length === 1 ? `data-trade="${esc(e.uid)}"` : `data-pol="${esc(x.politician)}"`}><span class="unb lg">Large</span>${avatar(x.politician, x.bioguide, 'round')}
-      <div class="um"><div class="t"><b>${esc(x.politician)}</b></div><div class="s">${ev.slice(0, 3).map(v => `<span class="side ${v.side}">${v.side === 'buy' ? 'Buy' : 'Sell'}</span> ${esc(v.ticker)} ${esc(amtShort(v))}`).join(' · ')}${ev.length > 3 ? ` · +${ev.length - 3} more` : ''}</div>
-      <div class="s">${esc(e.why.startsWith('Top') ? e.why : `${ev.length} trade${ev.length === 1 ? '' : 's'} of $250K+`)}</div></div>
-      <div class="r mute">${fmtD(x.disclosed)}</div></button>`;
-  }).join('');
+  if (route.cur === 'un') renderUnusualAll();
+}
+function renderUnusualAll() {
+  if (!UN.loaded) { loadUnusual(); $('#unFull').innerHTML = skRows(6); return; }
+  const cut = daysAgoISO(+UN.win), inWin = UN.all.filter(e => e.disclosed >= cut);
+  const n = {}; inWin.forEach(e => n[e.type] = (n[e.type] || 0) + 1);
+  if (UN.type && !n[UN.type]) UN.type = '';
+  $('#unTypes').innerHTML = `<button class="chip-btn ${UN.type ? '' : 'on'}" data-ut="">All <small>${inWin.length}</small></button>`
+    + Object.keys(UT).filter(k => n[k]).map(k => `<button class="chip-btn ${UN.type === k ? 'on' : ''}" data-ut="${k}"><i class="dot ${UT[k][1]}"></i>${UT[k][0]} <small>${n[k]}</small></button>`).join('');
+  const list = inWin.filter(e => !UN.type || e.type === UN.type);
+  $('#unNote').textContent = UN.type ? UT_HELP[UN.type] : `${list.length} item${list.length === 1 ? '' : 's'} disclosed in the last ${UN.win} days, strongest first`;
+  $('#unFull').innerHTML = list.map(unRow).join('') || empty('Nothing unusual in this window', 'Try a longer window.');
+  $$('#unTypes [data-ut]').forEach(b => b.onclick = () => { UN.type = b.dataset.ut; renderUnusualAll(); });
+}
+$$('#unWin button').forEach(b => b.onclick = () => { UN.win = b.dataset.v; $$('#unWin button').forEach(x => x.classList.toggle('on', x === b)); renderUnusualAll(); });
+async function openUnusual(id) {
+  const el = $('#v-und');
+  el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div><div class="sk-card" style="height:120px;margin-top:16px"></div><div class="sk-card" style="height:240px;margin-top:16px"></div>`;
+  let e; try { e = await api('/api/unusual_event?id=' + encodeURIComponent(id)); }
+  catch (x) { el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>` + empty('This item is no longer listed', 'Unusual activity covers the last 90 days.'); return; }
+  if (route.h !== 'unusual=' + id) return;
+  e.trades.forEach(t => trades.set(t.uid, t));
+  const T = [...e.trades].sort((a, b) => (b.tx_date || '') < (a.tx_date || '') ? -1 : 1);
+  const first = [...e.trades].filter(t => t.est_price).sort((a, b) => a.tx_date < b.tx_date ? -1 : 1)[0];
+  const cur = e.trades.find(t => t.cur_price != null);
+  const mv = e.ticker && first && cur ? (cur.cur_price / first.est_price - 1) * 100 : null;
+  const ticks = [...new Set(e.trades.map(t => t.ticker).filter(Boolean))];
+  const days = Math.max(1, Math.round((D(e.to) - D(e.from)) / 864e5) + 1);
+  el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
+    <div class="und-h">${e.ticker ? logo(e.ticker) : avatar(e.pols[0].name, e.pols[0].bioguide, 'round')}<div class="und-t">${unTag(e.type)}<h1>${esc(e.title)}</h1>${e.name && e.ticker ? `<div class="mute">${esc(e.name)}</div>` : ''}</div></div>
+    <p class="und-why">${esc(e.why)}</p>
+    ${e.type === 'hindsight' ? '<p class="und-warn">Hindsight: this looks back at what the price did after the trade. It says nothing about why they traded.</p>' : ''}
+    <div class="st-stats">
+      <div class="card"><div class="k">Politicians</div><b>${e.n_pols}</b><span>${e.pols.map(p => p.party).filter(Boolean).sort().join(' · ') || ''}</span></div>
+      <div class="card"><div class="k">Trades</div><b>${e.n_trades}</b><span>${e.from === e.to ? fmtDY(e.from) : `${fmtD(e.from)} – ${fmtD(e.to)} · ${days} days`}</span></div>
+      <div class="card"><div class="k">Est. amount</div><b>${money(e.est_total)}</b><span>range midpoints</span></div>
+      <div class="card"><div class="k">${e.ticker ? `${esc(e.ticker)} since` : 'Disclosed'}</div>${e.ticker ? `<b class="${mv == null ? '' : mv >= 0 ? 'up' : 'dn'}">${mv == null ? '—' : (mv >= 0 ? '+' : '') + mv.toFixed(1) + '%'}</b><span>${first ? `from ${usd(first.est_price)} on ${fmtD(first.tx_date)}` : 'no price'}</span>` : `<b>${fmtD(e.disclosed)}</b><span>${ticks.length} ticker${ticks.length === 1 ? '' : 's'}</span>`}</div>
+    </div>
+    ${e.ticker ? `<div class="card st-chart" style="margin-top:14px"><div id="unChart"><div class="sk-card" style="height:230px"></div></div><div class="st-pop card" id="unPop" hidden></div>
+      <div class="st-leg"><span><i class="b"></i>Buy</span><span><i class="s"></i>Sell</span><span class="mute">Only the trades in this item</span></div></div>
+      <a class="viewall more-btn" href="#t=${encodeURIComponent(e.ticker)}">Open ${esc(e.ticker)} stock page</a>`
+      : ticks.length ? `<div class="und-ticks">${ticks.slice(0, 24).map(t => `<button class="chip-btn" data-tick="${esc(t)}">${esc(t)}</button>`).join('')}</div>` : ''}
+    <div class="sec-h"><h2>Politicians</h2><small class="mute">tap for profile</small></div>
+    <div class="und-pols">${e.pols.map(p => `<button class="chip-btn und-p" data-pol="${esc(p.name)}">${avatar(p.name, p.bioguide, 'round')}${esc(p.name)}${p.party ? `<small class="mute">${esc(p.party)}</small>` : ''}</button>`).join('')}</div>
+    <div class="sec-h"><h2>Trades involved</h2><small class="mute">${e.n_trades}${e.n_trades > e.trades.length ? ` · first ${e.trades.length} shown` : ''}</small></div>
+    <div class="card tlist">${T.map(t => tradeRow(t)).join('')}</div>
+    <p class="fine"><b>${esc((UT[e.type] || [e.type])[0])}.</b> ${UT_HELP[e.type] || ''} Amounts are disclosed ranges; prices are estimated from Yahoo daily closes.</p>`;
+  if (e.ticker) {
+    let st; try { st = await api('/api/stock?ticker=' + encodeURIComponent(e.ticker)); } catch (x) { st = null; }
+    if (route.h !== 'unusual=' + id) return;
+    ST.t = e.ticker; ST.s = st || {}; ST.rows = e.trades; ST.pts = [];
+    if (st && st.px) { let ms = D(st.px.d0).getTime(); st.px.dd.forEach((x, i) => { ms += x * 864e5; ST.pts.push([new Date(ms).toISOString().slice(0, 10), st.px.c[i]]); }); }
+    ST_RANGES.EV = Math.max(90, Math.round((Date.now() - D(e.from)) / 864e5) + 45); ST.range = 'EV';
+    const c = $('#unChart'); c.innerHTML = stockChart(Math.max(280, c.clientWidth));
+    c.onclick = x => { const m = x.target.closest('[data-mk]'); if (m) stockPop(+m.dataset.mk, '#unPop'); };
+  }
 }
 function mbRows(it) {
   if (!it.length) return empty('No purchases in this window', 'Try a longer window.');
@@ -744,14 +813,14 @@ function stockChart(w) {
   return `<svg class="stc" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><defs><linearGradient id="stg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${up ? '#22c55e' : '#ef4444'}" stop-opacity=".22"/><stop offset="1" stop-color="${up ? '#22c55e' : '#ef4444'}" stop-opacity="0"/></linearGradient></defs>
     <g class="grid">${yl}</g><path d="${area}" fill="url(#stg)"/><path d="${line}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>${mk}<g class="ax">${ticks}</g></svg>`;
 }
-function stockPop(i) {
+function stockPop(i, pop = '#stPop') {
   const m = ST.groups[i]; if (!m) return;
   const rows = m.rows.slice(0, 6);
-  $('#stPop').innerHTML = `<div class="sp-h"><span class="side ${m.side}">${m.side === 'buy' ? 'Bought' : 'Sold'}</span> ${fmtDY(m.d)}${m.rows.length > 1 ? ` · ${m.rows.length} trades` : ''}<button class="sp-x" aria-label="Close">×</button></div>`
+  $(pop).innerHTML = `<div class="sp-h"><span class="side ${m.side}">${m.side === 'buy' ? 'Bought' : 'Sold'}</span> ${fmtDY(m.d)}${m.rows.length > 1 ? ` · ${m.rows.length} trades` : ''}<button class="sp-x" aria-label="Close">×</button></div>`
     + rows.map(t => `<button class="sp-r" data-trade="${esc(t.uid)}">${avatar(t.politician, t.bioguide, 'round')}<span class="n">${esc(t.politician)}</span><span class="a">${amtShort(t)}</span></button>`).join('')
     + (m.rows.length > 6 ? `<div class="sp-more">+${m.rows.length - 6} more in the list below</div>` : '');
-  $('#stPop').hidden = false;
-  $('#stPop .sp-x').onclick = () => { $('#stPop').hidden = true; };
+  $(pop).hidden = false;
+  $(pop + ' .sp-x').onclick = () => { $(pop).hidden = true; };
 }
 const STAR = on => `<svg viewBox="0 0 24 24" width="22" height="22" style="fill:${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.85L12 16.9l-5.25 2.75 1-5.85L3.5 9.7l5.9-.9z"/></svg>`;
 const watching = () => store.get('watch', []);
@@ -773,7 +842,7 @@ function renderStock() {
     <div class="st-px"><b>${cur != null ? usd(cur) : '—'}</b>${ch != null ? `<span class="${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}% <small class="mute">${ST.range === 'ALL' ? 'all' : ST.range}</small></span>` : ''}</div>
     <div class="card st-chart"><div id="stChart"></div><div class="st-pop card" id="stPop" hidden></div>
       <div class="st-leg"><span><i class="b"></i>Politician buy</span><span><i class="s"></i>Sell</span><span class="mute">Tap a dot</span></div></div>
-    <div class="pills st-rng" id="stRange">${Object.keys(ST_RANGES).map(k => `<button data-v="${k}" class="${k === ST.range ? 'on' : ''}">${k}</button>`).join('')}</div>
+    <div class="pills st-rng" id="stRange">${Object.keys(ST_RANGES).filter(k => k !== 'EV').map(k => `<button data-v="${k}" class="${k === ST.range ? 'on' : ''}">${k}</button>`).join('')}</div>
     <div class="st-stats">
       <div class="card"><div class="k">Most bought 90D</div>${mb('90')}</div>
       <div class="card"><div class="k">Most bought 1Y</div>${mb('365')}</div>
@@ -892,6 +961,7 @@ document.addEventListener('click', e => {
   const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Copied')).catch(() => toast(cp.dataset.copy)); return; }
   if (e.target.closest('[data-back]')) { if (history.length > 1 && document.referrer !== undefined && route.prev) history.back(); else location.hash = baseView === 'home' ? '' : baseView; return; }
   if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
+  const un = e.target.closest('[data-un]'); if (un) { location.hash = 'unusual=' + un.dataset.un; return; }
   const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }
   const tk = e.target.closest('[data-tick]'); if (tk) { location.hash = 't=' + encodeURIComponent(tk.dataset.tick); return; }
   const ov = e.target.closest('[data-ov]'); if (ov) { openOverlap(ov.dataset.ov); return; }

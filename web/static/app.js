@@ -74,7 +74,8 @@ const initials = n => {
   const w = (n || '?').replace(/\b(Hon|Dr|Mr|Mrs|Ms|Jr|Sr|II|III|IV)\b\.?/g, '').replace(/,/g, '').trim().split(/\s+/).filter(Boolean);
   return ((w[0] || '?')[0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase();
 };
-const photoURL = (name, bio, big) => PHOTO[name] || (bio ? `https://unitedstates.github.io/images/congress/${big ? '450x550' : '225x275'}/${bio}.jpg` : null);
+const PHOTOS = window.PHOTOS || {};
+const photoURL = (name, bio, big) => PHOTO[name] || (PHOTOS[name] ? PHOTOS[name] + (big ? '.jpg' : '-s.jpg') : null) || (bio ? `https://unitedstates.github.io/images/congress/${big ? '450x550' : '225x275'}/${bio}.jpg` : null);
 function avatar(name, bio, cls = '') {
   const ph = `<span class="av ${cls}">${esc(initials(name))}</span>`;
   const u = photoURL(name, bio);
@@ -86,11 +87,33 @@ function portrait(name, bio, cls = '') {
   const ini = `<span class="ini">${esc(initials(name))}</span>`;
   return u ? `<img class="${cls}" loading="lazy" alt="" src="${esc(u)}" onerror="this.outerHTML='${esc(ini).replace(/'/g, '&#39;')}'">` : ini;
 }
-function logo(ticker, kind, cls = '') {
-  if (!ticker) return `<span class="logo ph ${cls}">${kind === 'BOND' ? I.bond : kind === 'GS' ? I.bank : I.doc}</span>`;
+/* logos: cached file (static/logos, see logos.js) > parqet > FMP > fund issuer by name > glyph or letters */
+const LOGOS = window.LOGOS || {}, ISS = window.ISSUER_LOGOS || {};
+const ISSUER_RE = [[/\bishares\b/i, 'ishares'], [/blackrock/i, 'blackrock'], [/vanguard/i, 'vanguard'], [/\bspdr\b|state street|select sector/i, 'ssga'],
+  [/invesco|oppenheimer|powershares/i, 'invesco'], [/schwab/i, 'schwab'], [/fidelity/i, 'fidelity'], [/pimco/i, 'pimco'], [/goldman/i, 'goldman'],
+  [/american funds|capital group/i, 'capitalgroup'], [/j\.?\s?p\.?\s?morgan|jpmorgan/i, 'jpmorgan'], [/franklin|templeton/i, 'franklin'], [/t\.?\s?rowe/i, 'troweprice'],
+  [/\bmfs\b|massachusetts investors/i, 'mfs'], [/vaneck/i, 'vaneck'], [/\bark\b/i, 'ark'], [/wisdomtree/i, 'wisdomtree'], [/first trust/i, 'firsttrust'],
+  [/proshares/i, 'proshares'], [/direxion/i, 'direxion'], [/global x/i, 'globalx'], [/lord abbett/i, 'lordabbett'], [/doubleline/i, 'doubleline'],
+  [/blackstone/i, 'blackstone'], [/dimensional|\bdfa\b/i, 'dimensional'], [/yieldmax/i, 'yieldmax'], [/oakmark/i, 'oakmark'], [/eventide/i, 'eventide'],
+  [/westwood/i, 'westwood'], [/neuberger/i, 'neuberger'], [/janus/i, 'janus'], [/morgan stanley/i, 'morganstanley'], [/american century|avantis/i, 'americancentury'],
+  [/dodge\s*&?\s*cox/i, 'dodgecox'], [/baron/i, 'baron'], [/edgewood/i, 'edgewood'], [/fuller\s*&?\s*thaler/i, 'fullerthaler'], [/icapital/i, 'icapital']];
+const FUNDISH = /\b(fund|funds|portfolio|trust|etf|shares class|class [a-z0-9-]+ shares|money market)\b/i;
+const issuerLogo = n => { if (!n) return null; for (const [re, k] of ISSUER_RE) if (re.test(n) && ISS[k]) return 'static/logos/' + ISS[k]; return null; };
+const isTreasury = (kind, n) => /treasur|t-?bills?\b|\bu\.?s\.? (govt?|government)\b/i.test(n || '');
+function glyph(kind, name, cls) {
+  const n = name || '';
+  if (isTreasury(kind, n)) return `<span class="logo ph gl tr ${cls}" title="US Treasury">${I.cap}</span>`;
+  if (kind === 'BOND' || kind === 'GS' || /\bbonds?\b|notes? due|municipal|\brev(enue)?\b|\bgo\b|% due/i.test(n)) return `<span class="logo ph gl bd ${cls}" title="Bond">${I.bond}</span>`;
+  if (['EF', 'MF', 'OT', 'HN', 'AB', 'OI', 'PS'].includes(kind) || FUNDISH.test(n)) return `<span class="logo ph gl fd ${cls}" title="Fund">${I.pie}</span>`;
+  return `<span class="logo ph gl ${cls}">${I.doc}</span>`;
+}
+function logo(ticker, kind, cls = '', name = '') {
+  if (!ticker || ticker === '--') return glyph(kind, name, cls);
+  const fb = ['EF', 'MF', 'OT', 'HN', 'AB'].includes(kind) || FUNDISH.test(name || '') ? glyph(kind, name, cls) : `<span class="logo ph ${cls}">${esc(ticker.replace(/[$].*$/, '').slice(0, 4))}</span>`;
+  if (LOGOS[ticker]) return `<span class="logo ${cls}"><img loading="lazy" alt="" src="static/logos/${esc(LOGOS[ticker])}" data-ph="${esc(fb)}" onerror="this.parentNode.outerHTML=this.dataset.ph"></span>`;
   const t = encodeURIComponent(ticker.replace('.', '-'));
-  const ph = `<span class="logo ph ${cls}">${esc(ticker.slice(0, 4))}</span>`;
-  return `<span class="logo ${cls}"><img loading="lazy" alt="" src="https://assets.parqet.com/logos/symbol/${t}?format=png" data-alt="https://financialmodelingprep.com/image-stock/${t}.png" data-ph="${esc(ph)}" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.dataset.alt=''}else{this.parentNode.outerHTML=this.dataset.ph}"></span>`;
+  const alts = [`https://financialmodelingprep.com/image-stock/${t}.png`, issuerLogo(name)].filter(Boolean).join('|');
+  return `<span class="logo ${cls}"><img loading="lazy" alt="" src="https://assets.parqet.com/logos/symbol/${t}?format=png" data-alt="${esc(alts)}" data-ph="${esc(fb)}" onerror="var a=(this.dataset.alt||'').split('|').filter(Boolean);if(a.length){this.src=a.shift();this.dataset.alt=a.join('|')}else{this.parentNode.outerHTML=this.dataset.ph}"></span>`;
 }
 const cleanAsset = t => (t.asset || '').replace(/\s*\[[A-Z]{2}\]\s*$/, '').replace(/\s*\(([A-Z0-9.\-\/$]{1,10})\)\s*$/, '').replace(/\s+-\s+/g, ' – ').replace(/\s+/g, ' ').trim();
 const assetName = t => t.company || cleanAsset(t);
@@ -142,7 +165,7 @@ function tradeRow(t, showWho = true) {
   const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
   const sub = t.est_price != null ? `<b>${usd(t.est_price)}</b>/share` : t.ticker ? esc(assetName(t)) : esc(t.asset_type === 'BOND' ? 'Bond · no market price' : (cleanAsset(t) && t.ticker ? '' : 'Not exchange-listed'));
   return `<button class="trow" data-trade="${esc(t.uid)}">
-    ${logo(t.ticker, t.asset_type)}
+    ${logo(t.ticker, t.asset_type, '', assetName(t))}
     <div class="mid">
       <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
       <div class="l2">${sub}</div>
@@ -376,7 +399,7 @@ function mbRows(it) {
     const av = x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('');
     const more = x.n_pols > 4 ? `<span class="av round more">+${x.n_pols - 4}</span>` : '';
     const who = x.n_pols === 1 ? x.pols[0].name.split(' ').slice(-1)[0] : `${x.n_pols} politicians`;
-    return `<button class="mbrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${i + 1}</span>${logo(x.ticker)}
+    return `<button class="mbrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${i + 1}</span>${logo(x.ticker, x.kind === 'etf' ? 'EF' : '', '', x.name || '')}
       <div class="mbmid"><div class="tk">${esc(x.ticker)}${x.kind === 'etf' ? ' <span class="tag">ETF</span>' : ''}</div><div class="nm">${esc(x.name || '')}</div></div>
       <div class="r"><div class="val">${money(x.est_total)}</div><div class="g ${x.chg == null ? '' : x.chg >= 0 ? 'up' : 'dn'}">${x.chg == null ? '' : (x.chg >= 0 ? '+' : '') + x.chg.toFixed(1) + '%'}</div></div>
       <div class="mbwho"><span class="mbstack">${av}${more}</span><span>${esc(who)} · ${x.n_buys} buy${x.n_buys === 1 ? '' : 's'}</span></div></button>`;
@@ -663,7 +686,7 @@ function renderPeriod() {
 function renderHoldings() {
   const el = $('#holdings'); if (!el) return;
   const H = POL.data.holdings, n = POL.showAll ? Math.min(H.length, 100) : 5;
-  el.innerHTML = H.slice(0, n).map(h => `<button class="hrow" data-tick="${esc(h.ticker)}">${logo(h.ticker)}
+  el.innerHTML = H.slice(0, n).map(h => `<button class="hrow" data-tick="${esc(h.ticker)}">${logo(h.ticker, '', '', h.name || '')}
       <div><div class="tk">${esc(h.ticker)}</div><div class="w">${h.weight.toFixed(2)}%</div></div>
       <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div></button>`).join('')
     + (H.length > 5 ? `<button class="viewall${POL.showAll ? ' open' : ''}" id="viewAll">${POL.showAll ? 'Show less' : 'View All'} ${I.chevd}</button>` : '');
@@ -756,7 +779,7 @@ async function openTrade(uid) {
   const close = t.est_price, lo = t.day_low ?? close, hi = t.day_high ?? close;
   const sh = close != null && t.amount_low ? [t.amount_low / hi, (t.amount_high || t.amount_low) / lo] : null;
   const k = t.pct_since != null ? 1 + t.pct_since / 100 : null;
-  openSheet(`<div class="td-head">${logo(t.ticker, t.asset_type)}<div style="min-width:0"><h2>${esc(t.ticker || cleanAsset(t).slice(0, 34))}</h2><div class="an">${esc(t.ticker ? assetName(t) : t.tx_type)}</div></div><div style="margin-left:auto">${sideTag(t)}</div></div>
+  openSheet(`<div class="td-head">${logo(t.ticker, t.asset_type, '', assetName(t))}<div style="min-width:0"><h2>${esc(t.ticker || cleanAsset(t).slice(0, 34))}</h2><div class="an">${esc(t.ticker ? assetName(t) : t.tx_type)}</div></div><div style="margin-left:auto">${sideTag(t)}</div></div>
     <button class="who" data-pol="${esc(t.politician)}">${avatar(t.politician, t.bioguide)}<span><div class="nm">${esc(t.politician)}</div><div class="mt">${esc(metaShort(t))}</div></span></button>
     ${overlap(t) ? `<div class="card ovcard">${ovExplain(t, overlap(t))}</div>` : ''}
     <div class="card" style="padding:16px;margin-top:16px"><div class="mute" style="font-size:13px">Estimated price on ${fmtDY(t.tx_date)}</div>${rangeBar(t)}</div>
@@ -849,7 +872,7 @@ function renderStock() {
   const H = s.holders || [], hv = H.reduce((a, h) => a + h.value, 0);
   const mb = w => ST.mb[w] ? `<b>#${ST.mb[w].rank}</b><span>${ST.mb[w].n_pols} politician${ST.mb[w].n_pols === 1 ? '' : 's'} · ${ST.mb[w].n_buys} buys</span>` : `<b>—</b><span>not bought</span>`;
   $('#v-stock').innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
-    <div class="st-head">${logo(tk)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div><button class="st-star ${watching().includes(tk) ? 'on' : ''}" id="stStar" aria-label="Watch ${esc(tk)}">${STAR(watching().includes(tk))}<span>${watching().includes(tk) ? 'Watching' : 'Watch'}</span></button></div>
+    <div class="st-head">${logo(tk, '', '', name)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div><button class="st-star ${watching().includes(tk) ? 'on' : ''}" id="stStar" aria-label="Watch ${esc(tk)}">${STAR(watching().includes(tk))}<span>${watching().includes(tk) ? 'Watching' : 'Watch'}</span></button></div>
     <div class="st-px"><b>${cur != null ? usd(cur) : '—'}</b>${ch != null ? `<span class="${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}% <small class="mute">${ST.range === 'ALL' ? 'all' : ST.range}</small></span>` : ''}</div>
     <div class="card st-chart"><div id="stChart"></div><div class="st-pop card" id="stPop" hidden></div>
       <div class="st-leg"><span><i class="b"></i>Politician buy</span><span><i class="s"></i>Sell</span><span class="mute">Tap a dot</span></div></div>
@@ -954,7 +977,7 @@ async function renderAlerts() {
     <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">
       <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from the Senate's own <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">eFD</a> reports (plus <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> for the newest), and <b>${by('Executive').toLocaleString()}</b> trades from <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE reports</a> of the President, Vice President and Cabinet. Scanned paper filings are read with OCR. Newest filing ${fmtDY(newest)}.</p>
-      <p>Prices come from Yahoo Finance daily data and photos from the public-domain congress-legislators project. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
+      <p>Prices come from Yahoo Finance daily data. Photos come from the public-domain congress-legislators project; officials without one use free-licensed Wikimedia Commons images (<a href="https://github.com/WajeehK/congress-trades/blob/main/web/static/img/people/SOURCES.md" target="_blank" rel="noopener">credits</a>). Logos are their owners' trademarks. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
     </div>`;
   $$('[data-unfollow]').forEach(b => b.onclick = () => { setFollow(b.dataset.unfollow, false); renderAlerts(); });

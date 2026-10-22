@@ -3,7 +3,7 @@
 const SHELL = 'ct-shell-__BUILD__';
 const DATA = 'ct-data';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './static/style.css?v=__BUILD__', './static/search.js?v=__BUILD__', './static/data.js?v=__BUILD__',
-  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg', './static/badge-96.png'];
+  './static/app.js?v=__BUILD__', './static/icon-192.png', './static/icon-512.png', './static/apple-touch-icon.png?v=__BUILD__', './static/favicon.svg?v=__BUILD__', './static/img/trump.jpg', './static/img/people/photos.js?v=__BUILD__', './static/logos/logos.js?v=__BUILD__', './static/badge-96.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('ct-shell-') && k !== SHELL).map(k => caches.delete(k)))).then(() => self.clients.claim()));

@@ -225,7 +225,7 @@ function portfolioCard(p, pf, o = {}) {
   return `<button class="pcard" data-pol="${esc(p.politician)}">
     <div class="ph">${portrait(p.politician, p.bioguide)}${o.rank ? `<span class="rank">${o.rank}</span>` : ''}<div class="tag"><i class="pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}</div><div class="nm">${esc(p.politician)}</div></div>
     ${pf ? `<div class="b"><div class="k">Portfolio Value</div><div class="v">${usd0(pf.value)}</div>
-      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>${o.period ? `<small class="per">${o.period}</small>` : ''}` : ''}</div></div>
+      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>` : ''}</div></div>
       <div class="spark">${sparkSVG(pf.spark, up)}</div>`
     : `<div class="b"><div class="k">${num(p.n)} disclosed trades</div></div><div class="none">No priced stock trades to build a portfolio from.</div>`}
   </button>`;

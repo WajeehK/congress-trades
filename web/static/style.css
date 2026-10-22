@@ -674,7 +674,8 @@ main{overflow-x:clip}
 .brand .wm em{font-style:normal;color:var(--brand-ink)}
 .tabs a.on{background:var(--brand-soft);color:var(--brand-ink)}
 .dock a.on{color:var(--brand-ink);background:var(--brand-soft)}
-.pills button.on,.rtabs button.on,.phone .tb span.on,.unchips .chip-btn.on{background:var(--brand-ui);color:#fff;border-color:var(--brand-ui)}
+.rtabs button.on,.phone .tb span.on{background:var(--brand-ui);color:#fff}
+.pills button.on,.unchips .chip-btn.on{background:var(--brand-soft);color:var(--brand-ink);border-color:transparent;font-weight:700}
 .btn{background:var(--brand-ui);color:#fff}
 .btn.ghost{background:var(--card);color:var(--ink)}
 .sbtn,.step::before{background:var(--brand-ui);color:#fff}
@@ -683,7 +684,6 @@ main{overflow-x:clip}
 .sec-h h2::before{content:"";display:inline-block;width:4px;height:.72em;border-radius:2px;background:var(--brand-ui);margin-right:10px;vertical-align:.02em}
 .search:focus-within{border-color:var(--brand-ink);box-shadow:0 0 0 3px var(--brand-soft)}
 :focus-visible{outline:2px solid var(--brand-ring);outline-offset:2px}
-.sw.me,.cp-ch .me{background:var(--brand-ink);stroke:var(--brand-ink)}
 
 /* ---------- hero: the name is the headline ---------- */
 .hero-name{font-weight:900;text-transform:uppercase;font-size:clamp(50px,13.2vw,100px);line-height:.86;letter-spacing:-.055em;

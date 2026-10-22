@@ -115,6 +115,7 @@ jobs:
               except Exception as e:
                   print(f"- {name}: FAILED {type(e).__name__}: {e}")
           PY
+          python pipeline/probe_efd.py 2>&1 | sed 's/^/    /' | tee -a "$GITHUB_STEP_SUMMARY" || true
 
       - name: Senate feed from the box (Bargo blocks GitHub IPs)
         run: |

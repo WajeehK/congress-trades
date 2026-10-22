@@ -92,11 +92,11 @@ def _clean(a):
     return re.sub(r"\s*\[[A-Z]{2}\]\s*$|\s*\([A-Z0-9.\-/$]{1,10}\)\s*$", "", a or "").strip() or None
 
 
-def build(rows, limit=50, today=None):
+def build(rows, limit=250, today=None):
     """Precomputed payload for every window, stocks-only and with ETFs."""
     rows = list(rows)
     since = ((today or date.today()) - timedelta(days=max(WINDOWS.values()))).isoformat()
     rows = [r for r in rows if r["side"] == "buy" and (r["tx_date"] or "") >= since]
     return {"windows": {w: {"days": d, "since": ((today or date.today()) - timedelta(days=d)).isoformat(),
-                            "stocks": rank(rows, d, False, limit, today), "all": rank(rows, d, True, limit, today)}
+                            "stocks": rank(rows, d, False, 10, today), "all": rank(rows, d, True, limit, today)}
                         for w, d in WINDOWS.items()}}

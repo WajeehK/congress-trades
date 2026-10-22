@@ -472,10 +472,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .mbrow .r .val{font-size:16px;font-weight:600}
 .mbrow .r .g{font-size:13.5px;font-weight:500;margin-top:1px}
 .mb-foot{font-size:12.5px;color:var(--mute);margin:10px 4px 0;line-height:1.5}
-.mb-more{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:46px;border-top:1px solid var(--line);font-weight:600;font-size:14px;color:var(--mute)}
-.mb-more:hover{color:var(--ink)}
-.mb-more svg{width:15px;height:15px;transition:transform .2s}
-.mb-more.open svg{transform:rotate(180deg)}
 .mb-h{margin-top:var(--s6)}
 .more-btn{margin-top:10px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);color:var(--ink)}
 .perf-h .more-link{margin-left:auto}
@@ -490,3 +486,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .pcard .ph .rank{position:absolute;top:10px;left:10px;z-index:2;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);display:grid;place-items:center;font-size:12px;font-weight:800;color:#111}
 .pcard .d .per{margin-left:6px;font-size:11px;font-weight:700;color:var(--mute);padding:1px 6px;border-radius:6px;background:var(--bg2)}
 #polPeriod[hidden]{display:none}
+.mbp-top{padding-top:var(--s4)}
+.mbp-top .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#v-mb .page-h{padding-top:var(--s3)}
+.mbp-pills{display:flex;margin-bottom:12px}
+@media (max-width:700px){.mbp-pills{width:100%}.mbp-pills button{flex:1;height:32px;font-size:13px}}

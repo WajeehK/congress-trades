@@ -157,11 +157,11 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol'];
+const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
-  const nav = v === 'pol' ? null : v;
+  const nav = v === 'pol' ? null : v === 'mb' ? 'home' : v;
   $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
 }
 function route() {
@@ -176,13 +176,15 @@ function route() {
   let v = 'home';
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'alerts'].includes(h)) v = h;
+  else if (h === 'mostbought') v = 'mb';
   else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
   const changed = v !== route.cur || (v === 'pol' && h !== route.h);
   showView(v); route.cur = v; route.h = h;
-  if (v !== 'pol') baseView = v;
+  if (v !== 'pol' && v !== 'mb') baseView = v;
   if (changed) window.scrollTo({top: 0, behavior: 'instant'});
   if (v === 'home') loadHome();
+  if (v === 'mb' && !MB.loaded) loadMostBought();
   if (v === 'trades' && !F.loaded) { F.loaded = true; loadKpis(); loadFeed(); }
   if (v === 'people') loadPeople();
   if (v === 'alerts') renderAlerts();
@@ -233,24 +235,25 @@ function portfolioCard(p, pf, o = {}) {
 
 /* ============ home ============ */
 const H = {period: '1Y', loaded: false};
-const MB = {days: '90', all: false, loaded: false, items: [], seq: 0};
+const MB = {days: '90', loaded: false, items: [], seq: 0};
 const MB_NOTE = {'30': '30 days', '90': '90 days', '365': 'year'};
 async function loadMostBought() {
   MB.loaded = true;
-  const el = $('#mbList'), seq = ++MB.seq;
-  if (!MB.items.length) el.innerHTML = skRows(6);
+  const seq = ++MB.seq;
+  if (!MB.items.length) { $('#mbList').innerHTML = skRows(5); $('#mbFull').innerHTML = skRows(8); }
+  $$('#mbPills button, #mbPills2 button').forEach(x => x.classList.toggle('on', x.dataset.v === MB.days));
   try {
     const d = await api(`/api/most_bought?days=${MB.days}&etf=1`);
     if (seq !== MB.seq) return;
     MB.items = d.items || [];
-    $('#mbNote').textContent = `Stocks and funds ranked by how many politicians bought · last ${MB_NOTE[MB.days]}`;
+    const note = `Stocks and funds ranked by how many politicians bought · last ${MB_NOTE[MB.days]}`;
+    $('#mbNote').textContent = note; $('#mbNote2').textContent = note;
     renderMostBought();
-  } catch (e) { MB.loaded = false; el.innerHTML = empty('Could not load', String(e.message || e)); }
+  } catch (e) { MB.loaded = false; $('#mbList').innerHTML = $('#mbFull').innerHTML = empty('Could not load', String(e.message || e)); }
 }
-function renderMostBought() {
-  const el = $('#mbList'), it = MB.items, n = MB.all ? it.length : Math.min(5, it.length);
-  if (!it.length) { el.innerHTML = empty('No purchases in this window', 'Try a longer window.'); return; }
-  el.innerHTML = it.slice(0, n).map((x, i) => {
+function mbRows(it) {
+  if (!it.length) return empty('No purchases in this window', 'Try a longer window.');
+  return it.map((x, i) => {
     const av = x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('');
     const more = x.n_pols > 4 ? `<span class="av round more">+${x.n_pols - 4}</span>` : '';
     const who = x.n_pols === 1 ? x.pols[0].name.split(' ').slice(-1)[0] : `${x.n_pols} politicians`;
@@ -258,10 +261,13 @@ function renderMostBought() {
       <div class="mbmid"><div class="tk">${esc(x.ticker)}${x.kind === 'etf' ? ' <span class="tag">ETF</span>' : ''}</div><div class="nm">${esc(x.name || '')}</div></div>
       <div class="r"><div class="val">${money(x.est_total)}</div><div class="g ${x.chg == null ? '' : x.chg >= 0 ? 'up' : 'dn'}">${x.chg == null ? '' : (x.chg >= 0 ? '+' : '') + x.chg.toFixed(1) + '%'}</div></div>
       <div class="mbwho"><span class="mbstack">${av}${more}</span><span>${esc(who)} · ${x.n_buys} buy${x.n_buys === 1 ? '' : 's'}</span></div></button>`;
-  }).join('') + (it.length > 5 ? `<button class="mb-more${MB.all ? ' open' : ''}" id="mbAll">${MB.all ? 'Show less' : `See all ${it.length}`}${I.chevd}</button>` : '');
-  if ($('#mbAll')) $('#mbAll').onclick = e => { e.stopPropagation(); const was = MB.all; MB.all = !MB.all; renderMostBought(); if (was) $('#mbList').scrollIntoView({block: 'nearest'}); };
+  }).join('');
 }
-$$('#mbPills button').forEach(b => b.onclick = () => { $$('#mbPills button').forEach(x => x.classList.toggle('on', x === b)); MB.days = b.dataset.v; MB.all = false; loadMostBought(); });
+function renderMostBought() {
+  $('#mbList').innerHTML = mbRows(MB.items.slice(0, 5));
+  $('#mbFull').innerHTML = mbRows(MB.items);
+}
+$$('#mbPills button, #mbPills2 button').forEach(b => b.onclick = () => { MB.days = b.dataset.v; loadMostBought(); });
 
 async function loadHome() {
   if (!MB.loaded) loadMostBought();

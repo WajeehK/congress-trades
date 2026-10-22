@@ -1117,7 +1117,7 @@ def most_bought_api(days: int = 90, etf: int = 1):
     since = (date.today() - timedelta(days=days)).isoformat()
     with db() as c:
         rows = c.execute(f"{TRADE_SELECT} WHERE t.side='buy' AND t.tx_date >= ?", (since,)).fetchall()
-    out = {"days": days, "since": since, "items": most_bought.rank(rows, days, bool(etf), 50)}
+    out = {"days": days, "since": since, "items": most_bought.rank(rows, days, bool(etf), 250)}
     _MB_CACHE[key] = (time.time(), out)
     return out
 

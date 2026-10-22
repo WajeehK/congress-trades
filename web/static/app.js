@@ -757,3 +757,4 @@ setInterval(loadStatus, 5 * 60e3);
 document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && loadStatus());
 
 setTimeout(() => pushRefresh(false), 4000);
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.type === 'push') { window.__lastPush = e.data; loadStatus(); } });

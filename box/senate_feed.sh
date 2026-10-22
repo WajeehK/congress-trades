@@ -4,11 +4,16 @@
 #   - READS ONLY the box tracker's latest Bargo dump (data/bargo_senate_<date>_p*.json); makes no Bargo calls itself
 #   - encrypts it with the repo's STATE_KEY (AES-256) so raw Bargo records are never public
 #   - force-pushes ONE file to ONE branch (senate-feed) of ONE repo, only when the content changed
-# Run:  ./senate_feed.sh loop   (hourly)   |   ./senate_feed.sh once
+#   - dispatches the repo's "Refresh data and deploy" workflow: right after a feed push, and once an hour at ~:07
+#     (GitHub's own cron is late or skipped for hours at a time; it stays as a backup and skips itself after our run)
+# Run:  ./senate_feed.sh loop   (checks every 10 min)   |   ./senate_feed.sh once   |   ./senate_feed.sh dispatch
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC=/workspace/politician-trades-tracker/data
 REPO=https://github.com/WajeehK/congress-trades.git
+GH_REPO=WajeehK/congress-trades
+WORKFLOW=pipeline.yml
+PUSHED=0
 KEY="$HERE/../state_key.txt"
 push_once() {
   local work; work="$(mktemp -d)"; trap 'rm -rf "$work"' RETURN
@@ -36,11 +41,49 @@ PY
   git -C "$work/g" -c user.name=WajeehK -c user.email=WajeehK@users.noreply.github.com commit -qm "senate feed $(date -u +%FT%TZ)"
   git -C "$work/g" -c credential.helper= -c credential.helper='!gh auth git-credential' push -qf "$REPO" senate-feed:senate-feed
   echo "$sum" > "$HERE/last.sha"
+  PUSHED=1
   echo "$(date -Is) pushed"
+}
+
+# Start the workflow unless one is already waiting to run (the concurrency group then picks it up after the
+# current run, so it will see the newest feed anyway). $1 = reason, $2 = "hourly" also skips if a run started <30 min ago.
+dispatch() {
+  local waiting recent since
+  waiting="$(gh run list -R "$GH_REPO" --workflow "$WORKFLOW" -L 10 --json status \
+             -q '[.[] | select(.status == "queued" or .status == "pending" or .status == "waiting" or .status == "requested")] | length' 2>/dev/null || echo 0)"
+  if [ "${waiting:-0}" -gt 0 ]; then echo "$(date -Is) dispatch ($1) skipped: a run is already queued"; return 0; fi
+  if [ "${2:-}" = hourly ]; then
+    since="$(date -u -d '-30 min' +%FT%TZ)"
+    recent="$(gh run list -R "$GH_REPO" --workflow "$WORKFLOW" -L 10 --json createdAt,status,conclusion \
+              -q "[.[] | select(.createdAt >= \"$since\" and (.status == \"in_progress\" or .conclusion == \"success\"))] | length" 2>/dev/null || echo 0)"
+    if [ "${recent:-0}" -gt 0 ]; then echo "$(date -Is) dispatch ($1) skipped: a run started in the last 30 min"; return 0; fi
+  fi
+  if gh workflow run "$WORKFLOW" -R "$GH_REPO" >/dev/null 2>&1; then echo "$(date -Is) dispatched ($1)"
+  else echo "$(date -Is) dispatch ($1) FAILED"; fi
+}
+
+# seconds until the next check at :07, :17, :27, :37, :47 or :57
+sleep_to_next_slot() {
+  local now m s
+  now="$(date +%s)"; m=$(( 10#$(date +%M) )); s=$(( 10#$(date +%S) ))
+  local into=$(( ((m - 7) % 10 + 10) % 10 * 60 + s ))
+  sleep $(( 600 - into ))
 }
 if [ "${1:-once}" = loop ]; then
   echo $$ > "$HERE/senate_feed.pid"
-  while true; do push_once || echo "$(date -Is) push failed"; sleep 3600; done
+  while true; do
+    PUSHED=0
+    push_once || echo "$(date -Is) push failed"
+    [ "$PUSHED" = 1 ] && dispatch "new Senate feed"
+    slot="$(date -u +%FT%H)"   # one hourly dispatch per UTC hour, remembered across restarts
+    if [ "$(cat "$HERE/last_hourly" 2>/dev/null)" != "$slot" ] && [ $(( 10#$(date +%M) )) -ge 7 ]; then
+      [ "$PUSHED" = 1 ] || dispatch "hourly" hourly
+      echo "$slot" > "$HERE/last_hourly"
+    fi
+    sleep_to_next_slot
+  done
+elif [ "$1" = dispatch ]; then
+  dispatch "manual"
 else
   push_once
 fi

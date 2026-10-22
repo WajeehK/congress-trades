@@ -728,6 +728,13 @@ function stockPop(i) {
   $('#stPop').hidden = false;
   $('#stPop .sp-x').onclick = () => { $('#stPop').hidden = true; };
 }
+const STAR = on => `<svg viewBox="0 0 24 24" width="22" height="22" style="fill:${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.85L12 16.9l-5.25 2.75 1-5.85L3.5 9.7l5.9-.9z"/></svg>`;
+const watching = () => store.get('watch', []);
+function setWatch(tk, on) {
+  const w = watching().filter(x => x !== tk); if (on) w.unshift(tk);
+  store.set('watch', w); pushRefresh(true);
+  toast(on ? `Watching ${tk}` : `Removed ${tk} from watchlist`);
+}
 function renderStock() {
   const s = ST.s, tk = ST.t, R = ST.rows, t0 = R[0] || {};
   const name = t0.company || cleanAsset(t0) || '', P = stRange(), cur = t0.cur_price ?? (ST.pts.length ? ST.pts[ST.pts.length - 1][1] : null);
@@ -737,7 +744,7 @@ function renderStock() {
   const H = s.holders || [], hv = H.reduce((a, h) => a + h.value, 0);
   const mb = w => ST.mb[w] ? `<b>#${ST.mb[w].rank}</b><span>${ST.mb[w].n_pols} politician${ST.mb[w].n_pols === 1 ? '' : 's'} · ${ST.mb[w].n_buys} buys</span>` : `<b>—</b><span>not bought</span>`;
   $('#v-stock').innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
-    <div class="st-head">${logo(tk)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div></div>
+    <div class="st-head">${logo(tk)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div><button class="st-star ${watching().includes(tk) ? 'on' : ''}" id="stStar" aria-label="Watch ${esc(tk)}">${STAR(watching().includes(tk))}<span>${watching().includes(tk) ? 'Watching' : 'Watch'}</span></button></div>
     <div class="st-px"><b>${cur != null ? usd(cur) : '—'}</b>${ch != null ? `<span class="${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}% <small class="mute">${ST.range === 'ALL' ? 'all' : ST.range}</small></span>` : ''}</div>
     <div class="card st-chart"><div id="stChart"></div><div class="st-pop card" id="stPop" hidden></div>
       <div class="st-leg"><span><i class="b"></i>Politician buy</span><span><i class="s"></i>Sell</span><span class="mute">Tap a dot</span></div></div>
@@ -762,6 +769,7 @@ function renderStock() {
   $('#stChart').onclick = e => { const c = e.target.closest('[data-mk]'); if (c) stockPop(+c.dataset.mk); };
   $$('#stRange button').forEach(b => b.onclick = () => { ST.range = b.dataset.v; renderStock(); });
   if ($('#stMore')) $('#stMore').onclick = () => { ST.shown += 30; renderStock(); };
+  $('#stStar').onclick = () => { setWatch(tk, !watching().includes(tk)); renderStock(); };
 }
 addEventListener('resize', () => { if (route.cur === 'stock' && ST.s && $('#stChart')) $('#stChart').innerHTML = stockChart(Math.max(280, $('#stChart').clientWidth)); });
 
@@ -805,10 +813,11 @@ async function pushCard() {
   if (!reg) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>Open <a href="https://wajeehk.github.io/congress-trades/" style="text-decoration:underline">wajeehk.github.io/congress-trades</a> and install it to get notifications.</p></div></div>`;
   const sub = await reg.pushManager.getSubscription(), perm = Notification.permission, on = !!sub && perm === 'granted', all = store.get('pushAll', true), n = following().length;
   if (!on) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>${perm === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser’s site settings, then tap Enable.' : 'Get a notification on this device the moment new trades are disclosed. No extra app needed.'}</p></div><button class="sbtn pc-on" id="pushOn">Enable notifications</button></div>`;
-  return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : n ? `Only the ${n} ${n === 1 ? 'person' : 'people'} you follow` : 'Nobody yet: follow someone or turn on all trades'} · this device</p></div>
+  return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : (n || watching().length) ? `Only ${[n ? `the ${n} ${n === 1 ? 'person' : 'people'} you follow` : '', watching().length ? `trades in your ${watching().length} watched ticker${watching().length === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ')}` : 'Nothing yet: follow someone, watch a stock or turn on all trades'} · this device</p></div>
     <label class="pc-row"><span>All new trades</span><input type="checkbox" id="pushAll" ${all ? 'checked' : ''}></label>
     <label class="pc-row"><span>Unusual activity<small class="mute">Clusters of 3+ buyers and $250K+ trades</small></span><input type="checkbox" id="pushUnusual" ${store.get('pushUnusual', true) ? 'checked' : ''}></label>
     <div class="pc-row"><span>People you follow</span><span class="mute">${n} ${n === 1 ? 'person' : 'people'} · tap the bell on a politician</span></div>
+    <div class="pc-row"><span>Watchlist</span><span class="mute">${watching().length} ticker${watching().length === 1 ? '' : 's'} · tap the star on a stock</span></div>
     <div class="pc-btns"><button class="chip-btn" id="pushOff">Turn off</button></div></div>`;
 }
 async function renderAlerts() {
@@ -828,10 +837,13 @@ async function renderAlerts() {
     <div class="h2s"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
     <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b><small class="mute">${esc(p.party ? metaShort(p) : '')}</small></div><button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')
       : `<div class="empty"><b>You're not following anyone yet</b>Open a politician and tap the ${I.bell.replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} bell.</div>`}</div>
+    <div class="h2s"><h2>Watchlist</h2><small>${watching().length} ticker${watching().length === 1 ? '' : 's'}</small></div>
+    <div class="card">${watching().length ? watching().map(t => `<div class="frow wrow" data-tick="${esc(t)}">${logo(t)}<div class="t"><b>${esc(t)}</b><small class="mute">Alert on any politician trade</small></div><button class="sbtn ghost" data-unwatch="${esc(t)}">Remove</button></div>`).join('')
+      : `<div class="empty"><b>No watched stocks yet</b>Open a stock and tap ${STAR(false).replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-2px"')} Watch to get notified whenever a politician trades it.</div>`}</div>
     <div class="h2s"><h2>How it works</h2></div>
     <div class="steps">
       <div class="step card"><div><b>Turn on notifications</b><p>Tap Enable notifications above and allow them. Works in the installed app on Android and desktop, and on iPhone (iOS 16.4+) once it’s added to your Home Screen.</p></div></div>
-      <div class="step card"><div><b>Choose what you hear about</b><p>Every new trade, or only the people you follow: open a politician and tap the bell.</p></div></div>
+      <div class="step card"><div><b>Choose what you hear about</b><p>Every new trade, or only the people you follow and the stocks you watch: tap the bell on a politician or the star on a stock.</p></div></div>
       <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>Filings are checked every hour. New trades arrive as one notification with the tickers and amounts; tap it to open their page.</p></div></div>
     </div>
     <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
@@ -841,6 +853,7 @@ async function renderAlerts() {
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
     </div>`;
   $$('[data-unfollow]').forEach(b => b.onclick = () => { setFollow(b.dataset.unfollow, false); renderAlerts(); });
+  $$('[data-unwatch]').forEach(b => b.onclick = e => { e.stopPropagation(); setWatch(b.dataset.unwatch, false); renderAlerts(); });
   if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
   if ($('#pushOff')) $('#pushOff').onclick = pushDisable;
   if ($('#pushAll')) $('#pushAll').onchange = e => { store.set('pushAll', e.target.checked); pushRefresh(true); renderAlerts(); };

@@ -570,3 +570,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .unrow .r{font-size:12px;align-self:end}
 .pc-row span small{display:block;font-size:12px;font-weight:500;margin-top:2px}
 @media (max-width:700px){.unrow{padding:12px 14px;gap:10px}}
+
+/* watchlist */
+.st-star{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 10px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--mute);font:600 11px/1 inherit;cursor:pointer}
+.st-star.on{color:#f5b400;border-color:rgba(245,180,0,.45)}
+.st-star span{font-size:11px}
+.wrow{cursor:pointer}
+.wrow .logo{width:40px;height:40px;border-radius:12px;flex:none}

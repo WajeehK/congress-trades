@@ -1100,8 +1100,10 @@ def trades(q: Optional[str] = None, politician: Optional[str] = None, ticker: Op
            chamber: Optional[str] = None, party: Optional[str] = None, side: Optional[str] = None,
            date_from: Optional[str] = None, date_to: Optional[str] = None,
            date_field: str = "disclosure_date", sort: str = "disclosure_date", asset: Optional[str] = None,
-           limit: int = Query(50, le=500), offset: int = 0):
+           limit: int = Query(50, le=500), offset: int = 0, new_since: Optional[str] = None):
     where, a = _where(q, politician, ticker, chamber, party, side, date_from, date_to, date_field, asset)
+    if new_since:
+        where, a = where + (" AND " if where else " WHERE ") + "t.first_seen > ?", a + [new_since]
     with db() as c:
         total = c.execute(f"SELECT COUNT(*) FROM trades t{where}", a).fetchone()[0]
         rows = c.execute(f"{TRADE_SELECT}{where} ORDER BY {SORTS.get(sort, SORTS['disclosure_date'])} LIMIT ? OFFSET ?",
@@ -1329,6 +1331,33 @@ def stock_api(ticker: str):
 
 
 _MB_CACHE = {}
+
+
+@app.get("/api/earnings")
+def earnings_api():
+    """Earnings dates per traded ticker (earnings.py; the calendar cache is filled by the static build)."""
+    import earnings
+    try:
+        cal = json.loads(meta_get(earnings.KEY) or "{}")
+    except Exception:
+        cal = {}
+    with db() as c:
+        ticks = {(r[0] or "").upper().replace("-", ".") for r in c.execute("SELECT DISTINCT ticker FROM trades WHERE ticker IS NOT NULL")}
+    return earnings.build(cal, ticks)
+
+
+@app.get("/api/recap")
+def recap_api():
+    """Daily and weekly recap payloads (recap.py)."""
+    import recap
+    since = (datetime.now(timezone.utc) - timedelta(days=8)).isoformat()
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.first_seen >= ?", (since,)).fetchall()
+    try:
+        sec = json.loads((Path(__file__).resolve().parent / "ticker_sectors.json").read_text())
+    except Exception:
+        sec = {}
+    return {k: recap.build(rows, k, sectors=sec) for k in ("daily", "weekly")}
 
 
 @app.get("/api/gems")

@@ -22,6 +22,7 @@ os.environ.setdefault("NO_SCHEDULER", "1")
 import app  # noqa: E402
 import earnings  # noqa: E402
 import gems  # noqa: E402
+import recap  # noqa: E402
 import most_bought  # noqa: E402
 import stock_page  # noqa: E402
 
@@ -123,6 +124,8 @@ def main():
         sec = json.loads((ROOT / "ticker_sectors.json").read_text())
     except Exception:
         sec = {}
+    recent_rows = [r for r in rows if (r["first_seen"] or "") >= (datetime.now(timezone.utc) - timedelta(days=8)).isoformat()]
+    dump(data / "recap.json", {k: recap.build(recent_rows, k, sectors=sec) for k in ("daily", "weekly")})
     gm = gems.build(rows, sec)
     dump(data / "gems.json", gm)
     print(f"hidden gems: {len(gm['items'])} ({gm['caps']} caps)")

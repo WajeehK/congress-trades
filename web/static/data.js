@@ -61,6 +61,7 @@
     async portfolios() { return get(`data/portfolios.json?v=${await v()}`); },
     async intro() { return get(`data/intro.json?v=${await v()}`); },
     async earnings() { return get(`data/earnings.json?v=${await v()}`); },
+    async recap() { return get(`data/recap.json?v=${await v()}`); },
     async gems() { return get(`data/gems.json?v=${await v()}`); },
     async unusual() { return get(`data/unusual.json?v=${await v()}`); },
     async unusual_event(q) { return get(`data/unusual/${encodeURIComponent(q.get('id'))}.json?v=${await v()}`); },

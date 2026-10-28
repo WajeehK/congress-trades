@@ -244,11 +244,11 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm'];
+const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
-  const nav = v === 'pol' || v === 'stock' ? null : v === 'mb' || v === 'gm' ? 'home' : v;
+  const nav = v === 'pol' || v === 'stock' || v === 'rc' ? null : v === 'mb' || v === 'gm' ? 'home' : v;
   $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
   dockSync(nav);
 }
@@ -267,13 +267,14 @@ function route() {
   else if (h === 'mostbought') v = 'mb';
   else if (h === 'unusual') v = 'un';
   else if (h === 'gems') v = 'gm';
+  else if (h.startsWith('recap')) v = 'rc';
   else if (h.startsWith('unusual=')) v = 'und';
   else if (h.startsWith('t=')) v = 'stock';
   else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
   const changed = v !== route.cur || ((v === 'pol' || v === 'stock' || v === 'und') && h !== route.h);
   showView(v); route.cur = v; route.h = h;
-  if (!['pol', 'mb', 'stock', 'un', 'und', 'gm'].includes(v)) baseView = v;
+  if (!['pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'].includes(v)) baseView = v;
   if (changed) window.scrollTo({top: 0, behavior: 'instant'});
   if (v === 'home') loadHome();
   if (v === 'mb' && !MB.loaded) loadMostBought();
@@ -285,6 +286,7 @@ function route() {
   if (v === 'stock' && changed) openStock(h.slice(2));
   if (v === 'un') renderUnusualAll();
   if (v === 'gm') loadGems();
+  if (v === 'rc') openRecap(h.split('=')[1] || 'daily');
   if (v === 'und' && changed) openUnusual(h.slice(8));
 }
 addEventListener('hashchange', route);
@@ -375,6 +377,26 @@ async function loadGems() {
   $('#gmMore').hidden = GM.items.length <= 5;
   $('#gmList').innerHTML = gmRows(GM.items.slice(0, 5));
   $('#gmFull').innerHTML = gmRows(GM.items);
+}
+/* ---- recap page (recap.py): #recap=daily | #recap=weekly ---- */
+async function openRecap(kind) {
+  const el = $('#v-rc');
+  el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div><div class="sk-card" style="height:240px;margin-top:16px"></div>`;
+  let d; try { d = await api('/api/recap'); } catch (e) { el.innerHTML += empty('Recap not available', 'Try again after the next refresh.'); return; }
+  const rc = d[kind] || d.daily, label = rc.kind === 'weekly' ? 'Weekly recap' : 'Daily recap';
+  const tr = (t, i) => `<button class="mbrow" data-trade="${esc(t.uid)}"><span class="rk">${String(i + 1).padStart(2, '0')}</span>${logo(t.ticker, '', '', t.name || '')}
+    <div class="mbmid"><div class="tk">${esc(t.ticker || t.name || '—')}</div><div class="nm">${esc(t.name || '')}</div></div>
+    <div class="r"><div class="val">${amtShort(t)}</div><div class="g mute">${fmtD(t.tx_date)}</div></div>
+    <div class="mbwho"><span class="mbstack">${avatar(t.politician, t.bioguide, 'round')}</span><span>${esc(t.politician)}${t.party ? ' · ' + esc(t.party) : ''}</span></div></button>`;
+  const sec = (h, items, f, none) => `<div class="sec-h"><h2>${h}</h2><small class="mute">${items.length}</small></div><div class="tlist card">${items.length ? items.map(f).join('') : empty(none, '')}</div>`;
+  el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
+    <div class="page-h"><div class="eyebrow">${rc.kind === 'weekly' ? 'Last 7 days' : 'Last 24 hours'} · as of ${fmtUK(rc.generated_at)}</div><h1>${label}</h1></div>
+    <div class="pills mbp-pills" id="rcSeg"><button data-v="daily" class="${rc.kind === 'daily' ? 'on' : ''}">Daily</button><button data-v="weekly" class="${rc.kind === 'weekly' ? 'on' : ''}">Weekly</button></div>
+    <p class="mb-sub"><span><b>${rc.n}</b> new trade${rc.n === 1 ? '' : 's'} from <b>${rc.n_pols}</b> politician${rc.n_pols === 1 ? '' : 's'}</span></p>
+    ${sec('Biggest buys', rc.buys, tr, 'No new buys')}
+    ${sec('Biggest sells', rc.sells, tr, 'No new sells')}
+    ${sec('Hidden gems', rc.gems, (g, i) => `<button class="mbrow gmrow" data-tick="${esc(g.ticker)}"><span class="rk">${String(i + 1).padStart(2, '0')}</span>${logo(g.ticker, '', '', g.name || '')}<div class="mbmid"><div class="tk">${esc(g.name || g.ticker)}</div><div class="nm"><b>${esc(g.ticker)}</b>${g.industry ? ' · ' + esc(g.industry) : ''}</div></div><div class="r"><div class="val">${money(g.est_total)}</div></div><div class="mbwho"><span>${esc(g.who || '')}</span></div></button>`, 'No hidden gems in this period')}
+    <p class="mb-foot">Built from trades first found in the period (older back-filed reports are left out). Amounts are disclosed ranges.</p>`;  $$('#rcSeg button').forEach(b => b.onclick = () => { history.replaceState(null, '', '#recap=' + b.dataset.v); openRecap(b.dataset.v); });
 }
 /* ---- unusual activity (unusual.py): every type, ranked; Home top 5, full list #unusual, detail #unusual=<id> ---- */
 const UT = {cluster_buy: ['Cluster buy', 'cl'], bipartisan: ['Bipartisan', 'bp'], cluster_sell: ['Cluster sell', 'cs'], large: ['Large', 'lg'],
@@ -986,7 +1008,7 @@ const pushOK = () => 'serviceWorker' in navigator && 'PushManager' in window && 
 const b64u = s => { const p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(b, c => c.charCodeAt(0)); };
 async function pushSub() { if (!pushOK()) return null; const r = await navigator.serviceWorker.getRegistration(); return r ? r.pushManager.getSubscription() : null; }
 async function pushPublish(sub, off) {
-  const body = {v: 1, sub: sub.toJSON(), all: store.get('pushAll', true), follows: following(), watch: store.get('watch', []), unusual: store.get('pushUnusual', true), off: !!off};
+  const body = {v: 1, sub: sub.toJSON(), all: store.get('pushAll', true), daily: store.get('pushDaily', true), weekly: store.get('pushWeekly', true), follows: following(), watch: store.get('watch', []), unusual: store.get('pushUnusual', true), off: !!off};
   const r = await fetch(PUSH_TOPIC, {method: 'POST', body: JSON.stringify(body)});
   if (!r.ok) throw new Error('register ' + r.status);
   store.set('pushPub', Date.now());
@@ -1020,6 +1042,8 @@ async function pushCard() {
   if (!on) return `<div class="card pushcard"><div class="pc-t"><b>Phone notifications</b><p>${perm === 'denied' ? 'Notifications are blocked for this site. Allow them in your browser’s site settings, then tap Enable.' : 'Get a notification on this device the moment new trades are disclosed. No extra app needed.'}</p></div><button class="sbtn pc-on" id="pushOn">Enable notifications</button></div>`;
   return `<div class="card pushcard on"><div class="pc-t"><b>Notifications are on</b><p>${all ? 'Every new trade' : (n || watching().length) ? `Only ${[n ? `the ${n} ${n === 1 ? 'person' : 'people'} you follow` : '', watching().length ? `trades in your ${watching().length} watched ticker${watching().length === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ')}` : 'Nothing yet: follow someone, watch a stock or turn on all trades'} · this device</p></div>
     <label class="pc-row"><span>All new trades</span><input type="checkbox" id="pushAll" ${all ? 'checked' : ''}></label>
+    <label class="pc-row"><span>Daily recap<small class="mute">Around 18:00 UK: biggest buys, sells and hidden gems</small></span><input type="checkbox" id="pushDaily" ${store.get('pushDaily', true) ? 'checked' : ''}></label>
+    <label class="pc-row"><span>Weekly recap<small class="mute">Sundays around 18:00 UK</small></span><input type="checkbox" id="pushWeekly" ${store.get('pushWeekly', true) ? 'checked' : ''}></label>
     <label class="pc-row"><span>Unusual activity<small class="mute">Clusters of 3+ buyers and $250K+ trades</small></span><input type="checkbox" id="pushUnusual" ${store.get('pushUnusual', true) ? 'checked' : ''}></label>
     <div class="pc-row"><span>People you follow</span><span class="mute">${n} ${n === 1 ? 'person' : 'people'} · tap the bell on a politician</span></div>
     <div class="pc-row"><span>Watchlist</span><span class="mute">${watching().length} ticker${watching().length === 1 ? '' : 's'} · tap the star on a stock</span></div>
@@ -1097,6 +1121,7 @@ async function renderAlerts() {
   if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
   if ($('#pushOff')) $('#pushOff').onclick = pushDisable;
   if ($('#pushAll')) $('#pushAll').onchange = e => { store.set('pushAll', e.target.checked); pushRefresh(true); renderAlerts(); };
+  ['Daily', 'Weekly'].forEach(k => { if ($('#push' + k)) $('#push' + k).onchange = e => { store.set('push' + k, e.target.checked); pushRefresh(true); }; });
   if ($('#pushUnusual')) $('#pushUnusual').onchange = e => { store.set('pushUnusual', e.target.checked); pushRefresh(true); };
 
 }

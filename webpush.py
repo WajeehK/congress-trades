@@ -85,7 +85,8 @@ def sync(meta_get, meta_set, note=print):
             watch = [str(x).upper()[:12] for x in (b.get("watch") or [])][:300]
             subs[ep] = {"sub": {"endpoint": ep, "keys": {"p256dh": sub["keys"]["p256dh"], "auth": sub["keys"]["auth"]}},
                         "all": bool(b.get("all")), "follows": fol, "watch": watch,
-                        "unusual": b.get("unusual", True) is not False, "ts": int(m["time"])}
+                        "unusual": b.get("unusual", True) is not False, "daily": b.get("daily", True) is not False,
+                        "weekly": b.get("weekly", True) is not False, "ts": int(m["time"])}
             changed += 1
         except Exception:
             continue
@@ -202,6 +203,30 @@ def send(new_rows, meta_get, meta_set, note=print, unusual=()):
             subs.pop(ep, None)
         meta_set("push_subs", json.dumps(subs))
     note(f"push: sent {sent} notification(s){f', removed {len(dead)} expired' if dead else ''}")
+    return sent
+
+
+def send_recap(payload, kind, meta_get, meta_set, note=print):
+    """Daily/weekly recap (recap.py) to every subscriber who left that recap on."""
+    subs, vapid = _load(meta_get), _vapid()
+    if not subs or vapid is None:
+        return 0
+    sent, dead = 0, []
+    for ep, s in subs.items():
+        if s.get(kind, True) is False:
+            continue
+        res = deliver(s["sub"], payload, vapid)
+        if res == "ok":
+            sent += 1
+        elif res == "gone":
+            dead.append(ep)
+        else:
+            note(f"push: recap delivery failed ({res})")
+    if dead:
+        subs = _load(meta_get)
+        for ep in dead:
+            subs.pop(ep, None)
+        meta_set("push_subs", json.dumps(subs))
     return sent
 
 

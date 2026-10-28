@@ -69,6 +69,17 @@ def main():
     app.refresh(force_senate=False, do_notify=send)
     if send and extra:
         app.notify(extra)
+    try:  # daily 18:00 / weekly Sunday 18:00 UK recaps: first run at or after the time sends once
+        import recap
+        with app.db() as c:
+            rows = c.execute(f"{app.TRADE_SELECT} WHERE t.first_seen >= ?", ((datetime.now(timezone.utc) - timedelta(days=8)).isoformat(),)).fetchall()
+        try:
+            sec = json.loads((ROOT / "ticker_sectors.json").read_text())
+        except Exception:
+            sec = {}
+        recap.maybe_send(rows, app.meta_get, app.meta_set, app.note, sec)
+    except Exception as e:
+        app.note(f"recap failed: {type(e).__name__}: {e}")
     st = app.status()
     n0 = sum(s["n"] for s in before["sources"])
     n1 = sum(s["n"] for s in st["sources"])

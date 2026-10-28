@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ.setdefault("NO_SCHEDULER", "1")
 import app  # noqa: E402
+import gems  # noqa: E402
 import most_bought  # noqa: E402
 import stock_page  # noqa: E402
 
@@ -117,6 +118,13 @@ def main():
     pfs = [p for p in app.portfolios() if p["politician"] in published]
     dump(data / "portfolios.json", pfs)
     dump(data / "most-bought.json", most_bought.build(rows))
+    try:
+        sec = json.loads((ROOT / "ticker_sectors.json").read_text())
+    except Exception:
+        sec = {}
+    gm = gems.build(rows, sec)
+    dump(data / "gems.json", gm)
+    print(f"hidden gems: {len(gm['items'])} ({gm['caps']} caps)")
 
     by_pol, fil_by = {}, {}
     for r in rows:

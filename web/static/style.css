@@ -735,3 +735,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .nrow.hot .nh{font-weight:600}
 .nrow .nel{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-ink);border:1px solid var(--brand-ring);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:2px;white-space:nowrap}
 #newsList .sk-row{height:52px}
+
+/* ---------- hidden gems ---------- */
+.gmrow .tk{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gmrow .nm b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--ink2);letter-spacing:.02em}
+.gmrow .r .g{font-family:var(--mono);font-size:11px}

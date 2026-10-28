@@ -206,11 +206,11 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und'];
+const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
-  const nav = v === 'pol' || v === 'stock' ? null : v === 'mb' ? 'home' : v;
+  const nav = v === 'pol' || v === 'stock' ? null : v === 'mb' || v === 'gm' ? 'home' : v;
   $$('#tabs a, #dock a').forEach(a => a.classList.toggle('on', a.dataset.v === nav));
   dockSync(nav);
 }
@@ -227,13 +227,14 @@ function route() {
   else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
   else if (h === 'mostbought') v = 'mb';
   else if (h === 'unusual') v = 'un';
+  else if (h === 'gems') v = 'gm';
   else if (h.startsWith('unusual=')) v = 'und';
   else if (h.startsWith('t=')) v = 'stock';
   else if (h.startsWith('people:')) { const [, s, per] = h.split(':'); if (s) P.sort = s; if (per) P.period = per; P.dir = -1; v = 'people'; }
   else if (h === 'info') v = 'alerts';
   const changed = v !== route.cur || ((v === 'pol' || v === 'stock' || v === 'und') && h !== route.h);
   showView(v); route.cur = v; route.h = h;
-  if (!['pol', 'mb', 'stock', 'un', 'und'].includes(v)) baseView = v;
+  if (!['pol', 'mb', 'stock', 'un', 'und', 'gm'].includes(v)) baseView = v;
   if (changed) window.scrollTo({top: 0, behavior: 'instant'});
   if (v === 'home') loadHome();
   if (v === 'mb' && !MB.loaded) loadMostBought();
@@ -244,6 +245,7 @@ function route() {
   if (v === 'pol' && changed) openPolitician(h.slice(2));
   if (v === 'stock' && changed) openStock(h.slice(2));
   if (v === 'un') renderUnusualAll();
+  if (v === 'gm') loadGems();
   if (v === 'und' && changed) openUnusual(h.slice(8));
 }
 addEventListener('hashchange', route);
@@ -306,6 +308,34 @@ async function loadMostBought() {
     $('#mbNote').textContent = note; $('#mbNote2').textContent = note;
     renderMostBought();
   } catch (e) { MB.loaded = false; $('#mbList').innerHTML = $('#mbFull').innerHTML = empty('Could not load', String(e.message || e)); }
+}
+
+/* ---- hidden gems (gems.py): buys of lesser-known listed companies; Home top 5, full list #gems ---- */
+const GM = {loaded: false, items: []};
+const capTxt = c => c >= 1e9 ? '$' + (c / 1e9).toFixed(c >= 1e10 ? 0 : 1) + 'B cap' : '$' + Math.round(c / 1e6) + 'M cap';
+function gmRows(it, start = 0) {
+  if (!it.length) return empty('No hidden gems right now', 'Nothing lesser-known was bought in the last 90 days.');
+  return it.map((x, i) => {
+    const av = x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('');
+    const last = x.last || x.pols[0] || {};
+    const who = x.n_pols === 1 ? `${esc(last.name || '')}` : `${x.n_pols} politicians · latest ${esc(lastNm(last.name))}`;
+    return `<button class="mbrow gmrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${String(start + i + 1).padStart(2, '0')}</span>${logo(x.ticker, '', '', x.name || '')}
+      <div class="mbmid"><div class="tk">${esc(x.name || x.ticker)}</div><div class="nm"><b>${esc(x.ticker)}</b>${x.industry ? ' · ' + esc(x.industry) : ''} · ${capTxt(x.cap)}</div></div>
+      <div class="r"><div class="val">${money(x.est_total)}</div><div class="g mute">${fmtD(x.disclosed)}</div></div>
+      <div class="mbwho"><span class="mbstack">${av}</span><span>${who} · ${x.n_buys} buy${x.n_buys === 1 ? '' : 's'}</span></div></button>`;
+  }).join('');
+}
+async function loadGems() {
+  if (GM.loaded) { $('#gmFull').innerHTML = gmRows(GM.items); return; }
+  GM.loaded = true;
+  if ($('#gmFull')) $('#gmFull').innerHTML = skRows(8);
+  let d; try { d = await api('/api/gems'); } catch (e) { GM.loaded = false; return; }
+  GM.items = d.items || [];
+  const on = GM.items.length > 0;
+  ['#gmHead', '#gmSub', '#gmList', '#gmMore'].forEach(s => { $(s).hidden = !on; });
+  $('#gmMore').hidden = GM.items.length <= 5;
+  $('#gmList').innerHTML = gmRows(GM.items.slice(0, 5));
+  $('#gmFull').innerHTML = gmRows(GM.items);
 }
 /* ---- unusual activity (unusual.py): every type, ranked; Home top 5, full list #unusual, detail #unusual=<id> ---- */
 const UT = {cluster_buy: ['Cluster buy', 'cl'], bipartisan: ['Bipartisan', 'bp'], cluster_sell: ['Cluster sell', 'cs'], large: ['Large', 'lg'],
@@ -429,6 +459,7 @@ async function loadIntro() {
 async function loadHome() {
   loadIntro();
   if (!MB.loaded) loadMostBought();
+  if (!GM.loaded) loadGems();
   if (!UN.loaded) loadUnusual();
   const pfs = await portfolios();
   const list = [...pfs.values()];

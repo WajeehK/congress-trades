@@ -60,6 +60,7 @@
     async refresh() { return {started: false, message: 'This site updates itself every hour'}; },
     async portfolios() { return get(`data/portfolios.json?v=${await v()}`); },
     async intro() { return get(`data/intro.json?v=${await v()}`); },
+    async gems() { return get(`data/gems.json?v=${await v()}`); },
     async unusual() { return get(`data/unusual.json?v=${await v()}`); },
     async unusual_event(q) { return get(`data/unusual/${encodeURIComponent(q.get('id'))}.json?v=${await v()}`); },
     async context() { return get(`data/context.json?v=${await v()}`); },

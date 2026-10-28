@@ -1331,6 +1331,26 @@ def stock_api(ticker: str):
 _MB_CACHE = {}
 
 
+@app.get("/api/gems")
+def gems_api():
+    """Hidden gems (see gems.py): last-90-day buys of lesser-known listed companies, cached 10 minutes."""
+    import time
+    import gems
+    hit = _MB_CACHE.get("gems")
+    if hit and time.time() - hit[0] < 600:
+        return hit[1]
+    since = (date.today() - timedelta(days=gems.DAYS)).isoformat()
+    with db() as c:
+        rows = c.execute(f"{TRADE_SELECT} WHERE t.side='buy' AND t.tx_date >= ?", (since,)).fetchall()
+    try:
+        sec = json.loads((Path(__file__).resolve().parent / "ticker_sectors.json").read_text())
+    except Exception:
+        sec = {}
+    out = gems.build(rows, sec, refresh=False)
+    _MB_CACHE["gems"] = (time.time(), out)
+    return out
+
+
 @app.get("/api/most_bought")
 def most_bought_api(days: int = 90, etf: int = 1):
     """Most-bought stocks by trade date window: distinct buyers, then # buys, then est. $ (see most_bought.py)."""

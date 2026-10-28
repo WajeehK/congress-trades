@@ -56,6 +56,11 @@
     <a class="viewall more-btn" href="#mostbought">See more trades</a>
     <p class="mb-foot">$ = estimated amount bought (range midpoints) · % = price change since the buys</p>
 
+    <div class="sec-h" id="gmHead" hidden><h2>Hidden gems</h2><small class="mute">last 90 days</small></div>
+    <div class="mb-sub" id="gmSub" hidden><span>Lesser-known companies politicians are buying</span></div>
+    <div class="tlist card gmlist" id="gmList" hidden></div>
+    <a class="viewall more-btn" id="gmMore" href="#gems" hidden>See more hidden gems</a>
+
     <div class="sec-h" id="unHead" hidden><h2>Unusual activity</h2><small class="mute">last 30 days</small></div>
     <div class="tlist card unlist" id="unList" hidden></div>
     <a class="viewall more-btn" id="unMore" href="#unusual" hidden>See more unusual activity</a>
@@ -86,6 +91,14 @@
     <p class="mb-foot">Ranked by a simple score: how strong the signal is (more politicians, bigger trades, bigger gaps from their norm), minus a point per day since it was disclosed. Built only from public disclosures and Yahoo prices. Hindsight and late-filing items look back, so they never trigger notifications. None of this is evidence of wrongdoing.</p>
   </section>
   <section class="view" id="v-und" hidden></section>
+
+  <section class="view" id="v-gm" hidden>
+    <div class="mbp-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button></div>
+    <div class="page-h"><div class="eyebrow">Off the radar</div><h1>Hidden gems</h1></div>
+    <div class="mb-sub"><span>Lesser-known companies politicians are buying · last 90 days</span></div>
+    <div class="tlist card gmlist" id="gmFull"></div>
+    <p class="mb-foot">US-listed companies worth roughly $300M to $20B, so no mega-caps, no well-known consumer brands, no funds, bonds, options or over-the-counter stocks. Purchases only, ranked by how many politicians bought, then estimated $ (range midpoints). Market caps from Nasdaq's public screener.</p>
+  </section>
 
   <section class="view" id="v-mb" hidden>
     <div class="mbp-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button></div>

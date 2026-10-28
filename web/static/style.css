@@ -762,10 +762,36 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 /* reduce motion (in-app switch) */
 [data-rm] *{animation:none!important;transition:none!important}
 /* hidden Home sections */
-[data-hide~=intro] #v-home [data-sec=intro],[data-hide~=mb] #v-home [data-sec=mb],[data-hide~=gems] #v-home [data-sec=gems],[data-hide~=unusual] #v-home [data-sec=unusual],
+[data-hide~=today] #v-home [data-sec=today],[data-hide~=intro] #v-home [data-sec=intro],[data-hide~=mb] #v-home [data-sec=mb],[data-hide~=gems] #v-home [data-sec=gems],[data-hide~=unusual] #v-home [data-sec=unusual],
 [data-hide~=recent] #v-home [data-sec=recent],[data-hide~=portfolios] #v-home [data-sec=portfolios],[data-hide~=performers] #v-home [data-sec=performers]{display:none!important}
 
 /* ---------- earnings tags ---------- */
 .lag.etag{color:var(--brand-ink);box-shadow:inset 0 0 0 1px var(--brand-ring)}
 .und-earn,.st-earn{font-size:13px;color:var(--ink2);margin-top:var(--s3)}
 .st-earn span{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-right:10px}
+
+/* ---------- today card ---------- */
+.today{display:block;margin:var(--s4) 0 var(--s2);padding:14px 0 12px;border-top:2px solid var(--rule);border-bottom:1px solid var(--line)}
+.today .td-k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-ink)}
+.today .td-g{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.today .td-g b{display:block;font-family:var(--mono);font-size:28px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.today .td-g span{font-size:12px;color:var(--mute)}
+.today .td-top{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:13.5px;color:var(--ink2);min-width:0}
+.today .td-top>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.today .td-top small{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-right:8px}
+.today .td-top b{color:var(--ink)}
+.today .td-go{margin-top:10px;font-size:13px;font-weight:600;color:var(--brand-ink)}
+[data-hide~=intro] #v-home .today{margin-top:var(--s6)}
+/* ---------- scoreboard (party / chamber average returns) ---------- */
+.lb{display:grid;gap:var(--s4);margin-top:var(--s3)}
+.lb-k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding-bottom:6px;border-bottom:1px solid var(--line)}
+.lb-r{display:grid;grid-template-columns:118px 1fr 64px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lb-n{display:flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px}
+.lb-n small{font-family:var(--mono);font-size:11px;color:var(--mute);font-weight:500}
+.lb-n .pty{width:8px;height:8px;border-radius:50%;display:inline-block}
+.lb-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.lb-bar i{display:block;height:100%;border-radius:3px;background:var(--up)}
+.lb-bar i.dn{background:var(--dn)}
+.lb-r b{font-family:var(--mono);font-weight:500;font-size:14px;text-align:right}
+.lb-foot{margin-bottom:var(--s4)}
+@media (min-width:861px){.lb{grid-template-columns:1fr 1fr;gap:var(--s8)}}

@@ -264,6 +264,7 @@ function route() {
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
   else if (h === 'settings') v = 'alerts';
+  else if (h === 'trades:new') { v = 'trades'; F.newSince = prevVisit; F.loaded = false; }
   else if (h === 'mostbought') v = 'mb';
   else if (h === 'unusual') v = 'un';
   else if (h === 'gems') v = 'gm';
@@ -519,8 +520,25 @@ async function loadIntro() {
     [d.trades.toLocaleString('en-US'), `trades disclosed · ${d.portfolios} portfolios tracked`, '#trades']].filter(Boolean);
   $('#heroCards').innerHTML = cards.map(c => `<a class="hcard" href="${c[2]}"><b>${c[0]}</b><span>${c[1]}</span></a>`).join('');
 }
+async function loadToday() {
+  const el = $('#today'); if (!el) return;
+  try {
+    const q = x => api('/api/trades?limit=1&sort=amount&' + x);
+    let day = todayISO(), td = await q('date_from=' + day);
+    if (!td.total) { const l = await api('/api/trades?limit=1&sort=disclosure_date'); if (l.trades[0]) { day = l.trades[0].disclosure_date; td = await q('date_from=' + day); } }
+    const nw = await q('date_from=' + daysAgoISO(90) + '&new_since=' + encodeURIComponent(prevVisit));
+    const top = td.trades[0], isToday = day === todayISO();
+    el.innerHTML = `<div class="td-k">${isToday ? 'Today' : 'Latest filings · ' + fmtD(day)}</div>
+      <div class="td-g"><div><b>${num(nw.total)}</b><span>new since your last visit</span></div><div><b>${num(td.total)}</b><span>trades disclosed ${isToday ? 'today' : 'on ' + fmtD(day)}</span></div></div>
+      ${top ? `<div class="td-top">${logo(top.ticker, top.asset_type, 'sm', assetName(top))}<span><small>Biggest</small><b>${esc(top.ticker || (cleanAsset(top) || 'Asset').replace(/\s+CUSIP.*$/i, '').slice(0, 26))}</b> ${sideTag(top)} ${esc(amtShort(top))} · ${esc(lastNm(top.politician))}</span></div>` : ''}
+      <div class="td-go">${nw.total ? 'See what’s new' : 'See recent trades'} →</div>`;
+    el.href = nw.total ? '#trades:new' : '#trades';
+    el.hidden = false;
+  } catch (e) { el.hidden = true; }
+}
 async function loadHome() {
   loadIntro();
+  if (!loadToday.done) { loadToday.done = true; loadToday(); }
   if (!MB.loaded) loadMostBought();
   if (!GM.loaded) loadGems();
   if (!UN.loaded) loadUnusual();
@@ -568,7 +586,7 @@ function feedParams() {
   const [a, b] = rangeDates();
   set('q', $('#q').value.trim()); set('chamber', F.chamber); set('party', $('#party').value); set('side', F.side);
   set('date_field', $('#dateField').value); set('date_from', a); set('date_to', b); set('asset', $('#assetSel').value);
-  set('sort', $('#sort').value); set('ticker', F.ticker);
+  set('sort', $('#sort').value); set('ticker', F.ticker); set('new_since', F.newSince);
   p.set('limit', F.PAGE); p.set('offset', F.offset);
   return p;
 }
@@ -586,7 +604,7 @@ async function loadFeed(append = false) {
   if (!append) $('#feed').innerHTML = html || (qv ? empty(`No trades match “${esc(qv)}” ${F.range === 'all' ? 'at all' : lbl}`, F.range === 'all' ? 'Try a ticker (GOOGL), a company (Google) or a politician’s name.' : 'Try a wider date range like 1 year or All, or fewer filters.') : empty('No trades match', 'Try a wider date range or fewer filters.'));
   const newN = d.trades.filter(isNew).length;
   $('#feedCount').innerHTML = `<span><b>${d.total.toLocaleString()}</b> trades ${$('#dateField').value === 'tx_date' ? 'made' : 'disclosed'} ${lbl}${newN && !append ? ` · <span style="color:var(--blue);font-weight:600">${newN} new since your last visit</span>` : ''}</span>`;
-  $('#tickChip').innerHTML = F.ticker ? `<button class="chip-btn" id="clrTick">${esc(F.ticker)} ✕</button>` : '';
+  $('#tickChip').innerHTML = (F.ticker ? `<button class="chip-btn" id="clrTick">${esc(F.ticker)} ✕</button>` : '') + (F.newSince ? `<button class="chip-btn" id="clrNew">New since last visit ✕</button>` : '');
   $('#more').hidden = F.offset + F.PAGE >= d.total;
 }
 async function loadKpis() {
@@ -612,7 +630,19 @@ function syncPolPills() {
   $$('#polPeriod button').forEach(x => x.classList.toggle('on', x.dataset.v === P.period));
   $('#polPeriod').hidden = P.sort !== 'ret';
 }
+const LB = {k: '1Y'};
+async function renderLB() {
+  const pfs = [...(await portfolios()).values()], k = LB.k;
+  const el = pfs.filter(p => p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
+  const grp = [['Democrats', p => p.party === 'D', 'pty-D'], ['Republicans', p => p.party === 'R', 'pty-R'], ['House', p => p.chamber === 'House', ''], ['Senate', p => p.chamber === 'Senate', '']];
+  const rows = grp.map(([n, f, c]) => { const xs = el.filter(f).map(p => p.periods[k][1]); return {n, c, cnt: xs.length, avg: xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null}; });
+  const mx = Math.max(1, ...rows.map(r => Math.abs(r.avg || 0)));
+  const line = r => `<div class="lb-r"><span class="lb-n">${r.c ? `<i class="pty ${r.c}"></i>` : ''}${r.n}<small>${r.cnt}</small></span><span class="lb-bar"><i class="${(r.avg || 0) >= 0 ? 'up' : 'dn'}" style="width:${r.avg == null ? 0 : Math.max(2, Math.abs(r.avg) / mx * 100)}%"></i></span><b class="${r.avg == null ? 'mute' : r.avg >= 0 ? 'up' : 'dn'}">${r.avg == null ? '—' : (r.avg >= 0 ? '+' : '−') + Math.abs(r.avg).toFixed(1) + '%'}</b></div>`;
+  $('#lb').innerHTML = `<div class="lb-g"><div class="lb-k">Party</div>${rows.slice(0, 2).map(line).join('')}</div><div class="lb-g"><div class="lb-k">Chamber</div>${rows.slice(2).map(line).join('')}</div>`;
+}
+$$('#lbPills button').forEach(b => b.onclick = () => { $$('#lbPills button').forEach(x => x.classList.toggle('on', x === b)); LB.k = b.dataset.v; renderLB(); });
 async function loadPeople() {
+  renderLB();
   if (!P.list) {
     $('#polGrid').innerHTML = Array(8).fill('<div class="sk-card"></div>').join('');
     const [people, pfs] = await Promise.all([api('/api/politicians'), portfolios()]);
@@ -1059,7 +1089,7 @@ async function renderAlerts() {
   const sample = fol[0] || 'Nancy Pelosi';
   const seg = (k, opts) => `<div class="pills set-seg" data-set="${k}">${opts.map(([v, l]) => `<button data-v="${esc(v)}"${String(SET[k]) === String(v) ? ' class="on"' : ''}>${esc(l)}</button>`).join('')}</div>`;
   const tog = (k, l, sub, val, attr = '') => `<label class="pc-row set-row"><span>${esc(l)}${sub ? `<small class="mute">${esc(sub)}</small>` : ''}</span><input type="checkbox" ${attr || `data-tog="${k}"`} ${val ? 'checked' : ''}></label>`;
-  const HS = [['intro', 'Intro'], ['mb', 'Most bought'], ['gems', 'Hidden gems'], ['unusual', 'Unusual activity'], ['recent', 'Recent trades'], ['portfolios', 'Portfolios'], ['performers', 'Top performers']];
+  const HS = [['today', 'Today card'], ['intro', 'Intro'], ['mb', 'Most bought'], ['gems', 'Hidden gems'], ['unusual', 'Unusual activity'], ['recent', 'Recent trades'], ['portfolios', 'Portfolios'], ['performers', 'Top performers']];
   const ver = (($('script[src*="app.js"]') || {}).src || '').split('v=')[1] || 'dev';
   $('#v-alerts').innerHTML = `
     <div class="page-h"><div class="eyebrow">Saved on this device</div><h1>Settings</h1></div>
@@ -1132,6 +1162,7 @@ document.addEventListener('click', e => {
   const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Copied')).catch(() => toast(cp.dataset.copy)); return; }
   if (e.target.closest('[data-back]')) { if (history.length > 1 && document.referrer !== undefined && route.prev) history.back(); else location.hash = baseView === 'home' ? '' : baseView; return; }
   if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
+  if (e.target.closest('#clrNew')) { F.newSince = null; if (location.hash === '#trades:new') history.replaceState(null, '', '#trades'); loadFeed(); return; }
   const un = e.target.closest('[data-un]'); if (un) { location.hash = 'unusual=' + un.dataset.un; return; }
   const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }
   const tk = e.target.closest('[data-tick]'); if (tk) { location.hash = 't=' + encodeURIComponent(tk.dataset.tick); return; }

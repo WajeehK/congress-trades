@@ -33,13 +33,14 @@
     const match = window.BHSearch ? window.BHSearch.compile(p.get('q') || '') : () => true;
     const df = p.get('date_field') === 'tx_date' ? 'tx_date' : 'disclosure_date';
     const from = p.get('date_from'), to = p.get('date_to');
+    const ns = p.get('new_since');
     const f = {politician: p.get('politician'), ticker: (p.get('ticker') || '').toUpperCase(), chamber: p.get('chamber'), party: p.get('party'), side: p.get('side'), asset: p.get('asset')};
     return rows.filter(t =>
       match(t) &&
       (!f.politician || t.politician === f.politician) && (!f.ticker || (t.ticker || '').toUpperCase() === f.ticker) &&
       (!f.chamber || t.chamber === f.chamber) && (!f.party || t.party === f.party) && (!f.side || t.side === f.side) &&
       (!from || (t[df] && t[df] >= from)) && (!to || (t[df] && t[df] <= to)) &&
-      (f.asset !== 'stock' || isStock(t)) && (f.asset !== 'other' || !isStock(t)));
+      (f.asset !== 'stock' || isStock(t)) && (f.asset !== 'other' || !isStock(t)) && (!ns || (t.first_seen || '') > ns));
   }
   async function source(p) {
     if (p.get('politician')) return (await pol(p.get('politician'))).rows;

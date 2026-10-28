@@ -36,6 +36,7 @@
 <main id="main">
   <!-- HOME -->
   <section class="view" id="v-home">
+    <a data-sec="today" class="today" id="today" href="#trades:new" hidden></a>
     <div data-sec="intro" class="hero">
       <svg class="hero-cap" viewBox="0 0 200 120" aria-hidden="true"><path d="M8 113H192M18 105H182M28 97H172M34 71H166M40 64H160M70 64V51H130V64M74 51Q100 10 126 51M95 25V16H105V25M100 16V6"/><path d="M42 97V71M56 97V71M70 97V71M84 97V71M98 97V71M112 97V71M126 97V71M140 97V71M154 97V71"/></svg>
       <div class="hero-copy">
@@ -156,6 +157,10 @@
       <div class="pills" id="polPeriod" hidden><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div>
       <div class="pills" id="polChamber"><button data-v="" class="on">All</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button></div>
     </div>
+    <div class="sec-h lb-h"><h2>Scoreboard</h2><div class="pills" id="lbPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button></div></div>
+    <div class="lb" id="lb"></div>
+    <p class="mb-foot lb-foot">Average estimated return of each group’s tracked portfolios ($50K+ and 5+ priced trades), from disclosed trades only.</p>
+    <div class="sec-h"><h2>All politicians</h2></div>
     <div class="pgrid" id="polGrid"></div>
   </section>
 

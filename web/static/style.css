@@ -764,3 +764,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 /* hidden Home sections */
 [data-hide~=intro] #v-home [data-sec=intro],[data-hide~=mb] #v-home [data-sec=mb],[data-hide~=gems] #v-home [data-sec=gems],[data-hide~=unusual] #v-home [data-sec=unusual],
 [data-hide~=recent] #v-home [data-sec=recent],[data-hide~=portfolios] #v-home [data-sec=portfolios],[data-hide~=performers] #v-home [data-sec=performers]{display:none!important}
+
+/* ---------- earnings tags ---------- */
+.lag.etag{color:var(--brand-ink);box-shadow:inset 0 0 0 1px var(--brand-ring)}
+.und-earn,.st-earn{font-size:13px;color:var(--ink2);margin-top:var(--s3)}
+.st-earn span{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-right:10px}

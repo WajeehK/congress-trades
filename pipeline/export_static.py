@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 os.environ.setdefault("NO_SCHEDULER", "1")
 import app  # noqa: E402
+import earnings  # noqa: E402
 import gems  # noqa: E402
 import most_bought  # noqa: E402
 import stock_page  # noqa: E402
@@ -162,6 +163,11 @@ def main():
             dump(data / "stock" / f"{stock_file(t)}.json", {"ticker": t, "px": stock_page.series(c, t, f), "holders": hs})
 
     news_snapshot(data / "news.json")
+    try:  # earnings dates for the tags on trades made shortly before a report
+        cal = earnings.refresh(app.meta_get, app.meta_set)
+        dump(data / "earnings.json", earnings.build(cal, {(r["ticker"] or "").upper().replace("-", ".") for r in rows if r["ticker"]}))
+    except Exception as e:
+        print(f"earnings skipped: {e}")
     st = app.status()
     st["log"] = []
     st["running"] = False

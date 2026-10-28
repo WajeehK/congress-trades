@@ -186,6 +186,19 @@ async function loadCtx() {
   try { const d = await api('/api/context'); CTX = d; try { store.set('ctx', d); } catch (e) {} } catch (e) { return; }
   $$('.ovslot').forEach(el => { const t = ovFromKey(el.dataset.ovk); el.outerHTML = overlap(t) ? `<span class="ovtag" data-ov="${esc(el.dataset.ovk)}" title="Possible committee overlap">Possible overlap</span>` : ''; });
 }
+/* earnings (earnings.py): tag trades made 1-14 days before the company reported */
+const EARN = {m: {}};
+EARN.p = api('/api/earnings').then(d => { EARN.m = d || {}; }).catch(() => {});
+function earnAfter(tk, from, max = 14) {
+  const ds = EARN.m[(tk || '').toUpperCase().replace('-', '.')]; if (!ds || !from) return null;
+  for (const d of ds) { const n = dayDiff(from, d); if (n > 0 && n <= max) return {d, n}; if (n > max) break; }
+  return null;
+}
+function earnTag(t) {
+  if (!t.ticker || (t.side !== 'buy' && t.side !== 'sell')) return '';
+  const e = earnAfter(t.ticker, t.tx_date); if (!e) return '';
+  return `<span class="lag atag etag" title="${esc(t.ticker)} reported earnings on ${fmtDY(e.d)}, ${e.n} day${e.n === 1 ? '' : 's'} after this trade">Earnings in ${e.n}d</span>`;
+}
 function tradeRow(t, showWho = true) {
   const sh = t.est_price && t.amount_low ? mid(t) / t.est_price : null;
   const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
@@ -195,12 +208,12 @@ function tradeRow(t, showWho = true) {
   return `<button class="trow" data-trade="${esc(t.uid)}">
     ${logo(t.ticker, t.asset_type, '', assetName(t))}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${earnTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
       <div class="l2">${showWho ? who : `<span class="an">${sub}</span>`}</div>
     </div>
     <div class="r">
       <div class="amt">${amtShort(t)}</div>
-      ${t.pct_since != null ? `<div class="pc">${chgTxt(t.pct_since)}</div>` : t.owner && t.owner !== 'Self' ? `<div class="sh">${esc(t.owner)}</div>` : ''}
+      ${t.pct_since != null ? `<div class="pc" title="Price move from the trade-date close to the latest close">${chgTxt(t.pct_since)}</div>` : t.owner && t.owner !== 'Self' ? `<div class="sh">${esc(t.owner)}</div>` : ''}
     </div>
     <div class="l3"><span class="dates" title="Trade date → disclosure date">${fmtD(t.tx_date)} → ${fmtD(t.disclosure_date)}</span>${lagTag(t)}${px}<span class="ago">${ago(t.disclosure_date).replace("Yesterday", "1d ago")}</span></div>
   </button>`;
@@ -427,6 +440,7 @@ async function openUnusual(id) {
   el.innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
     <div class="und-h">${e.ticker ? logo(e.ticker) : avatar(e.pols[0].name, e.pols[0].bioguide, 'round')}<div class="und-t">${unTag(e.type)}<h1>${esc(e.title)}</h1>${e.name && e.ticker ? `<div class="mute">${esc(e.name)}</div>` : ''}</div></div>
     <p class="und-why">${esc(e.why)}</p>
+    ${(() => { if (!e.ticker) return ''; const tx = e.trades.map(t => t.tx_date).filter(Boolean).sort(); const er = earnAfter(e.ticker, tx[0]); return er ? `<p class="und-earn">${esc(e.ticker)} reported earnings on <b>${fmtDY(er.d)}</b>, ${er.n} day${er.n === 1 ? '' : 's'} after the first trade here.</p>` : ''; })()}
     ${e.type === 'hindsight' ? '<p class="und-warn">Hindsight: this looks back at what the price did after the trade. It says nothing about why they traded.</p>' : ''}
     <div class="st-stats">
       <div class="card"><div class="k">Politicians</div><b>${e.n_pols}</b><span>${e.pols.map(p => p.party).filter(Boolean).sort().join(' · ') || ''}</span></div>
@@ -936,6 +950,7 @@ function renderStock() {
   $('#v-stock').innerHTML = `<div class="mbp-top"><button class="ib" data-back aria-label="Back">${I.back}</button></div>
     <div class="st-head">${logo(tk, '', '', name)}<div class="st-t"><h1>${esc(tk)}</h1><div class="mute">${esc(name)}</div></div><button class="st-star ${watching().includes(tk) ? 'on' : ''}" id="stStar" aria-label="Watch ${esc(tk)}">${STAR(watching().includes(tk))}<span>${watching().includes(tk) ? 'Watching' : 'Watch'}</span></button></div>
     <div class="st-px"><b>${cur != null ? usd(cur) : '—'}</b>${ch != null ? `<span class="${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}% <small class="mute">${ST.range === 'ALL' ? 'all' : ST.range}</small></span>` : ''}</div>
+    ${(() => { const ds = EARN.m[tk.replace('-', '.')] || [], td = todayISO(), past = ds.filter(d => d <= td), next = ds.find(d => d > td); return ds.length ? `<p class="st-earn"><span>Earnings</span>${past.length ? `last ${fmtDY(past[past.length - 1])}` : ''}${past.length && next ? ' · ' : ''}${next ? `next <b>${fmtDY(next)}</b>` : ''}</p>` : ''; })()}
     <div class="card st-chart"><div id="stChart"></div><div class="st-pop card" id="stPop" hidden></div>
       <div class="st-leg"><span><i class="b"></i>Politician buy</span><span><i class="s"></i>Sell</span><span class="mute">Tap a dot</span></div></div>
     <div class="pills st-rng" id="stRange">${Object.keys(ST_RANGES).filter(k => k !== 'EV').map(k => `<button data-v="${k}" class="${k === ST.range ? 'on' : ''}">${k}</button>`).join('')}</div>
@@ -1306,7 +1321,7 @@ const qp = new URLSearchParams(location.search);
 if (qp.get('chamber')) { F.chamber = qp.get('chamber'); $$('#chamberSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === F.chamber)); }
 loadStatus();
 loadCtx();
-route();
+Promise.race([EARN.p, new Promise(r => setTimeout(r, 1500))]).then(route);
 setInterval(loadStatus, 5 * 60e3);
 document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && loadStatus());
 

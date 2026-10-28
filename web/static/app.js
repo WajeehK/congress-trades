@@ -1,5 +1,5 @@
 'use strict';
-/* The Black House v5 */
+/* The Insider House v6 */
 /* ============ helpers ============ */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -164,19 +164,20 @@ async function loadCtx() {
 function tradeRow(t, showWho = true) {
   const sh = t.est_price && t.amount_low ? mid(t) / t.est_price : null;
   const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
-  const sub = t.est_price != null ? `<b>${usd(t.est_price)}</b>/share` : t.ticker ? esc(assetName(t)) : esc(t.asset_type === 'BOND' ? 'Bond · no market price' : (cleanAsset(t) && t.ticker ? '' : 'Not exchange-listed'));
+  const sub = t.ticker ? esc(assetName(t)) : esc(t.asset_type === 'BOND' ? 'Bond · no market price' : 'Not exchange-listed');
+  const px = t.est_price != null ? `<span class="px">${usd(t.est_price)}${sh ? ` · ~${num(sh)} sh` : ''}</span>` : '';
+  const who = `<span class="who-mini">${avatar(t.politician, t.bioguide, 'round')}<span class="wn">${esc(t.politician)}</span><span class="pl">${esc(t.party || '')}${t.party ? '-' : ''}${esc(loc(t))}</span></span>`;
   return `<button class="trow" data-trade="${esc(t.uid)}">
     ${logo(t.ticker, t.asset_type, '', assetName(t))}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">NEW</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
-      <div class="l2">${sub}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
+      <div class="l2">${showWho ? who : `<span class="an">${sub}</span>`}</div>
     </div>
     <div class="r">
-      <div class="sh">${sh ? `~${num(sh)} shares` : esc(t.owner && t.owner !== 'Self' ? t.owner : '')}</div>
       <div class="amt">${amtShort(t)}</div>
-      ${t.pct_since != null ? `<div class="pc">${chgTxt(t.pct_since)}</div>` : ''}
+      ${t.pct_since != null ? `<div class="pc">${chgTxt(t.pct_since)}</div>` : t.owner && t.owner !== 'Self' ? `<div class="sh">${esc(t.owner)}</div>` : ''}
     </div>
-    <div class="l3">${showWho ? `<span class="who-mini">${avatar(t.politician, t.bioguide, 'round')}${esc(t.politician)}<span class="mute" style="font-weight:500">${esc(t.party || '')}${t.party ? '-' : ''}${esc(loc(t))}</span></span>` : ''}<span class="dates"><span title="Trade date → disclosure date">Traded ${fmtD(t.tx_date)} · Filed ${fmtD(t.disclosure_date)}</span>${lagTag(t)}<span class="ago">${ago(t.disclosure_date).replace("Yesterday", "1d ago")}</span></span></div>
+    <div class="l3"><span class="dates" title="Trade date → disclosure date">${fmtD(t.tx_date)} → ${fmtD(t.disclosure_date)}</span>${lagTag(t)}${px}<span class="ago">${ago(t.disclosure_date).replace("Yesterday", "1d ago")}</span></div>
   </button>`;
 }
 const skRows = n => Array(n).fill('<div class="sk-row"></div>').join('');
@@ -278,12 +279,12 @@ async function portfolios() {
 function portfolioCard(p, pf, o = {}) {
   const all = pf && pf.periods ? pf.periods[o.period || 'ALL'] : null;
   const up = !all || all[1] == null || all[1] >= 0;
-  return `<button class="pcard" data-pol="${esc(p.politician)}">
-    <div class="ph">${portrait(p.politician, p.bioguide)}${o.rank ? `<span class="rank">${o.rank}</span>` : ''}<div class="tag"><i class="pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}</div><div class="nm">${esc(p.politician)}</div></div>
-    ${pf ? `<div class="b"><div class="k">Portfolio Value</div><div class="v">${usd0(pf.value)}</div>
-      <div class="d">${all ? `<span>${sgnUsd(all[0])}</span><span class="${up ? 'up' : 'dn'}"><span class="tri">${up ? '▲' : '▼'}</span> ${pct(Math.abs(all[1]))}</span>` : ''}</div></div>
-      <div class="spark">${sparkSVG(pf.spark, up)}</div>`
-    : `<div class="b"><div class="k">${num(p.n)} disclosed trades</div></div><div class="none">No priced stock trades to build a portfolio from.</div>`}
+  return `<button class="pcard${o.rank ? ' ranked' : ''}" data-pol="${esc(p.politician)}">
+    ${o.rank ? `<span class="rank">${String(o.rank).padStart(2, '0')}</span>` : ''}${avatar(p.politician, p.bioguide, 'round')}
+    <div class="pm"><div class="nm">${esc(p.politician)}</div><div class="mt"><i class="pty pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}${p.chamber && p.chamber !== 'Executive' ? ' · ' + esc(p.chamber) : ''}</div></div>
+    ${pf ? `<div class="spark">${sparkSVG(pf.spark, up)}</div>
+      <div class="r"><div class="v" title="${esc(usd0(pf.value))}">${money(pf.value)}</div><div class="d">${all && all[1] != null ? `<span class="${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(all[1]))}</span>` : ''}${o.period ? `<span class="per">${esc(o.period)}</span>` : ''}</div></div>`
+    : `<div class="spark"></div><div class="r"><div class="v mute">—</div><div class="d mute">${num(p.n)} trades</div></div>`}
   </button>`;
 }
 
@@ -401,7 +402,7 @@ function mbRows(it) {
     const av = x.pols.slice(0, 4).map(p => avatar(p.name, p.bioguide, 'round')).join('');
     const more = x.n_pols > 4 ? `<span class="av round more">+${x.n_pols - 4}</span>` : '';
     const who = x.n_pols === 1 ? x.pols[0].name.split(' ').slice(-1)[0] : `${x.n_pols} politicians`;
-    return `<button class="mbrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${i + 1}</span>${logo(x.ticker, x.kind === 'etf' ? 'EF' : '', '', x.name || '')}
+    return `<button class="mbrow" data-tick="${esc(x.ticker)}" title="${esc(x.pols.map(p => p.name).join(', '))}"><span class="rk">${String(i + 1).padStart(2, '0')}</span>${logo(x.ticker, x.kind === 'etf' ? 'EF' : '', '', x.name || '')}
       <div class="mbmid"><div class="tk">${esc(x.ticker)}${x.kind === 'etf' ? ' <span class="tag">ETF</span>' : ''}</div><div class="nm">${esc(x.name || '')}</div></div>
       <div class="r"><div class="val">${money(x.est_total)}</div><div class="g ${x.chg == null ? '' : x.chg >= 0 ? 'up' : 'dn'}">${x.chg == null ? '' : (x.chg >= 0 ? '+' : '') + x.chg.toFixed(1) + '%'}</div></div>
       <div class="mbwho"><span class="mbstack">${av}${more}</span><span>${esc(who)} · ${x.n_buys} buy${x.n_buys === 1 ? '' : 's'}</span></div></button>`;
@@ -436,8 +437,8 @@ async function loadHome() {
   elig.sort((a, b) => b.periods[k][1] - a.periods[k][1]);
   $('#perfRail').innerHTML = elig.slice(0, 12).map((p, i) => {
     const r = p.periods[k][1], up = r >= 0;
-    return `<button class="pcard-s" data-pol="${esc(p.politician)}"><div class="ph">${portrait(p.politician, p.bioguide)}<span class="rank">${i + 1}</span><span class="badge ${up ? 'up' : 'dn'}">${up ? '+' : ''}${pct(r)}</span></div>
-      <div class="b"><div class="nm">${esc(p.politician)}</div><div class="mt">${esc(metaShort(p))}</div></div></button>`;
+    return `<button class="pcard-s" data-pol="${esc(p.politician)}"><div class="top"><span class="rank">${String(i + 1).padStart(2, '0')}</span>${avatar(p.politician, p.bioguide, 'round')}</div>
+      <div class="ret ${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(r), 1)}</div><div class="nm">${esc(p.politician)}</div><div class="mt">${esc(metaShort(p))}</div></button>`;
   }).join('') || empty('No data yet', '');
   if (!H.loaded) {
     H.loaded = true;
@@ -561,7 +562,7 @@ function setFollow(n, on) { const f = following().filter(x => x !== n); if (on) 
 async function openPolitician(name) {
   POL.name = name; POL.period = 'ALL'; POL.showAll = false; POL.offset = 0;
   const el = $('#v-pol');
-  el.innerHTML = `<div class="phero"><button class="hbtn back" data-back>${I.back}</button></div><div class="pbody"><div class="sk-card" style="height:120px"></div></div>`;
+  el.innerHTML = `<div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button></div><div class="pbody"><div class="sk-card" style="height:160px"></div></div>`;
   let d;
   try { d = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) { el.innerHTML = empty('Politician not found', `<a href="#people">Browse politicians</a>`); return; }
   if (POL.name !== name) return;
@@ -570,11 +571,11 @@ async function openPolitician(name) {
   const has = d.series && d.series.d.length > 1;
   const fol = isFollowing(name);
   el.innerHTML = `
-    <div class="phero">${portrait(name, d.bioguide, 'portrait')}
-      <button class="hbtn back" data-back aria-label="Back">${I.back}</button>
-      <button class="hbtn bell${fol ? ' on' : ''}" id="bellBtn" aria-label="Follow">${I.bell}</button>
-      <button class="hbtn share" id="shareBtn" aria-label="Share">${I.share}</button>
-      <div class="nm"><h1>${esc(name)}</h1><div class="sub"><span><i class="pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span><span>${esc(loc(p))}</span><span>${esc(chamberLbl(d.chamber))}</span></div></div>
+    <div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button>
+      <button class="ib bell${fol ? ' on' : ''}" id="bellBtn" aria-label="Follow">${I.bell}</button>
+      <button class="ib share" id="shareBtn" aria-label="Share">${I.share}</button></div>
+    <div class="phero"><div class="pimg">${portrait(name, d.bioguide, 'portrait')}</div>
+      <div class="nm"><div class="eyebrow">${esc(chamberLbl(d.chamber))}${d.chamber === 'Executive' ? '' : ' · ' + esc(loc(p))}</div><h1>${esc(name)}</h1><div class="sub"><span><i class="pty pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span>${d.chamber === 'Executive' ? `<span>${esc(loc(p))}</span>` : ''}</div></div>
     </div>
     <div class="pbody">
       <div class="pv-k">Portfolio Value <span class="est">Estimate</span></div>
@@ -607,7 +608,7 @@ async function openPolitician(name) {
   $('#bellBtn').onclick = () => toggleFollow(name);
   $('#shareBtn').onclick = async () => {
     const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(name);
-    if (navigator.share) { try { await navigator.share({title: `${name} · The Black House`, url}); } catch (e) { /* cancelled */ } }
+    if (navigator.share) { try { await navigator.share({title: `${name} · The Insider House`, url}); } catch (e) { /* cancelled */ } }
     else { await navigator.clipboard.writeText(url).catch(() => {}); toast('Link copied'); }
   };
   if ($('#mirrorBtn')) $('#mirrorBtn').onclick = () => openMirror();
@@ -721,7 +722,7 @@ async function openFollowSheet(name) {
   const d = POL.data && POL.data.politician === name ? POL.data : null;
   const sub = await pushSub().catch(() => null), on = !!sub && Notification.permission === 'granted';
   openSheet(`<div class="td-head">${avatar(name, d && d.bioguide)}<div><h2 style="font-size:22px">Following ${esc(name)}</h2><div class="an">Saved on this device</div></div></div>
-    <div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+    <div class="lock" style="margin-bottom:16px;padding:18px 14px 20px"><div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Insider House</span><span>now</span></div><div class="t">${esc(name)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
     ${on ? `<p class="prose">You’ll get a notification on this device when ${esc(name)} discloses new trades.${store.get('pushAll', true) ? ' (You also get every new trade; turn that off in Alerts to hear only about people you follow.)' : ''}</p>`
       : `<p class="prose">Turn on notifications to hear about ${esc(name)}’s new trades on this device.</p><button class="sbtn pc-on" id="sheetPushOn" style="height:40px;padding:0 18px">Enable notifications</button>`}`);
   if ($('#sheetPushOn')) $('#sheetPushOn').onclick = async () => { await pushEnable(); closeSheet(); };
@@ -962,7 +963,7 @@ async function renderAlerts() {
     <div class="page-h"><div class="eyebrow">Instant alerts</div><h1>Never miss<br>a trade.</h1></div>
     <div class="lock"><div class="time">${now.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})}</div>
       <div class="clock">${now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: false})}</div>
-      <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Black House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
+      <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Insider House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
     <div class="h2s" style="margin-top:8px"><h2>Notifications</h2></div>${await pushCard()}
     <div class="h2s"><h2>Following</h2><small>${fol.length} ${fol.length === 1 ? 'person' : 'people'}</small></div>
     <div class="card">${fol.length ? fol.map(n => { const p = pfs.get(n) || {}; return `<div class="frow">${avatar(n, p.bioguide)}<div class="t"><b>${esc(n)}</b><small class="mute">${esc(p.party ? metaShort(p) : '')}</small></div><button class="sbtn ghost" data-unfollow="${esc(n)}">Remove</button></div>`; }).join('')

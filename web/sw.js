@@ -1,4 +1,4 @@
-/* The Black House service worker (build __BUILD__).
+/* The Insider House service worker (build __BUILD__).
    App shell: cache-first, refreshed per build. Data JSON: network-first with offline fallback. */
 const SHELL = 'ct-shell-__BUILD__';
 const DATA = 'ct-data';
@@ -41,7 +41,7 @@ self.addEventListener('push', e => {
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = {body: e.data ? e.data.text() : ''}; }
   // tell open windows too, so a visible app can refresh its data right away
   self.clients.matchAll({type: 'window', includeUncontrolled: true}).then(cs => cs.forEach(c => c.postMessage({type: 'push', title: d.title || '', url: d.url || ''})));
-  e.waitUntil(self.registration.showNotification(d.title || 'The Black House', {
+  e.waitUntil(self.registration.showNotification(d.title || 'The Insider House', {
     body: d.body || 'New trades disclosed', icon: './static/icon-192.png', badge: './static/badge-96.png',
     tag: d.tag || undefined, renotify: !!d.tag, data: {url: d.url || self.registration.scope}}));
 });

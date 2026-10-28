@@ -1,4 +1,4 @@
-"""Native Web Push for The Black House PWA (replaces the ntfy app for people who install the site).
+"""Native Web Push for The Insider House PWA (replaces the ntfy app for people who install the site).
 
 Subscriptions: the browser publishes its PushSubscription (+ "all trades" flag and follow list) as a JSON message to a
 dedicated ntfy.sh topic (SUB_TOPIC; anonymous, free, no account). Every refresh (GitHub Actions hourly and the box)
@@ -214,7 +214,7 @@ if __name__ == "__main__":  # python webpush.py test  -> test notification to ev
     if sys.argv[1:] == ["test"]:
         subs, v = _load(app.meta_get), _vapid()
         for ep, s in subs.items():
-            print(ep[:40], deliver(s["sub"], {"title": "The Black House", "body": "Test notification: push is working.",
+            print(ep[:40], deliver(s["sub"], {"title": "The Insider House", "body": "Test notification: push is working.",
                                               "url": APP_URL, "tag": "test"}, v))
     else:
         print(len(_load(app.meta_get)), "subscriptions")

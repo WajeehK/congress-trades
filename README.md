@@ -1,4 +1,4 @@
-# The Black House
+# The Insider House
 
 Stock trades disclosed by members of Congress and the President, rebuilt into estimated portfolios.
 **Live site:** https://wajeehk.github.io/congress-trades/ (installable as a PWA)

@@ -955,7 +955,7 @@ def scheduler():
 
 
 # ---------------------------------------------------------------- API
-app = FastAPI(title="The Black House")
+app = FastAPI(title="The Insider House")
 
 
 @app.on_event("startup")

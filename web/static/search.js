@@ -1,4 +1,4 @@
-/* The Black House: smart search shared by the trades feed and the politicians list.
+/* The Insider House: smart search shared by the trades feed and the politicians list.
    Case-insensitive partial matching across ticker, asset, company, politician, party, state, chamber
    and trade type, plus brand aliases (google -> GOOGL/GOOG, facebook -> META, berkshire -> BRK.B ...). */
 (function () {

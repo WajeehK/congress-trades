@@ -206,7 +206,7 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'alerts', 'pol', 'mb', 'stock', 'un', 'und'];
+const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
@@ -224,7 +224,7 @@ function route() {
   closeSheet(false);
   let v = 'home';
   if (h.startsWith('p=')) v = 'pol';
-  else if (['trades', 'people', 'alerts'].includes(h)) v = h;
+  else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
   else if (h === 'mostbought') v = 'mb';
   else if (h === 'unusual') v = 'un';
   else if (h.startsWith('unusual=')) v = 'und';
@@ -239,6 +239,7 @@ function route() {
   if (v === 'mb' && !MB.loaded) loadMostBought();
   if (v === 'trades' && !F.loaded) { F.loaded = true; loadKpis(); loadFeed(); }
   if (v === 'people') loadPeople();
+  if (v === 'news') loadNews(false); else stopNews();
   if (v === 'alerts') renderAlerts();
   if (v === 'pol' && changed) openPolitician(h.slice(2));
   if (v === 'stock' && changed) openStock(h.slice(2));
@@ -1036,6 +1037,67 @@ $('#reset').onclick = () => {
   loadFeed(); loadKpis();
 };
 $('#more').onclick = () => { F.offset += F.PAGE; $('#more').textContent = 'Loading…'; loadFeed(true).then(() => $('#more').textContent = 'Show more trades'); };
+
+
+/* ============ news: FinancialJuice RSS, fetched live (their feed sends CORS *) ============ */
+const NEWS = {url: 'https://www.financialjuice.com/feed.ashx?xy=rss', items: null, at: 0, busy: false, timer: 0};
+function agoT(t) {
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return 'now';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  if (s < 86400) return Math.floor(s / 3600) + 'h';
+  return Math.floor(s / 86400) + 'd';
+}
+function parseNews(xml) {
+  const doc = new DOMParser().parseFromString(xml, 'text/xml');
+  return [...doc.querySelectorAll('item')].map(it => {
+    const g = k => (it.querySelector(k)?.textContent || '').trim();
+    let link = g('link');
+    if (!/^https:\/\/(www\.)?financialjuice\.com\//i.test(link)) link = 'https://www.financialjuice.com';
+    return {id: g('guid') || link, title: g('title').replace(/^FinancialJuice:\s*/i, ''), link, t: Date.parse(g('pubDate')) || 0};
+  }).filter(x => x.title);
+}
+function renderNews() {
+  const el = $('#newsList'); if (!el) return;
+  const it = NEWS.items;
+  if (!it) { el.innerHTML = skRows(8); return; }
+  if (!it.length) { el.innerHTML = empty('No headlines right now', 'Try refreshing in a minute.'); return; }
+  el.innerHTML = it.map(x => {
+    const elite = /\bFJElite\b/i.test(x.title);
+    const ti = x.title.replace(/\s*-\s*FJElite\s*$/i, '');
+    const hot = /^(breaking|urgent)\b/i.test(ti) || /^[A-Z0-9 ,.'’:%$&/-]{24,}$/.test(ti);
+    return `<a class="nrow${hot ? ' hot' : ''}" href="${esc(x.link)}" target="_blank" rel="noopener">
+      <span class="nt" title="${x.t ? esc(fmtUKlong(new Date(x.t).toISOString())) : ''}">${x.t ? agoT(x.t) : ''}</span>
+      <span class="nh">${esc(ti)}${elite ? ' <i class="nel">FJElite</i>' : ''}</span></a>`;
+  }).join('');
+  const n = $('#newsNote');
+  if (n) n.textContent = NEWS.at ? `${it.length} headlines · updated ${fmtUK(new Date(NEWS.at).toISOString())}` : '';
+}
+async function loadNews(force) {
+  if (!NEWS.items) { try { const c = JSON.parse(localStorage.getItem('news1') || 'null'); if (c) { NEWS.items = c.items; NEWS.at = c.at; } } catch (_) {} }
+  renderNews();
+  clearInterval(NEWS.timer); NEWS.timer = setInterval(() => document.visibilityState === 'visible' && loadNews(false), 60e3);
+  if (NEWS.busy || (!force && Date.now() - NEWS.at < 30e3)) return;
+  NEWS.busy = true; $('#newsRefresh')?.classList.add('busy');
+  try {
+    const r = await fetch(NEWS.url, {cache: 'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    const items = parseNews(await r.text());
+    if (!items.length) throw new Error('empty');
+    NEWS.items = items.slice(0, 60); NEWS.at = Date.now();
+    try { localStorage.setItem('news1', JSON.stringify({items: NEWS.items, at: NEWS.at})); } catch (_) {}
+  } catch (e) {
+    try {  // live feed unreachable: fall back to the copy saved with the last site build
+      const snap = await fetch('data/news.json', {cache: 'no-store'}).then(r => r.ok ? r.json() : null);
+      if (snap && snap.items && snap.items.length && snap.at > NEWS.at) { NEWS.items = snap.items; NEWS.at = snap.at; }
+    } catch (_) {}
+    if (!NEWS.items) NEWS.items = [];
+    if (force || !NEWS.at) toast("Couldn't reach FinancialJuice. Showing the last headlines we had.");
+  } finally { NEWS.busy = false; $('#newsRefresh')?.classList.remove('busy'); renderNews(); }
+}
+function stopNews() { clearInterval(NEWS.timer); NEWS.timer = 0; }
+$('#newsRefresh')?.addEventListener('click', () => loadNews(true));
+setInterval(() => { if (route.cur === 'news') renderNews(); }, 30e3);
 
 /* ============ dock: floating glass bar with a springy selection blob ============ */
 const DK = {el: $('#dock'), blob: null, links: [], x: 0, v: 0, tx: 0, w: 0, raf: 0, last: 0, nav: 'home', shown: false,

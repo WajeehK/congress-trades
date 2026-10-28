@@ -68,6 +68,36 @@ def dump(path, obj):
     path.write_text(json.dumps(obj, separators=(",", ":"), default=str))
 
 
+def news_snapshot(path):
+    """Fallback copy of FinancialJuice's public RSS headlines (the app fetches the feed live; this is only used if that fails)."""
+    import urllib.request
+    import xml.etree.ElementTree as ET
+    from email.utils import parsedate_to_datetime
+    try:
+        req = urllib.request.Request("https://www.financialjuice.com/feed.ashx?xy=rss", headers={
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            root = ET.fromstring(r.read())
+        items = []
+        for it in root.iter("item"):
+            title = re.sub(r"^FinancialJuice:\s*", "", (it.findtext("title") or "").strip())
+            link = (it.findtext("link") or "").strip()
+            if not title:
+                continue
+            if not re.match(r"^https://(www\.)?financialjuice\.com/", link, re.I):
+                link = "https://www.financialjuice.com"
+            try:
+                t = int(parsedate_to_datetime(it.findtext("pubDate")).timestamp() * 1000)
+            except Exception:
+                t = 0
+            items.append({"id": (it.findtext("guid") or link).strip(), "title": title, "link": link, "t": t})
+        if items:
+            dump(path, {"at": int(datetime.now(timezone.utc).timestamp() * 1000), "items": items[:60]})
+            print(f"news snapshot: {len(items[:60])} headlines")
+    except Exception as e:  # never fail the build over news
+        print(f"news snapshot skipped: {e}")
+
+
 def main():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -123,6 +153,7 @@ def main():
             hs = sorted(holders.get(t, []), key=lambda h: -h["value"])
             dump(data / "stock" / f"{stock_file(t)}.json", {"ticker": t, "px": stock_page.series(c, t, f), "holders": hs})
 
+    news_snapshot(data / "news.json")
     st = app.status()
     st["log"] = []
     st["running"] = False

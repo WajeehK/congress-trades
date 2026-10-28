@@ -719,3 +719,19 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .unrow,.mbrow,.trow,.hrow{border-top:0!important}
 @media (max-width:860px){.kpi{flex:0 0 52%}.kpi .v{font-size:18px}}
 @media (min-width:861px){.hero-cap{width:100%;max-width:1080px;top:-10px}}
+
+/* ---------- news (FinancialJuice) ---------- */
+.news-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:var(--s2);font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.news-bar .chip-btn{display:inline-flex;align-items:center;gap:6px}
+.news-bar .chip-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.news-bar .chip-btn.busy svg{animation:nspin .9s linear infinite}
+@keyframes nspin{to{transform:rotate(360deg)}}
+.nlist{border-top:1px solid var(--rule)}
+.nrow{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:12px;padding:14px 0;border-bottom:1px solid var(--line);color:var(--ink);transition:background .12s}
+.nrow:hover{background:color-mix(in srgb,var(--bg2) 60%,transparent)}
+.nrow .nt{font-family:var(--mono);font-size:11px;color:var(--mute);padding-top:3px;letter-spacing:.02em}
+.nrow .nh{font-size:15px;line-height:1.4;letter-spacing:-.005em;overflow-wrap:anywhere}
+.nrow.hot .nt{color:var(--brand-ink)}
+.nrow.hot .nh{font-weight:600}
+.nrow .nel{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand-ink);border:1px solid var(--brand-ring);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:2px;white-space:nowrap}
+#newsList .sk-row{height:52px}

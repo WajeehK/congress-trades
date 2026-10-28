@@ -17,14 +17,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="static/style.css?v=__BUILD__">
-<script>(function(){var t=localStorage.getItem('theme5')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name=theme-color]');if(m)m.content=(t==='dark')?'#0a0a0a':'#fafaf8';})();</script>
+<script>(function(){var S={};try{S=JSON.parse(localStorage.getItem('set1'))||{};}catch(e){}var d=document.documentElement,m=S.mode||(localStorage.getItem('theme5')?'manual':'system');var t=(m==='light'||m==='dark')?m:(m==='manual'?localStorage.getItem('theme5'):(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));d.dataset.theme=t;if(S.ts&&S.ts!=='m')d.dataset.ts=S.ts;if(S.rm)d.dataset.rm='1';if(S.hide&&S.hide.length)d.dataset.hide=S.hide.join(' ');try{var c=localStorage.getItem('accentCss');if(c){var st=document.createElement('style');st.id='accentCss';st.textContent=c;document.head.appendChild(st);}}catch(e){}var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=(t==='dark')?'#0a0a0a':'#fafaf8';})();</script>
 </head>
 <body>
 <header class="top" id="top">
   <div class="top-in">
     <a class="brand" href="#" aria-label="The Insider House home"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 3v2M9.5 7.5a2.5 2.5 0 0 1 5 0V9h-5zM4 11h16L12 9zM6 11v7M10 11v7M14 11v7M18 11v7M4 18.5h16"/><path class="mk-r" d="M3 21h18"/></svg></span><span class="wm">The <em>Insider</em> House</span></a>
     <nav class="tabs" id="tabs">
-      <a href="#" data-v="home">Home</a><a href="#trades" data-v="trades">Trades</a><a href="#news" data-v="news">News</a><a href="#people" data-v="people">Politicians</a><a href="#alerts" data-v="alerts">Alerts</a>
+      <a href="#" data-v="home">Home</a><a href="#trades" data-v="trades">Trades</a><a href="#news" data-v="news">News</a><a href="#people" data-v="people">Politicians</a><a href="#settings" data-v="alerts">Settings</a>
     </nav>
     <div class="top-r">
       <button class="live" id="live" title="Check for new filings now"><i></i><span id="liveTxt">Live</span></button>
@@ -36,7 +36,7 @@
 <main id="main">
   <!-- HOME -->
   <section class="view" id="v-home">
-    <div class="hero">
+    <div data-sec="intro" class="hero">
       <svg class="hero-cap" viewBox="0 0 200 120" aria-hidden="true"><path d="M8 113H192M18 105H182M28 97H172M34 71H166M40 64H160M70 64V51H130V64M74 51Q100 10 126 51M95 25V16H105V25M100 16V6"/><path d="M42 97V71M56 97V71M70 97V71M84 97V71M98 97V71M112 97V71M126 97V71M140 97V71M154 97V71"/></svg>
       <div class="hero-copy">
         <h1 class="hero-name"><span class="w1">The</span> <span class="w2">Insider</span> <span class="w3">House</span></h1>
@@ -50,30 +50,30 @@
       <div class="phone" id="heroPhone" aria-hidden="true"></div>
     </div>
 
-    <div class="sec-h mb-h"><h2>Most bought</h2><div class="pills" id="mbPills"><button data-v="30">30D</button><button data-v="90" class="on">90D</button><button data-v="365">1Y</button></div></div>
-    <div class="mb-sub"><span id="mbNote">Stocks and funds ranked by how many politicians bought · last 90 days</span></div>
-    <div class="tlist card mblist" id="mbList"></div>
-    <a class="viewall more-btn" href="#mostbought">See more trades</a>
-    <p class="mb-foot">$ = estimated amount bought (range midpoints) · % = price change since the buys</p>
+    <div data-sec="mb" class="sec-h mb-h"><h2>Most bought</h2><div class="pills" id="mbPills"><button data-v="30">30D</button><button data-v="90" class="on">90D</button><button data-v="365">1Y</button></div></div>
+    <div data-sec="mb" class="mb-sub"><span id="mbNote">Stocks and funds ranked by how many politicians bought · last 90 days</span></div>
+    <div data-sec="mb" class="tlist card mblist" id="mbList"></div>
+    <a data-sec="mb" class="viewall more-btn" href="#mostbought">See more trades</a>
+    <p data-sec="mb" class="mb-foot">$ = estimated amount bought (range midpoints) · % = price change since the buys</p>
 
-    <div class="sec-h" id="gmHead" hidden><h2>Hidden gems</h2><small class="mute">last 90 days</small></div>
-    <div class="mb-sub" id="gmSub" hidden><span>Lesser-known companies politicians are buying</span></div>
-    <div class="tlist card gmlist" id="gmList" hidden></div>
-    <a class="viewall more-btn" id="gmMore" href="#gems" hidden>See more hidden gems</a>
+    <div data-sec="gems" class="sec-h" id="gmHead" hidden><h2>Hidden gems</h2><small class="mute">last 90 days</small></div>
+    <div data-sec="gems" class="mb-sub" id="gmSub" hidden><span>Lesser-known companies politicians are buying</span></div>
+    <div data-sec="gems" class="tlist card gmlist" id="gmList" hidden></div>
+    <a data-sec="gems" class="viewall more-btn" id="gmMore" href="#gems" hidden>See more hidden gems</a>
 
-    <div class="sec-h" id="unHead" hidden><h2>Unusual activity</h2><small class="mute">last 30 days</small></div>
-    <div class="tlist card unlist" id="unList" hidden></div>
-    <a class="viewall more-btn" id="unMore" href="#unusual" hidden>See more unusual activity</a>
+    <div data-sec="unusual" class="sec-h" id="unHead" hidden><h2>Unusual activity</h2><small class="mute">last 30 days</small></div>
+    <div data-sec="unusual" class="tlist card unlist" id="unList" hidden></div>
+    <a data-sec="unusual" class="viewall more-btn" id="unMore" href="#unusual" hidden>See more unusual activity</a>
 
-    <div class="sec-h"><h2>Recent trades</h2><a class="more-link" href="#trades">See all</a></div>
-    <div class="tlist card" id="homeTrades"></div>
-    <a class="viewall more-btn" href="#trades">See more trades</a>
+    <div data-sec="recent" class="sec-h"><h2>Recent trades</h2><a class="more-link" href="#trades">See all</a></div>
+    <div data-sec="recent" class="tlist card" id="homeTrades"></div>
+    <a data-sec="recent" class="viewall more-btn" href="#trades">See more trades</a>
 
-    <div class="sec-h"><h2>Portfolios</h2><a class="more-link" href="#people">See all</a></div>
-    <div class="pgrid" id="homeGrid"></div>
+    <div data-sec="portfolios" class="sec-h"><h2>Portfolios</h2><a class="more-link" href="#people">See all</a></div>
+    <div data-sec="portfolios" class="pgrid" id="homeGrid"></div>
 
-    <div class="sec-h perf-h"><h2>Top performers</h2><a class="more-link" id="perfAll" href="#people:ret:1Y">See all</a><div class="pills" id="perfPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div></div>
-    <div class="perf-rail" id="perfRail"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
+    <div data-sec="performers" class="sec-h perf-h"><h2>Top performers</h2><a class="more-link" id="perfAll" href="#people:ret:1Y">See all</a><div class="pills" id="perfPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div></div>
+    <div data-sec="performers" class="perf-rail" id="perfRail"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
 
     <p class="fine">Portfolio values, returns and prices are estimates built only from disclosed trades (range midpoints × Yahoo daily closes). Not investment advice.</p>
   </section>
@@ -178,7 +178,7 @@
   <a href="#trades" data-v="trades"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>Trades</span></a>
   <a href="#news" data-v="news"><svg viewBox="0 0 24 24"><path d="M4 5h12v14H6a2 2 0 0 1-2-2zM16 9h4v8a2 2 0 0 1-4 0M7.5 9h5M7.5 12.5h5M7.5 16h3"/></svg><span>News</span></a>
   <a href="#people" data-v="people"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg><span>Politicians</span></a>
-  <a href="#alerts" data-v="alerts"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span>Alerts</span></a>
+  <a href="#settings" data-v="alerts"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></a>
 </nav>
 
 <div class="sheet-wrap" id="sheet" hidden><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div><button class="ib close" id="sheetX" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div id="sheetBody"></div></div></div>

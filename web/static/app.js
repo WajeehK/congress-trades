@@ -30,7 +30,7 @@ const usd0 = n => usd(n, 0);
 const sgnUsd = n => (n >= 0 ? '+' : '-') + usd(Math.abs(n), Math.abs(n) >= 1e5 ? 0 : 2);
 const pct = (p, dp = 2) => p == null ? '—' : `${p >= 0 ? '' : '-'}${Math.abs(p).toLocaleString('en-US', {minimumFractionDigits: dp, maximumFractionDigits: dp})}%`;
 const num = n => n == null ? '—' : n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e4 ? Math.round(n / 1e3) + 'K' : Math.round(n).toLocaleString('en-US');
-const amtShort = t => t.amount_low && t.amount_high ? `${money(t.amount_low)}–${money(t.amount_high)}` : t.amount_low ? `${money(t.amount_low - 1)}+` : (t.amount || '—');
+const amtShort = t => window.SET && SET.amt === 'mid' && t.amount_low ? '~' + money(mid(t)) : t.amount_low && t.amount_high ? `${money(t.amount_low)}–${money(t.amount_high)}` : t.amount_low ? `${money(t.amount_low - 1)}+` : (t.amount || '—');
 const mid = t => t.amount_low ? (t.amount_low + (t.amount_high || t.amount_low)) / 2 : null;
 const PARTY = {D: 'Democrat', R: 'Republican', I: 'Independent'};
 const PHOTO = {'Donald J. Trump': 'static/img/trump.jpg'};
@@ -63,11 +63,36 @@ setTimeout(() => localStorage.setItem('lastVisit', new Date().toISOString()), 40
 const isNew = t => t.first_seen && t.first_seen > prevVisit;
 
 /* theme */
-$('#themeBtn').onclick = () => {
-  const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = t; localStorage.setItem('theme5', t);
-  $('meta[name=theme-color]').content = t === 'dark' ? '#0c0c0c' : '#f6f4f0';
-};
+/* ============ settings (saved on this device) ============ */
+const SET_DEF = {mode: 'system', accent: 'red', custom: '#2563eb', ts: 'm', rm: false, hide: [], range: '90', chamber: '', party: '', noEtf: false, amt: 'range'};
+const ACCENTS = {red: ['Red', '#b3121b', '#ff4a55'], blue: ['Blue', '#1d4ed8', '#5b8cff'], green: ['Green', '#15803d', '#3ccf7a'], purple: ['Purple', '#6d28d9', '#a78bfa'],
+  orange: ['Orange', '#c2410c', '#ff8a3d'], teal: ['Teal', '#0f766e', '#2dd4bf'], pink: ['Pink', '#be185d', '#f472b6'], gold: ['Gold', '#a16207', '#e3b341'], mono: ['Mono', '#121210', '#ecebe6']};
+window.SET = {...SET_DEF, ...(() => { try { return JSON.parse(localStorage.getItem('set1')) || {}; } catch (e) { return {}; } })()};
+if (!localStorage.getItem('set1') && localStorage.getItem('theme5')) SET.mode = localStorage.getItem('theme5');  // keep the old dark/light choice
+const sysDark = matchMedia('(prefers-color-scheme: dark)');
+function accentCss() {
+  if (SET.accent === 'red') return '';
+  let lt, dk;
+  if (SET.accent === 'custom') { lt = SET.custom; dk = `color-mix(in srgb,${SET.custom} 78%,white)`; } else [, lt, dk] = ACCENTS[SET.accent] || ACCENTS.red;
+  const v = (c, ui, a) => `--brand:${c};--brand-ink:${c};--brand-ui:${ui};--brand-soft:color-mix(in srgb,${c} ${a[0]}%,transparent);--brand-ring:color-mix(in srgb,${c} ${a[1]}%,transparent);--brand-glow:color-mix(in srgb,${c} ${a[2]}%,transparent);`;
+  return `:root{${v(lt, lt, [7, 35, 10])}--mark-r:${SET.accent === 'mono' ? '#ecebe6' : dk};}[data-theme=dark]{${v(dk, SET.accent === 'mono' ? dk : `color-mix(in srgb,${dk} 80%,black)`, [10, 45, 14])}}`;
+}
+function applySettings(save = true) {
+  if (save) localStorage.setItem('set1', JSON.stringify(SET));
+  const d = document.documentElement;
+  const t = SET.mode === 'light' || SET.mode === 'dark' ? SET.mode : sysDark.matches ? 'dark' : 'light';
+  d.dataset.theme = t; localStorage.setItem('theme5', t);
+  $('meta[name=theme-color]').content = t === 'dark' ? '#0a0a0a' : '#fafaf8';
+  if (SET.ts !== 'm') d.dataset.ts = SET.ts; else delete d.dataset.ts;
+  if (SET.rm) d.dataset.rm = '1'; else delete d.dataset.rm;
+  if (SET.hide.length) d.dataset.hide = SET.hide.join(' '); else delete d.dataset.hide;
+  const css = accentCss(); localStorage.setItem('accentCss', css);
+  let st = $('#accentCss'); if (!st) { st = document.createElement('style'); st.id = 'accentCss'; document.head.appendChild(st); }
+  st.textContent = css;
+  if (typeof dockPlace === 'function' && DK.blob) setTimeout(() => dockPlace(true), 0);
+}
+sysDark.addEventListener('change', () => SET.mode === 'system' && applySettings(false));
+$('#themeBtn').onclick = () => { SET.mode = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applySettings(); if (route.cur === 'alerts') renderAlerts(); };
 
 /* ============ building blocks ============ */
 const initials = n => {
@@ -225,6 +250,7 @@ function route() {
   let v = 'home';
   if (h.startsWith('p=')) v = 'pol';
   else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
+  else if (h === 'settings') v = 'alerts';
   else if (h === 'mostbought') v = 'mb';
   else if (h === 'unusual') v = 'un';
   else if (h === 'gems') v = 'gm';
@@ -304,7 +330,7 @@ async function loadMostBought() {
     const d = await api(`/api/most_bought?days=${MB.days}&etf=1`);
     if (seq !== MB.seq) return;
     MB.items = d.items || [];
-    const note = `Stocks and funds ranked by how many politicians bought · last ${MB_NOTE[MB.days]}`;
+    const note = `${SET.noEtf ? 'Stocks' : 'Stocks and funds'} ranked by how many politicians bought · last ${MB_NOTE[MB.days]}`;
     $('#mbNote').textContent = note; $('#mbNote2').textContent = note;
     renderMostBought();
   } catch (e) { MB.loaded = false; $('#mbList').innerHTML = $('#mbFull').innerHTML = empty('Could not load', String(e.message || e)); }
@@ -440,8 +466,9 @@ function mbRows(it) {
   }).join('');
 }
 function renderMostBought() {
-  $('#mbList').innerHTML = mbRows(MB.items.slice(0, 5));
-  $('#mbFull').innerHTML = mbRows(MB.items);
+  const it = SET.noEtf ? MB.items.filter(x => x.kind !== 'etf') : MB.items;
+  $('#mbList').innerHTML = mbRows(it.slice(0, 5));
+  $('#mbFull').innerHTML = mbRows(it);
 }
 $$('#mbPills button, #mbPills2 button').forEach(b => b.onclick = () => { MB.days = b.dataset.v; loadMostBought(); });
 
@@ -991,8 +1018,29 @@ async function renderAlerts() {
   const newest = (s.sources || []).map(x => x.newest_disclosure).sort().pop();
   const by = c => (s.sources || []).filter(x => x.chamber === c).reduce((a, x) => a + x.n, 0);
   const sample = fol[0] || 'Nancy Pelosi';
+  const seg = (k, opts) => `<div class="pills set-seg" data-set="${k}">${opts.map(([v, l]) => `<button data-v="${esc(v)}"${String(SET[k]) === String(v) ? ' class="on"' : ''}>${esc(l)}</button>`).join('')}</div>`;
+  const tog = (k, l, sub, val, attr = '') => `<label class="pc-row set-row"><span>${esc(l)}${sub ? `<small class="mute">${esc(sub)}</small>` : ''}</span><input type="checkbox" ${attr || `data-tog="${k}"`} ${val ? 'checked' : ''}></label>`;
+  const HS = [['intro', 'Intro'], ['mb', 'Most bought'], ['gems', 'Hidden gems'], ['unusual', 'Unusual activity'], ['recent', 'Recent trades'], ['portfolios', 'Portfolios'], ['performers', 'Top performers']];
+  const ver = (($('script[src*="app.js"]') || {}).src || '').split('v=')[1] || 'dev';
   $('#v-alerts').innerHTML = `
-    <div class="page-h"><div class="eyebrow">Instant alerts</div><h1>Never miss<br>a trade.</h1></div>
+    <div class="page-h"><div class="eyebrow">Saved on this device</div><h1>Settings</h1></div>
+    <div class="h2s"><h2>Theme</h2><small>Accent colour</small></div>
+    <div class="set-sw">${Object.entries(ACCENTS).map(([k, [l, lt, dk]]) => `<button class="sw${SET.accent === k ? ' on' : ''}" data-accent="${k}" style="--c:${lt};--c2:${dk}" aria-label="${l}"><i></i><span>${l}</span></button>`).join('')}
+      <label class="sw${SET.accent === 'custom' ? ' on' : ''}" style="--c:${esc(SET.custom)};--c2:${esc(SET.custom)}"><i><input type="color" id="setCustom" value="${esc(SET.custom)}" aria-label="Custom colour"></i><span>Custom</span></label></div>
+    <p class="set-note">Changes the brand colour everywhere: the name, tab highlight, section numbers, links and the White House drawing. Buys and gains stay green, sells and losses stay orange.</p>
+    <div class="h2s"><h2>Appearance</h2></div>
+    <div class="set-g"><div class="pc-row set-row"><span>Mode</span>${seg('mode', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']])}</div>
+      <div class="pc-row set-row"><span>Text size</span>${seg('ts', [['s', 'S'], ['m', 'M'], ['l', 'L']])}</div>
+      ${tog('rm', 'Reduce motion', 'No springy tab glide or animations', SET.rm)}</div>
+    <div class="h2s"><h2>Home sections</h2></div>
+    <div class="set-g">${HS.map(([k, l]) => tog('', l, '', !SET.hide.includes(k), `data-sec-tog="${k}"`)).join('')}</div>
+    <div class="h2s"><h2>Data</h2><small>Defaults</small></div>
+    <div class="set-g"><div class="pc-row set-row"><span>Trades date range</span>${seg('range', [['7', '1W'], ['30', '1M'], ['90', '3M'], ['365', '1Y'], ['all', 'ALL']])}</div>
+      <div class="pc-row set-row"><span>Chamber</span>${seg('chamber', [['', 'All'], ['House', 'House'], ['Senate', 'Senate'], ['Executive', 'Pres.']])}</div>
+      <div class="pc-row set-row"><span>Party</span>${seg('party', [['', 'Any'], ['D', 'Dem'], ['R', 'Rep'], ['I', 'Ind']])}</div>
+      ${tog('noEtf', 'Hide ETFs and funds', 'In Most bought', SET.noEtf)}
+      <div class="pc-row set-row"><span>Amounts<small class="mute">Disclosed range or its midpoint</small></span>${seg('amt', [['range', 'Range'], ['mid', 'Midpoint']])}</div></div>
+    <div class="h2s"><h2>Alerts</h2><small>Notifications</small></div>
     <div class="lock"><div class="time">${now.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'})}</div>
       <div class="clock">${now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: false})}</div>
       <div class="noti"><span class="ic">${I.cap}</span><div style="flex:1;min-width:0"><div class="app"><span>The Insider House</span><span>now</span></div><div class="t">${esc(sample)} disclosed new trades.</div><div class="s">Tap to see what they bought and sold.</div></div></div></div>
@@ -1009,12 +1057,26 @@ async function renderAlerts() {
       <div class="step card"><div><b>Choose what you hear about</b><p>Every new trade, or only the people you follow and the stocks you watch: tap the bell on a politician or the star on a stock.</p></div></div>
       <div class="step card"><div><b>Get “Name disclosed new trades.”</b><p>Filings are checked every hour. New trades arrive as one notification with the tickers and amounts; tap it to open their page.</p></div></div>
     </div>
-    <div class="h2s"><h2>Data</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
+    <div class="h2s"><h2>About</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">
       <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from the Senate's own <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">eFD</a> reports (plus <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> for the newest), and <b>${by('Executive').toLocaleString()}</b> trades from <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE reports</a> of the President, Vice President and Cabinet. Scanned paper filings are read with OCR. Newest filing ${fmtDY(newest)}.</p>
       <p>Prices come from Yahoo Finance daily data. Photos come from the public-domain congress-legislators project; officials without one use free-licensed Wikimedia Commons images (<a href="https://github.com/WajeehK/congress-trades/blob/main/web/static/img/people/SOURCES.md" target="_blank" rel="noopener">credits</a>). Logos are their owners' trademarks. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
+      <p>Built from public disclosures. Not investment advice, and not a claim that any individual broke the law. Version ${esc(ver)} · last refresh ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}.</p>
+      <p><button class="chip-btn" id="setReset">Reset all settings</button></p>
     </div>`;
+  const redo = () => { const y = scrollY; renderAlerts().then(() => scrollTo(0, y)); };
+  $$('[data-accent]').forEach(b => b.onclick = () => { SET.accent = b.dataset.accent; applySettings(); redo(); });
+  const cc = $('#setCustom'); cc.oninput = () => { SET.accent = 'custom'; SET.custom = cc.value; applySettings(); cc.closest('.sw').style.setProperty('--c', cc.value); $$('.set-sw .sw').forEach(x => x.classList.toggle('on', x.contains(cc))); }; cc.onchange = redo;
+  $$('.set-seg').forEach(g => g.querySelectorAll('button').forEach(b => b.onclick = () => {
+    const k = g.dataset.set; SET[k] = b.dataset.v; applySettings(); g.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    if (['range', 'chamber', 'party'].includes(k)) { tradeDefaults(); F.loaded = false; }
+    if (k === 'amt') { F.loaded = false; H.loaded = false; }
+    if (k === 'mode') redo();
+  }));
+  $$('[data-tog]').forEach(c => c.onchange = () => { SET[c.dataset.tog] = c.checked; applySettings(); if (c.dataset.tog === 'noEtf' && MB.items.length) { renderMostBought(); MB.loaded = false; } });
+  $$('[data-sec-tog]').forEach(c => c.onchange = () => { const k = c.dataset.secTog; SET.hide = SET.hide.filter(x => x !== k).concat(c.checked ? [] : [k]); applySettings(); });
+  $('#setReset').onclick = () => { if (!confirm('Reset all settings to their defaults? Follows, watchlist and notifications are kept.')) return; window.SET = {...SET_DEF}; applySettings(); tradeDefaults(); F.loaded = false; H.loaded = false; MB.loaded = false; redo(); toast('Settings reset'); };
   $$('[data-unfollow]').forEach(b => b.onclick = () => { setFollow(b.dataset.unfollow, false); renderAlerts(); });
   $$('[data-unwatch]').forEach(b => b.onclick = e => { e.stopPropagation(); setWatch(b.dataset.unwatch, false); renderAlerts(); });
   if ($('#pushOn')) $('#pushOn').onclick = pushEnable;
@@ -1063,10 +1125,14 @@ $('#party').onchange = () => { loadFeed(); loadKpis(); };
 $('#reset').onclick = () => {
   ['#q', '#from', '#to', '#party', '#assetSel'].forEach(s => $(s).value = ''); $$('.search').forEach(l => l.classList.remove('has'));
   $('#dateField').value = 'disclosure_date'; $('#sort').value = 'disclosure_date';
-  F.ticker = null; F.side = ''; F.chamber = ''; F.range = '90'; $('#custom').hidden = true;
-  [['rangeSeg', '90'], ['sideSeg', ''], ['chamberSeg', '']].forEach(([id, v]) => $$(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === v)));
+  F.ticker = null; F.side = '';
+  tradeDefaults(); $('#custom').hidden = true; $$('#sideSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === ''));
   loadFeed(); loadKpis();
 };
+function tradeDefaults() {
+  F.range = SET.range; F.chamber = SET.chamber; $('#party').value = SET.party;
+  [['rangeSeg', F.range], ['chamberSeg', F.chamber]].forEach(([id, v]) => $$(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === v)));
+}
 $('#more').onclick = () => { F.offset += F.PAGE; $('#more').textContent = 'Loading…'; loadFeed(true).then(() => $('#more').textContent = 'Show more trades'); };
 
 
@@ -1132,7 +1198,7 @@ setInterval(() => { if (route.cur === 'news') renderNews(); }, 30e3);
 
 /* ============ dock: floating glass bar with a springy selection blob ============ */
 const DK = {el: $('#dock'), blob: null, links: [], x: 0, v: 0, tx: 0, w: 0, raf: 0, last: 0, nav: 'home', shown: false,
-  drag: null, dragEnd: 0, rm: matchMedia('(prefers-reduced-motion: reduce)')};
+  drag: null, dragEnd: 0, rm: {mq: matchMedia('(prefers-reduced-motion: reduce)'), get matches() { return this.mq.matches || !!SET.rm; }}};
 function dockInit() {
   const d = DK.el; if (!d || DK.blob) return;
   DK.blob = document.createElement('span'); DK.blob.className = 'dock-blob'; DK.blob.setAttribute('aria-hidden', 'true');
@@ -1235,6 +1301,7 @@ function dockPaint(v) {
 }
 
 /* ============ boot ============ */
+applySettings(false); tradeDefaults();
 const qp = new URLSearchParams(location.search);
 if (qp.get('chamber')) { F.chamber = qp.get('chamber'); $$('#chamberSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === F.chamber)); }
 loadStatus();

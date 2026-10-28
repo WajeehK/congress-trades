@@ -49,7 +49,7 @@ img{display:block}
 .mark,.brandmark{width:30px;height:30px;border-radius:8px;background:#0d0d0d;color:#fff;display:grid;place-items:center;flex:none}
 [data-theme=dark] .mark{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
 .mark svg{width:19px;height:19px;stroke-width:1.8}
-.mark .mk-r,.noti .ic .mk-r{stroke:#ff3b47;stroke-width:2.2}
+.mark .mk-r,.noti .ic .mk-r{stroke:var(--mark-r,#ff3b47);stroke-width:2.2}
 .wm{font-family:var(--display);font-stretch:75%;font-weight:800;font-size:17px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
 .wm em{font-style:normal;color:var(--brand-ink)}
 .tabs{display:flex;gap:22px}
@@ -560,10 +560,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
   .dock-blob{position:absolute;left:0;top:6px;bottom:6px;width:25%;z-index:0;border-radius:999px;pointer-events:none;will-change:transform;
     transform-origin:50% 50%;
     background:linear-gradient(180deg,color-mix(in srgb,var(--brand-ui) 13%,rgba(255,255,255,.75)),color-mix(in srgb,var(--brand-ui) 9%,rgba(255,255,255,.45)));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(193,18,31,.10),0 4px 14px -6px rgba(193,18,31,.35);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px color-mix(in srgb,var(--brand-ui) 10%,transparent),0 4px 14px -6px color-mix(in srgb,var(--brand-ui) 35%,transparent);
     transition:opacity .22s ease,top .3s cubic-bezier(.34,1.56,.64,1),bottom .3s cubic-bezier(.34,1.56,.64,1)}
-  [data-theme=dark] .dock-blob{background:linear-gradient(180deg,rgba(255,74,85,.24),rgba(255,74,85,.13));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,74,85,.20),0 6px 18px -6px rgba(255,40,50,.45)}
+  [data-theme=dark] .dock-blob{background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 24%,transparent),color-mix(in srgb,var(--brand) 13%,transparent));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px color-mix(in srgb,var(--brand) 20%,transparent),0 6px 18px -6px color-mix(in srgb,var(--brand-ui) 45%,transparent)}
   .dock-blob.off{opacity:0}
   .dock.scrub .dock-blob{top:2px;bottom:2px}  /* the lens swells while you drag it */
   main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
@@ -740,3 +740,27 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 .gmrow .tk{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gmrow .nm b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--ink2);letter-spacing:.02em}
 .gmrow .r .g{font-family:var(--mono);font-size:11px}
+
+/* ---------- settings ---------- */
+.set-g{margin-top:var(--s2)}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-weight:600;font-size:14.5px}
+.set-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--brand-ui);margin:0;flex:none}
+.set-row .pills{flex:none;gap:2px}
+.set-row .pills button{height:30px;padding:0 9px}
+.set-sw{display:grid;grid-template-columns:repeat(5,1fr);gap:14px 6px;margin-top:var(--s4)}
+.set-sw .sw{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;color:var(--mute);cursor:pointer}
+.set-sw .sw i{position:relative;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--c) 50%,var(--c2) 50%);box-shadow:inset 0 0 0 1px var(--line2);overflow:hidden}
+.set-sw .sw.on i{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.set-sw .sw.on span{color:var(--ink);font-weight:600}
+.set-sw .sw input{position:absolute;inset:-8px;width:50px;height:50px;opacity:0;cursor:pointer;border:0;padding:0}
+.set-sw label.sw i{background:conic-gradient(from 0deg,#e5484d,#f5a524,#3ccf7a,#2dd4bf,#5b8cff,#a78bfa,#f472b6,#e5484d)}
+.set-sw label.sw.on i{background:var(--c)}
+.set-note{font-size:12.5px;color:var(--mute);margin-top:var(--s4);line-height:1.5}
+/* text size: scale content, not the tab bar (its glide maths stay exact) */
+[data-ts=s] #main,[data-ts=s] .top,[data-ts=s] .sheet{zoom:.92}
+[data-ts=l] #main,[data-ts=l] .top,[data-ts=l] .sheet{zoom:1.1}
+/* reduce motion (in-app switch) */
+[data-rm] *{animation:none!important;transition:none!important}
+/* hidden Home sections */
+[data-hide~=intro] #v-home [data-sec=intro],[data-hide~=mb] #v-home [data-sec=mb],[data-hide~=gems] #v-home [data-sec=gems],[data-hide~=unusual] #v-home [data-sec=unusual],
+[data-hide~=recent] #v-home [data-sec=recent],[data-hide~=portfolios] #v-home [data-sec=portfolios],[data-hide~=performers] #v-home [data-sec=performers]{display:none!important}

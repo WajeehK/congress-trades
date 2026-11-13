@@ -145,20 +145,35 @@ const cleanAsset = t => (t.asset || '').replace(/\s*\[[A-Z]{2}\]\s*$/, '').repla
 const assetName = t => t.company || cleanAsset(t);
 function loc(p) {
   if (p.chamber === 'Executive') return ROLE[p.politician] || p.district || 'Executive';
+  if (p.chamber === 'Insider') return p.district || p.state || 'Corporate insider';
+  if (p.chamber === 'Institution') return p.district || 'Institutional 13F';
   if (p.chamber === 'House' && p.district) {
     const m = p.district.match(/^([A-Z]{2})0*(\d+)$/);
     if (m) return m[2] === '0' ? `${m[1]}-AL` : `${m[1]}-${m[2]}`;
   }
   return p.state || '';
 }
-const chamberLbl = c => c === 'Executive' ? 'White House' : c;
-const metaShort = p => `${p.party || '?'} · ${loc(p)}${p.chamber !== 'Executive' ? ' · ' + p.chamber : ''}`;
+const chamberLbl = c => ({Executive: 'White House', Insider: 'Insiders', Institution: 'Funds'})[c] || c;
+const isPol = p => !p || !p.chamber || p.chamber === 'House' || p.chamber === 'Senate' || p.chamber === 'Executive';
+const metaShort = p => {
+  if (p.chamber === 'Insider' || p.chamber === 'Institution') return `${chamberLbl(p.chamber)} · ${loc(p)}`;
+  return `${p.party || '?'} · ${loc(p)}${p.chamber !== 'Executive' ? ' · ' + p.chamber : ''}`;
+};
 function sideTag(t) {
+  if (/^13F /i.test(t.tx_type || '') || t.source === 'sec_13f') return `<span class="side other">${I.swap}${esc(t.tx_type || '13F change')}</span>`;
   if (t.side === 'buy') return `<span class="side buy">${I.up}Buy</span>`;
   if (t.side === 'sell') return `<span class="side sell">${I.dn}${/partial/i.test(t.tx_type || '') ? 'Partial sell' : 'Sell'}</span>`;
   return `<span class="side other">${I.swap}${esc(t.tx_type || 'Other')}</span>`;
 }
-const lagTag = t => t.lag_days == null || t.lag_days < 0 ? '' : `<span class="lag${t.lag_days > 45 ? ' late' : ''}" title="Days between the trade and its public disclosure">${t.lag_days === 0 ? 'same day' : t.lag_days + 'd lag'}</span>`;
+const lagTag = t => {
+  if (t.source === 'sec_13f' || t.chamber === 'Institution') {
+    return `<span class="lag" title="Form 13F is a quarterly snapshot, filed up to 45 days after quarter-end. This is an inferred change, not a disclosed trade.">13F snapshot</span>`;
+  }
+  if (t.source === 'sec_form4') {
+    return t.lag_days == null || t.lag_days < 0 ? '' : `<span class="lag" title="Form 4 is due within two business days of the trade">${t.lag_days === 0 ? 'same day' : t.lag_days + 'd lag'}</span>`;
+  }
+  return t.lag_days == null || t.lag_days < 0 ? '' : `<span class="lag${t.lag_days > 45 ? ' late' : ''}" title="Days between the trade and its public disclosure">${t.lag_days === 0 ? 'same day' : t.lag_days + 'd lag'}</span>`;
+};
 const chgTxt = p => p == null ? '' : `<span class="${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(1)}%</span>`;
 
 /* Trade row, styled like Insiderwave's "Trades in this update" list */
@@ -204,11 +219,14 @@ function tradeRow(t, showWho = true) {
   const title = t.ticker || cleanAsset(t) || 'Undisclosed asset';
   const sub = t.ticker ? esc(assetName(t)) : esc(t.asset_type === 'BOND' ? 'Bond · no market price' : 'Not exchange-listed');
   const px = t.est_price != null ? `<span class="px">${usd(t.est_price)}${sh ? ` · ~${num(sh)} sh` : ''}</span>` : '';
-  const who = `<span class="who-mini">${avatar(t.politician, t.bioguide, 'round')}<span class="wn">${esc(t.politician)}</span><span class="pl">${esc(t.party || '')}${t.party ? '-' : ''}${esc(loc(t))}</span></span>`;
+  const whoMeta = (t.chamber === 'Insider' || t.chamber === 'Institution') ? loc(t) : `${t.party || ''}${t.party ? '-' : ''}${loc(t)}`;
+  const who = `<span class="who-mini">${avatar(t.politician, t.bioguide, 'round')}<span class="wn">${esc(t.politician)}</span><span class="pl">${esc(whoMeta)}</span></span>`;
+  const f4tag = t.source === 'sec_form4' ? '<span class="lag atag" title="SEC Form 4 open-market transaction">Form 4</span>' : '';
+  const f13tag = (t.source === 'sec_13f' || /^13F /i.test(t.tx_type || '')) ? '<span class="lag atag" title="Inferred from a delayed 13F holdings snapshot, not a disclosed trade">Inferred</span>' : '';
   return `<button class="trow" data-trade="${esc(t.uid)}">
-    ${logo(t.ticker, t.asset_type, '', assetName(t))}
+    ${t.ticker ? logo(t.ticker, t.asset_type, '', assetName(t)) : `<span class="logo">${esc((t.asset || title || '?').slice(0, 2))}</span>`}
     <div class="mid">
-      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${earnTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${ovTag(t)}</div>
+      <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${earnTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${f4tag}${f13tag}${ovTag(t)}</div>
       <div class="l2">${showWho ? who : `<span class="an">${sub}</span>`}</div>
     </div>
     <div class="r">
@@ -326,7 +344,7 @@ function portfolioCard(p, pf, o = {}) {
   const up = !all || all[1] == null || all[1] >= 0;
   return `<button class="pcard${o.rank ? ' ranked' : ''}" data-pol="${esc(p.politician)}">
     ${o.rank ? `<span class="rank">${String(o.rank).padStart(2, '0')}</span>` : ''}${avatar(p.politician, p.bioguide, 'round')}
-    <div class="pm"><div class="nm">${esc(p.politician)}</div><div class="mt"><i class="pty pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}${p.chamber && p.chamber !== 'Executive' ? ' · ' + esc(p.chamber) : ''}</div></div>
+    <div class="pm"><div class="nm">${esc(p.politician)}</div><div class="mt">${isPol(p) ? `<i class="pty pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}${p.chamber && p.chamber !== 'Executive' ? ' · ' + esc(p.chamber) : ''}` : esc(metaShort(p))}</div></div>
     ${pf ? `<div class="spark">${sparkSVG(pf.spark, up)}</div>
       <div class="r"><div class="v" title="${esc(usd0(pf.value))}">${money(pf.value)}</div><div class="d">${all && all[1] != null ? `<span class="${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(all[1]))}</span>` : ''}${o.period ? `<span class="per">${esc(o.period)}</span>` : ''}</div></div>`
     : `<div class="spark"></div><div class="r"><div class="v mute">—</div><div class="d mute">${num(p.n)} trades</div></div>`}
@@ -546,7 +564,7 @@ async function loadHome() {
   const list = [...pfs.values()];
   // top performers: meaningful portfolios only
   const k = H.period;
-  const elig = list.filter(p => p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
+  const elig = list.filter(p => isPol(p) && p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
   elig.sort((a, b) => b.periods[k][1] - a.periods[k][1]);
   $('#perfRail').innerHTML = elig.slice(0, 12).map((p, i) => {
     const r = p.periods[k][1], up = r >= 0;
@@ -556,14 +574,14 @@ async function loadHome() {
   if (!H.loaded) {
     H.loaded = true;
     const tot = list.reduce((a, p) => a + p.value, 0);
-    const f = list.filter(p => p.n_priced >= 5 && p.periods.ALL && p.periods.ALL[1] > 0 && p.politician !== 'Donald J. Trump').sort((a, b) => b.value - a.value)[0];
+    const f = list.filter(p => isPol(p) && p.n_priced >= 5 && p.periods.ALL && p.periods.ALL[1] > 0 && p.politician !== 'Donald J. Trump').sort((a, b) => b.value - a.value)[0];
     if (f && isWide()) {
       const all = f.periods.ALL;
       $('#heroPhone').innerHTML = `<div class="scr" data-pol="${esc(f.politician)}"><span class="notch"></span><div class="ph">${portrait(f.politician, f.bioguide)}<span class="hb" style="left:14px">${I.back}</span><span class="hb" style="right:54px">${I.bell}</span><span class="hb" style="right:14px">${I.share}</span><div class="nm">${esc(f.politician.split(' ')[0])}</div></div>
         <div class="bd"><div class="k">Portfolio Value</div><div class="v">${usd(f.value)}</div><div class="d"><span>${sgnUsd(all[0])}</span><span class="up">▲ ${pct(all[1])}</span></div></div>
         <div class="sp">${sparkSVG(f.spark, true)}</div><div class="tb"><span>1W</span><span>1M</span><span>3M</span><span>YTD</span><span>1Y</span><span>5Y</span><span class="on">ALL</span></div></div>`;
     }
-    const top = list.filter(p => p.n_priced >= 5).sort((a, b) => b.value - a.value).slice(0, isWide() ? 8 : 6);
+    const top = list.filter(p => isPol(p) && p.n_priced >= 5).sort((a, b) => b.value - a.value).slice(0, isWide() ? 8 : 6);
     $('#homeGrid').innerHTML = top.map(p => portfolioCard(p, p)).join('');
     $('#homeTrades').innerHTML = skRows(5);
     const d = await api('/api/trades?limit=5&sort=disclosure_date');
@@ -601,7 +619,12 @@ async function loadFeed(append = false) {
   if (append) $('#feed').insertAdjacentHTML('beforeend', html);
   const lbl = {0: 'today', 7: 'in the past week', 30: 'in the past month', 90: 'in the past 3 months', 365: 'in the past year', all: 'all time', custom: 'in the chosen dates'}[F.range];
   const qv = $('#q').value.trim();
-  if (!append) $('#feed').innerHTML = html || (qv ? empty(`No trades match “${esc(qv)}” ${F.range === 'all' ? 'at all' : lbl}`, F.range === 'all' ? 'Try a ticker (GOOGL), a company (Google) or a politician’s name.' : 'Try a wider date range like 1 year or All, or fewer filters.') : empty('No trades match', 'Try a wider date range or fewer filters.'));
+  const cave = F.chamber === 'Insider'
+    ? `<p class="set-note feed-caveat">SEC Form 4 open-market buys and sells by officers and directors of a mega-cap watchlist. Usually disclosed within 0–2 business days. Awards, option exercises and tax withholding are omitted. Not investment advice.</p>`
+    : F.chamber === 'Institution'
+    ? `<p class="set-note feed-caveat">Inferred quarter-over-quarter changes from SEC Form 13F — a delayed snapshot of US-listed long positions only (no shorts, most private or non-US assets, or actual trade tickets), filed up to 45 days after quarter-end. The Public Investment Fund 13F is not PIF’s whole book and not MBS’s personal account. Not investment advice.</p>`
+    : '';
+  if (!append) $('#feed').innerHTML = cave + (html || (qv ? empty(`No trades match “${esc(qv)}” ${F.range === 'all' ? 'at all' : lbl}`, F.range === 'all' ? 'Try a ticker (GOOGL), a company (Google) or a person’s or fund’s name.' : 'Try a wider date range like 1 year or All, or fewer filters.') : empty('No trades match', 'Try a wider date range or fewer filters.')));
   const newN = d.trades.filter(isNew).length;
   $('#feedCount').innerHTML = `<span><b>${d.total.toLocaleString()}</b> trades ${$('#dateField').value === 'tx_date' ? 'made' : 'disclosed'} ${lbl}${newN && !append ? ` · <span style="color:var(--blue);font-weight:600">${newN} new since your last visit</span>` : ''}</span>`;
   $('#tickChip').innerHTML = (F.ticker ? `<button class="chip-btn" id="clrTick">${esc(F.ticker)} ✕</button>` : '') + (F.newSince ? `<button class="chip-btn" id="clrNew">New since last visit ✕</button>` : '');
@@ -633,7 +656,7 @@ function syncPolPills() {
 const LB = {k: '1Y'};
 async function renderLB() {
   const pfs = [...(await portfolios()).values()], k = LB.k;
-  const el = pfs.filter(p => p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
+  const el = pfs.filter(p => isPol(p) && p.value >= 50000 && p.n_priced >= 5 && p.periods[k] && p.periods[k][1] != null);
   const grp = [['Democrats', p => p.party === 'D', 'pty-D'], ['Republicans', p => p.party === 'R', 'pty-R'], ['House', p => p.chamber === 'House', ''], ['Senate', p => p.chamber === 'Senate', '']];
   const rows = grp.map(([n, f, c]) => { const xs = el.filter(f).map(p => p.periods[k][1]); return {n, c, cnt: xs.length, avg: xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null}; });
   const mx = Math.max(1, ...rows.map(r => Math.abs(r.avg || 0)));
@@ -659,7 +682,7 @@ async function loadPeople() {
   $('#polDir span').textContent = P.sort === 'name' ? (P.dir === -1 ? 'A → Z' : 'Z → A') : (P.dir === -1 ? 'High → low' : 'Low → high');
   syncPolPills();
   const ret = P.sort === 'ret', nOK = ret ? L.filter(p => key(p) > -1e9).length : 0;
-  $('#polGrid').innerHTML = L.map((p, i) => ret ? portfolioCard(p, p.pf, {period: P.period, rank: key(p) > -1e9 ? (P.dir === -1 ? i + 1 : nOK - i) : 0}) : portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, party (e.g. Democrat) or state (e.g. Texas or TX).') : empty('Nobody found', ''));
+  $('#polGrid').innerHTML = L.map((p, i) => ret ? portfolioCard(p, p.pf, {period: P.period, rank: key(p) > -1e9 ? (P.dir === -1 ? i + 1 : nOK - i) : 0}) : portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, fund, party or state.') : empty('Nobody found', ''));
 }
 
 /* ============ politician page ============ */
@@ -689,23 +712,35 @@ async function openPolitician(name) {
   const el = $('#v-pol');
   el.innerHTML = `<div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button></div><div class="pbody"><div class="sk-card" style="height:160px"></div></div>`;
   let d;
-  try { d = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) { el.innerHTML = empty('Politician not found', `<a href="#people">Browse politicians</a>`); return; }
+  try { d = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) { el.innerHTML = empty('Not found', `<a href="#people">Browse people</a>`); return; }
   if (POL.name !== name) return;
   POL.data = d;
   const p = {...d, politician: name};
-  const has = d.series && d.series.d.length > 1;
+  const isInst = d.chamber === 'Institution' || d.source === 'sec_13f';
+  const isInsider = d.chamber === 'Insider';
+  const has = !isInst && !isInsider && d.series && d.series.d.length > 1;
   const fol = isFollowing(name);
+  const subline = isInst
+    ? `<span>${esc(d.note ? 'SEC Form 13F' : 'Institution')}</span>${d.period_end ? `<span>Holdings as of ${fmtDY(d.period_end)}</span>` : ''}${d.filed ? `<span>Filed ${fmtDY(d.filed)}</span>` : ''}`
+    : isInsider
+    ? `<span>${esc(loc(p))}</span>`
+    : `<span><i class="pty pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span>${d.chamber === 'Executive' ? `<span>${esc(loc(p))}</span>` : ''}`;
+  const valueLabel = isInst ? `13F value ${d.period_end ? '<span class="est">as of ' + fmtDY(d.period_end) + '</span>' : '<span class="est">reported</span>'}` : 'Portfolio Value <span class="est">Estimate</span>';
+  const valueAmt = (isInst && d.value) || has ? usd(d.value) : '—';
+  const valueSub = isInst
+    ? `<span class="when">${d.note ? esc(d.note) : 'US-listed long positions only, filed up to 45 days after quarter-end. Not a complete portfolio and not a personal account.'}</span>`
+    : (has ? '' : '<span class="when">No priced stock trades to build a portfolio from.</span>');
   el.innerHTML = `
     <div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button>
       <button class="ib bell${fol ? ' on' : ''}" id="bellBtn" aria-label="Follow">${I.bell}</button>
       <button class="ib share" id="shareBtn" aria-label="Share">${I.share}</button></div>
     <div class="phero"><div class="pimg">${portrait(name, d.bioguide, 'portrait')}</div>
-      <div class="nm"><div class="eyebrow">${esc(chamberLbl(d.chamber))}${d.chamber === 'Executive' ? '' : ' · ' + esc(loc(p))}</div><h1>${esc(name)}</h1><div class="sub"><span><i class="pty pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span>${d.chamber === 'Executive' ? `<span>${esc(loc(p))}</span>` : ''}</div></div>
+      <div class="nm"><div class="eyebrow">${esc(chamberLbl(d.chamber))}${d.chamber === 'Executive' || isInst || isInsider ? '' : ' · ' + esc(loc(p))}</div><h1>${esc(name)}</h1><div class="sub">${subline}</div></div>
     </div>
     <div class="pbody">
-      <div class="pv-k">Portfolio Value <span class="est">Estimate</span></div>
-      <div class="pv-v" id="pvV">${has ? usd(d.value) : '—'}</div>
-      <div class="pv-d" id="pvD">${has ? '' : '<span class="when">No priced stock trades to build a portfolio from.</span>'}</div>
+      <div class="pv-k">${valueLabel}</div>
+      <div class="pv-v" id="pvV">${valueAmt}</div>
+      <div class="pv-d" id="pvD">${valueSub}</div>
       ${has ? `<div class="chart" id="chart"></div>
       <div class="rtabs" id="rtabs">${['1W', '1M', '3M', 'YTD', '1Y', '5Y', 'ALL'].map(k => `<button data-v="${k}"${k === POL.period ? ' class="on"' : ''}>${k}</button>`).join('')}</div>` : ''}
       <div class="stats">
@@ -716,15 +751,15 @@ async function openPolitician(name) {
         <div class="stat"><div class="k">Holdings</div><div class="v">${num(d.n_holdings)}</div><div class="f">Since ${fmtDY(d.first_tx)}</div></div>
       </div>
       ${has ? `<div class="h2s"><h2>If you’d copied ${esc(name.split(' ').slice(-1)[0])}</h2><small>Estimate</small></div><div class="card cpy" id="copySim">${skRows(2)}</div>` : ''}
-      ${d.holdings.length ? `<button class="btn mirror-btn" id="mirrorBtn">${I.copy}Mirror portfolio</button>` : ''}
-      ${d.holdings.length ? `<div class="h2s"><h2>Current Holdings</h2><small>${num(d.n_holdings)} positions · est.</small></div>
+      ${d.holdings.length && !isInst ? `<button class="btn mirror-btn" id="mirrorBtn">${I.copy}Mirror portfolio</button>` : ''}
+      ${d.holdings.length ? `<div class="h2s"><h2>Current Holdings</h2><small>${num(d.n_holdings)} positions${isInst ? (d.period_end ? ' · 13F as of ' + fmtDY(d.period_end) : ' · 13F') : ' · est.'}</small></div>
       <div class="card hlist" id="holdings"></div>` : ''}
       <div class="h2s"><h2>Trades</h2><small>Newest disclosed first</small></div>
       <div class="card tlist" id="polTrades">${skRows(4)}</div>
       <button class="btn ghost full" id="polMore" hidden>Show more trades</button>
       <div class="h2s"><h2>Disclosures</h2><small id="filN"></small></div>
       <div class="card flist" id="polFilings">${skRows(2)}</div>
-      <p class="note">${I.info}<span>Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.politician === 'Donald J. Trump' ? ' The President\'s reports are scanned PDFs read with OCR, so some trades are missing.' : ''}</span></p>
+      <p class="note">${I.info}<span>${isInst ? 'Holdings are the fund’s latest SEC Form 13F snapshot of US-listed long positions only, filed up to 45 days after quarter-end. No shorts, most private or non-US assets, or actual trade tickets. The Public Investment Fund 13F is not PIF’s whole book and not Mohammed bin Salman’s personal account. Inferred trades are quarter-over-quarter changes only. Not investment advice.' : isInsider ? 'These are SEC Form 4 open-market buys and sells by an officer, director or 10% owner, usually disclosed within 0–2 business days. Awards, option exercises, tax withholding and derivative rows are omitted, so this is not a complete position. Not investment advice.' : `Portfolio value, holdings and returns are <b>estimates</b> rebuilt only from disclosed trades: each trade's range midpoint is turned into shares at that day's Yahoo close, and sells reduce the position. Stock held before ${fmtDY(d.first_tx)} or never disclosed isn't included. Returns are time-weighted, so new money doesn't count as a gain. Not investment advice.${d.politician === 'Donald J. Trump' ? " The President's reports are scanned PDFs read with OCR, so some trades are missing." : ''}`}</span></p>
     </div>`;
   if (has) { renderPeriod(); POL.cp = POL.cp || '1Y'; renderCopy(); }
   renderHoldings();
@@ -814,9 +849,15 @@ function renderPeriod() {
 function renderHoldings() {
   const el = $('#holdings'); if (!el) return;
   const H = POL.data.holdings, n = POL.showAll ? Math.min(H.length, 100) : 5;
-  el.innerHTML = H.slice(0, n).map(h => `<button class="hrow" data-tick="${esc(h.ticker)}">${logo(h.ticker, '', '', h.name || '')}
-      <div><div class="tk">${esc(h.ticker)}</div><div class="w">${h.weight.toFixed(2)}%</div></div>
-      <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div></button>`).join('')
+  el.innerHTML = H.slice(0, n).map(h => {
+      const unlisted = h.unlisted || !h.ticker;
+      const label = unlisted ? (h.name || h.title || 'Unlisted holding') : h.ticker;
+      const sub = unlisted ? 'No public ticker · reported 13F value' : ((h.weight || 0).toFixed(2) + '%');
+      const inner = `${unlisted ? `<span class="logo">${esc((h.name || '?').slice(0, 2))}</span>` : logo(h.ticker, '', '', h.name || '')}
+      <div><div class="tk">${esc(label)}</div><div class="w">${esc(sub)}</div></div>
+      <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div>`;
+      return unlisted ? `<div class="hrow">${inner}</div>` : `<button class="hrow" data-tick="${esc(h.ticker)}">${inner}</button>`;
+    }).join('')
     + (H.length > 5 ? `<button class="viewall${POL.showAll ? ' open' : ''}" id="viewAll">${POL.showAll ? 'Show less' : 'View All'} ${I.chevd}</button>` : '');
   if ($('#viewAll')) $('#viewAll').onclick = () => { POL.showAll = !POL.showAll; renderHoldings(); };
 }
@@ -1105,7 +1146,7 @@ async function renderAlerts() {
     <div class="set-g">${HS.map(([k, l]) => tog('', l, '', !SET.hide.includes(k), `data-sec-tog="${k}"`)).join('')}</div>
     <div class="h2s"><h2>Data</h2><small>Defaults</small></div>
     <div class="set-g"><div class="pc-row set-row"><span>Trades date range</span>${seg('range', [['7', '1W'], ['30', '1M'], ['90', '3M'], ['365', '1Y'], ['all', 'ALL']])}</div>
-      <div class="pc-row set-row"><span>Chamber</span>${seg('chamber', [['', 'All'], ['House', 'House'], ['Senate', 'Senate'], ['Executive', 'Pres.']])}</div>
+      <div class="pc-row set-row"><span>Category</span>${seg('chamber', [['', 'All'], ['House', 'House'], ['Senate', 'Senate'], ['Executive', 'Pres.'], ['Insider', 'Insiders'], ['Institution', 'Funds']])}</div>
       <div class="pc-row set-row"><span>Party</span>${seg('party', [['', 'Any'], ['D', 'Dem'], ['R', 'Rep'], ['I', 'Ind']])}</div>
       ${tog('noEtf', 'Hide ETFs and funds', 'In Most bought', SET.noEtf)}
       <div class="pc-row set-row"><span>Amounts<small class="mute">Disclosed range or its midpoint</small></span>${seg('amt', [['range', 'Range'], ['mid', 'Midpoint']])}</div></div>
@@ -1128,7 +1169,8 @@ async function renderAlerts() {
     </div>
     <div class="h2s"><h2>About</h2><small>Checked ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}</small></div>
     <div class="card prose" style="padding:4px 18px 18px">
-      <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from the Senate's own <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">eFD</a> reports (plus <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> for the newest), and <b>${by('Executive').toLocaleString()}</b> trades from <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE reports</a> of the President, Vice President and Cabinet. Scanned paper filings are read with OCR. Newest filing ${fmtDY(newest)}.</p>
+      <p><b>${by('House').toLocaleString()}</b> House trades from official <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener">House Clerk</a> filings, <b>${by('Senate').toLocaleString()}</b> Senate trades from the Senate's own <a href="https://efdsearch.senate.gov/search/" target="_blank" rel="noopener">eFD</a> reports (plus <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> for the newest), <b>${by('Executive').toLocaleString()}</b> trades from <a href="https://extapps2.oge.gov/201/Presiden.nsf/President%20and%20Vice%20President%20Index?OpenView&Count=1000" target="_blank" rel="noopener">OGE reports</a> of the President, Vice President and Cabinet, <b>${by('Insider').toLocaleString()}</b> company insider trades from <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC Form 4</a> (open-market buys and sells by officers and directors of a mega-cap watchlist), and <b>${by('Institution').toLocaleString()}</b> inferred changes from <a href="https://www.sec.gov/data-research/sec-markets-data/form-13f-data-sets" target="_blank" rel="noopener">SEC Form 13F</a> holdings of selected funds. Scanned paper filings are read with OCR. Newest filing ${fmtDY(newest)}.</p>
+    <p class="set-note">Form 4 insider trades are usually disclosed within 0–2 business days. Form 13F is a quarterly snapshot of US-listed long positions only, filed up to 45 days after quarter-end — no shorts, most private or non-US assets, or actual trade tickets. Sells appear only as a position shrinking or disappearing versus the prior quarter. The Public Investment Fund 13F is not PIF’s whole book and not Mohammed bin Salman’s personal account; inferred 13F “buys” and “sells” are quarter-over-quarter changes only. None of this is investment advice. Insider push alerts default to large trades only ($1M+), so routine Form 4s are not sent.</p>
       <p>Prices come from Yahoo Finance daily data. Photos come from the public-domain congress-legislators project; officials without one use free-licensed Wikimedia Commons images (<a href="https://github.com/WajeehK/congress-trades/blob/main/web/static/img/people/SOURCES.md" target="_blank" rel="noopener">credits</a>). Logos are their owners' trademarks. Politicians have up to 45 days to disclose, so trades appear when they're filed, not when they're made.</p>
       <p><b>How estimates work.</b> Each disclosed amount range becomes its midpoint, which is turned into shares at that day's close. Buys add to a position and sells reduce it (a full sale closes it). Portfolio value is those shares at today's price. Returns are time-weighted, so new money doesn't count as a gain. Win rate is the share of trades where the price moved their way within 30 days. Only disclosed trades count, so these are rough estimates, not advice.</p>
       <p>Built from public disclosures. Not investment advice, and not a claim that any individual broke the law. Version ${esc(ver)} · last refresh ${s.last_refresh ? fmtUKlong(s.last_refresh) : '—'}.</p>

@@ -88,6 +88,12 @@ TRADE_COLS = ["uid", "source", "filing_id", "chamber", "politician", "last_name"
               "owner", "ticker", "asset", "asset_type", "tx_type", "side", "tx_date", "disclosure_date", "amount",
               "amount_low", "amount_high", "description", "url", "fetched_at", "bioguide", "first_seen"]
 
+# Congress / White House only — Form 4 insiders and 13F funds are separate categories and must not
+# leak into political unusual-activity, recaps, most-bought or scoreboard averages.
+POLITICAL_CHAMBERS = ("House", "Senate", "Executive")
+# Open-market Form 4 alerts: large-only, so routine mega-cap sales never spam "all trades" subscribers.
+INSIDER_ALERT_MIN = 1_000_000
+
 
 def db():
     c = sqlite3.connect(DB_PATH, timeout=60)
@@ -127,6 +133,11 @@ def init_db():
         CREATE INDEX IF NOT EXISTS ix_tr_tick ON trades(ticker);
         CREATE INDEX IF NOT EXISTS ix_tr_seen ON trades(first_seen);
         """)
+        try:
+            import sec13f
+            sec13f.ensure_schema(c)
+        except Exception:
+            pass
         canonical_names(c)
         for old, new, asset, n in ticker_fixes.migrate(c):   # typo'd / misread tickers (see ticker_fixes.py)
             log.info("ticker fix: %s -> %s x%d (%s)", old, new, n, asset)
@@ -859,9 +870,19 @@ def follow_topic(name):
     return f"{NTFY_TOPIC}-{slug}" if NTFY_TOPIC else None
 
 
+def _alertable(r):
+    """Congress/Executive: unchanged. Insider Form 4: $1M+ only. 13F inferred changes: never."""
+    ch = r.get("chamber")
+    if ch == "Institution":
+        return False
+    if ch == "Insider":
+        return (r.get("amount_low") or 0) >= INSIDER_ALERT_MIN
+    return True
+
+
 def notify(new_rows):
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
-    new_rows = [r for r in new_rows if r["first_seen"] >= cutoff]
+    new_rows = [r for r in new_rows if r["first_seen"] >= cutoff and _alertable(r)]
     if new_rows:
         evs, sent = [], set()
         try:  # unusual activity that these new disclosures created (each event alerted once)
@@ -874,6 +895,7 @@ def notify(new_rows):
                 ctx = None
             with db() as c:
                 rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ? OR t.disclosure_date >= ?", (since, since)).fetchall()
+                rows = [r for r in rows if r["chamber"] in POLITICAL_CHAMBERS]
                 evs = unusual.for_new(c, rows, new_rows, sent, ctx)
         except Exception as e:
             note(f"unusual check failed: {e}")
@@ -920,6 +942,22 @@ def refresh(force_senate=False, do_notify=True):
             except Exception as e:
                 note(f"Executive (OGE) failed: {e}")
                 _state["last_error"] = f"OGE: {e}"
+        if os.environ.get("FORM4_DISABLE") != "1":
+            try:
+                import form4
+                import sys as _sys
+                new_rows += form4.fetch(_sys.modules[__name__])
+            except Exception as e:
+                note(f"Form 4 (insiders) failed: {e}")
+                _state["last_error"] = f"Form 4: {e}"
+        if os.environ.get("SEC13F_DISABLE") != "1":
+            try:
+                import sec13f as _sec13f
+                import sys as _sys
+                new_rows += _sec13f.fetch(_sys.modules[__name__])
+            except Exception as e:
+                note(f"13F (institutions) failed: {e}")
+                _state["last_error"] = f"13F: {e}"
         meta_set("last_refresh", now())
         try:
             import webpush
@@ -1153,7 +1191,21 @@ def politicians():
             SUM(side='buy') buys, SUM(side='sell') sells, SUM({MID}) volume,
             SUM(CASE WHEN disclosure_date >= date('now','-365 days') THEN 1 ELSE 0 END) n_1y
             FROM trades t GROUP BY politician, chamber ORDER BY politician""").fetchall()
-    return [dict(r) for r in rows]
+        out = [dict(r) for r in rows]
+        try:
+            import sec13f
+            have = {r["politician"] for r in out}
+            for inst in sec13f.list_names(c):
+                if inst["name"] in have:
+                    continue
+                latest = sec13f.latest_for_name(c, inst["name"])
+                out.append({"politician": inst["name"], "chamber": "Institution", "party": None, "state": None,
+                            "district": inst.get("cik"), "bioguide": None, "n": 0,
+                            "latest": (latest or {}).get("filed"), "latest_tx": (latest or {}).get("period_end"),
+                            "buys": 0, "sells": 0, "volume": 0, "n_1y": 0})
+        except Exception:
+            pass
+    return out
 
 
 @app.get("/api/politician")
@@ -1196,7 +1248,28 @@ def _pf(name):
     r = _pf_cache.get(name)
     if r is None:
         with db() as c:
-            r = pf.compute(c, name)
+            ch = c.execute("SELECT chamber FROM trades WHERE politician=? LIMIT 1", (name,)).fetchone()
+            if not ch:
+                try:
+                    import sec13f
+                    if sec13f.latest_for_name(c, name):
+                        ch = {"chamber": "Institution"}
+                except Exception:
+                    ch = None
+            if ch and ch["chamber"] == "Institution":
+                import sec13f
+                r = sec13f.portfolio(c, name)
+            elif ch and ch["chamber"] == "Insider":
+                # Form 4 feed is open-market P/S only (awards/exercises omitted), so a reconstructed
+                # portfolio would be misleading. The person page lists the trades instead.
+                lag = c.execute("""SELECT AVG(julianday(disclosure_date) - julianday(tx_date)) a FROM trades
+                    WHERE politician=? AND tx_date IS NOT NULL AND disclosure_date >= tx_date""", (name,)).fetchone()
+                r = {"name": name, "avg_delay": round(lag["a"], 1) if lag and lag["a"] is not None else None,
+                     "n_priced": 0, "value": 0.0, "pnl": None, "invested": None, "holdings": [],
+                     "series": {"d": [], "v": [], "p": [], "i": []}, "win_rate": None, "win_n": 0, "edge": None,
+                     "source": "sec_form4", "note": "Open-market Form 4 buys and sells only; not a complete position."}
+            else:
+                r = pf.compute(c, name)
         _pf_cache[name] = r
     return r
 
@@ -1208,16 +1281,37 @@ def portfolio_summaries():
         with db() as c:
             people = c.execute("""SELECT politician, chamber, MAX(party) party, MAX(state) state, MAX(district) district,
                 MAX(bioguide) bioguide, COUNT(*) n, MAX(disclosure_date) latest FROM trades GROUP BY politician, chamber""").fetchall()
+        # 13F institutions may have holdings but no reconstructed trade series
+        try:
+            import sec13f
+            have = {p["politician"] for p in people}
+            with db() as c:
+                for inst in sec13f.list_names(c):
+                    if inst["name"] not in have:
+                        latest = sec13f.latest_for_name(c, inst["name"])
+                        if latest:
+                            people = list(people) + [dict(politician=inst["name"], chamber="Institution",
+                                                          party=None, state=None, district=inst.get('cik'),
+                                                          bioguide=None, n=0, latest=latest.get("filed"))]
+        except Exception:
+            pass
         out = []
         for p in people:
             r = _pf(p["politician"])
-            if not r["series"]["d"]:
+            inst = (p["chamber"] == "Institution") or r.get("source") == "sec_13f"
+            if not r["series"]["d"] and not inst:
                 continue
-            per = {k: pf.period_stats(r["series"], k) for k in pf.PERIODS}
+            if not r["series"]["d"] and inst and not r.get("holdings"):
+                continue
+            per = {k: pf.period_stats(r["series"], k) for k in pf.PERIODS} if r["series"]["d"] else {}
+            top = []
+            for h in r["holdings"][:3]:
+                top.append(h.get("ticker") or h.get("name") or "")
             out.append({**dict(p), "value": r["value"], "pnl": r["pnl"], "invested": r["invested"],
-                        "periods": per, "spark": pf.spark(r["series"]), "n_holdings": len(r["holdings"]),
+                        "periods": per, "spark": pf.spark(r["series"]) if r["series"]["d"] else [],
+                        "n_holdings": len(r["holdings"]),
                         "n_priced": r["n_priced"], "win_rate": r["win_rate"], "avg_delay": r["avg_delay"],
-                        "top": [h["ticker"] for h in r["holdings"][:3]]})
+                        "top": top, "source": r.get("source"), "filed": r.get("filed"), "period_end": r.get("period_end")})
         _pf_cache["__summary__"] = out
         return out
 
@@ -1239,7 +1333,7 @@ def intro_api():
         a = c.execute("SELECT adjclose, d FROM prices WHERE ticker='SPY' AND adjclose > 0 ORDER BY d DESC LIMIT 1").fetchone()
         b = c.execute("SELECT adjclose, d FROM prices WHERE ticker='SPY' AND adjclose > 0 AND d <= ? ORDER BY d DESC LIMIT 1", (yr,)).fetchone()
     spy = round((a[0] / b[0] - 1) * 100, 1) if a and b else None
-    S = portfolio_summaries()
+    S = [p for p in portfolio_summaries() if p.get("chamber") in POLITICAL_CHAMBERS]
     el = [p for p in S if p["value"] >= 50_000 and p["n_priced"] >= 5 and (p["periods"].get("1Y") or [None, None])[1] is not None]
     rets = [p["periods"]["1Y"][1] for p in el]
     return {"as_of": a[1] if a else None, "trades": n_trades, "portfolios": len(S),
@@ -1264,6 +1358,7 @@ def _unusual_recent(max_age=600):
         ctx = None
     with db() as c:
         rows = c.execute(f"{TRADE_SELECT} WHERE t.tx_date >= ? OR t.disclosure_date >= ?", (since, since)).fetchall()
+        rows = [r for r in rows if r["chamber"] in POLITICAL_CHAMBERS]
         v = unusual.recent(c, rows, ctx)
     _un_cache.update(t=time.time(), v=v)
     return v
@@ -1410,7 +1505,17 @@ def portfolio(name: str, holdings: int = Query(200, le=2000)):
         p = c.execute("""SELECT chamber, MAX(party) party, MAX(state) state, MAX(district) district, MAX(bioguide) bioguide,
             COUNT(*) n, SUM(side='buy') buys, SUM(side='sell') sells, MAX(disclosure_date) latest, MIN(tx_date) first_tx
             FROM trades WHERE politician=?""", (name,)).fetchone()
-    if not p or not p["n"]:
+        if (not p or not p["n"]):
+            try:
+                import sec13f
+                if sec13f.latest_for_name(c, name):
+                    p = {"chamber": "Institution", "party": None, "state": None, "district": None,
+                         "bioguide": None, "n": 0, "buys": 0, "sells": 0, "latest": None, "first_tx": None}
+                else:
+                    p = None
+            except Exception:
+                p = None
+    if not p:
         raise HTTPException(404, "not found")
     r = _pf(name)
     return {**dict(p), **{k: v for k, v in r.items() if k != "holdings"}, "politician": name,

@@ -55,7 +55,7 @@
     return p => {
       if (!p._hay) {
         const st = (p.state || '').toUpperCase();
-        const h = norm([p.politician, PARTY[p.party] || p.party, p.party && st ? `${p.party}-${st}` : '', st, STATES[st], p.chamber, p.chamber === 'President' ? 'white house' : ''].filter(Boolean).join(' | '));
+        const h = norm([p.politician, PARTY[p.party] || p.party, p.party && st ? `${p.party}-${st}` : '', st, STATES[st], p.chamber, p.chamber === 'Executive' || p.chamber === 'President' ? 'white house' : '', p.chamber === 'Insider' ? 'insiders corporate ceo' : '', p.chamber === 'Institution' ? 'funds institutions 13f sovereign' : '', p.district].filter(Boolean).join(' | '));
         Object.defineProperty(p, '_hay', {value: {h, c: h.replace(/[^a-z0-9]/g, ''), t: ''}, enumerable: false});
       }
       return terms.every(x => p._hay.h.includes(x.text) || (x.c.length >= 3 && p._hay.c.includes(x.c)));

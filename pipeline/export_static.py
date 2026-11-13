@@ -115,18 +115,27 @@ def main():
     dump(data / "trades-recent.json", pack([r for r in rows if (r["disclosure_date"] or "") >= recent_from]))
 
     published = {r["politician"] for r in rows}
+    # 13F institutions should appear even if they have holdings but no inferred QoQ rows
+    try:
+        import sec13f
+        with app.db() as c:
+            for inst in sec13f.list_names(c):
+                published.add(inst["name"])
+    except Exception:
+        pass
     pols = [p for p in app.politicians() if p["politician"] in published]
     dump(data / "politicians.json", pols)
     pfs = [p for p in app.portfolios() if p["politician"] in published]
     dump(data / "portfolios.json", pfs)
-    dump(data / "most-bought.json", most_bought.build(rows))
+    political = [r for r in rows if r["chamber"] in getattr(app, "POLITICAL_CHAMBERS", ("House", "Senate", "Executive"))]
+    dump(data / "most-bought.json", most_bought.build(political))
     try:
         sec = json.loads((ROOT / "ticker_sectors.json").read_text())
     except Exception:
         sec = {}
     recent_rows = [r for r in rows if (r["first_seen"] or "") >= (datetime.now(timezone.utc) - timedelta(days=8)).isoformat()]
-    dump(data / "recap.json", {k: recap.build(recent_rows, k, sectors=sec) for k in ("daily", "weekly")})
-    gm = gems.build(rows, sec)
+    dump(data / "recap.json", {k: recap.build([r for r in recent_rows if r["chamber"] in getattr(app, "POLITICAL_CHAMBERS", ("House", "Senate", "Executive"))], k, sectors=sec) for k in ("daily", "weekly")})
+    gm = gems.build(political, sec)
     dump(data / "gems.json", gm)
     print(f"hidden gems: {len(gm['items'])} ({gm['caps']} caps)")
 

@@ -6,7 +6,7 @@ Stock trades disclosed by members of Congress and the President, rebuilt into es
 ## How it works
 - `.github/workflows/pipeline.yml` runs **every hour** (and on push / manual dispatch):
   1. restores the SQLite state (`state/trades.db`: trades, filings, parsed OCR results, Yahoo price cache) from the Actions cache, or from the AES-encrypted backup on the `state` branch if the cache was evicted;
-  2. `pipeline/ci_refresh.py` fetches new House Clerk PTRs, Senate trades (Bargo API), OGE 278-T filings (the President) and Yahoo Finance prices, incrementally;
+  2. `pipeline/ci_refresh.py` fetches new House Clerk PTRs, Senate trades (Bargo API), OGE 278-T filings (the President), SEC Form 4 insider trades, SEC 13F fund holdings, and Yahoo Finance prices, incrementally;
   3. sends native Web Push alerts for genuinely new trades (see below);
   4. `pipeline/export_static.py` writes pre-generated JSON (`data/*.json`) plus the frontend in `web/` to `_site`, which is deployed to GitHub Pages.
 - The frontend (`web/`) is the same app as the server version; `web/static/data.js` emulates the API in the browser, so filtering, sorting, estimated prices, portfolios, Mirror and the Alerts tab all run client-side.
@@ -53,7 +53,13 @@ Exactly one sender at a time. `NTFY_SENDER` (repository variable, name kept for 
   (`HOUSE_OCR_MAX` per run) into the state cache.
 - **Vice President and Cabinet:** `exec_oge.py` lists their 278-T and 278e reports from OGE's PAS index API and parses
   the Integrity.gov tables (scans fall back to the OCR path).
-- Backfilled rows (first eFD backfill, first Cabinet pass, OCR of already-listed scans) never send alerts.
+- **Corporate insiders:** `form4.py` reads official SEC Form 4 / 4-A XML for a mega-cap issuer watchlist and keeps
+  officer, director and 10% owner open-market buys (P) and sells (S) only.
+- **Funds / institutions:** `sec13f.py` reads official SEC 13F-HR information tables for a short roster (PIF, Norges,
+  Mubadala, Temasek, Berkshire Hathaway, Pershing Square). Holdings are shown on the fund's page; the trades feed may
+  include clearly labelled quarter-over-quarter *inferred* changes, not disclosed tickets.
+- Backfilled rows (first eFD backfill, first Cabinet pass, first Form 4 / 13F pass, OCR of already-listed scans) never send alerts.
+  Insider push alerts are large-only ($1M+); 13F inferred changes never send alerts.
 
 ## Data sources and attribution
 - U.S. House Clerk financial disclosures (public domain)
@@ -63,6 +69,11 @@ Exactly one sender at a time. `NTFY_SENDER` (repository variable, name kept for 
   (politician, ticker, side, dates, amount range, our price estimates) for trades disclosed in the last 100 days,
   with visible credit to Bargo. Raw Bargo records are never committed or published; they live only in the encrypted state.
   Set the repository variable `PUBLISH_SENATE=0` to hide Senate trades entirely.
+- SEC EDGAR Form 4 / 4-A (corporate insider transactions) and Form 13F-HR (institutional holdings), retrieved with a
+  declared User-Agent under the SEC's fair-access rate limit. Form 4 is usually 0–2 business days old. Form 13F is a
+  delayed, long-only snapshot of US-listed Section 13(f) securities (no shorts, most private or non-US assets, or actual
+  trade tickets), filed up to 45 days after quarter-end. The Public Investment Fund 13F is the fund's US filing, not
+  Mohammed bin Salman's personal account, and not PIF's complete portfolio.
 - Prices: Yahoo Finance chart data (estimates only; not investment advice).
 
 ## Local server version

@@ -41,10 +41,10 @@
       <div class="hero-copy">
         <h1 class="hero-name"><span class="w1">The</span> <span class="w2">Insider</span> <span class="w3">House</span></h1>
         <p class="hero-tag">They write the laws.<br><span class="brand-t">Then they trade on them.</span></p>
-        <p class="lede">Members of Congress and the White House trade stock in the companies they regulate, file the paperwork weeks late, and some still beat the market. Under the STOCK Act, it’s all perfectly legal for them.</p>
+        <p class="lede">Members of Congress, White House officials, company insiders and big funds all have to disclose some of what they trade. Congress often files weeks late. Company Form 4s usually land within two business days. Fund 13Fs are a delayed, long-only snapshot of US-listed holdings — not a complete portfolio, and not anyone’s personal account.</p>
         <p class="hero-punch">We track every disclosed trade so you can follow the money.</p>
         <div class="hero-cards" id="heroCards"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
-        <p class="credit">Sources: House Clerk · Senate eFD · OGE · newest Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> · prices from Yahoo Finance</p>
+        <p class="credit">Sources: House Clerk · Senate eFD · OGE · SEC Form 4 · SEC 13F · newest Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a> · prices from Yahoo Finance</p>
         <p class="hero-disc">Estimates built from public disclosures. Not investment advice, and not a claim that any individual broke the law.</p>
       </div>
       <div class="phone" id="heroPhone" aria-hidden="true"></div>
@@ -113,17 +113,17 @@
   </section>
 
   <section class="view" id="v-trades" hidden>
-    <div class="page-h"><div class="eyebrow">Latest disclosures</div><h1>Trades</h1><p class="credit">House Clerk · Senate eFD · OGE · newest Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a></p></div>
+    <div class="page-h"><div class="eyebrow">Latest disclosures</div><h1>Trades</h1><p class="credit">House Clerk · Senate eFD · OGE · SEC Form 4 · SEC 13F · newest Senate trades via <a href="https://www.bargo.ai/free-apis/congress" target="_blank" rel="noopener">Bargo</a></p></div>
     <div class="kpis" id="kpis"></div>
     <div class="controls">
-      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search a company, ticker, politician or state" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
+      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search a company, ticker, person or fund" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
       <div class="pills wide" id="rangeSeg" role="group" aria-label="Date range">
         <button data-v="0">Today</button><button data-v="7">1W</button><button data-v="30">1M</button><button data-v="90" class="on">3M</button><button data-v="365">1Y</button><button data-v="all">ALL</button><button data-v="custom">Custom</button>
       </div>
       <div class="scroller">
         <div class="pills" id="sideSeg"><button data-v="" class="on">All</button><button data-v="buy">Buys</button><button data-v="sell">Sells</button></div>
         <span class="vsep"></span>
-        <div class="pills" id="chamberSeg"><button data-v="" class="on">Everyone</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button></div>
+        <div class="pills" id="chamberSeg"><button data-v="" class="on">Everyone</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button><button data-v="Insider">Insiders</button><button data-v="Institution">Funds</button></div>
       </div>
       <div class="scroller">
         <label class="sel"><span>Sort</span><select id="sort">
@@ -148,20 +148,20 @@
 
   <!-- PEOPLE -->
   <section class="view" id="v-people" hidden>
-    <div class="page-h"><div class="eyebrow">Estimated portfolios</div><h1>Politicians</h1></div>
+    <div class="page-h"><div class="eyebrow">Estimated portfolios</div><h1>People</h1></div>
     <div class="controls">
-      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="Search politicians, party or state" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
+      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="pq" type="search" placeholder="Search people, funds, party or state" autocomplete="off" enterkeyhint="search"><button class="sx" type="button" aria-label="Clear search"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></label>
       <div class="scroller">
         <div class="pills" id="polSort"><button data-v="value" class="on">Portfolio</button><button data-v="ret">Return</button><button data-v="n">Most trades</button><button data-v="volume">Volume</button><button data-v="latest">Recent</button><button data-v="name">A–Z</button></div>
         <button class="chip-btn dir" id="polDir" title="Reverse order"><svg viewBox="0 0 24 24"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg><span>High → low</span></button>
       </div>
       <div class="pills" id="polPeriod" hidden><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div>
-      <div class="pills" id="polChamber"><button data-v="" class="on">All</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button></div>
+      <div class="pills" id="polChamber"><button data-v="" class="on">All</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button><button data-v="Insider">Insiders</button><button data-v="Institution">Funds</button></div>
     </div>
     <div class="sec-h lb-h"><h2>Scoreboard</h2><div class="pills" id="lbPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button></div></div>
     <div class="lb" id="lb"></div>
     <p class="mb-foot lb-foot">Average estimated return of each group’s tracked portfolios ($50K+ and 5+ priced trades), from disclosed trades only.</p>
-    <div class="sec-h"><h2>All politicians</h2></div>
+    <div class="sec-h"><h2>All people</h2></div>
     <div class="pgrid" id="polGrid"></div>
   </section>
 
@@ -184,7 +184,7 @@
   <a href="#" data-v="home"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10"/></svg><span>Home</span></a>
   <a href="#trades" data-v="trades"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>Trades</span></a>
   <a href="#news" data-v="news"><svg viewBox="0 0 24 24"><path d="M4 5h12v14H6a2 2 0 0 1-2-2zM16 9h4v8a2 2 0 0 1-4 0M7.5 9h5M7.5 12.5h5M7.5 16h3"/></svg><span>News</span></a>
-  <a href="#people" data-v="people"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg><span>Politicians</span></a>
+  <a href="#people" data-v="people"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg><span>People</span></a>
   <a href="#settings" data-v="alerts"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></a>
 </nav>
 

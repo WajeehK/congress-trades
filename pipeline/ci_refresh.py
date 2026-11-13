@@ -73,6 +73,7 @@ def main():
         import recap
         with app.db() as c:
             rows = c.execute(f"{app.TRADE_SELECT} WHERE t.first_seen >= ?", ((datetime.now(timezone.utc) - timedelta(days=8)).isoformat(),)).fetchall()
+            rows = [r for r in rows if r["chamber"] in getattr(app, "POLITICAL_CHAMBERS", ("House", "Senate", "Executive"))]
         try:
             sec = json.loads((ROOT / "ticker_sectors.json").read_text())
         except Exception:

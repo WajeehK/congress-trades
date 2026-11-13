@@ -100,13 +100,6 @@ h1{font-family:var(--display);font-stretch:75%;font-size:56px;line-height:.95;fo
 .cats-pills button:hover{color:var(--ink);background:var(--bg2)}
 .cats-pills button.on{color:var(--bg);background:var(--ink);border-color:var(--ink)}
 .cats-pills button.on::after{display:none}
-.browse{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0 0 var(--s5)}
-.browse a{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:68px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:inherit;text-decoration:none;transition:background .15s,border-color .15s}
-.browse a:hover{background:var(--bg2);border-color:var(--ink2)}
-.browse .b-k{font-weight:650;font-size:14.5px;letter-spacing:-.01em}
-.browse .b-s{font-size:11.5px;color:var(--mute);font-family:var(--mono);letter-spacing:.02em}
-.browse a[href="#insiders"],.browse a[href="#funds"]{box-shadow:inset 0 0 0 1px var(--brand-ring)}
-@media (max-width:1100px){.browse{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .chip-btn{height:32px;padding:0 12px;border-radius:6px;border:1px solid var(--line2);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;color:var(--ink2)}
 .chip-btn:hover{border-color:var(--ink2);color:var(--ink)}
 .chip-btn svg{width:15px;height:15px}
@@ -119,11 +112,11 @@ h1{font-family:var(--display);font-stretch:75%;font-size:56px;line-height:.95;fo
 
 /* avatar / logo */
 .av{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 18%;background:var(--bg2);flex:none;display:grid;place-items:center;font-weight:600;font-size:12px;color:var(--ink2)}
-.av.logoish,img.portrait.logoish{object-fit:contain;object-position:50% 50%;background:#fff;padding:1px}
+.av.logoish,img.portrait.logoish{object-fit:contain;object-position:50% 50%;background:#fff;padding:0}
 img.portrait.logoish{padding:8px}
-.who-mini .av.logoish,.pcard>.av.logoish,.pcard-s .top .av.logoish{padding:1px}
+.who-mini .av.logoish,.pcard>.av.logoish,.pcard-s .top .av.logoish{padding:0}
 .logo{width:38px;height:38px;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center;overflow:hidden;flex:none}
-.logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+.logo img{width:100%;height:100%;object-fit:contain;padding:2px}
 .logo.ph{background:var(--bg2);color:var(--ink2);font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:0}
 .logo.ph svg{width:18px;height:18px;color:var(--mute)}
 .logo.sm{width:32px;height:32px;border-radius:8px}
@@ -183,7 +176,7 @@ img.portrait.logoish{padding:8px}
 .who-mini{display:inline-flex;align-items:center;gap:7px;color:var(--ink2);font-weight:500;min-width:0;max-width:100%}
 .who-mini .wn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who-mini .pl{color:var(--mute);font-family:var(--mono);font-size:11px;flex:none}
-.who-mini img,.who-mini .av{width:36px;height:36px;font-size:12px}
+.who-mini img,.who-mini .av{width:36px;height:36px;min-width:36px;min-height:36px;flex:none;font-size:12px}
 .newtag{display:inline-flex;align-items:center;height:17px;padding:0 6px;border-radius:4px;background:var(--brand-soft);color:var(--brand-ink);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;flex:none}
 .lag{font-family:var(--mono);font-size:11px;color:var(--mute)}
 .lag.late{color:var(--dn)}
@@ -558,7 +551,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 /* ---------- floating glass dock with a fluid selection blob (iOS-style) ---------- */
 .dock{display:none}
 @media (max-width:860px){
-  .browse{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 calc(var(--s4)*-1) var(--s4);padding:0 var(--s4)}
   .cats-pills{width:100%;gap:6px}
   .cats-pills button{height:38px;padding:0 13px;font-size:12.5px}
   .set-row:has(.set-seg){align-items:flex-start;flex-wrap:wrap}

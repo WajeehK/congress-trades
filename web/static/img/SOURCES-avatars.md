@@ -68,6 +68,8 @@ A headshot is used only when Wikidata identifies the person with high confidence
 
 ## Company logos (insider fallback, and consistency)
 
+Square / icon-style crops are used so marks stay readable in a 36px circular avatar (wide wordmarks collapsed to a thin unreadable strip). Microsoft uses the four-square symbol cropped from the 2012 lockup; Netflix, Google “G”, and Amazon icons are from Commons (`Netflix icon.svg`, `Google "G" logo.svg`, `Amazon icon.svg`, public domain). Meta and NVIDIA use the infinity / eye symbols cropped from their official lockups. Tesla is the official T recolored red on white for contrast. JPMorgan and Oracle use tidy “JP” / “O” monograms because no free square mark was reliably available. Broadcom uses the red wave from its lockup.
+
 | Ticker | File | Commons file | License | Credit | Source |
 |---|---|---|---|---|---|
 | AAPL | companies/aapl.png | Apple logo black.svg | Public domain | Original:  Rob Janoff | https://commons.wikimedia.org/wiki/File:Apple_logo_black.svg |
@@ -99,6 +101,6 @@ Wordmarks that collapsed into a black bar or an unreadable hairline at avatar si
 
 | Holding | File | Source | Notes |
 |---|---|---|---|
-| SpaceX (SPACE EXPLORATION TECHN CORP) | companies/spacex.png | [SpaceX-Logo-Xonly.svg](https://commons.wikimedia.org/wiki/File:SpaceX-Logo-Xonly.svg) (public domain) | Official X mark on a dark circular chip so the light/blue glyph stays visible on the app’s light row background |
+| SpaceX (SPACE EXPLORATION TECHN CORP) | companies/spacex.png | Generated monogram (not a trademarked logo) | Bold white “X” on a 128px #111 chip. The official Commons X-swoosh is a light glyph and is unreadable at avatar size on a light row, so this high-contrast stand-in is used instead. |
 | Lucid (LCID) | companies/lcid.png | Monogram | The official Lucid wordmark is a wide, light-on-dark mark that rendered as a dark/blank box in a 38px square; the UI uses a tidy “L” monogram on white instead |
 

@@ -93,4 +93,12 @@ A headshot is used only when Wikidata identifies the person with high confidence
 | Temasek Holdings | funds/temasek.png | Temasek Holdings logo.svg | Public domain | Temasek Holdings | https://commons.wikimedia.org/wiki/File:Temasek_Holdings_logo.svg |
 | Berkshire Hathaway | funds/berkshire.png | Berkshire Hathaway.svg | Public domain | Berkshire Hathaway, Inc.; vectorization by Mendaliv | https://commons.wikimedia.org/wiki/File:Berkshire_Hathaway.svg |
 
-Pershing Square has no freely licensed official mark on Wikimedia Commons, so the UI uses a monogram of its initials rather than a guessed or unofficial logo.
+Wordmarks that collapsed into a black bar or an unreadable hairline at avatar size were replaced with tidy monograms (Temasek “T”, Berkshire “BH”, Mubadala “M”) on a white background. Norges Bank uses a crop of the official “N” lettermark from [Norges Bank logo.svg](https://commons.wikimedia.org/wiki/File:Norges_Bank_logo.svg) (public domain). Pershing Square still has no freely licensed official mark, so the UI uses a monogram of its initials.
+
+## Holding logos (PIF book and similar)
+
+| Holding | File | Source | Notes |
+|---|---|---|---|
+| SpaceX (SPACE EXPLORATION TECHN CORP) | companies/spacex.png | [SpaceX-Logo-Xonly.svg](https://commons.wikimedia.org/wiki/File:SpaceX-Logo-Xonly.svg) (public domain) | Official X mark, white background |
+| Lucid (LCID) | companies/lcid.png | Monogram | The official Lucid wordmark is a wide, light-on-dark mark that rendered as a dark/blank box in a 38px square; the UI uses a tidy “L” monogram on white instead |
+

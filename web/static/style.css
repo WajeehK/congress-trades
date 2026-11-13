@@ -119,8 +119,10 @@ h1{font-family:var(--display);font-stretch:75%;font-size:56px;line-height:.95;fo
 
 /* avatar / logo */
 .av{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 18%;background:var(--bg2);flex:none;display:grid;place-items:center;font-weight:600;font-size:12px;color:var(--ink2)}
-.av.logoish,img.portrait.logoish{object-fit:contain;object-position:50% 50%;background:#fff;padding:5px}
-img.portrait.logoish{padding:12px}
+.av.logoish,img.portrait.logoish{object-fit:contain;object-position:50% 50%;background:#fff;padding:2px}
+img.portrait.logoish{padding:10px}
+.who-mini .av.logoish{padding:1px}
+.pcard>.av.logoish,.pcard-s .top .av.logoish{padding:3px}
 .logo{width:38px;height:38px;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center;overflow:hidden;flex:none}
 .logo img{width:100%;height:100%;object-fit:contain;padding:6px}
 .logo.ph{background:var(--bg2);color:var(--ink2);font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:0}
@@ -182,7 +184,7 @@ img.portrait.logoish{padding:12px}
 .who-mini{display:inline-flex;align-items:center;gap:7px;color:var(--ink2);font-weight:500;min-width:0;max-width:100%}
 .who-mini .wn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who-mini .pl{color:var(--mute);font-family:var(--mono);font-size:11px;flex:none}
-.who-mini img,.who-mini .av{width:18px;height:18px;font-size:7px}
+.who-mini img,.who-mini .av{width:28px;height:28px;font-size:10px}
 .newtag{display:inline-flex;align-items:center;height:17px;padding:0 6px;border-radius:4px;background:var(--brand-soft);color:var(--brand-ink);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;flex:none}
 .lag{font-family:var(--mono);font-size:11px;color:var(--mute)}
 .lag.late{color:var(--dn)}
@@ -222,6 +224,7 @@ img.portrait.logoish{padding:12px}
 
 /* ---------- portfolios: ledger rows ---------- */
 .pgrid{display:grid;grid-template-columns:1fr;column-gap:var(--s8)}
+.pcard,a.pcard{color:inherit;text-decoration:none;cursor:pointer}
 .pcard{display:grid;grid-template-columns:auto minmax(0,1fr) 64px auto;align-items:center;column-gap:12px;padding:13px 0;border-bottom:1px solid var(--line);text-align:left;width:100%;transition:background .12s}
 .pcard:hover{background:color-mix(in srgb,var(--bg2) 60%,transparent)}
 .pcard>.av{width:40px;height:40px}
@@ -244,6 +247,7 @@ img.portrait.logoish{padding:12px}
 .perf-h .pills{margin-left:auto}
 .perf-rail{display:grid;grid-auto-flow:column;grid-auto-columns:168px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(var(--s6)*-1);padding:0 var(--s6);scroll-padding-inline:var(--s6);border-bottom:1px solid var(--line)}
 .perf-rail::-webkit-scrollbar{display:none}
+.pcard-s,a.pcard-s{color:inherit;text-decoration:none;cursor:pointer}
 .pcard-s{scroll-snap-align:start;text-align:left;padding:18px 16px 18px 0;margin-right:16px;border-right:1px solid var(--line);min-width:0}
 .pcard-s .top{display:flex;align-items:center;justify-content:space-between}
 .pcard-s .top .av{width:40px;height:40px}

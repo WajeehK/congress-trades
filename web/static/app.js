@@ -135,6 +135,8 @@ function portrait(name, bio, cls = '') {
 }
 /* logos: cached file (static/logos, see logos.js) > parqet > FMP > fund issuer by name > glyph or letters */
 const LOGOS = window.LOGOS || {}, ISS = window.ISSUER_LOGOS || {};
+const HOLDING_LOGOS = window.HOLDING_LOGOS || {};
+const localHoldingLogo = (ticker, name) => HOLDING_LOGOS[ticker] || (ticker && COMPANY_LOGOS[ticker]) || (name && (HOLDING_LOGOS[name] || HOLDING_LOGOS[String(name).toUpperCase()])) || null;
 const ISSUER_RE = [[/\bishares\b/i, 'ishares'], [/blackrock/i, 'blackrock'], [/vanguard/i, 'vanguard'], [/\bspdr\b|state street|select sector/i, 'ssga'],
   [/invesco|oppenheimer|powershares/i, 'invesco'], [/schwab/i, 'schwab'], [/fidelity/i, 'fidelity'], [/pimco/i, 'pimco'], [/goldman/i, 'goldman'],
   [/american funds|capital group/i, 'capitalgroup'], [/j\.?\s?p\.?\s?morgan|jpmorgan/i, 'jpmorgan'], [/franklin|templeton/i, 'franklin'], [/t\.?\s?rowe/i, 'troweprice'],
@@ -155,6 +157,12 @@ function glyph(kind, name, cls) {
   return `<span class="logo ph gl ${cls}">${I.doc}</span>`;
 }
 function logo(ticker, kind, cls = '', name = '') {
+  const local = localHoldingLogo(ticker, name);
+  if (local) {
+    const letters = esc((ticker && ticker !== '--' ? ticker : (name || '?')).replace(/[$].*$/, '').slice(0, 4));
+    const fb = `<span class="logo ph ${cls}">${letters}</span>`;
+    return `<span class="logo ${cls}"><img loading="lazy" alt="" src="${esc(local)}" data-ph="${esc(fb)}" onerror="this.parentNode.outerHTML=this.dataset.ph"></span>`;
+  }
   if (!ticker || ticker === '--') return glyph(kind, name, cls);
   const fb = ['EF', 'MF', 'OT', 'HN', 'AB'].includes(kind) || FUNDISH.test(name || '') ? glyph(kind, name, cls) : `<span class="logo ph ${cls}">${esc(ticker.replace(/[$].*$/, '').slice(0, 4))}</span>`;
   if (LOGOS[ticker]) return `<span class="logo ${cls}"><img loading="lazy" alt="" src="static/logos/${esc(LOGOS[ticker])}" data-ph="${esc(fb)}" onerror="this.parentNode.outerHTML=this.dataset.ph"></span>`;
@@ -365,13 +373,14 @@ async function portfolios() {
 function portfolioCard(p, pf, o = {}) {
   const all = pf && pf.periods ? pf.periods[o.period || 'ALL'] : null;
   const up = !all || all[1] == null || all[1] >= 0;
-  return `<button class="pcard${o.rank ? ' ranked' : ''}" data-pol="${esc(p.politician)}">
+  const val = pf && pf.source === 'sec_13f' && !pf.value ? '—' : (pf ? money(pf.value) : null);
+  return `<a class="pcard${o.rank ? ' ranked' : ''}" href="#p=${encodeURIComponent(p.politician)}" data-pol="${esc(p.politician)}">
     ${o.rank ? `<span class="rank">${String(o.rank).padStart(2, '0')}</span>` : ''}${avatar(p.politician, p.bioguide, 'round')}
     <div class="pm"><div class="nm">${esc(p.politician)}</div><div class="mt">${isPol(p) ? `<i class="pty pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}${p.chamber && p.chamber !== 'Executive' ? ' · ' + esc(p.chamber) : ''}` : esc(metaShort(p))}</div></div>
     ${pf ? `<div class="spark">${sparkSVG(pf.spark, up)}</div>
-      <div class="r"><div class="v" title="${esc(usd0(pf.value))}">${money(pf.value)}</div><div class="d">${all && all[1] != null ? `<span class="${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(all[1]))}</span>` : ''}${o.period ? `<span class="per">${esc(o.period)}</span>` : ''}</div></div>`
+      <div class="r"><div class="v" title="${val === '—' ? 'No substantial 13F-HR table in the latest filings' : esc(usd0(pf.value))}">${val}</div><div class="d">${all && all[1] != null ? `<span class="${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(all[1]))}</span>` : (val === '—' ? `<span class="per">no usable 13F</span>` : '')}${o.period && val !== '—' ? `<span class="per">${esc(o.period)}</span>` : ''}</div></div>`
     : `<div class="spark"></div><div class="r"><div class="v mute">—</div><div class="d mute">${num(p.n)} trades</div></div>`}
-  </button>`;
+  </a>`;
 }
 
 /* ============ home ============ */
@@ -591,8 +600,8 @@ async function loadHome() {
   elig.sort((a, b) => b.periods[k][1] - a.periods[k][1]);
   $('#perfRail').innerHTML = elig.slice(0, 12).map((p, i) => {
     const r = p.periods[k][1], up = r >= 0;
-    return `<button class="pcard-s" data-pol="${esc(p.politician)}"><div class="top"><span class="rank">${String(i + 1).padStart(2, '0')}</span>${avatar(p.politician, p.bioguide, 'round')}</div>
-      <div class="ret ${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(r), 1)}</div><div class="nm">${esc(p.politician)}</div><div class="mt">${esc(metaShort(p))}</div></button>`;
+    return `<a class="pcard-s" href="#p=${encodeURIComponent(p.politician)}" data-pol="${esc(p.politician)}"><div class="top"><span class="rank">${String(i + 1).padStart(2, '0')}</span>${avatar(p.politician, p.bioguide, 'round')}</div>
+      <div class="ret ${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(r), 1)}</div><div class="nm">${esc(p.politician)}</div><div class="mt">${esc(metaShort(p))}</div></a>`;
   }).join('') || empty('No data yet', '');
   if (!H.loaded) {
     H.loaded = true;
@@ -758,9 +767,10 @@ async function openPolitician(name) {
     ? `<span>${esc(loc(p))}</span>`
     : `<span><i class="pty pty-${esc(d.party || '')}"></i>${esc(PARTY[d.party] || 'Unknown party')}</span>${d.chamber === 'Executive' ? `<span>${esc(loc(p))}</span>` : ''}`;
   const valueLabel = isInst ? `13F value ${d.period_end ? '<span class="est">as of ' + fmtDY(d.period_end) + '</span>' : '<span class="est">reported</span>'}` : 'Portfolio Value <span class="est">Estimate</span>';
-  const valueAmt = (isInst && d.value) || has ? usd(d.value) : '—';
+  const noBook = isInst && !d.value;
+  const valueAmt = isInst ? (d.value ? usd(d.value) : '—') : (has ? usd(d.value) : '—');
   const valueSub = isInst
-    ? `<span class="when">${d.note ? esc(d.note) : 'US-listed long positions only, filed up to 45 days after quarter-end. Not a complete portfolio and not a personal account.'}</span>`
+    ? `<span class="when">${noBook ? (d.thin_note || 'No substantial 13F-HR table in the latest filings — a recent file was empty or a placeholder, not a $0 portfolio.') : (d.note ? esc(d.note) : 'US-listed long positions only, filed up to 45 days after quarter-end. Not a complete portfolio and not a personal account.')}</span>`
     : (has ? '' : '<span class="when">No priced stock trades to build a portfolio from.</span>');
   el.innerHTML = `
     <div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button>
@@ -885,7 +895,7 @@ function renderHoldings() {
       const unlisted = h.unlisted || !h.ticker;
       const label = unlisted ? (h.name || h.title || 'Unlisted holding') : h.ticker;
       const sub = unlisted ? 'No public ticker · reported 13F value' : ((h.weight || 0).toFixed(2) + '%');
-      const inner = `${unlisted ? `<span class="logo">${esc((h.name || '?').slice(0, 2))}</span>` : logo(h.ticker, '', '', h.name || '')}
+      const inner = `${logo(h.ticker, '', '', h.name || h.title || '')}
       <div><div class="tk">${esc(label)}</div><div class="w">${esc(sub)}</div></div>
       <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div>`;
       return unlisted ? `<div class="hrow">${inner}</div>` : `<button class="hrow" data-tick="${esc(h.ticker)}">${inner}</button>`;
@@ -1238,7 +1248,13 @@ document.addEventListener('click', e => {
   if (e.target.closest('#clrTick')) { F.ticker = null; loadFeed(); return; }
   if (e.target.closest('#clrNew')) { F.newSince = null; if (location.hash === '#trades:new') history.replaceState(null, '', '#trades'); loadFeed(); return; }
   const un = e.target.closest('[data-un]'); if (un) { location.hash = 'unusual=' + un.dataset.un; return; }
-  const pol = e.target.closest('[data-pol]'); if (pol) { closeSheet(false); location.hash = 'p=' + encodeURIComponent(pol.dataset.pol); return; }
+  const pol = e.target.closest('[data-pol]'); if (pol) {
+    closeSheet(false);
+    const next = 'p=' + encodeURIComponent(pol.dataset.pol);
+    if (location.hash.slice(1) === next) { route(); return; }
+    location.hash = next;
+    return;
+  }
   const tk = e.target.closest('[data-tick]'); if (tk) { location.hash = 't=' + encodeURIComponent(tk.dataset.tick); return; }
   const ov = e.target.closest('[data-ov]'); if (ov) { openOverlap(ov.dataset.ov); return; }
   const tr = e.target.closest('[data-trade]'); if (tr) { location.hash = 'x=' + encodeURIComponent(tr.dataset.trade); return; }

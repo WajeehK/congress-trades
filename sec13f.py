@@ -452,9 +452,19 @@ def list_names(c):
 
 
 def latest_for_name(c, name):
-    r = c.execute("""SELECT cik, accession, period_end, filed, name FROM holdings_13f
-                     WHERE name=? ORDER BY filed DESC, period_end DESC LIMIT 1""", (name,)).fetchone()
-    return dict(r) if r else None
+    """Newest *substantial* 13F-HR for this institution (skip empty/placeholder tables)."""
+    accs = c.execute("""SELECT cik, accession, period_end, filed, name
+                        FROM holdings_13f WHERE name=?
+                        GROUP BY cik, accession, period_end, filed, name
+                        ORDER BY filed DESC, period_end DESC, accession DESC""", (name,)).fetchall()
+    first = None
+    for r in accs:
+        d = dict(r)
+        if first is None:
+            first = d
+        if not is_thin(_holdings_for(c, d["cik"], d["accession"])):
+            return d
+    return first
 
 
 def portfolio(c, name):
@@ -528,9 +538,16 @@ def portfolio(c, name):
             lag = (date.fromisoformat(meta["filed"]) - date.fromisoformat(meta["period_end"])).days
         except ValueError:
             lag = None
+    note = fund.get("note")
+    if is_thin(rows) or total < 1:
+        note = (note + " " if note else "") + (
+            "No substantial 13F-HR table in the latest filings — a recent file was empty or a placeholder, not a $0 portfolio."
+        )
     empty.update(
         avg_delay=lag, n_priced=priced, value=round(total, 2), pnl=None, invested=round(reported_total, 2),
         holdings=hold, source=SOURCE, period_end=meta.get("period_end"), filed=meta.get("filed"),
-        note=fund.get("note"), first=meta.get("period_end"), reported_value=round(reported_total, 2),
+        note=note, first=meta.get("period_end"), reported_value=round(reported_total, 2),
+        thin=bool(is_thin(rows) or total < 1),
+        thin_note="No substantial 13F-HR table in the latest filings — a recent file was empty or a placeholder, not a $0 portfolio." if (is_thin(rows) or total < 1) else None,
     )
     return empty

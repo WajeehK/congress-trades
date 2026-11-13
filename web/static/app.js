@@ -97,20 +97,41 @@ $('#themeBtn').onclick = () => { SET.mode = document.documentElement.dataset.the
 /* ============ building blocks ============ */
 const initials = n => {
   const w = (n || '?').replace(/\b(Hon|Dr|Mr|Mrs|Ms|Jr|Sr|II|III|IV)\b\.?/g, '').replace(/,/g, '').trim().split(/\s+/).filter(Boolean);
-  return ((w[0] || '?')[0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase();
+  if (!w.length) return '?';
+  // Form 4 names often arrive as "COOK TIMOTHY D" (LAST FIRST M)
+  if ((n || '') === (n || '').toUpperCase() && w.length >= 2) return (w[1][0] + w[0][0]).toUpperCase();
+  return (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase();
 };
 const PHOTOS = window.PHOTOS || {};
-const photoURL = (name, bio, big) => PHOTO[name] || (PHOTOS[name] ? PHOTOS[name] + (big ? '.jpg' : '-s.jpg') : null) || (bio ? `https://unitedstates.github.io/images/congress/${big ? '450x550' : '225x275'}/${bio}.jpg` : null);
+const CONGRESS_PHOTOS = window.CONGRESS_PHOTOS || {};
+const INSIDER_PHOTOS = window.INSIDER_PHOTOS || {};
+const INSIDER_COMPANY = window.INSIDER_COMPANY || {};
+const COMPANY_LOGOS = window.COMPANY_LOGOS || {};
+const FUND_LOGOS = window.FUND_LOGOS || {};
+const isLogoURL = u => /\/(?:funds|companies)\//.test(u || '') || /\.png$/i.test(u || '');
+function photoURL(name, bio, big) {
+  if (PHOTO[name]) return PHOTO[name];
+  if (PHOTOS[name]) return PHOTOS[name] + (big ? '.jpg' : '-s.jpg');
+  if (INSIDER_PHOTOS[name]) return INSIDER_PHOTOS[name] + (big ? '.jpg' : '-s.jpg');
+  if (bio && CONGRESS_PHOTOS[bio]) return `static/img/congress/${bio}${big ? '' : '-s'}.jpg`;
+  if (FUND_LOGOS[name]) return FUND_LOGOS[name];
+  const t = INSIDER_COMPANY[name];
+  if (t && COMPANY_LOGOS[t]) return COMPANY_LOGOS[t];
+  return null;
+}
 function avatar(name, bio, cls = '') {
   const ph = `<span class="av ${cls}">${esc(initials(name))}</span>`;
   const u = photoURL(name, bio);
   if (!u) return ph;
-  return `<img class="av ${cls}" loading="lazy" alt="" src="${esc(u)}" data-ph="${esc(ph)}" onerror="this.outerHTML=this.dataset.ph">`;
+  const extra = isLogoURL(u) ? ' logoish' : '';
+  return `<img class="av ${cls}${extra}" loading="lazy" alt="${esc(name || '')}" src="${esc(u)}" data-ph="${esc(ph)}" onerror="this.outerHTML=this.dataset.ph">`;
 }
 function portrait(name, bio, cls = '') {
   const u = photoURL(name, bio, true);
   const ini = `<span class="ini">${esc(initials(name))}</span>`;
-  return u ? `<img class="${cls}" loading="lazy" alt="" src="${esc(u)}" onerror="this.outerHTML='${esc(ini).replace(/'/g, '&#39;')}'">` : ini;
+  if (!u) return ini;
+  const extra = isLogoURL(u) ? ' logoish' : '';
+  return `<img class="${cls}${extra}" loading="lazy" alt="${esc(name || '')}" src="${esc(u)}" onerror="this.outerHTML='${esc(ini).replace(/'/g, '&#39;')}'">`;
 }
 /* logos: cached file (static/logos, see logos.js) > parqet > FMP > fund issuer by name > glyph or letters */
 const LOGOS = window.LOGOS || {}, ISS = window.ISSUER_LOGOS || {};
@@ -279,7 +300,9 @@ function route() {
   if (h2 !== h) return route();
   closeSheet(false);
   let v = 'home';
+  const CAT_HASH = {insiders:'Insider', funds:'Institution', 'trades:House':'House', 'trades:Senate':'Senate', 'trades:Executive':'Executive', 'trades:President':'Executive', 'trades:Insider':'Insider', 'trades:Insiders':'Insider', 'trades:Institution':'Institution', 'trades:Funds':'Institution', 'trades:all':''};
   if (h.startsWith('p=')) v = 'pol';
+  else if (Object.prototype.hasOwnProperty.call(CAT_HASH, h)) { v = 'trades'; applyTradeChamber(CAT_HASH[h]); }
   else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
   else if (h === 'settings') v = 'alerts';
   else if (h === 'trades:new') { v = 'trades'; F.newSince = prevVisit; F.loaded = false; }
@@ -591,6 +614,15 @@ async function loadHome() {
 $$('#perfPills button').forEach(b => b.onclick = () => { $$('#perfPills button').forEach(x => x.classList.toggle('on', x === b)); H.period = b.dataset.v; $('#perfAll').href = '#people:ret:' + H.period; loadHome(); });
 
 /* ============ trades feed ============ */
+function applyTradeChamber(c) {
+  const ch = c || '';
+  if (F.chamber !== ch) F.loaded = false;
+  F.chamber = ch;
+  $$('#chamberSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === ch));
+}
+function chamberHash(c) {
+  return ({Insider:'insiders', Institution:'funds', House:'trades:House', Senate:'trades:Senate', Executive:'trades:Executive'})[c] || 'trades:all';
+}
 const F = {offset: 0, range: '90', side: '', chamber: '', ticker: null, total: 0, PAGE: 40, seq: 0, loaded: false};
 const trades = new Map();
 function rangeDates() {
@@ -1220,7 +1252,7 @@ document.addEventListener('keydown', e => {
 function pills(id, cb) { $$(`#${id} button`).forEach(b => b.onclick = () => { $$(`#${id} button`).forEach(x => x.classList.toggle('on', x === b)); cb(b.dataset.v); }); }
 pills('rangeSeg', v => { F.range = v; $('#custom').hidden = v !== 'custom'; if (v !== 'custom') { loadFeed(); loadKpis(); } });
 pills('sideSeg', v => { F.side = v; loadFeed(); });
-pills('chamberSeg', v => { F.chamber = v; loadFeed(); loadKpis(); });
+pills('chamberSeg', v => { applyTradeChamber(v); if (location.hash.slice(1) !== chamberHash(v)) history.replaceState(null, '', '#' + chamberHash(v)); loadFeed(); loadKpis(); });
 pills('polSort', v => { P.sort = v; P.dir = -1; loadPeople(); });
 pills('polPeriod', v => { P.period = v; loadPeople(); });
 pills('polChamber', v => { P.chamber = v; loadPeople(); });

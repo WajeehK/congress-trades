@@ -24,7 +24,7 @@
   <div class="top-in">
     <a class="brand" href="#" aria-label="The Insider House home"><span class="mark"><svg viewBox="0 0 24 24"><path d="M12 3v2M9.5 7.5a2.5 2.5 0 0 1 5 0V9h-5zM4 11h16L12 9zM6 11v7M10 11v7M14 11v7M18 11v7M4 18.5h16"/><path class="mk-r" d="M3 21h18"/></svg></span><span class="wm">The <em>Insider</em> House</span></a>
     <nav class="tabs" id="tabs">
-      <a href="#" data-v="home">Home</a><a href="#trades" data-v="trades">Trades</a><a href="#news" data-v="news">News</a><a href="#people" data-v="people">Politicians</a><a href="#settings" data-v="alerts">Settings</a>
+      <a href="#" data-v="home">Home</a><a href="#trades" data-v="trades">Trades</a><a href="#news" data-v="news">News</a><a href="#people" data-v="people">People</a><a href="#settings" data-v="alerts">Settings</a>
     </nav>
     <div class="top-r">
       <button class="live" id="live" title="Check for new filings now"><i></i><span id="liveTxt">Live</span></button>
@@ -49,6 +49,15 @@
       </div>
       <div class="phone" id="heroPhone" aria-hidden="true"></div>
     </div>
+
+    <nav class="browse" aria-label="Browse categories">
+      <a href="#trades:all"><span class="b-k">Everyone</span><span class="b-s">All disclosures</span></a>
+      <a href="#trades:House"><span class="b-k">House</span><span class="b-s">US House members</span></a>
+      <a href="#trades:Senate"><span class="b-k">Senate</span><span class="b-s">US Senators</span></a>
+      <a href="#trades:Executive"><span class="b-k">President</span><span class="b-s">White House</span></a>
+      <a href="#insiders"><span class="b-k">Insiders</span><span class="b-s">SEC Form 4</span></a>
+      <a href="#funds"><span class="b-k">Funds</span><span class="b-s">13F holdings</span></a>
+    </nav>
 
     <a data-sec="today" class="today" id="today" href="#trades:new" hidden></a>
 
@@ -120,10 +129,16 @@
       <div class="pills wide" id="rangeSeg" role="group" aria-label="Date range">
         <button data-v="0">Today</button><button data-v="7">1W</button><button data-v="30">1M</button><button data-v="90" class="on">3M</button><button data-v="365">1Y</button><button data-v="all">ALL</button><button data-v="custom">Custom</button>
       </div>
+      <div class="pills cats-pills" id="chamberSeg" role="tablist" aria-label="Category">
+        <button type="button" data-v="" class="on">Everyone</button>
+        <button type="button" data-v="House">House</button>
+        <button type="button" data-v="Senate">Senate</button>
+        <button type="button" data-v="Executive">President</button>
+        <button type="button" data-v="Insider">Insiders</button>
+        <button type="button" data-v="Institution">Funds</button>
+      </div>
       <div class="scroller">
         <div class="pills" id="sideSeg"><button data-v="" class="on">All</button><button data-v="buy">Buys</button><button data-v="sell">Sells</button></div>
-        <span class="vsep"></span>
-        <div class="pills" id="chamberSeg"><button data-v="" class="on">Everyone</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button><button data-v="Insider">Insiders</button><button data-v="Institution">Funds</button></div>
       </div>
       <div class="scroller">
         <label class="sel"><span>Sort</span><select id="sort">
@@ -156,7 +171,7 @@
         <button class="chip-btn dir" id="polDir" title="Reverse order"><svg viewBox="0 0 24 24"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg><span>High → low</span></button>
       </div>
       <div class="pills" id="polPeriod" hidden><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button><button data-v="ALL">ALL</button></div>
-      <div class="pills" id="polChamber"><button data-v="" class="on">All</button><button data-v="House">House</button><button data-v="Senate">Senate</button><button data-v="Executive">President</button><button data-v="Insider">Insiders</button><button data-v="Institution">Funds</button></div>
+      <div class="pills cats-pills" id="polChamber" role="tablist" aria-label="Category"><button type="button" data-v="" class="on">All</button><button type="button" data-v="House">House</button><button type="button" data-v="Senate">Senate</button><button type="button" data-v="Executive">President</button><button type="button" data-v="Insider">Insiders</button><button type="button" data-v="Institution">Funds</button></div>
     </div>
     <div class="sec-h lb-h"><h2>Scoreboard</h2><div class="pills" id="lbPills"><button data-v="1M">1M</button><button data-v="3M">3M</button><button data-v="YTD">YTD</button><button data-v="1Y" class="on">1Y</button></div></div>
     <div class="lb" id="lb"></div>
@@ -192,6 +207,7 @@
 <div class="toast" id="toast" hidden></div>
 <script src="static/search.js?v=__BUILD__"></script>
 <script src="static/img/people/photos.js?v=__BUILD__"></script>
+<script src="static/img/avatars.js?v=__BUILD__"></script>
 <script src="static/logos/logos.js?v=__BUILD__"></script>
 <script src="static/data.js?v=__BUILD__"></script>
 <script src="static/app.js?v=__BUILD__"></script>

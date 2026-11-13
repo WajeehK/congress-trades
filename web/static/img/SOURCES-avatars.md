@@ -99,6 +99,6 @@ Wordmarks that collapsed into a black bar or an unreadable hairline at avatar si
 
 | Holding | File | Source | Notes |
 |---|---|---|---|
-| SpaceX (SPACE EXPLORATION TECHN CORP) | companies/spacex.png | [SpaceX-Logo-Xonly.svg](https://commons.wikimedia.org/wiki/File:SpaceX-Logo-Xonly.svg) (public domain) | Official X mark, white background |
+| SpaceX (SPACE EXPLORATION TECHN CORP) | companies/spacex.png | [SpaceX-Logo-Xonly.svg](https://commons.wikimedia.org/wiki/File:SpaceX-Logo-Xonly.svg) (public domain) | Official X mark on a dark circular chip so the light/blue glyph stays visible on the app’s light row background |
 | Lucid (LCID) | companies/lcid.png | Monogram | The official Lucid wordmark is a wide, light-on-dark mark that rendered as a dark/blank box in a 38px square; the UI uses a tidy “L” monogram on white instead |
 

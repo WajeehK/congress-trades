@@ -253,7 +253,7 @@ function tradeRow(t, showWho = true) {
   const f4tag = t.source === 'sec_form4' ? '<span class="lag atag" title="SEC Form 4 open-market transaction">Form 4</span>' : '';
   const f13tag = (t.source === 'sec_13f' || /^13F /i.test(t.tx_type || '')) ? '<span class="lag atag" title="Inferred from a delayed 13F holdings snapshot, not a disclosed trade">Inferred</span>' : '';
   return `<button class="trow" data-trade="${esc(t.uid)}">
-    ${t.ticker ? logo(t.ticker, t.asset_type, '', assetName(t)) : `<span class="logo">${esc((t.asset || title || '?').slice(0, 2))}</span>`}
+    ${logo(t.ticker, t.asset_type, '', assetName(t) || t.asset || title)}
     <div class="mid">
       <div class="l1"><span class="tk">${esc(title)}</span>${sideTag(t)}${earnTag(t)}${isNew(t) ? '<span class="newtag">New</span>' : ''}${/^From the OGE 278e/.test(t.description || '') ? '<span class="lag atag" title="From an annual OGE 278e financial disclosure report">278e</span>' : ''}${f4tag}${f13tag}${ovTag(t)}</div>
       <div class="l2">${showWho ? who : `<span class="an">${sub}</span>`}</div>

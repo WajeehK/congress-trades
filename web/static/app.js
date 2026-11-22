@@ -292,7 +292,7 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'news', 'favs', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'];
+const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
@@ -312,8 +312,8 @@ function route() {
   const CAT_HASH = {insiders:'Insider', funds:'Institution', 'trades:House':'House', 'trades:Senate':'Senate', 'trades:Executive':'Executive', 'trades:President':'Executive', 'trades:Insider':'Insider', 'trades:Insiders':'Insider', 'trades:Institution':'Institution', 'trades:Funds':'Institution', 'trades:all':''};
   if (h.startsWith('p=')) v = 'pol';
   else if (Object.prototype.hasOwnProperty.call(CAT_HASH, h)) { v = 'trades'; applyTradeChamber(CAT_HASH[h]); }
-  else if (['trades', 'people', 'news', 'alerts', 'favs'].includes(h)) v = h;
-  else if (h === 'favourites' || h === 'favorites') v = 'favs';
+  else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
+  else if (h === 'favourites' || h === 'favorites' || h === 'favs') { history.replaceState(null, '', '#people'); v = 'people'; }
   else if (h === 'settings') v = 'alerts';
   else if (h === 'trades:new') { v = 'trades'; F.newSince = prevVisit; F.loaded = false; }
   else if (h === 'mostbought') v = 'mb';
@@ -332,7 +332,6 @@ function route() {
   if (v === 'mb' && !MB.loaded) loadMostBought();
   if (v === 'trades' && !F.loaded) { F.loaded = true; loadKpis(); loadFeed(); }
   if (v === 'people') loadPeople();
-  if (v === 'favs') loadFavourites();
   if (v === 'news') loadNews(false); else stopNews();
   if (v === 'alerts') renderAlerts();
   if (v === 'pol' && changed) openPolitician(h.slice(2));
@@ -727,7 +726,26 @@ async function loadPeople() {
   $('#polDir span').textContent = P.sort === 'name' ? (P.dir === -1 ? 'A → Z' : 'Z → A') : (P.dir === -1 ? 'High → low' : 'Low → high');
   syncPolPills();
   const ret = P.sort === 'ret', nOK = ret ? L.filter(p => key(p) > -1e9).length : 0;
-  $('#polGrid').innerHTML = L.map((p, i) => ret ? portfolioCard(p, p.pf, {period: P.period, rank: key(p) > -1e9 ? (P.dir === -1 ? i + 1 : nOK - i) : 0}) : portfolioCard(p, p.pf)).join('') || (q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, fund, party or state.') : empty('Nobody found', ''));
+  const favSet = new Set(favourites());
+  const starred = L.filter(p => favSet.has(p.politician));
+  const rest = L.filter(p => !favSet.has(p.politician));
+  const card = (p, i, arr) => ret
+    ? portfolioCard(p, p.pf, {period: P.period, rank: key(p) > -1e9 ? (P.dir === -1 ? i + 1 : (arr.filter(x => key(x) > -1e9).length - i) ) : 0})
+    : portfolioCard(p, p.pf);
+  const none = q ? empty(`Nobody matches “${esc(q)}”`, 'Search by name, fund, party or state.') : empty('Nobody found', '');
+  const starWrap = $('#polStarWrap'), allH = $('#polAllH');
+  if (starWrap) {
+    starWrap.hidden = !starred.length;
+    if (starred.length) {
+      $('#polStarN').textContent = String(starred.length);
+      $('#polStar').innerHTML = starred.map((p, i) => card(p, i, starred)).join('');
+    } else if ($('#polStar')) $('#polStar').innerHTML = '';
+  }
+  if (allH) {
+    allH.querySelector('h2').textContent = starred.length ? 'Everyone else' : 'All people';
+    allH.hidden = !!(starred.length && rest.length === 0);
+  }
+  $('#polGrid').innerHTML = (starred.length ? rest : L).map((p, i, arr) => card(p, i, arr)).join('') || (starred.length ? '' : none);
 }
 
 /* ============ politician page ============ */
@@ -762,8 +780,8 @@ function toggleFav(name) {
     b.setAttribute('aria-label', `${on ? 'Remove' : 'Add'} ${name} ${on ? 'from' : 'to'} favourites`);
     b.innerHTML = STAR(on);
   });
-  if (route.cur === 'favs') loadFavourites();
-  toast(on ? `Added to Favourites` : `Removed from Favourites`);
+  if (route.cur === 'people') loadPeople();
+  toast(on ? 'Starred — pinned to the top of People' : 'Removed from starred');
 }
 // names are normalised server-side (clean_name in app.py); migrate follows saved under the old spelling
 (() => { const H = new Set(['mr', 'mrs', 'ms', 'miss', 'dr', 'hon', 'rep', 'sen', 'honorable', 'md', 'facs', 'phd', 'dds', 'dvm', 'cpa', 'esq']);
@@ -831,6 +849,7 @@ async function openPolitician(name) {
   renderHoldings();
   loadPolTrades();
   loadFilings(name);
+  renderXPosts(name);
   $('#bellBtn').onclick = () => toggleFollow(name);
   $('#shareBtn').onclick = async () => {
     const url = location.href.split('#')[0] + '#p=' + encodeURIComponent(name);
@@ -1264,57 +1283,47 @@ async function renderAlerts() {
 }
 
 
-/* ============ favourites tab ============ */
-function favHoldingRow(h) {
-  const unlisted = h.unlisted || !h.ticker;
-  const label = unlisted ? (h.name || h.title || 'Unlisted holding') : h.ticker;
-  const sub = unlisted ? (h.name && h.ticker ? esc(h.name) : 'Reported 13F value') : ((h.weight || 0).toFixed(2) + '%');
-  const inner = `${logo(h.ticker, '', '', h.name || h.title || '')}
-    <div><div class="tk">${esc(label)}</div><div class="w">${sub}</div></div>
-    <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div>`;
-  return unlisted ? `<div class="hrow">${inner}</div>` : `<button class="hrow" data-tick="${esc(h.ticker)}">${inner}</button>`;
-}
-async function loadFavourites() {
-  const el = $('#favList');
-  const names = favourites();
-  if (!names.length) {
-    el.innerHTML = empty('No favourites yet', 'Open anyone’s page — a politician, insider or fund — and tap the star. This tab then shows only their latest positions, trades and details, newest first.');
-    return;
+
+
+/* ============ X disclosures (static file; public posts only) ============ */
+let XDISC = null;
+async function xDisclosures() {
+  if (!XDISC) {
+    try { XDISC = await fetch('static/x-disclosures.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+    catch (e) { XDISC = {people: {}}; }
   }
-  el.innerHTML = skRows(Math.min(4, names.length));
-  let people = [], pfs = new Map();
-  try { people = await api('/api/politicians'); } catch (e) { people = []; }
-  try { pfs = await portfolios(); } catch (e) { pfs = new Map(); }
-  const by = new Map(people.map(p => [p.politician, p]));
-  const rows = await Promise.all(names.map(async name => {
-    const meta = by.get(name) || {politician: name, ...(pfs.get(name) || {})};
-    let pf = null, trades = [];
-    try { pf = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) {}
-    try { const d = await api('/api/trades?politician=' + encodeURIComponent(name) + '&limit=6&sort=disclosure_date'); trades = (d && d.trades) || []; } catch (e) {}
-    const sum = pfs.get(name);
-    const latest = [sum && sum.latest, pf && (pf.filed || pf.period_end), trades[0] && trades[0].disclosure_date].filter(Boolean).sort().pop() || '';
-    return {name, meta, pf, sum, trades, latest};
-  }));
-  if (route.cur !== 'favs') return;
-  rows.sort((a, b) => (b.latest || '').localeCompare(a.latest || '') || a.name.localeCompare(b.name));
-  el.innerHTML = `<p class="fav-note">${rows.length} ${rows.length === 1 ? 'person' : 'people'} · newest activity first</p>` + rows.map(r => {
-    const p = {...r.meta, politician: r.name};
-    const pf = r.pf || {};
-    const isInst = pf.source === 'sec_13f' || p.chamber === 'Institution' || (r.sum && r.sum.source === 'sec_13f');
-    const val = isInst && !pf.value ? '—' : (pf.value != null ? money(pf.value) : (r.sum ? money(r.sum.value) : '—'));
-    const when = isInst
-      ? (pf.period_end ? '13F as of ' + fmtDY(pf.period_end) + (pf.filed ? ' · filed ' + fmtDY(pf.filed) : '') : (pf.filed ? 'Filed ' + fmtDY(pf.filed) : 'SEC Form 13F'))
-      : (r.latest ? 'Latest ' + fmtDY(r.latest) : (p.n ? num(p.n) + ' trades' : ''));
-    const holds = (pf.holdings || []).slice(0, 5);
-    const trades = r.trades || [];
-    const href = '#p=' + encodeURIComponent(r.name);
-    return `<article class="fav-block">
-      <div class="fav-head"><a class="fav-who" href="${href}">${avatar(r.name, p.bioguide, 'round')}<div class="pm"><div class="nm">${esc(r.name)}</div><div class="mt">${esc(metaShort(p))}</div><div class="d">${esc(when)}</div></div><div class="r"><div class="v">${val}</div></div></a>${favBtn(r.name, true)}</div>
-      ${holds.length ? `<div class="h2s"><h2>Positions</h2><small>${num(pf.n_holdings || holds.length)}${isInst ? (pf.period_end ? ' · 13F as of ' + fmtDY(pf.period_end) : ' · 13F') : ' · est.'}</small></div><div class="card hlist">${holds.map(favHoldingRow).join('')}</div>` : ''}
-      ${trades.length ? `<div class="h2s"><h2>Trades</h2><small>Newest disclosed first</small></div><div class="card tlist">${trades.map(t => tradeRow(t, false)).join('')}</div>` : (!holds.length ? `<div class="empty"><b>No positions or trades yet</b>Nothing in the current data for this person.</div>` : '')}
-      <a class="fav-more" href="${href}">See all details</a>
-    </article>`;
-  }).join('');
+  return XDISC;
+}
+function xSideTag(side) {
+  if (side === 'buy') return `<span class="side buy">${I.up}Buy</span>`;
+  if (side === 'sell') return `<span class="side sell">${I.dn}Sell</span>`;
+  if (side === 'short') return `<span class="side sell">${I.dn}Short</span>`;
+  return '';
+}
+async function renderXPosts(name) {
+  const data = await xDisclosures();
+  const rec = (data.people || {})[name];
+  if (!rec || !rec.posts || !rec.posts.length || POL.name !== name) return;
+  const el = $('#v-pol .pbody'); if (!el) return;
+  if ($('#xPosts')) return;
+  const rows = rec.posts.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const html = `<div class="h2s" id="xPostsH"><h2>From his X posts</h2><small>Public posts only · @${esc(rec.username || 'michaeljburry')}</small></div>
+    <div class="card xlist" id="xPosts">${rows.map(p => {
+      const tags = (p.tickers || []).map(tk => `<button type="button" class="xtag" data-tick="${esc(tk)}">${esc(tk)}</button>`).join('');
+      return `<div class="xrow">
+        <div><div class="xd">${fmtDY(p.date)} · from his X posts</div>
+          <div class="xq">“${esc(p.summary || p.text || '')}”</div>
+          <div class="xtags">${xSideTag(p.side)}${tags}<span class="xsrc">${esc(p.quote_from ? 'Quoted from ' + p.quote_from : 'Source post')}</span></div>
+        </div>
+        <a class="xgo" href="${esc(p.url)}" target="_blank" rel="noopener">View post ↗</a>
+      </div>`;
+    }).join('')}</div>
+    <p class="fine" id="xPostsNote">${esc(data.note || 'Public X posts only. Not a complete book. Not investment advice.')}</p>`;
+  const holdH = el.querySelector('#holdings') ? el.querySelector('#holdings').previousElementSibling : null;
+  const tradesH = $$('#v-pol .h2s').find(h => /Trades/.test(h.textContent));
+  const anchor = holdH || tradesH;
+  if (anchor) anchor.insertAdjacentHTML('beforebegin', html);
+  else el.insertAdjacentHTML('beforeend', html);
 }
 
 /* ============ events ============ */

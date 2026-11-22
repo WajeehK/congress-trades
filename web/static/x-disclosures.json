@@ -1,0 +1,82 @@
+{
+  "updated": "2026-11-22",
+  "note": "Public statements from Michael Burry’s official X account, @michaeljburry (verified; numeric id 412833880). Entries are only posts that actually state a position. Where the tweet itself is a Trading Post announcement, the quoted sentence is taken from the public excerpt of the Substack post that tweet links to. Paywalled detail is omitted, so this is not a complete book. Dates are the X post’s date (UTC). Not investment advice.",
+  "people": {
+    "Scion Asset Management (Michael Burry)": {
+      "username": "michaeljburry",
+      "user_id": "412833880",
+      "posts": [
+        {
+          "id": "2122429350117036330",
+          "url": "https://x.com/michaeljburry/status/2122429350117036330",
+          "date": "2026-11-16",
+          "text": "New Trading Post November 16, 2026",
+          "summary": "I bought more Adobe (ADBE) at ~$246. It is a full position.",
+          "tickers": ["ADBE"],
+          "side": "buy",
+          "quote_from": "public excerpt of the linked Substack Trading Post"
+        },
+        {
+          "id": "2103507370701643825",
+          "url": "https://x.com/michaeljburry/status/2103507370701643825",
+          "date": "2026-09-25",
+          "text": "I did not short these until after the runup. The one I shorted back then- Palantir and. nVDA have generally not done so well, and have provided big drops in which I could make money as a short.",
+          "summary": "I did not short these until after the runup. The one I shorted back then— Palantir and NVDA — have generally not done so well, and have provided big drops in which I could make money as a short.",
+          "tickers": ["PLTR", "NVDA"],
+          "side": "short",
+          "quote_from": "the X post"
+        },
+        {
+          "id": "2080183943475986605",
+          "url": "https://x.com/michaeljburry/status/2080183943475986605",
+          "date": "2026-07-23",
+          "text": "Trading Post July 23, 2026 - 3 Stock Buys & the BIS Weighs in on AI's Rampant Circular Financing. Taking the Momentum Pair Trade challenge by shorting the Pods.",
+          "summary": "Today I added to my Tencent (0700 HK) long at HK$448.60 per share.",
+          "tickers": ["0700.HK"],
+          "side": "buy",
+          "quote_from": "public excerpt of the linked Substack Trading Post"
+        },
+        {
+          "id": "2073171498160849026",
+          "url": "https://x.com/michaeljburry/status/2073171498160849026",
+          "date": "2026-07-03",
+          "text": "Read the latest Trading Post - a new short and additions to five longs.",
+          "summary": "A new short and five additions to long positions.",
+          "tickers": [],
+          "side": "",
+          "quote_from": "the X post and the public Substack description (the names are behind the paywall)"
+        },
+        {
+          "id": "2071459164786765993",
+          "url": "https://x.com/michaeljburry/status/2071459164786765993",
+          "date": "2026-06-29",
+          "text": "Trading Post June 18, 2026. Dollar Cost Averaging with Volume Signals.",
+          "summary": "Today’s Trades: I bought Mercado Libre (MELI) at about $1,630.",
+          "tickers": ["MELI"],
+          "side": "buy",
+          "quote_from": "public excerpt of the linked Substack Trading Post"
+        },
+        {
+          "id": "2067006956661813723",
+          "url": "https://x.com/michaeljburry/status/2067006956661813723",
+          "date": "2026-06-16",
+          "text": "Trading Post June 16, 2026. Some early birthday presents for me, and SpaceX.",
+          "summary": "Today, I bought more Fiserv (FISV) at about $49.50 for the same reasons.",
+          "tickers": ["FISV"],
+          "side": "buy",
+          "quote_from": "public excerpt of the linked Substack Trading Post"
+        },
+        {
+          "id": "2062000820019728631",
+          "url": "https://x.com/michaeljburry/status/2062000820019728631",
+          "date": "2026-06-03",
+          "text": "MEGA Trading Post/Short Thoughts Mash-Up June 2, 2026. Trades, Short Philosophy, SpaceX bits, and Memory Chips Misremembering.",
+          "summary": "Palantir trades at ~16X its IV15, according to my assumptions. It is a sand castle, supported for now by the AI applications narrative, a short in my book.",
+          "tickers": ["PLTR"],
+          "side": "short",
+          "quote_from": "public excerpt of the linked Substack post"
+        }
+      ]
+    }
+  }
+}

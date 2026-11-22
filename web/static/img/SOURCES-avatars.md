@@ -94,8 +94,9 @@ Square / icon-style crops are used so marks stay readable in a 36px circular ava
 | Mubadala Investment Company | funds/mubadala.png | Mubadala Investment logo.svg | Public domain | Unknown author | https://commons.wikimedia.org/wiki/File:Mubadala_Investment_logo.svg |
 | Temasek Holdings | funds/temasek.png | Temasek Holdings logo.svg | Public domain | Temasek Holdings | https://commons.wikimedia.org/wiki/File:Temasek_Holdings_logo.svg |
 | Berkshire Hathaway | funds/berkshire.png | Berkshire Hathaway.svg | Public domain | Berkshire Hathaway, Inc.; vectorization by Mendaliv | https://commons.wikimedia.org/wiki/File:Berkshire_Hathaway.svg |
+| Scion Asset Management (Michael Burry) | funds/scion.png | — (generated monogram) | — | The Insider House | No freely licensed photograph: Wikidata [Q6828961](https://www.wikidata.org/wiki/Q6828961) has no P18. The official Commons wordmark [Scion Asset Management.png](https://commons.wikimedia.org/wiki/File:Scion_Asset_Management.png) (public domain, Scion Asset Management) is a 414×33 mark that collapses at avatar size, so the UI uses a tidy “MB” monogram, the same fallback as Temasek, Berkshire and Mubadala. |
 
-Wordmarks that collapsed into a black bar or an unreadable hairline at avatar size were replaced with tidy monograms (Temasek “T”, Berkshire “BH”, Mubadala “M”) on a white background. Norges Bank uses a crop of the official “N” lettermark from [Norges Bank logo.svg](https://commons.wikimedia.org/wiki/File:Norges_Bank_logo.svg) (public domain). Pershing Square still has no freely licensed official mark, so the UI uses a monogram of its initials.
+Wordmarks that collapsed into a black bar or an unreadable hairline at avatar size were replaced with tidy monograms (Temasek “T”, Berkshire “BH”, Mubadala “M”, Scion “MB”) on a white background. Norges Bank uses a crop of the official “N” lettermark from [Norges Bank logo.svg](https://commons.wikimedia.org/wiki/File:Norges_Bank_logo.svg) (public domain). Pershing Square still has no freely licensed official mark, so the UI uses a monogram of its initials.
 
 ## Holding logos (PIF book and similar)
 

@@ -117,6 +117,13 @@ FUNDS = [
         "files": ["Pershing Square Capital Management logo.svg", "Pershing Square logo.svg"],
         "search": "Pershing Square Capital Management logo",
     },
+    {
+        "key": "scion",
+        "name": "Scion Asset Management (Michael Burry)",
+        "files": ["Scion Asset Management.png"],
+        "search": "Scion Asset Management logo",
+        "monogram": "MB",
+    },
 ]
 
 SLEEP = 0.2
@@ -507,6 +514,9 @@ def fetch_logos(sources: list):
         except Exception as e:
             print(f"    fail {ticker}: {e}")
     for f in FUNDS:
+        if f.get("monogram"):
+            print(f"  fund {f['key']}: monogram {f['monogram']} (skip Commons wordmark)")
+            continue
         print(f"  fund {f['key']}")
         info = pick_logo(f["files"], f["search"], f.get("require"))
         if not info:
@@ -552,6 +562,36 @@ def write_spacex_chip(size=128):
     bbox = draw.textbbox((0, 0), "X", font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     draw.text(((size - tw) // 2 - bbox[0], (size - th) // 2 - bbox[1]), "X", font=font, fill=(255, 255, 255))
+    im.save(dest, "PNG", optimize=True)
+    return dest
+
+
+
+def write_scion_chip(size=128):
+    """Tidy MB monogram. Wikidata Q6828961 has no P18 photograph, and the
+    official Commons wordmark (File:Scion Asset Management.png) is a wide
+    414×33 mark that collapses at avatar size, same problem as Temasek/Berkshire."""
+    from PIL import ImageDraw, ImageFont
+    dest = WEB / "funds" / "scion.png"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    im = Image.new("RGB", (size, size), (255, 255, 255))
+    draw = ImageDraw.Draw(im)
+    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    text = "MB"
+    try:
+        font = ImageFont.truetype(font_path, 72)
+    except Exception:
+        font = ImageFont.load_default()
+    bbox = draw.textbbox((0, 0), text, font=font)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    target = size * 0.72
+    try:
+        font = ImageFont.truetype(font_path, max(8, int(font.size * (target / max(tw, th)))))
+    except Exception:
+        pass
+    bbox = draw.textbbox((0, 0), text, font=font)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    draw.text(((size - tw) // 2 - bbox[0], (size - th) // 2 - bbox[1]), text, font=font, fill=(18, 18, 16))
     im.save(dest, "PNG", optimize=True)
     return dest
 
@@ -660,6 +700,8 @@ def main():
     print("Insider headshots…")
     photos, company_of, missed = fetch_insiders(ins, sources)
     write_spacex_chip()
+    write_scion_chip()
+    funds["Scion Asset Management (Michael Burry)"] = "static/img/funds/scion.png"
     write_js(congress, photos, company_of, companies, funds)
     write_sources(sources, missed)
     print("DONE")

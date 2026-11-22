@@ -52,7 +52,7 @@ img{display:block}
 .mark .mk-r,.noti .ic .mk-r{stroke:var(--mark-r,#ff3b47);stroke-width:2.2}
 .wm{font-family:var(--display);font-stretch:75%;font-weight:800;font-size:17px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
 .wm em{font-style:normal;color:var(--brand-ink)}
-.tabs{display:flex;gap:22px}
+.tabs{display:flex;gap:16px;flex-wrap:nowrap}
 .tabs a{position:relative;padding:6px 0;font-weight:500;font-size:14px;color:var(--mute);transition:color .15s}
 .tabs a:hover{color:var(--ink)}
 .tabs a.on{color:var(--ink)}
@@ -290,7 +290,7 @@ img.portrait.logoish{padding:8px}
 /* ---------- politician page ---------- */
 .polpage{max-width:760px;margin:0 auto}
 .pbar{display:flex;gap:8px;padding:var(--s3) 0 0}
-.pbar .bell{margin-left:auto}
+.pbar .bell{margin-left:0}
 .pbar .bell.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .pbar .bell.on svg{fill:currentColor}
 .phero{display:grid;grid-template-columns:96px minmax(0,1fr);gap:18px;align-items:end;padding:var(--s5) 0 var(--s5);border-bottom:1px solid var(--rule)}
@@ -721,8 +721,9 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
   .phero .nm h1{font-size:40px}
   .sheet{padding-inline:18px}
   .mir-amt{font-size:46px}
-  .dock a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10.5px;font-weight:500;letter-spacing:.01em;color:var(--mute)}
-  .dock a svg{width:21px;height:21px}
+  .dock a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:500;letter-spacing:0;color:var(--mute);min-width:0;padding:0 1px}
+  .dock a svg{width:20px;height:20px}
+  .dock a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   body.on-pol .dock{display:none}
 }
 @media (max-width:360px){.hero-name{font-size:23vw}.pcard .spark{display:none}.pcard{grid-template-columns:auto minmax(0,1fr) auto}.pcard.ranked{grid-template-columns:22px auto minmax(0,1fr) auto}}
@@ -814,3 +815,28 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;ba
 @media (min-width:861px){.lb{grid-template-columns:1fr 1fr;gap:var(--s8)}}
 
 .feed-caveat{margin:0 0 14px;padding:12px 14px;background:var(--bg2);border-radius:12px;border:1px solid var(--line)}
+
+/* favourites: star on cards/profiles, and the Favourites tab */
+.pcard-wrap{display:grid;grid-template-columns:minmax(0,1fr) 36px;align-items:center;border-bottom:1px solid var(--line)}
+.pcard-wrap>.pcard{border-bottom:0;min-width:0}
+.fav-btn{width:36px;height:40px;display:grid;place-items:center;color:var(--mute);border-radius:10px;flex:none}
+.fav-btn svg{width:18px;height:18px}
+.fav-btn.on{color:#f5b400}
+.fav-btn.on svg{fill:currentColor}
+.pbar .fav{margin-left:auto}
+.pbar .fav.on{color:#f5b400;border-color:rgba(245,180,0,.45)}
+.pbar .fav.on svg{fill:currentColor}
+.fav-note{font-size:13px;color:var(--mute);margin:0 0 var(--s4)}
+.fav-block{padding:var(--s6) 0;border-bottom:1px solid var(--rule)}
+.fav-block:last-child{border-bottom:0}
+.fav-head{display:grid;grid-template-columns:minmax(0,1fr) 36px;align-items:center;gap:8px;margin-bottom:var(--s3)}
+.fav-who{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;min-width:0;color:inherit;text-decoration:none}
+.fav-who .av{width:44px;height:44px}
+.fav-who .nm{font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
+.fav-who .mt{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fav-who .r{text-align:right;min-width:72px;align-self:start;padding-top:2px}
+.fav-who .v{font-size:15px;font-weight:500;white-space:nowrap}
+.fav-who .d{font-family:var(--mono);font-size:11.5px;color:var(--mute);margin-top:3px;white-space:normal}
+.fav-block .h2s{margin-top:var(--s5)}
+.fav-more{display:flex;align-items:center;justify-content:space-between;width:100%;height:44px;padding:0;font-size:13.5px;font-weight:500;color:var(--ink);border:0;border-top:1px solid var(--line);background:none}
+.fav-more::after{content:"→";color:var(--brand-ink);font-size:16px}

@@ -54,6 +54,13 @@ FUNDS = {
         "note": "Pershing Square Capital Management (Bill Ackman). Only 13F-HR holdings tables are used "
                 "(13F-NT notices are skipped). US-listed longs, up to 45 days delayed.",
     },
+    "0001649339": {
+        "name": "Scion Asset Management (Michael Burry)",
+        "short": "Michael Burry",
+        "note": "Scion Asset Management, LLC, managed by Michael Burry. US-listed long positions on its "
+                "SEC 13F only; filed up to 45 days after quarter-end. This is the fund’s holdings, not a "
+                "complete picture of Burry’s personal assets.",
+    },
 }
 
 HR_FORMS = {"13F-HR", "13F-HR/A"}

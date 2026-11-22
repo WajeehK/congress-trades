@@ -56,6 +56,7 @@ const I = {
 const isWide = () => matchMedia('(min-width:861px)').matches;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
 const store = {get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } }, set: (k, v) => localStorage.setItem(k, JSON.stringify(v))};
+const STAR = on => `<svg viewBox="0 0 24 24" width="22" height="22" style="fill:${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.85L12 16.9l-5.25 2.75 1-5.85L3.5 9.7l5.9-.9z"/></svg>`;
 
 /* new since last visit */
 const prevVisit = localStorage.getItem('lastVisit') || new Date(Date.now() - 24 * 3600e3).toISOString();
@@ -291,7 +292,7 @@ function sparkSVG(vals, up) {
 
 /* ============ routing ============ */
 let baseView = 'home', statusData = null, lastSeen = null;
-const VIEWS = ['home', 'trades', 'people', 'news', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'];
+const VIEWS = ['home', 'trades', 'people', 'news', 'favs', 'alerts', 'pol', 'mb', 'stock', 'un', 'und', 'gm', 'rc'];
 function showView(v) {
   VIEWS.forEach(x => { $('#v-' + x).hidden = x !== v; });
   document.body.classList.toggle('on-pol', v === 'pol');
@@ -311,7 +312,8 @@ function route() {
   const CAT_HASH = {insiders:'Insider', funds:'Institution', 'trades:House':'House', 'trades:Senate':'Senate', 'trades:Executive':'Executive', 'trades:President':'Executive', 'trades:Insider':'Insider', 'trades:Insiders':'Insider', 'trades:Institution':'Institution', 'trades:Funds':'Institution', 'trades:all':''};
   if (h.startsWith('p=')) v = 'pol';
   else if (Object.prototype.hasOwnProperty.call(CAT_HASH, h)) { v = 'trades'; applyTradeChamber(CAT_HASH[h]); }
-  else if (['trades', 'people', 'news', 'alerts'].includes(h)) v = h;
+  else if (['trades', 'people', 'news', 'alerts', 'favs'].includes(h)) v = h;
+  else if (h === 'favourites' || h === 'favorites') v = 'favs';
   else if (h === 'settings') v = 'alerts';
   else if (h === 'trades:new') { v = 'trades'; F.newSince = prevVisit; F.loaded = false; }
   else if (h === 'mostbought') v = 'mb';
@@ -330,6 +332,7 @@ function route() {
   if (v === 'mb' && !MB.loaded) loadMostBought();
   if (v === 'trades' && !F.loaded) { F.loaded = true; loadKpis(); loadFeed(); }
   if (v === 'people') loadPeople();
+  if (v === 'favs') loadFavourites();
   if (v === 'news') loadNews(false); else stopNews();
   if (v === 'alerts') renderAlerts();
   if (v === 'pol' && changed) openPolitician(h.slice(2));
@@ -374,13 +377,14 @@ function portfolioCard(p, pf, o = {}) {
   const all = pf && pf.periods ? pf.periods[o.period || 'ALL'] : null;
   const up = !all || all[1] == null || all[1] >= 0;
   const val = pf && pf.source === 'sec_13f' && !pf.value ? '—' : (pf ? money(pf.value) : null);
-  return `<a class="pcard${o.rank ? ' ranked' : ''}" href="#p=${encodeURIComponent(p.politician)}" data-pol="${esc(p.politician)}">
+  const starOn = isFav(p.politician);
+  return `<div class="pcard-wrap"><a class="pcard${o.rank ? ' ranked' : ''}" href="#p=${encodeURIComponent(p.politician)}">
     ${o.rank ? `<span class="rank">${String(o.rank).padStart(2, '0')}</span>` : ''}${avatar(p.politician, p.bioguide, 'round')}
     <div class="pm"><div class="nm">${esc(p.politician)}</div><div class="mt">${isPol(p) ? `<i class="pty pty-${esc(p.party || '')}"></i>${esc(p.party || '?')} · ${esc(loc(p))}${p.chamber && p.chamber !== 'Executive' ? ' · ' + esc(p.chamber) : ''}` : esc(metaShort(p))}</div></div>
     ${pf ? `<div class="spark">${sparkSVG(pf.spark, up)}</div>
       <div class="r"><div class="v" title="${val === '—' ? 'No substantial 13F-HR table in the latest filings' : esc(usd0(pf.value))}">${val}</div><div class="d">${all && all[1] != null ? `<span class="${up ? 'up' : 'dn'}">${up ? '+' : '−'}${pct(Math.abs(all[1]))}</span>` : (val === '—' ? `<span class="per">no usable 13F</span>` : '')}${o.period && val !== '—' ? `<span class="per">${esc(o.period)}</span>` : ''}</div></div>`
     : `<div class="spark"></div><div class="r"><div class="v mute">—</div><div class="d mute">${num(p.n)} trades</div></div>`}
-  </a>`;
+  </a>${favBtn(p.politician, starOn)}</div>`;
 }
 
 /* ============ home ============ */
@@ -742,6 +746,25 @@ function periodSlice(s, key) {
 }
 const following = () => store.get('follows', []);
 const isFollowing = n => following().includes(n);
+const favourites = () => store.get('favs', []);
+const isFav = n => favourites().includes(n);
+function setFav(n, on) { const f = favourites().filter(x => x !== n); if (on) f.push(n); store.set('favs', f); }
+function favBtn(name, on = isFav(name)) {
+  return `<button type="button" class="fav-btn${on ? ' on' : ''}" data-fav="${esc(name)}" aria-pressed="${on}" aria-label="${on ? 'Remove' : 'Add'} ${esc(name)} ${on ? 'from' : 'to'} favourites">${STAR(on)}</button>`;
+}
+function toggleFav(name) {
+  const on = !isFav(name);
+  setFav(name, on);
+  $$('[data-fav]').forEach(b => {
+    if (b.dataset.fav !== name) return;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on);
+    b.setAttribute('aria-label', `${on ? 'Remove' : 'Add'} ${name} ${on ? 'from' : 'to'} favourites`);
+    b.innerHTML = STAR(on);
+  });
+  if (route.cur === 'favs') loadFavourites();
+  toast(on ? `Added to Favourites` : `Removed from Favourites`);
+}
 // names are normalised server-side (clean_name in app.py); migrate follows saved under the old spelling
 (() => { const H = new Set(['mr', 'mrs', 'ms', 'miss', 'dr', 'hon', 'rep', 'sen', 'honorable', 'md', 'facs', 'phd', 'dds', 'dvm', 'cpa', 'esq']);
   const clean = n => { const o = []; for (const w of n.split(/\s+/)) { const k = w.toLowerCase().replace(/^[.,]+|[.,]+$/g, ''); if (!w || H.has(k)) continue; if (o.length && k === o[o.length - 1].toLowerCase().replace(/^[.,]+|[.,]+$/g, '')) continue; o.push(w); } return o.join(' ') || n; };
@@ -774,6 +797,7 @@ async function openPolitician(name) {
     : (has ? '' : '<span class="when">No priced stock trades to build a portfolio from.</span>');
   el.innerHTML = `
     <div class="pbar"><button class="ib" data-back aria-label="Back">${I.back}</button>
+      <button class="ib fav${isFav(name) ? ' on' : ''}" id="favBtn" data-fav="${esc(name)}" aria-pressed="${isFav(name)}" aria-label="${isFav(name) ? 'Remove from' : 'Add to'} favourites">${STAR(isFav(name))}</button>
       <button class="ib bell${fol ? ' on' : ''}" id="bellBtn" aria-label="Follow">${I.bell}</button>
       <button class="ib share" id="shareBtn" aria-label="Share">${I.share}</button></div>
     <div class="phero"><div class="pimg">${portrait(name, d.bioguide, 'portrait')}</div>
@@ -1067,7 +1091,6 @@ function stockPop(i, pop = '#stPop') {
   $(pop).hidden = false;
   $(pop + ' .sp-x').onclick = () => { $(pop).hidden = true; };
 }
-const STAR = on => `<svg viewBox="0 0 24 24" width="22" height="22" style="fill:${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.85L12 16.9l-5.25 2.75 1-5.85L3.5 9.7l5.9-.9z"/></svg>`;
 const watching = () => store.get('watch', []);
 function setWatch(tk, on) {
   const w = watching().filter(x => x !== tk); if (on) w.unshift(tk);
@@ -1240,8 +1263,64 @@ async function renderAlerts() {
 
 }
 
+
+/* ============ favourites tab ============ */
+function favHoldingRow(h) {
+  const unlisted = h.unlisted || !h.ticker;
+  const label = unlisted ? (h.name || h.title || 'Unlisted holding') : h.ticker;
+  const sub = unlisted ? (h.name && h.ticker ? esc(h.name) : 'Reported 13F value') : ((h.weight || 0).toFixed(2) + '%');
+  const inner = `${logo(h.ticker, '', '', h.name || h.title || '')}
+    <div><div class="tk">${esc(label)}</div><div class="w">${sub}</div></div>
+    <div class="r"><div class="val">${usd(h.value)}</div><div class="g ${h.gain_pct == null ? '' : h.gain_pct >= 0 ? 'up' : 'dn'}">${h.gain_pct == null ? '' : (h.gain_pct >= 0 ? '+' : '') + pct(h.gain_pct)}</div></div>`;
+  return unlisted ? `<div class="hrow">${inner}</div>` : `<button class="hrow" data-tick="${esc(h.ticker)}">${inner}</button>`;
+}
+async function loadFavourites() {
+  const el = $('#favList');
+  const names = favourites();
+  if (!names.length) {
+    el.innerHTML = empty('No favourites yet', 'Open anyone’s page — a politician, insider or fund — and tap the star. This tab then shows only their latest positions, trades and details, newest first.');
+    return;
+  }
+  el.innerHTML = skRows(Math.min(4, names.length));
+  let people = [], pfs = new Map();
+  try { people = await api('/api/politicians'); } catch (e) { people = []; }
+  try { pfs = await portfolios(); } catch (e) { pfs = new Map(); }
+  const by = new Map(people.map(p => [p.politician, p]));
+  const rows = await Promise.all(names.map(async name => {
+    const meta = by.get(name) || {politician: name, ...(pfs.get(name) || {})};
+    let pf = null, trades = [];
+    try { pf = await api('/api/portfolio?name=' + encodeURIComponent(name)); } catch (e) {}
+    try { const d = await api('/api/trades?politician=' + encodeURIComponent(name) + '&limit=6&sort=disclosure_date'); trades = (d && d.trades) || []; } catch (e) {}
+    const sum = pfs.get(name);
+    const latest = [sum && sum.latest, pf && (pf.filed || pf.period_end), trades[0] && trades[0].disclosure_date].filter(Boolean).sort().pop() || '';
+    return {name, meta, pf, sum, trades, latest};
+  }));
+  if (route.cur !== 'favs') return;
+  rows.sort((a, b) => (b.latest || '').localeCompare(a.latest || '') || a.name.localeCompare(b.name));
+  el.innerHTML = `<p class="fav-note">${rows.length} ${rows.length === 1 ? 'person' : 'people'} · newest activity first</p>` + rows.map(r => {
+    const p = {...r.meta, politician: r.name};
+    const pf = r.pf || {};
+    const isInst = pf.source === 'sec_13f' || p.chamber === 'Institution' || (r.sum && r.sum.source === 'sec_13f');
+    const val = isInst && !pf.value ? '—' : (pf.value != null ? money(pf.value) : (r.sum ? money(r.sum.value) : '—'));
+    const when = isInst
+      ? (pf.period_end ? '13F as of ' + fmtDY(pf.period_end) + (pf.filed ? ' · filed ' + fmtDY(pf.filed) : '') : (pf.filed ? 'Filed ' + fmtDY(pf.filed) : 'SEC Form 13F'))
+      : (r.latest ? 'Latest ' + fmtDY(r.latest) : (p.n ? num(p.n) + ' trades' : ''));
+    const holds = (pf.holdings || []).slice(0, 5);
+    const trades = r.trades || [];
+    const href = '#p=' + encodeURIComponent(r.name);
+    return `<article class="fav-block">
+      <div class="fav-head"><a class="fav-who" href="${href}">${avatar(r.name, p.bioguide, 'round')}<div class="pm"><div class="nm">${esc(r.name)}</div><div class="mt">${esc(metaShort(p))}</div><div class="d">${esc(when)}</div></div><div class="r"><div class="v">${val}</div></div></a>${favBtn(r.name, true)}</div>
+      ${holds.length ? `<div class="h2s"><h2>Positions</h2><small>${num(pf.n_holdings || holds.length)}${isInst ? (pf.period_end ? ' · 13F as of ' + fmtDY(pf.period_end) : ' · 13F') : ' · est.'}</small></div><div class="card hlist">${holds.map(favHoldingRow).join('')}</div>` : ''}
+      ${trades.length ? `<div class="h2s"><h2>Trades</h2><small>Newest disclosed first</small></div><div class="card tlist">${trades.map(t => tradeRow(t, false)).join('')}</div>` : (!holds.length ? `<div class="empty"><b>No positions or trades yet</b>Nothing in the current data for this person.</div>` : '')}
+      <a class="fav-more" href="${href}">See all details</a>
+    </article>`;
+  }).join('');
+}
+
 /* ============ events ============ */
 document.addEventListener('click', e => {
+  const favEl = e.target.closest('[data-fav]');
+  if (favEl) { e.preventDefault(); e.stopPropagation(); toggleFav(favEl.dataset.fav); return; }
   const a = e.target.closest('a[href^="http"]'); if (a) return;
   const cp = e.target.closest('[data-copy]'); if (cp) { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Copied')).catch(() => toast(cp.dataset.copy)); return; }
   if (e.target.closest('[data-back]')) { if (history.length > 1 && document.referrer !== undefined && route.prev) history.back(); else location.hash = baseView === 'home' ? '' : baseView; return; }
